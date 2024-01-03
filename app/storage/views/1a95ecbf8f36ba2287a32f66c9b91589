@@ -1,0 +1,51 @@
+<?php $__env->startSection('main-content'); ?>
+<div class="row">
+	<div class="col-md-12 col-xs-12 col-sm-12">
+	<h4 class="text-primary"> Arbitrators registered with Construction arbitration
+		facilitation centre (cafc), cdb
+	</h4>
+	</div>
+	<div class="col-md-12 col-xs-12 col-sm-12 table-responsive">
+		<table class="table table-bordered table-striped table-hover table-condensed flip-content">
+			<thead class="flip-content">
+				<tr>
+					<th>
+						Reg#
+					</th>
+                    <th>
+                       	Name
+                    </th>
+					<th>
+						Designation
+					</th>
+					<th>
+						 Mail Id
+					</th>
+					<th>
+						Contact No.
+					</th>
+					<th>Cases in hand</th>
+					<th>Image</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php foreach($arbitrators as $arbitrator): ?>
+				<tr>
+					<td><?php echo $arbitrator->RegNo; ?></td>
+					<td><?php echo $arbitrator->Name; ?></td>
+					<td><?php echo $arbitrator->Designation; ?></td>
+					<td><?php echo $arbitrator->Email; ?></td>
+					<td><?php echo $arbitrator->ContactNo; ?></td>
+					<td><?php echo $arbitrator->CasesInHand; ?></td>
+					<td>
+						<?php if((bool)$arbitrator->FilePath): ?>
+						<img src="<?php echo asset($arbitrator->FilePath); ?>" style="width:180px; height: 200px;"/>
+						<?php endif; ?>
+					</td>
+				</tr>
+			<?php endforeach; ?>
+			</tbody>
+		</table>
+	</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('websitemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

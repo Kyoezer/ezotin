@@ -1,0 +1,118 @@
+<?php if(isset($isRejectedApp) && (int)$isRejectedApp==1): ?>
+<input type="hidden" value="1" name="ApplicationRejectedReapply">
+<?php endif; ?>
+ <!-- BEGIN FORM-->
+<div class="form-body">
+	<?php foreach($specializedtradeRegistrations as $SpecializedTradeRegistration): ?>
+	<div class="row">
+		<div class="col-md-9">
+			<div class="form-group">
+				<input type="hidden" value="<?php echo $SpecializedTradeRegistration->Id; ?>" name="Id" />
+				<input type="hidden" value="<?php echo $newGeneralInfoSave; ?>" name="NewGeneralInfoSave">
+				<?php if((int)$isServiceBySpecializedTrade==1): ?>
+				<input type="hidden" value="<?php echo $specializedfirmFinalTableId; ?>" name="CrpSpecializedTradeId" />
+				<?php endif; ?>
+				<label class="bold">Application No.</label>
+				<p class="form-control-static">
+					<?php if(!empty($SpecializedTradeRegistration->ReferenceNo) || !empty($applicationReferenceNo)): ?>
+						<?php if(!empty($SpecializedTradeRegistration->ReferenceNo)): ?>
+							<?php echo $SpecializedTradeRegistration->ReferenceNo; ?>
+
+						<?php else: ?>
+							<?php echo $applicationReferenceNo; ?>
+
+						<?php endif; ?>
+					<?php else: ?>
+						<?php echo Input::old('ReferenceNo'); ?>
+
+					<?php endif; ?>
+				</p>
+				<input type="hidden" name="ReferenceNo" value="<?php if(!empty($SpecializedTradeRegistration->ReferenceNo) || !empty($applicationReferenceNo)): ?><?php if(!empty($SpecializedTradeRegistration->ReferenceNo)): ?><?php echo $SpecializedTradeRegistration->ReferenceNo; ?><?php else: ?><?php echo $applicationReferenceNo; ?><?php endif; ?>@else<?php echo Input::old('ReferenceNo'); ?><?php endif; ?>" />
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="bold">Application Date</label>
+				<p class="form-control-static"><?php if(!empty($SpecializedTradeRegistration->ApplicationDate)): ?><?php echo convertDateToClientFormat($SpecializedTradeRegistration->ApplicationDate); ?><?php else: ?><?php echo convertDateToClientFormat(date('Y-m-d G:i:s')); ?><?php endif; ?></p>
+				<input type="hidden" name="ApplicationDate" value="<?php if(!empty($SpecializedTradeRegistration->ApplicationDate)): ?><?php echo $SpecializedTradeRegistration->ApplicationDate; ?><?php else: ?><?php echo date('Y-m-d G:i:s'); ?><?php endif; ?>" />
+			</div>
+		</div>
+	</div>
+	
+		<?php endforeach; ?>
+		<?php if(empty($editWorkClassificationsByCDB)): ?>
+		<div class="col-md-4">
+			<h5 class="font-blue-madison bold">Category Information</h5>
+			<label class="">Please tick the checkbox to select a category</label>				
+			<table class="table table-bordered table-striped table-condensed">
+				<thead>
+					<tr>
+						<th width="5%" class="table-checkbox"></th>
+						<th>Category</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach($categories as $category): ?>
+						<tr>
+							<td>
+								<input type="checkbox" class="tablerowcheckbox" value="1" <?php if($category->CategoryId==$category->CmnAppliedCategoryId): ?>checked="checked"<?php endif; ?>/>
+								<input type="hidden" name="CmnAppliedCategoryId[]" value="<?php echo $category->CategoryId; ?>" class="tablerowcontrol" <?php if($category->CategoryId!=$category->CmnAppliedCategoryId): ?>disabled="disabled"<?php endif; ?>/>
+							</td>
+							<td>
+								<?php echo $category->Code.'-'.$category->Name; ?>
+
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+		<?php else: ?> 
+		<div class="col-md-4 table-responsive">
+			<h5 class="font-blue-madison bold">Edit Category Information</h5>
+			<input type="hidden" name="CmnEditCategoryByCDB" value="1">
+			<table class="table table-bordered table-striped table-condensed">
+				<thead>
+					<tr>
+						<th width="5%" class="table-checkbox"></th>
+						<th>Category</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach($editWorkClassificationsByCDB as $editWorkClassificationByCDB): ?>
+						<tr>
+							<td>
+								<input type="checkbox" class="tablerowcheckbox" value="1" <?php if($editWorkClassificationByCDB->CategoryId==$editWorkClassificationByCDB->CmnApprovedCategoryId): ?>checked="checked"<?php endif; ?>/>
+								<input type="hidden" name="CmnAppliedCategoryId[]" value="<?php echo $editWorkClassificationByCDB->CategoryId; ?>" class="tablerowcontrol" <?php if($editWorkClassificationByCDB->CategoryId!=$editWorkClassificationByCDB->CmnApprovedCategoryId): ?>disabled="disabled"<?php endif; ?>/>
+								<input type="hidden" name="CmnVerifiedCategoryId[]" value="<?php echo $editWorkClassificationByCDB->CategoryId; ?>" class="tablerowcontrol" <?php if($editWorkClassificationByCDB->CategoryId!=$editWorkClassificationByCDB->CmnApprovedCategoryId): ?>disabled="disabled"<?php endif; ?>/>
+								<input type="hidden" name="CmnApprovedCategoryId[]" value="<?php echo $editWorkClassificationByCDB->CategoryId; ?>" class="tablerowcontrol" <?php if($editWorkClassificationByCDB->CategoryId!=$editWorkClassificationByCDB->CmnApprovedCategoryId): ?>disabled="disabled"<?php endif; ?>/>
+							</td>
+							<td>
+								<?php echo $editWorkClassificationByCDB->Code.'-'.$editWorkClassificationByCDB->Name; ?>
+
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+		<?php endif; ?>
+	</div>
+	<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+<div class="form-actions">
+	<div class="btn-set">
+		<?php if((bool)$specializedTradeId==null): ?>
+		<button type="submit" class="btn green">Register <i class="fa fa-arrow-circle-o-right"></i></button>
+		<a href="<?php echo URL::to('ezhotin/home/'.Session::get('UserViewerType')); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+		<?php else: ?>
+		<button type="submit" class="btn green">Update <i class="fa fa-arrow-circle-o-right"></i></button>
+			<?php if(!empty($redirectUrl)): ?>
+			<a href="<?php echo URL::to($redirectUrl.'/'.$specializedTradeId); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+			<?php else: ?>
+			<a href="<?php echo URL::to('specializedtrade/confirmregistration'); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+			<?php endif; ?>
+		<?php endif; ?>
+	</div>
+</div>
+<!-- END FORM-->

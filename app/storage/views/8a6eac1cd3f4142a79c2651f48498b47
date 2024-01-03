@@ -1,0 +1,32 @@
+<?php $__env->startSection('main-content'); ?>
+    <div class="row">
+        <div class="col-md-12">
+            <?php $count = 1; ?>
+            <h3 class="bold">SEARCH RESULTS:</h3>
+            <?php $__empty_1 = true; foreach($results as $result): $__empty_1 = false; ?>
+                <div class="well" style="padding:8px 19px; margin-bottom:4px;">
+                <span class="h4"><?php echo $count++; ?>. <?php echo $result->Name; ?></span><br>
+                <p>
+                    <strong><?php echo $result->Detail1Name; ?>: </strong><?php echo HTML::decode($result->Detail1); ?>
+
+                    <?php if((bool)$result->Detail2Name): ?>
+                        <br>
+                        <strong><?php echo $result->Detail2Name; ?>: </strong><?php echo HTML::decode($result->Detail2); ?>
+
+                    <?php endif; ?>
+                    <?php if((bool)$result->Link1): ?>
+                        <br><br>
+                        <a href="<?php echo URL::to($result->Link1); ?>"><strong>Click on this link for more</strong></a>
+                    <?php endif; ?>
+                </p>
+                </div>
+                <br>
+            <?php endforeach; if ($__empty_1): ?>
+                <p>
+                    <h4>No results!</h4>
+                </p>
+            <?php endif; ?>
+        </div>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('websitemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

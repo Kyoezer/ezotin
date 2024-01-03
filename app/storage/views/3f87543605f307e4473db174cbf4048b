@@ -1,0 +1,304 @@
+<?php if(isset($isRejectedApp) && (int)$isRejectedApp==1): ?>
+<input type="hidden" value="1" name="ApplicationRejectedReapply">
+<?php endif; ?>
+<!-- BEGIN FORM-->
+<div class="form-body">
+	<?php foreach($engineerRegistrations as $engineerRegistration): ?>
+	<div class="row">
+		<div class="col-md-9">
+			<div class="form-group">
+				<input type="hidden" value="<?php echo $engineerRegistration->Id; ?>" name="Id" />
+				<input type="hidden" value="<?php echo $newGeneralInfoSave; ?>" name="NewGeneralInfoSave">
+				<?php if((int)$isServiceByEngineer==1): ?>
+				<input type="hidden" value="<?php echo $engineerFinalTableId; ?>" name="CrpEngineerId" />
+				<?php endif; ?>
+				<label class="bold">Application No.</label>
+				<p class="form-control-static">
+					<?php if(!empty($engineerRegistration->ReferenceNo) || !empty($applicationReferenceNo)): ?>
+						<?php if(!empty($engineerRegistration->ReferenceNo)): ?>
+							<?php echo $engineerRegistration->ReferenceNo; ?>
+
+						<?php else: ?>
+							<?php echo $applicationReferenceNo; ?>
+
+						<?php endif; ?>
+					<?php else: ?>
+						<?php echo Input::old('ReferenceNo'); ?>
+
+					<?php endif; ?>
+				</p>
+				<input type="hidden" name="ReferenceNo" value="<?php if(!empty($engineerRegistration->ReferenceNo) || !empty($applicationReferenceNo)): ?><?php if(!empty($engineerRegistration->ReferenceNo)): ?><?php echo $engineerRegistration->ReferenceNo; ?><?php else: ?><?php echo $applicationReferenceNo; ?><?php endif; ?>@else<?php echo Input::old('ReferenceNo'); ?><?php endif; ?>" />
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="bold">Application Date</label>
+				<p class="form-control-static"><?php if(!empty($engineerRegistration->ApplicationDate)): ?><?php echo convertDateToClientFormat($engineerRegistration->ApplicationDate); ?><?php else: ?><?php echo convertDateToClientFormat(date('Y-m-d G:i:s')); ?><?php endif; ?></p>
+				<input type="hidden" name="ApplicationDate" value="<?php if(!empty($engineerRegistration->ApplicationDate)): ?><?php echo $engineerRegistration->ApplicationDate; ?><?php else: ?><?php echo date('Y-m-d G:i:s'); ?><?php endif; ?>" />
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12"><h5 class="font-blue-madison bold">Registration Detail</h5></div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="CmnServiceSectorTypeId">Type of Engineer <span class="font-red">*</span></label>
+				<select name="CmnServiceSectorTypeId" id="" class="form-control input-sm required">
+					<option value="">---SELECT ONE---</option>
+					<?php foreach($serviceSectorTypes as $serviceSectorType): ?>
+					<option value="<?php echo $serviceSectorType->Id; ?>" <?php if($serviceSectorType->Id==Input::old('CmnServiceSectorTypeId') || $serviceSectorType->Id==$engineerRegistration->CmnServiceSectorTypeId): ?>selected="selected"<?php endif; ?>><?php echo $serviceSectorType->Name; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="CmnTradeId">Trade <span class="font-red">*</span></label>
+				<select name="CmnTradeId" id="" class="form-control input-sm required">
+					<option value="">---SELECT ONE---</option>
+					<?php foreach($trades as $trade): ?>
+					<option value="<?php echo $trade->Id; ?>" <?php if($trade->Id==Input::old('CmnTradeId') || $trade->Id==$engineerRegistration->CmnTradeId): ?>selected="selected"<?php endif; ?>><?php echo $trade->Name; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="CIDNo">CID/Work Permit No. <span class="font-red">*</span></label>				
+				<input type="text" name="CIDNo" value="<?php if(!empty($engineerRegistration->CIDNo)): ?><?php echo $engineerRegistration->CIDNo; ?><?php else: ?><?php echo Input::old('CIDNo'); ?><?php endif; ?>" class="form-control input-sm required cidforwebservice" />
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<div class="col-md-12"><label for="CmnSalutationId">Name <span class="font-red">*</span></label></div>
+				<div class="col-md-4">
+					<select name="CmnSalutationId" id="" class="form-control input-sm required">
+						<option value="">---SELECT ONE---</option>
+						<?php foreach($salutations as $salutation): ?>
+						<option value="<?php echo $salutation->Id; ?>" <?php if($salutation->Id==Input::old('CmnSalutationId') || $salutation->Id==$engineerRegistration->CmnSalutationId): ?>selected="selected"<?php endif; ?>><?php echo $salutation->Name; ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+				<div class="col-md-8">
+					<input type="text" name="Name" value="<?php if(!empty($engineerRegistration->Name)): ?><?php echo $engineerRegistration->Name; ?><?php else: ?><?php echo Input::old('Name'); ?><?php endif; ?>" class="form-control input-sm required namefromwebservice" placeholder="">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="CmnCountryId">Country <span class="font-red">*</span></label>
+				<select name="CmnCountryId" class="form-control input-sm select2me required countryselect">
+					<option value="">---SELECT ONE---</option>
+					<?php foreach($countries as $country): ?>
+						<option value="<?php echo $country->Id; ?>"<?php if($country->Id==Input::old('CmnCountryId') || $country->Id==$engineerRegistration->CmnCountryId || $country->Name=="Bhutan"): ?>selected="selected"<?php endif; ?>><?php echo $country->Name; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="CmnDzongkhagId">Dzongkhag</label>			
+				<select name="CmnDzongkhagId" class="form-control input-sm select2me isbhutanese required dzongkhagfromwebservice">
+					<option value="">---SELECT ONE---</option>
+					<?php foreach($dzongkhags as $dzongkhag): ?>
+						<option value="<?php echo $dzongkhag->Id; ?>" <?php if($dzongkhag->Id==Input::old('CmnDzongkhagId') || $dzongkhag->Id==$engineerRegistration->CmnDzongkhagId): ?>selected="selected"<?php endif; ?>><?php echo $dzongkhag->NameEn; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="Gewog">Gewog</label>
+				<input type="text" name="Gewog" value="<?php if(!empty($engineerRegistration->Gewog)): ?><?php echo $engineerRegistration->Gewog; ?><?php else: ?><?php echo Input::old('Gewog'); ?><?php endif; ?>" class="form-control isbhutanese required gewogfromwebservice" />
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="">Village</label>
+				<input type="text" name="Village" value="<?php if(!empty($engineerRegistration->Village)): ?><?php echo $engineerRegistration->Village; ?><?php else: ?><?php echo Input::old('Village'); ?><?php endif; ?>" class="form-control isbhutanese required villagefromwebservice" />
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="Email">Email <span class="font-red">*</span><a role="button" tabindex="0" data-toggle="popover" data-container="body" data-trigger="focus" class="popoverdefaultopen" data-placement="top" title="<span class='font-green-seagreen'>Email</span>" data-content="<p class='text-justify'>This Email address will be used as username for your account and to receive email from Construction Development Board (CDB). Please provide a valid Email address inorder not to lose important messages from CDB.</p>"><i class="fa fa-question-circle"></i></a></label>
+				<input type="text" name="Email" value="<?php if(!empty($engineerRegistration->Email)): ?><?php echo $engineerRegistration->Email; ?><?php else: ?><?php echo Input::old('Email'); ?><?php endif; ?>" class="form-control input-sm required" />
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="MobileNo">Mobile No. <span class="font-red">*</span><a role="button" tabindex="0" data-toggle="popover" data-container="body" data-trigger="focus" class="popoverdefaultopen" data-placement="top" title="<span class='font-green-seagreen'>Mobile No.</span>" data-content="<p class='text-justify'>This Mobile No. will be used to receive sms alerts from Construction Development Board (CDB). Please provide a valid Mobile No. registered with Tashi Cell/B-Mobile inorder not to lose important messages from CDB.</p>"><i class="fa fa-question-circle"></i></a></label>
+				<input type="text" name="MobileNo" value="<?php if(!empty($engineerRegistration->MobileNo)): ?><?php echo $engineerRegistration->MobileNo; ?><?php else: ?><?php echo Input::old('MobileNo'); ?><?php endif; ?>" class="form-control input-sm required" />
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="EmployerName">Employer Name</label>
+				<input type="text" name="EmployerName" value="<?php if(!empty($engineerRegistration->EmployerName)): ?><?php echo $engineerRegistration->EmployerName; ?><?php else: ?><?php echo Input::old('EmployerName'); ?><?php endif; ?>" class="form-control input-sm" />
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="EmployerAddress">Employer Address</label>
+				<input type="text" name="EmployerAddress" value="<?php if(!empty($engineerRegistration->EmployerAddress)): ?><?php echo $engineerRegistration->EmployerAddress; ?><?php else: ?><?php echo Input::old('EmployerAddress'); ?><?php endif; ?>" class="form-control input-sm">
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="EmployerAddress">TPN</label>
+				<input type="text" name="TPN" value="<?php if(!empty($engineerRegistration->TPN)): ?><?php echo $engineerRegistration->TPN; ?><?php else: ?><?php echo Input::old('TPN'); ?><?php endif; ?>" class="form-control input-sm">
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12"><h5 class="font-blue-madison bold">Professional Qualification</h5></div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="CmnQualificationId">Qualification <span class="font-red">*</span></label>
+				<select name="CmnQualificationId" class="form-control select2me required">
+					<option value="">---SELECT ONE---</option>
+					<?php foreach($qualifications as $qualification): ?>
+					<option value="<?php echo $qualification->Id; ?>" <?php if($qualification->Id==Input::old('CmnQualificationId') || $qualification->Id==$engineerRegistration->CmnQualificationId): ?>selected="selected"<?php endif; ?>><?php echo $qualification->Name; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="GraduationYear">Year of Graduation <span class="font-red">*</span></label>
+				<div class="input-icon right">
+					<i class="fa fa-calendar"></i>
+					<input type="text" name="GraduationYear" class="form-control yearonly required" value="<?php if(!empty($engineerRegistration->GraduationYear)): ?><?php echo $engineerRegistration->GraduationYear; ?><?php else: ?><?php echo Input::old('GraduationYear'); ?><?php endif; ?>" placeholder="" readonly>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="NameOfUniversity">Name of University <span class="font-red">*</span></label>
+				<input type="text" name="NameOfUniversity" value="<?php if(!empty($engineerRegistration->NameOfUniversity)): ?><?php echo $engineerRegistration->NameOfUniversity; ?><?php else: ?><?php echo Input::old('NameOfUniversity'); ?><?php endif; ?>" class="form-control required" />
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label for="CmnUniversityCountryId">Location (Country) <span class="font-red">*</span></label>
+				<select name="CmnUniversityCountryId" class="form-control select2me required">
+					<option value="">---SELECT ONE---</option>
+					<?php foreach($countries as $country): ?>
+						<option value="<?php echo $country->Id; ?>" <?php if($country->Id==Input::old('CmnUniversityCountryId') || $country->Id==$engineerRegistration->CmnUniversityCountryId): ?>selected="selected"<?php endif; ?>><?php echo $country->Name; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+	</div>
+	<?php endforeach; ?>
+	<div class="row">
+		<?php if(isset($oldUploads) && !empty($oldUploads)): ?>
+		<div class="col-md-6 table-responsive">
+			<h5 class="font-blue-madison bold">Existing Documents</h5>
+			<table class="table table-bordered table-striped table-condensed">
+				<thead>
+					<tr>
+						<th>Document Name</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php $__empty_1 = true; foreach($oldUploads as $oldUpload): $__empty_1 = false; ?>
+					<tr>
+						<td>
+							<?php echo $oldUpload->DocumentName; ?>
+
+						</td>
+						<td>
+							<a href="<?php echo URL::to($oldUpload->DocumentPath); ?>" target="_blank">View</a>|
+							<a href="#" class="">Delete</a>
+						</td>
+					</tr>
+					<?php endforeach; if ($__empty_1): ?>
+					<tr>
+						<td colspan="2">No new documents attached</td>
+					</tr>
+					<?php endif; ?>
+				</tbody>
+			</table>
+		</div>
+		<?php endif; ?>
+		<?php if(!empty($engineerRegistrationAttachments)): ?>
+		<div class="col-md-6 table-responsive">
+			<h5 class="font-blue-madison bold">Uploaded Files</h5>
+			<table class="table table-bordered table-striped table-condensed">
+				<thead>
+					<tr>
+						<th>Document Name</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach($engineerRegistrationAttachments as $engineerRegistrationAttachment): ?>
+					<tr>
+						<td>
+							<?php echo $engineerRegistrationAttachment->DocumentName; ?>
+
+						</td>
+						<td>
+							<a href="<?php echo URL::to($engineerRegistrationAttachment->DocumentPath); ?>" target="_blank">View</a>|
+							<a href="#" class="">Delete</a>
+						</td>
+					</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+		<?php endif; ?>
+		<div class="col-md-6 table-responsive">
+			<h5 class="font-blue-madison bold">Attach Degree Certificate,Academic Certificate and other relevant documents if any.</h5>
+			<table id="engineerattachments" class="table table-bordered table-striped table-condensed">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Document Name</th>
+						<th>Upload File</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<button type="button" class="deletetablerow"><i class="fa fa-times fa-lg"></i></button>
+						</td>
+						<td>
+							<input type="text" name="DocumentName[]" value="Document" class="form-control input-sm <?php if(empty($engineerRegistration->Id) && $isServiceByEngineer==0): ?><?php echo 'required'; ?><?php endif; ?>">
+						</td>
+						<td>
+							<input type="file" name="attachments[]" class="input-sm <?php if(empty($engineerRegistration->Id) && $isServiceByEngineer==0): ?><?php echo 'required'; ?><?php endif; ?>" multiple="multiple" />
+						</td>
+					</tr>
+					<tr class="notremovefornew">
+						<td>
+							<button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+						</td>
+						<td colspan="2"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="form-actions">
+	<div class="btn-set">
+		<?php if((bool)$engineerId==null): ?>
+		<button type="submit" class="btn green">Register <i class="fa fa-arrow-circle-o-right"></i></button>
+		<a href="<?php echo URL::to('ezhotin/home/'.Session::get('UserViewerType')); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+		<?php else: ?>
+		<button type="submit" class="btn green">Update <i class="fa fa-arrow-circle-o-right"></i></button>
+			<?php if(!empty($redirectUrl)): ?>
+			<a href="<?php echo URL::to($redirectUrl.'/'.$engineerId); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+			<?php else: ?>
+			<a href="<?php echo URL::to('engineer/confirmregistration'); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+			<?php endif; ?>
+		<?php endif; ?>
+	</div>
+</div>
+<!-- END FORM-->

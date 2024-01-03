@@ -1,0 +1,67 @@
+<html>
+    <body>
+        <table>
+            <thead>
+            <tr>
+                <th colspan="13">Architect Application Details</th>
+            </tr>
+            <?php foreach($parametersForPrint as $key=>$value): ?>
+                <tr>
+                    <th><?php echo $key; ?>:</th><th> <?php echo $value; ?></th>
+                </tr>
+            <?php endforeach; ?>
+            <tr><th colspan="13"></th></tr>
+            <tr>
+                    <th>Sl #</th>
+                    <th>Application</th>
+					<th>
+						Name
+					</th>
+                    <th>
+						AR No.
+					</th>
+					<th class="">
+						 Type
+					</th>
+                    <th>Current Status</th>
+                    <th class="">
+                        Verified by
+                    </th>
+                    <th class="">
+                        Approved by
+                    </th>
+                    <th>Payment Approved by</th>
+                    <th>Rejected by</th>
+                    <th>Remarks By Rejector</th>
+                    <th>Currently Picked By</th>
+				</tr>
+            </thead>
+            <tbody>
+            <?php $count = 1; ?>
+            <?php $__empty_1 = true; foreach($architectLists as $architect): $__empty_1 = false; ?>
+            <tr>
+        
+                      <td><?php echo $count; ?></td>
+                    <td><?php echo $architect->ReferenceNo; ?> <br> <?php echo $architect->ApplicationDate; ?></td>
+                    <td><?php echo $architect->Name; ?> </td>
+                    <td><?php echo $architect->ARNo; ?> </td>
+                    <td><?php echo $architect->ServiceType; ?></td>
+                    <td><?php echo $architect->CurrentStatus; ?></td>
+              
+                    <td><?php echo $architect->VerifiedBy; ?>  <br> <?php echo $architect->RegistrationVerifiedDate; ?></td>
+                    <td><?php echo $architect->AprroverBy; ?>  <br> <?php echo $architect->RegistrationApprovedDate; ?></td>
+                    <td><?php echo $architect->PaymentApprover; ?>  <br> <?php echo $architect->RegistrationPaymentApprovedDate; ?></td>
+                    <td><?php echo $architect->RejectedBy; ?>  <br> <?php echo $architect->RejectedDate; ?></td>
+                    <td><?php echo $architect->RemarksByRejector; ?></td>
+                    <td><?php echo $architect->CurrentlyPickedBy; ?></td>
+                </tr>
+                <?php $count++; ?>
+            <?php endforeach; if ($__empty_1): ?>
+                <tr>
+                    <td colspan="14" class="text-center font-red">No data to display!</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </body>
+</html>

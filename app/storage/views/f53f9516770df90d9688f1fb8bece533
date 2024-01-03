@@ -1,0 +1,153 @@
+<?php $__env->startSection('main-content'); ?>
+<?php
+    include public_path()."/captcha/simple-php-captcha.php";
+?>
+<?php
+    $_SESSION['captcha'] = simple_php_captcha(
+        array(
+            'min_font_size' => 24,
+            'max_font_size' => 24,
+        )
+    );
+    $imgSrc = $_SESSION['captcha']['image_src'];
+    $indexOfQuestionMark = strpos($imgSrc,'?');
+    $captchaUrl = substr($imgSrc,$indexOfQuestionMark+1,strlen($imgSrc));
+?>
+
+<div class="row">
+
+	<div class="col-md-8 col-xs-12 col-sm-12">
+		<?php foreach($tenderDetails as $tenderDetail): ?>
+			<table class="table table-responsive table-condensed table-bordered">
+				<tbody>
+					<tr>
+						<td><strong>Procuring Agency</strong></td>
+						<td><?php echo $tenderDetail -> ProcuringAgencyName; ?></td>
+					</tr>
+					<tr>
+						<td><strong>Name of Work</strong></td>
+						<td><?php echo $tenderDetail -> NameOfWork; ?></td>
+					</tr>
+					<tr>
+						<td><strong>Description of Work</strong></td>
+						<td><?php echo HTML::decode($tenderDetail -> DescriptionOfWork); ?></td>
+					</tr>
+					<tr>
+						<td><strong>Contract Period (in Months)</strong></td>
+						<td><?php echo $tenderDetail -> ContractPeriod; ?></td>
+					</tr>
+					<tr>
+						<td><strong>Dzongkhag (Site)</strong></td>
+						<td><?php echo $tenderDetail -> Dzongkhag; ?></td>
+					</tr>
+					<tr>
+						<td><strong>Category of Work</strong></td>
+						<td><?php echo $tenderDetail -> WorkCategoryCode.' - '.$tenderDetail -> WorkCategory; ?></td>
+					</tr>
+					<tr>
+						<td><strong>Classification of Work</strong></td>
+						<td><?php echo $tenderDetail -> WorkClassificationCode.' - '.$tenderDetail -> WorkClassification; ?></td>
+					</tr>
+					<tr>
+						<td><strong>Cost of Tender (Nu.)</strong></td>
+						<td><?php echo $tenderDetail -> CostOfTender; ?></td>
+					</tr>
+					<tr>
+						<td><strong>Date of Sale of Tender</strong></td>
+						<td><?php echo convertDateToClientFormat($tenderDetail -> DateOfSaleOfTender); ?></td>
+					</tr>
+					<tr>
+						<td><strong>Date of Closing for Sale of Tender</strong></td>
+						<td><?php echo convertDateToClientFormat($tenderDetail -> DateOfClosingSaleOfTender); ?></td>
+					</tr>
+					<tr>
+						<td><strong>Last Date And Time Of Submission</strong></td>
+						<td><?php echo convertDateTimeToClientFormat($tenderDetail -> LastDateAndTimeOfSubmission); ?></td>
+					</tr>
+					<tr>
+						<td><strong>Tender Opening Date And Time</strong></td>
+						<td><?php echo convertDateTimeToClientFormat($tenderDetail -> TenderOpeningDateAndTime); ?></td>
+					</tr>
+					<tr>
+						<td><strong>EMD (Nu. or %)</strong></td>
+						<td><?php echo $tenderDetail -> EMD; ?></td>
+					</tr>
+					<tr>
+						<td><strong>Project Estimate Cost (Nu.)</strong></td>
+						<td>
+							<?php if((int)$tenderDetail -> ShowCostInWebsite==1): ?>
+							<?php echo $tenderDetail -> ProjectEstimateCost; ?>
+
+							<?php else: ?>
+							<span class="text-danger">Not Available</span>
+							<?php endif; ?>
+						</td>
+					</tr>
+					<tr>
+						<td><strong>Contact Person</strong></td>
+						<td><?php echo $tenderDetail -> ContactPerson; ?></td>
+					</tr>
+					<tr>
+						<td><strong>Contact No.</strong></td>
+						<td><?php echo $tenderDetail -> ContactNo; ?></td>
+					</tr>
+					<tr>
+						<td><strong>Contact Email</strong></td>
+						<td><?php echo $tenderDetail -> ContactEmail; ?></td>
+					</tr>
+				</tbody>
+			</table>
+		<?php endforeach; ?>
+	</div>
+	<?php if((int)$attachmentCount>0): ?>
+	<div class="col-md-4">
+		<a href="#downloadTender" role="button" class="btn btn-large btn-primary" data-toggle="modal">Download Tender Document <span class="fa fa-download"></span></a>
+	</div>
+	<?php endif; ?>
+</div>
+
+<div id="downloadTender" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<?php echo Form::open(array('action'=>'WebsiteTender@downloadTender', 'method'=>'POST')); ?>
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Download Tender</h4>
+				</div>
+				<div class="modal-body">
+					<div class="col-md-12">
+					<div class="alert alert-danger hide" id="tendererrormessage">
+						<p>Please enter either your Email or Mobile No.</p>
+					</div>
+					<p>Please enter either your email or phone number to continue your download.</p>
+					<label>Email Address:</label>
+					<input type="email" name="Email" class="form-control email" id="tenderdownloademail" placeholder="Email Address">
+
+					<label>Mobile Number:</label>
+					<input type="text" name="PhoneNo" class="form-control number" id="tenderdownloadphone" placeholder="Phone Number">
+
+					<input type="hidden" name="TenderId" value="<?php echo isset($tenderDetails[0]->Id)?$tenderDetails[0]->Id:''; ?>">
+					</div>
+
+					<div class="col-md-4">
+						<br>
+						<img src="<?php echo URL::to('/')."/captcha/simple-php-captcha.php?".$captchaUrl; ?>"/>
+					</div>
+					<div class="col-md-4">
+						<br><br>
+						<input type="text" placeholder="Answer" name="CaptchaAnswer" class="form-control input-small">
+					</div><div class="clearfix"></div>
+				</div>
+
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-success" id="downloadtenderdocuments">Submit</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+				</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('websitemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

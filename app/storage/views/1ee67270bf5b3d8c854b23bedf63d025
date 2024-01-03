@@ -1,0 +1,135 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+            <?php $parameters = Input::all(); $parameters['export']='excel'; $route="contractorrpt.contractorscategorywise"; ?>
+            <?php if(!Input::has('export')): ?>
+            <i class="fa fa-cogs"></i>Contractor Category Report&nbsp;&nbsp;<?php if(!Input::has('export')): ?> <?php $parameters['export'] = 'print'; ?><a href="<?php echo route($route,$parameters); ?>" class="btn btn-sm purple" target="_blank"><i class="fa fa-print"></i> Print</a><?php endif; ?>
+		    <?php endif; ?>
+        </div>
+	</div>
+	<div class="portlet-body flip-scroll">
+        <?php if(Input::get('export') != "print"): ?>
+        <?php echo Form::open(array('url'=>'contractorrpt/contractorscategorywise','method'=>'get')); ?>
+
+		<div class="form-body">
+			<div class="row">
+                <div class="col-md-2">
+                    <label class="control-label">From</label>
+                    <div class="input-icon right">
+                        <i class="fa fa-calendar"></i>
+                        <input type="text" name="FromDate" class="form-control datepicker" value="<?php echo Input::get('FromDate'); ?>" readonly="readonly" placeholder="">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="control-label">To</label>
+                    <div class="input-icon right">
+                        <i class="fa fa-calendar"></i>
+                        <input type="text" name="ToDate" class="form-control datepicker" value="<?php echo Input::get('ToDate'); ?>" readonly="readonly" placeholder="">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Country</label>
+                        <select class="form-control select2me" name="CountryId">
+                            <option value="">---SELECT ONE---</option>
+                            <?php foreach($countries as $country): ?>
+                                <option value="<?php echo $country->Id; ?>" <?php if($country->Id == Input::get('CountryId')): ?>selected <?php endif; ?>><?php echo $country->Name; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Dzongkhag</label>
+                        <select class="form-control select2me" name="DzongkhagId">
+                            <option value="">---SELECT ONE---</option>
+                            <?php foreach($dzongkhags as $dzongkhag): ?>
+                                <option value="<?php echo $dzongkhag->Id; ?>" <?php if($dzongkhag->Id == Input::get('DzongkhagId')): ?>selected <?php endif; ?>><?php echo $dzongkhag->NameEn; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label class="control-label">Category</label>
+						<select class="form-control" name="ContractorCategoryId">
+							<option value="">---SELECT ONE---</option>
+                            <?php foreach($contractorCategories as $contractorCategory): ?>
+                                <option value="<?php echo $contractorCategory->Id; ?>" <?php if($contractorCategory->Id == Input::get('ContractorCategoryId')): ?>selected <?php endif; ?>><?php echo $contractorCategory->Code; ?></option>
+                            <?php endforeach; ?>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">Classification</label>
+						<select class="form-control" name="ContractorClassificationId">
+							<option value="">---SELECT ONE---</option>
+                            <?php foreach($contractorClassifications as $contractorClassification): ?>
+                                <option value="<?php echo $contractorClassification->Id; ?>" <?php if($contractorClassification->Id == Input::get('ContractorClassificationId')): ?>selected="selected"<?php endif; ?>><?php echo $contractorClassification->Code; ?></option>
+                            <?php endforeach; ?>
+						</select>
+					</div>
+				</div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Application Status</label>
+                        <select class="form-control" name="StatusId">
+                            <option value="">---SELECT ONE---</option>
+                            <?php foreach($statuses as $status): ?>
+                                <option value="<?php echo $status->Id; ?>" <?php if($status->Id == Input::get('StatusId')): ?>selected="selected"<?php endif; ?>><?php echo $status->Name; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <?php if(!Input::has('export')): ?>
+                    <div class="col-md-2">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="btn-set">
+                            <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                            <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                        </div>
+                    </div>
+                <?php endif; ?>
+			</div>
+		</div>
+        <?php echo Form::close(); ?>
+
+        <?php else: ?>
+            <?php foreach($parametersForPrint as $key=>$value): ?>
+                <b><?php echo $key; ?>: <?php echo $value; ?></b><br>
+            <?php endforeach; ?>
+            <br/>
+        <?php endif; ?>
+        <div class="row">
+            <div class="col-md-4">
+                <table class="table table-bordered table-striped table-condensed flip-content dont-flip" id="contractorhumanresource">
+                    <thead class="flip-content">
+                        <tr>
+                            <th>
+                                No. of Contractors
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php $__empty_1 = true; foreach($reportData as $value): $__empty_1 = false; ?>
+                        <tr>
+                            <td><?php echo $value->Count; ?></td>
+                        </tr>
+                    <?php endforeach; if ($__empty_1): ?>
+                        <tr>
+                            <td class="font-red text-center">Please select a parameter!</td>
+                        </tr>
+                    <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

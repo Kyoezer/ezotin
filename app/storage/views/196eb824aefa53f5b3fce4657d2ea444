@@ -1,0 +1,79 @@
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/global/scripts/contractor.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption font-green-seagreen">
+                        <i class="fa fa-cogs"></i>
+                        <span class="caption-subject">Training Details</span>
+                        <?php /*<a href="<?php echo URL::to('contractor/addtraining'); ?>" class="btn btn-xs green"><i class="fa fa-plus"></i> Add New</a>*/ ?>
+                        <?php /*<a href="<?php echo URL::to('contractor/deletetraining'); ?>" class="btn btn-xs purple"><i class="fa fa-times"></i> Delete</a>*/ ?>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <strong>Training Type: </strong> <?php echo $training[0]->Training; ?> <br>
+                    <?php if((int)$training[0]->TrainingReference == 1602): ?>
+                        <strong>Module: </strong> <?php echo $training[0]->Module; ?> <br/>
+                    <?php endif; ?>
+                    <strong>Training Dates: </strong> <?php echo $training[0]->TrainingFromDate; ?> to <?php echo $training[0]->TrainingToDate; ?> <br/>
+                    <br>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-condensed table-striped">
+                        <thead>
+                            <tr>
+                                <th>Sl #</th>
+                                <?php if((int)$training[0]->TrainingReference == 1602): ?>
+                                    <th>CDB No.</th>
+                                <?php endif; ?>
+                                <th>Participant</th>
+                                <th>CID No</th>
+                                <?php if((int)$training[0]->TrainingReference == 1602): ?>
+                                    <th>Designation</th>
+                                <?php endif; ?>
+                                <th>Gender</th>
+                                <th>Qualification</th>
+                                <th>Contact No.</th>
+                                <th class="text-center" style="width: 15%;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $count = 1; ?>
+                            <?php $__empty_1 = true; foreach($trainingDetails as $trainingDetail): $__empty_1 = false; ?>
+                                <tr>
+                                    <td><?php echo $count++; ?></td>
+                                    <?php if((int)$training[0]->TrainingReference == 1602): ?>
+                                        <td><?php echo $trainingDetail->CDBNo; ?></td>
+                                    <?php endif; ?>
+                                    <td><?php echo $trainingDetail->Participant; ?></td>
+                                    <td><?php echo $trainingDetail->CIDNo; ?></td>
+                                    <?php if((int)$training[0]->TrainingReference == 1602): ?>
+                                        <td><?php echo $trainingDetail->Designation; ?></td>
+                                    <?php endif; ?>
+                                    <td><?php echo $trainingDetail->Gender; ?></td>
+                                    <td><?php echo $trainingDetail->Qualification; ?></td>
+                                    <td><?php echo $trainingDetail->ContactNo; ?></td>
+                                    <td class="text-center">
+                                        <a href="<?php echo URL::to('contractor/edittrainingparticipant/'.$training[0]->TrainingReference.'/'.$trainingDetail->Id); ?>" class="btn btn-xs green editaction"><i class="fa fa-edit"></i> Edit</a>
+                                        <a href="<?php echo URL::to('contractor/deletetrainingparticipant/'.$training[0]->Id.'/'.$trainingDetail->Id); ?>" class="btn btn-xs red deleteaction"><i class="fa fa-times"></i> Delete</a>
+                                    </td>
+                                </tr>
+
+                            <?php endforeach; if ($__empty_1): ?>
+                                <tr>
+                                    <td colspan="<?php if((int)$training[0]->TrainingReference == 1602): ?><?php echo '6'; ?><?php else: ?><?php echo '4'; ?><?php endif; ?>" class="text-center font-red">No data to display!</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+                <a href="<?php echo URL::to("contractor/training"); ?>" class="btn btn-sm purple"><i class="m-icon-swapleft m-icon-white"></i> Back</a>
+            </div>
+        </div>
+    </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

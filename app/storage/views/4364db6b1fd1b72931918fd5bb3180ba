@@ -1,0 +1,40 @@
+<?php $__env->startSection('content'); ?>
+
+
+	<a href="<?php echo URL::to('ezhotin/individualtaskreport'); ?>" class="btn btn-large red"><i class="fa fa-bar-chart-o"></i> Individual Task Report</a> <br><br>
+	<div class="row">
+	<div class="col-md-12">
+		<div class="portlet solid bordered grey-cararra">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-comments"></i>News/Notices
+				</div>
+			</div>
+			<div class="portlet-body" id="chats">
+				<ul class="chats">
+					<?php $__empty_1 = true; foreach($newsAndNotifications as $newsAndNotification): $__empty_1 = false; ?>
+					<li class="in">
+						<img class="avatar" alt="" src="<?php echo asset('assets/cdb/layout/img/avatar.png'); ?>"/>
+						<div class="message">
+							<span class="arrow">
+							</span>
+							<a href="#" class="name">
+							Administrator </a>
+							<span class="datetime">
+							on <?php echo convertDateToClientFormat($newsAndNotification->Date); ?> </span>
+							<span class="body">
+							<?php echo html_entity_decode($newsAndNotification->Message); ?>
+
+						</div>
+					</li>
+					<?php endforeach; if ($__empty_1): ?>
+						<li class="font-red">No News/Notices to display</li>
+					<?php endif; ?>
+				</ul>
+			</div>
+		</div>
+		<!-- END PORTLET-->
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

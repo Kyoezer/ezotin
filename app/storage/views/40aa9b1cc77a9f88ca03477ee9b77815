@@ -1,0 +1,55 @@
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption font-green-seagreen">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject">List of Applicants</span>
+		</div>
+	</div>
+	<div class="portlet-body">
+		<div class="row">
+			<div class="table-responsive col-md-12 col-sm-12 col-xs-12">
+				<table id="tablefilters_1" class="table table-condensed table-striped table-bordered table-hover table-responsive">
+					<thead>
+						<tr>
+							<th>Registration Type</th>
+							<th>CDB No</th>
+							<th>Firm/Name</th>
+							<th>User Full Name</th>
+							<th>Username/Email</th>
+							<th>Contact No</th>
+							<th>Applied On</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php $__empty_1 = true; foreach($applicantList as $applicant): $__empty_1 = false; ?>
+						<tr>
+							<td>
+								<?php echo $applicant->RegistrationType; ?>
+
+							</td>
+							<td><?php echo $applicant->CDBNo; ?></td>
+							<td><?php echo $applicant->Name; ?></td>
+							<td><?php echo $applicant->FullName; ?></td>
+							<td><?php echo $applicant->username; ?></td>
+							<td><?php echo $applicant->ContactNo; ?></td>
+							<td><?php echo convertDateTimeToClientFormat($applicant->AppliedOn); ?></td>
+							<td>
+								<a href="<?php echo URL::to('sys/approveregistrationapplication/'.$applicant->Id); ?>" class="editaction btn default btn-xs green-seagreen"><i class="fa fa-edit"></i>Approve</a>|
+								<a href="<?php echo URL::to('sys/deleteregistrationapplication/'.$applicant->Id); ?>" class="deleteaction btn default btn-xs red"><i class="fa fa-times"></i>Delete</a>
+							</td>
+						</tr>
+						<?php endforeach; if ($__empty_1): ?>
+							<tr>
+								<td colspan="8" class="font-red text-center">No applicants to display!</td>
+							</tr>
+						<?php endif; ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

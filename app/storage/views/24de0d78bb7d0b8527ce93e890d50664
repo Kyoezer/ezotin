@@ -1,0 +1,300 @@
+<?php $__env->startSection('content'); ?>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>
+					<span class="caption-subject font-green-seagreen">Add CDB Secretariat</span>
+				</div>
+			</div>updateCDBSecretariat
+			<div class="portlet-body form">
+			<?php if((bool)$cdbSecretariat[0]->Id): ?>
+				<?php $action = "CDBSecretariatController@updateCDBSecretariat"; ?>
+			<?php else: ?>
+					<?php $action = "CDBSecretariatController@addSecretariatDetails"; ?>
+			<?php endif; ?>
+			<?php echo Form::open(array('action'=>$action, 'files'=>true,'class'=>'form-horizontal')); ?>
+
+				<?php foreach($cdbSecretariat as $secretariat): ?>
+				<?php echo Form::hidden('cdbSecretariatId',$secretariat->Id); ?>
+
+				<div class="form-body">
+					<div class="form-group">
+						<label class="control-label col-md-3">Full Name</label>
+						<div class="col-md-7">
+							<input type="text" name="FullName" value="<?php echo $secretariat->FullName; ?>" class="required form-control" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-3">Email</label>
+						<div class="col-md-7">
+							<input type="text" name="Email" value="<?php echo $secretariat->Email; ?>" class="required form-control" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-3">Designation</label>
+						<div class="col-md-7">
+							<div class="input-group">
+								<select name="DesignationId" class="form-control required">
+									<option>---SELECT ONE---</option>
+									<?php foreach($cdbdesignations as $cdbdesignation): ?>
+										<option value="<?php echo $cdbdesignation->Id; ?>" <?php if($secretariat->DesignationId == $cdbdesignation->Id): ?>selected="selected"<?php endif; ?>><?php echo $cdbdesignation->DesignationName; ?></option>
+									<?php endforeach; ?>
+								</select>
+								<span class="input-group-btn">
+									<a href="#addNewDesignation" role="button" class="btn btn-primary" data-toggle="modal">Add New Designation</a>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-3">Department</label>
+						<div class="col-md-7">
+							<div class="input-group">
+								<select name="DepartmentId" class="form-control required" id="secretariat-department">
+									<option value="">---SELECT ONE---</option>
+									<?php foreach($cdbdepartments as $cdbdepartment): ?>
+										<option value="<?php echo $cdbdepartment->Id; ?>" <?php if($secretariat->DepartmentId == $cdbdepartment->Id): ?>selected="selected"<?php endif; ?>><?php echo $cdbdepartment->DepartmentName; ?></option>
+									<?php endforeach; ?>
+								</select>
+								<span class="input-group-btn">
+									<a href="#addNewDepartment" role="button" class="btn btn-large btn-primary" data-toggle="modal">Add New Department</a>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-3">Division</label>
+						<div class="col-md-7">
+							<div class="input-group">
+								<select name="DivisionId" class="form-control" id="secretariat-division">
+									<option value="">---SELECT ONE---</option>
+									<?php foreach($cdbdivisions as $division): ?>
+										<option value="<?php echo $division->Id; ?>" <?php if($division->Id == $secretariat->DivisionId): ?>selected="selected"<?php endif; ?> <?php if($division->DepartmentId != $secretariat->DepartmentId): ?>disabled="disabled"<?php endif; ?> data-deptid="<?php echo $division->DepartmentId; ?>"><?php echo $division->DepartmentName; ?></option>
+									<?php endforeach; ?>
+								</select>
+								<span class="input-group-btn">
+									<a href="#addNewDivision" role="button" class="btn btn-large btn-primary" data-toggle="modal">Add New Division</a>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-3">Phone No.</label>
+						<div class="col-md-7">
+							<input type="text" name="PhoneNo" value="<?php echo $secretariat->PhoneNo; ?>" class="required form-control" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-3">Ext No.</label>
+						<div class="col-md-7">
+							<input type="text" name="ExtensionNo" value="<?php echo $secretariat->ExtensionNo; ?>" class="required form-control" />
+						</div>
+					</div>
+					<?php if((bool)$secretariat->Image): ?>
+						<?php echo Form::hidden('ImageUpload1', $secretariat->Image); ?>
+
+						<div class="col-md-4 col-md-offset-3">
+							<img src="<?php echo asset($secretariat->Image); ?>"/>
+						</div><div class="clearfix"></div><br>
+					<?php endif; ?>
+					<div class="form-group">
+						<label class="control-label col-md-3">Image Upload <?php /*(width 120px, height 175px)*/ ?></label>
+						<div class="col-md-7">
+							<input type="file" name="ImageUpload" class="<?php if(!(bool)$secretariat->Image): ?>required <?php endif; ?> form-control" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="" class="control-label col-md-3">Is Head of Org</label>
+						<div class="col-md-4">
+							<div class="radio-list">
+								<label for="option1" class="radio-inline">
+									<input type="radio" name="IsDirectorGeneral" id="option1" <?php if((bool)$secretariat->Id): ?><?php if($secretariat->IsDirectorGeneral == 1): ?>checked="checked"<?php endif; ?><?php else: ?><?php echo "checked='checked'"; ?><?php endif; ?> class="form-control" value="1">&nbsp;Yes
+								</label>
+								<label for="option2" class="radio-inline">
+									<input type="radio" name="IsDirectorGeneral" id="option2" class="form-control" value="0" <?php if($secretariat->IsDirectorGeneral == 0): ?>checked="checked"<?php endif; ?>>&nbsp;No
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<?php endforeach; ?>
+				<div class="form-actions">
+					<div class="btn-set">
+						<button type="submit" class="btn green">Save</button>
+						<a href="<?php echo URL::to('web/addcdbsecretariat'); ?>" class="btn red">Cancel</a>
+					</div>
+				</div>
+			</div>	
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+</div>			
+<!-- Modals Start -->
+<div id="addNewDesignation" class="modal fade">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Manage Designation</h4>
+			</div>
+			<div class="col-md-6">
+			<?php echo Form::open(array('action'=>'CDBSecretariatController@addCDBDesignation', 'method'=>'POST')); ?>
+
+
+
+				<div class="modal-body">
+					<p>Please enter the new designation name.</p>
+
+					<label>Designation Name:</label>
+					<input type="text" name="DesignationName" class="form-control required" placeholder="Designation Name" autofocus>
+				</div>
+
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-success">Submit</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+				</div>
+			<?php echo Form::close(); ?>
+
+			</div>
+			<div class="col-md-6" style="height: 400px;overflow-y: scroll;">
+				<h4>Designation</h4>
+				<table class="table table-condensed table-bordered">
+					<thead>
+						<tr>
+							<th>Sl#</th>
+							<th>Designation</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php $count = 1; ?>
+						<?php foreach($cdbdesignations as $designation): ?>
+						<tr>
+							<td><?php echo $count++; ?></td>
+							<td><?php echo $designation->DesignationName; ?></td>
+							<td class="text-center"><a class="btn btn-xs red" href="<?php echo URL::to("web/deletecdbdesignation/$designation->Id"); ?>"><i class="fa fa-times"></i>&nbsp;Delete</a></td>
+						</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			</div><div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+<div id="addNewDepartment" class="modal fade">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Add New Department Category</h4>
+				</div>
+			<div class="col-md-6">
+			<?php echo Form::open(array('action'=>'CDBSecretariatController@addCDBDDepartment', 'method'=>'POST')); ?>
+
+				<div class="modal-body">
+					<p>Please enter the new department name.</p>
+
+					<label>Department Name:</label>
+					<input type="text" name="DepartmentName" class="form-control required" placeholder="Department Name" autofocus>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-success">Submit</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+				</div>
+			<?php echo Form::close(); ?>
+
+			</div>
+			<div class="col-md-6" style="height: 400px; overflow-y: scroll;">
+				<h4>Departments</h4>
+				<table class="table table-condensed table-bordered">
+					<thead>
+					<tr>
+						<td>Sl#</td>
+						<td>Department</td>
+						<td>Action</td>
+					</tr>
+					</thead>
+					<tbody>
+						<?php $count = 1; ?>
+						<?php foreach($cdbdepartments as $cdbdepartment): ?>
+							<tr>
+								<td><?php echo $count++; ?></td>
+								<td><?php echo $cdbdepartment->DepartmentName; ?></td>
+								<td class="text-center"><a class="btn btn-xs red" href="<?php echo URL::to("web/deletecdbdepartment/$cdbdepartment->Id"); ?>"><i class="fa fa-times"></i>&nbsp;Delete</a></td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			</div><div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+<div id="addNewDivision" class="modal fade">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Add New Division</h4>
+			</div>
+			<div class="col-md-6">
+				<?php echo Form::open(array('action'=>'CDBSecretariatController@addCDBDivision', 'method'=>'POST')); ?>
+
+				<div class="modal-body">
+					<p>Please enter the new division name.</p>
+					<div class="col-md-12">
+						<label>Department:</label>
+						<select name="DepartmentId" class="form-control required">
+							<option value="">--DEPARTMENT--</option>
+							<?php foreach($cdbdepartments as $dept): ?>
+								<option value="<?php echo $dept->Id; ?>"><?php echo $dept->DepartmentName; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+
+					<div class="col-md-12">
+						<br>
+						<label>Division Name:</label>
+						<input type="text" name="DepartmentName" class="form-control required" placeholder="Division Name" autofocus>
+					</div> <div class="clearfix"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-success">Submit</button>
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+				</div>
+				<?php echo Form::close(); ?>
+
+			</div>
+			<div class="col-md-6" style="height: 400px; overflow-y: scroll;">
+				<h4>Division</h4>
+				<table class="table table-condensed table-bordered">
+					<thead>
+					<tr>
+						<td>Sl#</td>
+						<td>Division</td>
+						<td>Under</td>
+						<td>Action</td>
+					</tr>
+					</thead>
+					<tbody>
+					<?php $count = 1; ?>
+					<?php foreach($cdbdivisions as $cdbdivision): ?>
+						<tr>
+							<td><?php echo $count++; ?></td>
+							<td><?php echo $cdbdivision->DepartmentName; ?></td>
+							<td><?php echo $cdbdivision->Department; ?></td>
+							<td class="text-center"><a class="btn btn-xs red" href="<?php echo URL::to("web/deletecdbdivision/$cdbdivision->Id"); ?>"><i class="fa fa-times"></i>&nbsp;Delete</a></td>
+						</tr>
+					<?php endforeach; ?>
+					</tbody>
+				</table>
+			</div><div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

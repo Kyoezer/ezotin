@@ -1,0 +1,797 @@
+<div class="margin-top-20" style="overflow: auto">
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+
+<script>
+    function printPDF() {        
+        var doc = new jsPDF();
+        var specialElementHandlers = {
+            '#editor': function (element, renderer) {
+                return true;
+            }
+        };    
+
+            doc.fromHTML($('#exportToPDF').html(), 15, 15, {
+                'width': 170,
+                    'elementHandlers': specialElementHandlers
+            });
+            doc.save('Detail-Report.pdf');
+    }
+
+</script>
+<div id="exportToPDF">
+    <?php if($reportType=='Office' || $reportType=='Private ongoing site'  || $reportType=='Public ongoing site'): ?>    
+   
+    <h4 style="font-weight: bold;">General Information</h4>
+    <?php elseif($reportType=='Office_human_resources'): ?>
+    <h4 style="font-weight: bold;">Human Resources</h4>
+    <?php elseif($reportType=='Public ongoing site_human_resources'): ?>
+    <h4 style="font-weight: bold;">Public ongoing site Human Resources</h4>
+    <?php elseif($reportType=='Public ongoing site_equipment'): ?>
+    <h4 style="font-weight: bold;">Public ongoing site Equipment</h4>
+    <?php elseif($reportType=='Public ongoing site_inspector' || $reportType=='Office_inspector'): ?>
+    <h4 style="font-weight: bold;">Site Inspector</h4>
+    <?php endif; ?>
+    <table class="table table- table-bordered" id="exportTable">
+        <?php if($reportType=='Office'): ?>
+        <?php foreach($detailReport as $data): ?>
+        <tr>
+            <td>CDB No.</td>
+            <td><?php echo $data->cdbNo; ?></td>
+        </tr>
+        <tr>
+            <td>Name of Firm</td>
+            <td><?php echo $data->nameOfFirm; ?></td>
+        </tr>
+        <tr>
+            <td>License No.</td>
+            <td><?php echo $data->licenseNo; ?></td>
+        </tr>
+        <tr>
+            <td>Dzongkhag Name.</td>
+            <td><?php echo $data->dzongkhagName; ?></td>
+        </tr>        
+        <tr>
+            <td>Address</td>
+            <td><?php echo $data->permAddress; ?></td>
+        </tr> 
+        <tr>
+            <td>Email</td>
+            <td><?php echo $data->email; ?></td>
+        </tr>
+        <tr>
+            <td>Telephone No.</td>
+            <td><?php echo $data->telNo; ?></td>
+        </tr>
+        <tr>
+            <td>Mobile No.</td>
+            <td><?php echo $data->mobNo; ?></td>
+        </tr>
+        <tr>
+            <td>Classfication</td>
+            <td><?php echo $data->classificationName; ?></td>
+        </tr>
+        <tr>
+            <td>Validity</td>
+            <td><?php echo $data->validity; ?></td>
+        </tr>
+        <tr>
+            <td>Office establishment</td>
+            <td><?php echo $data->isEstablished; ?></td>
+        </tr>
+        <tr> 
+            <td>Office signboard</td>
+            <td><?php echo $data->isSignboard; ?></td>
+        </tr>
+        <tr> 
+            <td>Filing system</td>
+            <td><?php echo $data->isFileSystem; ?></td>
+        </tr>
+        <tr> 
+            <td>OHS Handbook</td>
+            <td><?php echo $data->hasHandbook; ?></td>
+        </tr>
+        <tr> 
+            <td>Safety Committee</td>
+            <td><?php echo $data->hasSafety; ?></td>
+        </tr>
+        <tr> 
+            <td>Safety Officer</td>
+            <td><?php echo $data->hasSafetyOfficer; ?></td>
+        </tr>
+        <tr> 
+            <td>Locality name</td>
+            <td><?php echo $data->localityName; ?></td>
+        </tr>        
+        <tr> 
+            <td>Representative name</td>
+            <td><?php echo $data->representativeName; ?></td>
+        </tr>
+        <tr> 
+            <td>Representative CID</td>
+            <td><?php echo $data->representativeCidNo; ?></td>
+        </tr>
+        <tr> 
+            <td>Representative contact no</td>
+            <td><?php echo $data->representativeContactNo; ?></td>
+        </tr>
+        <tr> 
+            <td>Remarks</td>
+            <td><?php echo $data->remarks; ?></td>
+        </tr>
+        <tr> 
+            <td>Is requiment fullfilled</td>
+            <td><?php echo $data->isRequirementFulfilled; ?></td>
+        </tr>       
+        <tr> 
+            <td>Inspection date</td>
+            <td><?php echo $data->createdOn; ?></td>
+        </tr>
+        <?php endforeach; ?>
+        <?php elseif($reportType=='Office_inspector'): ?>
+            <thead>
+                <tr> 
+                    <th>Inspector Name</th>    
+                </tr>    
+            </thead>
+            <?php foreach($detailReport as $data): ?>
+            <tbody>
+                <tr> 
+                <td><?php echo $data->inspectorName; ?> </td>    
+                </tr>
+            </tbody>
+            <?php endforeach; ?>
+    <?php elseif($reportType=='Public ongoing site'): ?>
+    <?php foreach($detailReport as $data): ?>  
+        <tr>
+            <td>CDB No.</td>
+            <td><?php echo $data->cdbNo; ?></td>
+        </tr>
+        <tr>
+            <td>Name of Firm</td>
+            <td><?php echo $data->nameOfFirm; ?></td>
+        </tr>      
+        <tr>
+            <td>Work Name</td>
+            <td><?php echo $data->nameOfWork; ?></td>
+        </tr>
+        <tr>
+            <td>License No</td>
+            <td><?php echo $data->licenseNo; ?></td>
+        </tr>
+        <tr>
+            <td>Dzongkhag</td>
+            <td><?php echo $data->dzongkhagName; ?></td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td><?php echo $data->permAddress; ?></td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td><?php echo $data->email; ?></td>
+        </tr>
+        <tr>
+            <td>Mobile No</td>
+            <td><?php echo $data->mobNo; ?></td>
+        </tr>
+        <tr>
+            <td>Classification</td>
+            <td><?php echo $data->classificationName; ?></td>
+        </tr>
+        <tr>
+            <td>Validity</td>
+            <td><?php echo $data->validity; ?></td>
+        </tr>
+        <tr>
+            <td>Procuring Agency</td>
+            <td><?php echo $data->procuringAgency; ?></td>
+        </tr>
+        <tr>
+            <td>Start Date</td>
+            <td><?php echo $data->actualStartDate; ?></td>
+        </tr>
+        <tr>
+            <td>Proposed Completion Date</td>
+            <td><?php echo $data->actualEndDate; ?></td>
+        </tr>
+        <tr>
+            <td>Contract Price</td>
+            <td><?php echo $data->awardedAmount; ?></td>
+        </tr> 
+        <tr>
+            <td>Client Site Engineer Name</td>
+            <td><?php echo $data->procuringSiteEngineerName; ?></td>
+        </tr>
+        <tr> 
+            <td>Location</td>
+            <td><?php echo $data->latitude; ?>,<?php echo $data->longitude; ?>,<?php echo $data->localityName; ?></td>
+        </tr>  
+        <tr> 
+            <td>Representative name</td>
+            <td><?php echo $data->representativeName; ?></td>
+        </tr>    
+        <tr> 
+            <td>Representative CID</td>
+            <td><?php echo $data->representativeCidNo; ?></td>
+        </tr>
+        <tr> 
+            <td>Representative contact no</td>
+            <td><?php echo $data->representativeContactNo; ?></td>
+        </tr>
+        <tr>
+            <td>Government Site Engineer Name</td>
+            <td><?php echo $data->siteEngineerName; ?></td>
+        </tr>    
+        <tr>
+            <td>Remarks</td>
+            <td><?php echo $data->remarks; ?></td>
+        </tr>     
+        </table>
+
+        <h4 style="font-weight: bold;">Check List</h4>
+        <table class="table table- table-bordered">
+        <tr>
+            <th>Check List</th>
+            <th>Status</th>
+            <th>Remarks</th>
+        </tr>
+        <tr>
+            <td>APS maintained by Government Engineer</td>
+            <td><?php echo $data->hasAps; ?></td>
+            <td><?php echo $data->hasApsRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Office Setup at Site</td>
+            <td><?php echo $data->hasOffice; ?></td>
+            <td><?php echo $data->hasOfficeRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Office Signboard at Site</td>
+            <td><?php echo $data->hasSignboard; ?></td>
+            <td><?php echo $data->hasSignboardRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Store at Site</td>
+            <td><?php echo $data->hasStore; ?></td>
+            <td><?php echo $data->hasStoreRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Hibatable work accomodation at site</td>
+            <td><?php echo $data->hasAccommodation; ?></td>
+            <td><?php echo $data->hasAccommodationRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Proper sanitation facilities provided</td>
+            <td><?php echo $data->hasSanitary; ?></td>
+            <td><?php echo $data->hasSanitaryRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Access to potable water</td>
+            <td><?php echo $data->hasPotableWater; ?></td>
+            <td><?php echo $data->hasPotableWaterRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Work insurance</td>
+            <td><?php echo $data->hasWorkInsurance; ?></td>
+            <td><?php echo $data->hasWorkInsuranceRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Labour insurance</td>
+            <td><?php echo $data->hasLabourInsurance; ?></td>
+            <td><?php echo $data->hasLabourInsuranceRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Third party insurance</td>
+            <td><?php echo $data->hasThirdPartyInsurance; ?></td>
+            <td><?php echo $data->hasThirdPartyInsuranceRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Work plan available</td>
+            <td><?php echo $data->hasWorkPlan; ?></td>
+            <td><?php echo $data->hasWorkPlanRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Work Status</td>
+            <td><?php echo $data->workStatus; ?></td>
+            <td><?php echo $data->workStatusRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>BOQ available</td>
+            <td><?php echo $data->hasBoq; ?></td>
+            <td><?php echo $data->hasBoqRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Condidtion of contract available</td>
+            <td><?php echo $data->hasContractConditions; ?></td>
+            <td><?php echo $data->hasContractConditionsRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Approved drawing available</td>
+            <td><?php echo $data->hasApprovedDrawing; ?></td>
+            <td><?php echo $data->hasApprovedDrawingRemarks; ?></td>
+        </tr>
+        <!-- <tr>
+            <td>Work Progress</td>
+            <td>$data->work_progress</td>
+        </tr> -->
+        <tr>
+            <td>Work Specification</td>
+            <td><?php echo $data->hasWorkSpecifications; ?></td>
+            <td><?php echo $data->hasWorkSpecificationsRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Site order book available</td>
+            <td><?php echo $data->hasSiteOrderBook; ?></td>
+            <td><?php echo $data->hasSiteOrderBookRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Hindrance register available</td>
+            <td><?php echo $data->hasHindranceRegister; ?></td>
+            <td><?php echo $data->hasHindranceRegisterRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>MBS available</td>
+            <td><?php echo $data->hasMbs; ?></td>
+            <td><?php echo $data->hasMbsRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>CMS Maintained </td>
+            <td><?php echo $data->hasCms; ?></td>
+            <td><?php echo $data->hasCmsRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Day work journal available</td>
+            <td><?php echo $data->hasJournal; ?></td>
+            <td><?php echo $data->hasJournalRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Quality assurance plan available</td>
+            <td><?php echo $data->hasQualityAssurancePlan; ?></td>
+            <td><?php echo $data->hasQualityAssurancePlanRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Quality control plan available</td>
+            <td><?php echo $data->hasQualityControlPlan; ?></td>
+            <td><?php echo $data->hasQualityControlPlanRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Mandatory test report available</td>
+            <td><?php echo $data->hasTestReport; ?></td>
+            <td><?php echo $data->hasTestReportRemarks; ?></td>
+        </tr>        
+        <tr>
+            <td>Local material list</td>
+            <td><?php echo $data->hasLocalMaterials; ?></td>
+            <td><?php echo $data->hasLocalMaterialsRemarks; ?></td>
+        </tr>        
+        <tr>
+            <td>Sub contractor specialize trade</td>
+            <td><?php echo $data->hasSpecializedTrade; ?></td>
+            <td><?php echo $data->hasSpecializedTradeRemarks; ?></td>
+        </tr>       
+        <tr>
+            <td>OHS in charge</td>
+            <td><?php echo $data->hasOhsIncharge; ?></td>
+            <td><?php echo $data->hasOhsInchargeRemarks; ?></td>
+        </tr>   
+        <tr>
+            <td>Safety signages</td>
+            <td><?php echo $data->hasSafetySignages; ?></td>
+            <td><?php echo $data->hasSafetySignagesRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Fire extinguising</td>
+            <td><?php echo $data->hasFireExtinguishingEquipment; ?></td>
+            <td><?php echo $data->hasFireExtinguishingEquipmentRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>First aid box</td>
+            <td><?php echo $data->hasFirstAidBox; ?></td>
+            <td><?php echo $data->hasFirstAidBoxRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Peripheral bouday construction</td>
+            <td><?php echo $data->hasPeripheralBoundary; ?></td>
+            <td><?php echo $data->hasPeripheralBoundaryRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>Safe and proper electrical connection</td>
+            <td><?php echo $data->hasProperElectricalInstallations; ?></td>
+            <td><?php echo $data->hasProperElectricalInstallationsRemarks; ?></td>
+        </tr>
+        <tr>
+            <td>CCTV Installed</td>
+            <td><?php echo $data->hasCctv; ?></td>
+            <td><?php echo $data->hasCctvRemarks; ?></td>
+        </tr>
+        </table>
+
+        <h4 style="font-weight: bold;">PPE Check List</h4>
+        <table class="table table- table-bordered">
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Quantity</th>
+                <th>Remarks</th>
+            </tr>
+            <?php foreach($ppeCheckList as $ppeCheck): ?>
+            <tr>
+                <td><?php echo $ppeCheck->name; ?></td>
+                <td><?php echo $ppeCheck->status; ?></td>
+                <td><?php echo $ppeCheck->quantity; ?></td>
+                <td><?php echo $ppeCheck->remarks; ?></td>
+            </tr>
+            <?php endforeach; ?>
+        </table>
+
+        <h4 style="font-weight: bold;">Labour Information</h4>
+        <table class="table table- table-bordered">
+        <tr>
+            <td>Total National Labour</td>
+            <td><?php echo $data->nationalLabours; ?></td>
+        </tr>
+        <tr>
+            <td>Total Foreign Labour</td>
+            <td><?php echo $data->foreignLabours; ?></td>
+        </tr>
+
+        <tr>
+            <td>Total Intern</td>
+            <td><?php echo $data->internNo; ?></td>
+        </tr>
+        <tr>
+            <td>Total TVET Graduates</td>
+            <td><?php echo $data->vtiGraduates; ?></td>
+        </tr>       
+        <tr>
+            <td>Inspection date</td>
+            <td><?php echo $data->createdOn; ?></td>
+        </tr>
+	<?php endforeach; ?>
+        <?php elseif($reportType=='Public ongoing site_human_resources'): ?>
+        <thead>
+            <tr>  
+                <th>CID No.</th>
+                <th>Name</th>
+                <th>Designation</th>
+                <th>Status</th>
+                <th>Remarks</th>
+            </tr>
+        </thead>
+        <?php foreach($detailReport as $data): ?>
+        <tbody>
+            <tr> 
+            <td><?php echo $data->cid; ?></td>
+            <td><?php echo $data->name; ?></td>
+            <td><?php echo $data->designation; ?></td>
+            <td><?php echo $data->status; ?></td>
+            <td><?php echo $data->remarks; ?></td>
+            
+            </tr>
+        </tbody>           
+        <?php endforeach; ?>
+
+        <?php elseif($reportType=='Public ongoing site_equipment'): ?>       
+        <thead>
+            <tr> 
+                <th>Registration No.</th>
+                <th>Equipment Type</th>
+                <th>Quantity</th>
+                <th>Status</th>
+                <th>Remarks</th>
+            </tr>
+        </thead>
+        <?php foreach($detailReport as $data): ?>
+        <tbody>
+            <tr> 
+            <td><?php echo $data->vehicle_no; ?></td>
+            <td><?php echo $data->name; ?></td>
+            <td><?php echo $data->quantity; ?></td>
+            <td><?php echo $data->status; ?></td>
+            <td><?php echo $data->remarks; ?></td>
+            </tr>
+        </tbody>        
+        <?php endforeach; ?>	
+        <?php elseif($reportType=='Public ongoing site_inspector'): ?>
+        <table class="table table- table-bordered">
+            <thead>
+                <tr> 
+                    <th>Inspector Name</th>    
+                </tr>    
+            </thead>
+            <?php foreach($detailReport as $data): ?>
+            <tbody>
+                <tr> 
+                <td><?php echo $data->inspectorName; ?> </td>    
+                </tr>
+            </tbody>
+        </table>
+            <?php endforeach; ?>
+        <?php elseif($reportType=='Private ongoing site'): ?>
+            <?php foreach($detailReport as $data): ?>
+            <table class="table table- table-bordered">
+            <tbody>
+                <tr> 
+                    <td>CDB No.</td>
+                    <td><?php echo $data->cdbNo; ?></td>
+                </tr>
+                <tr> 
+                    <td>Name of Firm</td>
+                    <td><?php echo $data->nameOfFirm; ?></td>
+                </tr>
+                <tr> 
+                    <td>License No.</td>
+                    <td><?php echo $data->licenseNo; ?></td>
+                </tr>
+                <tr> 
+                    <td>Dzongkhag Name</td>
+                    <td><?php echo $data->dzongkhagName; ?></td>
+                </tr>
+                <tr> 
+                    <td>Work Address</td>
+                    <td><?php echo $data->workAddress; ?></td>
+                </tr>
+                <tr> 
+                    <td>Email</td>
+                    <td><?php echo $data->email; ?></td>
+                </tr>
+                <tr> 
+                    <td>Telephone</td>
+                    <td><?php echo $data->telNo; ?></td>
+                </tr>
+                <tr> 
+                    <td>Mobile No.</td>
+                    <td><?php echo $data->mobNo; ?></td>
+                </tr>
+                <tr> 
+                    <td>Classfication</td>
+                    <td><?php echo $data->classificationName; ?></td>
+                </tr>
+                <tr> 
+                    <td>Validity</td>
+                    <td><?php echo $data->validity; ?></td>
+                </tr>
+                <tr> 
+                    <td>Contract Extension</td>
+                    <td><?php echo $data->contractExtension; ?></td>
+                </tr>
+                <tr> 
+                    <td>Contract Extension Start Date</td>
+                    <td><?php echo $data->contractExtensionStartDate; ?></td>
+                </tr>
+                <tr> 
+                    <td>Contract Extension End Date</td>
+                    <td><?php echo $data->contractExtensionEndDate; ?></td>
+                </tr>
+                <tr> 
+                    <td>Contract Value</td>
+                    <td><?php echo $data->contractValue; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Office</td>
+                    <td><?php echo $data->hasOffice; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Office Remarks</td>
+                    <td><?php echo $data->hasOfficeRemarks; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Signboard</td>
+                    <td><?php echo $data->hasSignboard; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Signboard Remarks</td>
+                    <td><?php echo $data->hasSignboardRemarks; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Store</td>
+                    <td><?php echo $data->hasStore; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Store Remarks</td>
+                    <td><?php echo $data->hasStoreRemarks; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Document</td>
+                    <td><?php echo $data->hasDocument; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Document Remarks</td>
+                    <td><?php echo $data->hasDocumentRemarks; ?></td>
+                </tr>
+                <tr> 
+                    <td>Is Insured</td>
+                    <td><?php echo $data->isInsured; ?></td>
+                </tr>
+                <tr> 
+                    <td>Is Insured Remarks</td>
+                    <td><?php echo $data->isInsuredRemarks; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Labour Insurance</td>
+                    <td><?php echo $data->hasLabourInsurance; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Labour Insurance Remarks</td>
+                    <td><?php echo $data->hasLabourInsuranceRemarks; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Third Party Insurance</td>
+                    <td><?php echo $data->hasThirdPartyInsurance; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Third Party Insurance Remarks</td>
+                    <td><?php echo $data->hasThirdPartyInsuranceRemarks; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Work plan</td>
+                    <td><?php echo $data->hasWorkPlan; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Work plan Remarks</td>
+                    <td><?php echo $data->hasWorkPlanRemarks; ?></td>
+                </tr>
+                <tr> 
+                    <td>Work Status</td>
+                    <td><?php echo $data->workStatus; ?></td>
+                </tr>
+                <tr> 
+                    <td>Work Status Remarks</td>
+                    <td><?php echo $data->workStatusRemarks; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Camp</td>
+                    <td><?php echo $data->hasCamp; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Power Supply</td>
+                    <td><?php echo $data->hasPowerSupply; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Sanitary</td>
+                    <td><?php echo $data->hasSanitary; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Water Supply</td>
+                    <td><?php echo $data->hasWaterSupply; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has OHS Incharge</td>
+                    <td><?php echo $data->hasOhsIncharge; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has OHS Incharge Remarks</td>
+                    <td><?php echo $data->hasOhsInchargeRemarks; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Fire Extinguishing Equipment</td>
+                    <td><?php echo $data->hasFireExtinguishingEquipment; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Fire Extinguishing Equipment Remarks</td>
+                    <td><?php echo $data->hasFireExtinguishingEquipmentRemarks; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has First Aid Box</td>
+                    <td><?php echo $data->hasFirstAidBox; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has First Aid Box Remarks</td>
+                    <td><?php echo $data->hasFirstAidBoxRemarks; ?></td>
+                </tr>
+                <tr> 
+                    <td>Total National Labour</td>
+                    <td><?php echo $data->nationalLabours; ?></td>
+                </tr>
+                <tr> 
+                    <td>Total Foreign Labour</td>
+                    <td><?php echo $data->foreignLabours; ?></td>
+                </tr>
+                <tr> 
+                    <td>Total Intern</td>
+                    <td><?php echo $data->internNo; ?></td>
+                </tr>
+                <tr> 
+                    <td>Total VTI Graduate</td>
+                    <td><?php echo $data->vtiGraduates; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Specialize Trade</td>
+                    <td><?php echo $data->hasSpecializeTrade; ?></td>
+                </tr>
+                <tr> 
+                    <td>Has Specialize Trade Remarks</td>
+                    <td><?php echo $data->hasSpecializeTradeRemarks; ?></td>
+                </tr>
+                <tr> 
+                    <td>Location</td>
+                    <td><?php echo $data->latitude; ?>,<?php echo $data->longitude; ?>,<?php echo $data->localityName; ?></td>
+                </tr>
+                <tr> 
+                    <td>Representative Name</td>
+                    <td><?php echo $data->representativeName; ?></td>
+                </tr>
+                <tr> 
+                    <td>Representative CID No.</td>
+                    <td><?php echo $data->representativeCidNo; ?></td>
+                </tr>
+                <tr> 
+                    <td>Representative Contact No.</td>
+                    <td><?php echo $data->representativeContactNo; ?></td>
+                </tr>
+                <tr> 
+                    <td>Remarks</td>
+                    <td><?php echo $data->remarks; ?></td>
+                </tr>
+                <tr> 
+                    <td>Inspection Date</td>
+                    <td><?php echo $data->inspection_date; ?></td>
+                </tr>
+                
+            </tbody>   
+        </table>
+  <?php endforeach; ?> 
+        <h4 style="font-weight: bold;">PPE Check List</h4>
+        <table class="table table- table-bordered">
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Quantity</th>
+                <th>Remarks</th>
+            </tr>
+            <?php foreach($ppeCheckList as $ppeCheck): ?>
+            <tr>
+                <td><?php echo $ppeCheck->name; ?></td>
+                <td><?php echo $ppeCheck->status; ?></td>
+                <td><?php echo $ppeCheck->quantity; ?></td>
+                <td><?php echo $ppeCheck->remarks; ?></td>
+            </tr>
+            <?php endforeach; ?>              
+           
+        <?php elseif($reportType=='Office_human_resources'): ?>
+        <thead>
+            <tr> 
+                <th>CID No.</th>
+                <th>Name</th>
+                <th>Designation</th>
+                <th>Status</th>
+                <th>Remarks</th>
+            </tr>
+        </thead>
+        <?php foreach($detailReport as $data): ?>
+        <tbody>
+            <tr> 
+            <td><?php echo $data->cidNo; ?></td>
+            <td><?php echo $data->name; ?></td>
+            <td><?php echo $data->designation; ?></td>
+            <td><?php echo $data->status; ?></td>
+            <td><?php echo $data->remarks; ?></td>
+            </tr>
+        </tbody>
+        <?php endforeach; ?>        
+        <?php elseif($reportType=='Office_image' || $reportType=='Private ongoing site_image'  || $reportType=='Public ongoing site_image'): ?>
+        <h4 style="font-weight: bold;">Images</h4>    
+        <thead>
+                <tr> 
+                    <th>Sl#</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <?php $rowCount = 1;?>
+            <?php foreach($detailReport as $data): ?>
+            <tbody>
+                <tr> 
+                    <td><?php echo $rowCount++; ?></td>
+                    <td><?php echo $data->document_title; ?></td>
+                    <td style="text-align: center;"><img src="<?php echo asset('uploads/monitoring/'.$data->document_title); ?>" style="width: 410px;"/></td>
+                </tr>
+            </tbody>
+            <?php endforeach; ?>       
+        <?php endif; ?>
+    </table>
+</div>
+</div>

@@ -1,0 +1,90 @@
+<?php $__env->startSection('content'); ?>
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>
+					<span class="caption-subject font-green-seagreen">Edit Album</span>
+				</div>
+			</div>
+			<div class="portlet-body form">
+			<?php echo Form::open(array('url'=>'web/addnewalbum', 'files'=>true,'class'=>'form-horizontal')); ?>
+
+				<?php foreach($album as $value): ?>
+				<div class="form-body">
+					<?php echo Form::hidden('Id',$value->Id); ?>
+
+					<div class="form-group">
+						<label class="control-label col-md-3">Album Name</label>
+						<div class="col-md-7">
+							<input type="text" name="AlbumName" value="<?php echo $value->AlbumName; ?>" class="required form-control" />
+						</div>
+					</div>
+					<?php if((bool)$value->AlbumImage): ?>
+						&nbsp;&nbsp;&nbsp;&nbsp;<img src="<?php echo asset($value->AlbumImage); ?>" width="100" height="100"/>
+					<?php endif; ?>
+					<div class="form-group">
+						<label class="control-label col-md-3">Upload Image</label>
+						<div class="col-md-7">
+							<input type="file" name="AlbumImage" class="<?php if(!(bool)$value->AlbumImage): ?>required <?php endif; ?> form-control" />
+						</div>
+					</div>
+				</div>
+				<?php endforeach; ?>
+				<div class="form-actions">
+					<div class="btn-set">
+						<button type="submit" class="btn green">Save</button>
+						<a href="<?php echo URL::to('web/photoalbum'); ?>" class="btn red">Cancel</a>
+					</div>
+				</div>
+				<?php echo Form::close(); ?>
+
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>
+					<span class="caption-subject font-green-seagreen">Album Details</span>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<div class="form-body table-responsive">
+					<table class="table table-bordered table-striped table-condensed table-hover">
+						<thead>
+							<tr class="success">
+								<th>Album</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php $__empty_1 = true; foreach($saved as $imageDetail): $__empty_1 = false; ?>
+								<tr>
+									<td>
+										<div class="nanoGallery3">
+											<a href="<?php echo asset($imageDetail->AlbumImage); ?>" ><?php echo $imageDetail->AlbumName; ?></a>
+										</div>
+									</td>
+									<td>
+										<a href="<?php echo URL::to('web/deletealbum/'.$imageDetail->Id); ?>" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Delete</a>
+										<a href="<?php echo URL::to('web/photoalbum/'.$imageDetail->Id); ?>" class="btn green btn-sm"><i class="fa fa-edit"></i> Edit</a>
+									</td>
+								</tr>
+							<?php endforeach; if ($__empty_1): ?>
+								<tr>
+									<td colspan="2" class="text-center font-red">No albums!</td>
+								</tr>
+							<?php endif; ?>
+						</tbody>
+					</table>
+				</div>	
+			</div>
+		</div>		
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

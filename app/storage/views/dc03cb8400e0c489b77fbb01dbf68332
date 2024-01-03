@@ -1,0 +1,96 @@
+<?php $__env->startSection('main-content'); ?>
+<h4 class="text-primary"><strong>Forums</strong></h4>
+<div class="table-responsive">
+	<?php 
+		$i = 0;
+	?>
+	<?php $__empty_1 = true; foreach($forum as $forums): $__empty_1 = false; ?>
+	<div class="panel-heading">
+		<h4 class="panel-title">
+			<b><a  href="<?php echo URL::to('web/detailforum'); ?>"><?php echo ++$i; ?>. <?php echo $forums->topic; ?></a></b>
+			<?php if(Session::has('ArbitratorUserName')): ?>
+				<div class="pull-right">
+					<a href="<?php echo URL::to('web/arbitratorlogout'); ?>">
+						<i class="fa fa-power-off"></i> Log Out </a>
+				</div>
+			<?php endif; ?>
+		</h4>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+		<?php 
+				$datediff = date_diff(date_create($forums->CreatedOn),date_create(date('Y-m-d G:i:s')));
+				$diffInMonths = $datediff->format("%m");
+				$diffInDays = $datediff->format("%a");
+				$diffInHours = $datediff->format("%h");
+				$diffInMinutes = $datediff->format("%i");
+
+				if((int)$diffInMonths > 0){
+					$diff = $datediff->format("%m months, %d days");
+				}else{
+					if((int)$diffInDays > 0){
+						$diff = $datediff->format("%a days");
+					}else{
+						if((int)$diffInHours > 0){
+							$diff = $datediff->format("%h hours");
+						}else{
+							$diff = $datediff->format("%i minutes");
+						}
+					}
+				}
+		 ?> 
+		<small><i class="fa fa-clock-o"></i> <?php echo $diff; ?> </small> 
+		<p><?php echo $forums->content; ?></p>
+
+
+			<?php $__empty_2 = true; foreach($comment as $comments): $__empty_2 = false; ?>
+			<?php 
+				$datediffC = date_diff(date_create($comments->CreatedOn),date_create(date('Y-m-d G:i:s')));
+				$diffInMonthsC = $datediffC->format("%m");
+				$diffInDaysC = $datediffC->format("%a");
+				$diffInHoursC = $datediffC->format("%h");
+				$diffInMinutesC = $datediffC->format("%i");
+
+				if((int)$diffInMonthsC > 0){
+					$diffC = $datediffC->format("%m months, %d days");
+				}else{
+					if((int)$diffInDaysC > 0){
+						$diffC = $datediffC->format("%a days");
+					}else{
+						if((int)$diffInHoursC > 0){
+							$diffC = $datediffC->format("%h hours");
+						}else{
+							$diffC = $datediffC->format("%i minutes");
+						}
+					}
+				}
+		 ?> 
+			<blockquote>
+				<span style="color: #41A85F; font-family: Georgia; font-style: normal; font-size: 12px;">
+					<?php echo $comments->comments; ?>
+
+					<small><i class="fa fa-clock-o"></i> <?php echo $diffC; ?> <i class="fa fa-comments"></i> <?php echo $comments->name; ?></small>
+				</span>
+			</blockquote>
+			<?php endforeach; if ($__empty_2): ?>
+				<p><b>No Comments</b></p>
+			<?php endif; ?>
+			<div class="col-md-6">
+				<h4> Leave Your Comments</h4>
+					<?php echo Form::open(array('url' => 'web/postcomments','role'=>'form')); ?>
+
+						<input type="hidden" name="forum_id" value="<?php echo $forums->id; ?>"/>
+						<input type="text" value="<?php echo e(Session::has('ArbitratorUserName')?Session::get('ArbitratorUserName'):''); ?>" class="form-control required" <?php if(Session::has('ArbitratorUserName')): ?>readonly="readonly"<?php endif; ?> name="name" placeholder="Name"/>
+						<br/>
+						<textarea class="form-control required" name="comments" placeholder="Comments"></textarea><br/>
+						<button type="submit" class="btn btn-primary"> Comment </button>
+					<?php echo Form::close(); ?>
+
+			</div>
+	</div>
+	<?php endforeach; if ($__empty_1): ?>
+		No articles
+	<?php endif; ?>
+
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('websitemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,114 @@
+<?php $__env->startSection('pagescripts'); ?>
+	<?php echo HTML::script('ckeditor/ckeditor.js'); ?>
+
+	<script>
+        CKEDITOR.replace( 'editor' ,{
+            toolbar: [
+                { name: 'document', items: [ 'Print' ] },
+//                { name: 'clipboard', items: [ 'Undo', 'Redo' ] },
+                { name: 'clipboard', groups: [ 'Clipboard', 'Undo','Redo' ] },
+                { name: 'styles', items: [ 'Format', 'Font', 'FontSize' ] },
+                { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline','Subscript','Superscript', 'Strike', 'RemoveFormat', 'CopyFormatting' ] },
+                { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+                { name: 'align', items: [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
+                { name: 'links', items: [ 'Link', 'Unlink' ] },
+                { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },
+                { name: 'insert', items: [ 'Image', 'Table' ] },
+                { name: 'tools', items: [ 'Maximize' ] },
+                { name: 'editing', items: [ 'Scayt' ] }
+            ],
+        });
+	</script>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>
+					<span class="caption-subject font-green-seagreen">Add Circular</span>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<?php echo Form::open(array('action'=>'WebsiteAddNewCircular@addNewCircularData', 'method'=>'POST','class'=>'form-horizontal','files'=>true)); ?>
+
+				<?php foreach($circular as $detail): ?>
+				<?php echo Form::hidden('Id',$detail->Id); ?>
+
+				<div class="form-body">
+					<div class="form-group">
+						<label class="control-label col-md-3">Circular Title</label>
+						<div class="col-md-7">
+							<input type="text" name="Title" value="<?php echo $detail->Title; ?>" class="required form-control" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-3">Circular Type</label>
+						<div class="col-md-7">
+							<select class="form-control required" name="CircularType" id="circular-type">
+								<option value="">---SELECT ONE---</option>
+								<?php foreach($circularTypes as $circularType): ?>
+									<option value="<?php echo $circularType->Id; ?>" <?php if($circularType->Id == $detail->CircularTypeId): ?>selected="selected"<?php endif; ?> data-reference="<?php echo $circularType->ReferenceNo; ?>"><?php echo $circularType->CircularName; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-md-3">Content</label>
+						<div class="col-md-9">
+							<textarea name="Content" id="editor" rows="15"><?php echo $detail->Content; ?></textarea>
+						</div>
+					</div>
+					<?php if(!empty($detail->ImageUpload)): ?>
+						<span>
+							<img src="<?php echo asset($detail->ImageUpload); ?>" width="100" height="100"/> <i data-id="<?php echo $detail->Id; ?>" class="fa fa-2x fa-times delete-circular-img"></i>
+						</span>
+					<?php endif; ?>
+					<div class="form-group">
+						<label class="control-label col-md-3">Upload Image</label>
+						<div class="col-md-7">
+							<?php echo Form::file('Image_Upload'); ?>
+
+						</div>
+					</div>
+					<?php if(!empty($detail->Attachment)): ?>
+						<span>
+							<a href="<?php echo asset($detail->Attachment); ?>">Attachment</a>
+							<i data-id="<?php echo $detail->Id; ?>" class="fa fa-times delete-circular-attachment"></i>
+						</span>
+					<?php endif; ?>
+					<div class="form-group">
+						<label class="control-label col-md-3">Attachment</label>
+						<div class="col-md-7">
+							<?php echo Form::file('Attachment'); ?>
+
+						</div>
+					</div>
+					<?php echo Form::hidden('Featured','0',array('id'=>'featuredhidden-toggle','disabled'=>'disabled')); ?>
+
+					<div class="form-group" id="featureddiv-toggle">
+						<label class="control-label col-md-3">Featured in Home Slider</label>
+							<label class="radio-inline">
+						      <input type="radio" name="Featured" value="1" <?php if($detail->Featured == 1): ?>checked="checked"<?php endif; ?>/> Yes &nbsp;&nbsp;
+						    </label>
+						    <label class="radio-inline">
+						      <input type="radio" name="Featured" value="0" <?php if(empty($detail->Id)): ?>checked="checked"<?php else: ?><?php if($detail->Featured == 0): ?>checked="checked"<?php endif; ?><?php endif; ?>/> No
+						    </label>
+					</div>
+				</div>
+				<div class="form-actions">
+					<div class="btn-set">
+						<button type="submit" class="btn green">Save</button>
+						<a href="<?php echo Request::url(); ?>" class="btn red">Cancel</a>
+					</div>
+				</div>
+				<?php endforeach; ?>
+				<?php echo Form::close(); ?>
+
+			</div>
+		</div>
+	</div>		
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

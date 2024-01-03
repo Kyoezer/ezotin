@@ -1,0 +1,20 @@
+SELECT
+ (CONCAT('L', ( @a:=@a+1 ))) RANK,
+ T3.CDBNo,
+ T3.NameOfFirm,
+ T2.FinancialBidQuoted,
+ T2.AwardedAmount,
+ ((T2.FinancialBidQuoted-T5.ProjectEstimateCost)/T5.ProjectEstimateCost * 100) estimationPercentage
+ 
+FROM
+ (SELECT @a:= 0) AS a ,etltenderbiddercontractordetail AS T1
+ INNER JOIN etltenderbiddercontractor AS T2
+   ON T2.Id = T1.EtlTenderBidderContractorId
+ INNER JOIN crpcontractorfinal AS T3
+   ON T3.Id = T1.CrpContractorFinalId
+ INNER JOIN etlevaluationscore AS T4
+   ON T4.EtlTenderBidderContractorId = T2.Id
+ INNER JOIN etltender AS T5
+   ON T5.Id = T2.EtlTenderId
+WHERE T5.EGPTenderId = 5470
+ORDER BY T4.SmallAndRegisteredContractorPosition ASC

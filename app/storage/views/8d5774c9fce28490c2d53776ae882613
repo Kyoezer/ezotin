@@ -1,0 +1,17 @@
+<?php $__env->startSection('content'); ?>
+<div class="portlet bordered light">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-cogs"></i>Click on fee structure to edit
+		</div>
+	</div>
+	<div class="portlet-body flip-scroll">
+            <a href="<?php echo URL::to("contractor/editfeestructure"); ?>">Contractor</a> <br/>
+            <a href="<?php echo URL::to("consultant/editfeestructure"); ?>">Consultant</a> <br/>
+            <a href="<?php echo URL::to("architect/editfeestructure"); ?>">Architect</a> <br/>
+            <a href="<?php echo URL::to("engineer/editfeestructure"); ?>">Engineer</a> <br/>
+            <a href="<?php echo URL::to("specializedtrade/editfeestructure"); ?>">Specialized Trade</a> <br/>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

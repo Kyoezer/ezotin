@@ -1,0 +1,123 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php echo HTML::script('assets/global/scripts/sys.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption font-green-seagreen">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject">Monitoring Report</span>
+
+		</div>
+	</div>
+	<?php echo Form::open(array('url' => URL::to('monitoringreport/saveoffice'),'role'=>'form','id'=>'roleregistration')); ?>
+
+	<div class="portlet-body flip-scroll">
+		<div class="form-body">
+			<div class="row">
+				<div class="col-md-12"><h4><strong>Office Establishment</strong></h4></div>
+			</div>
+		</div>
+			<div class="table-responsive">
+				<table class="table table-condensed table-bordered table-responsive flip-content" id="monitoring-office">
+					<thead class="flip-content">
+						<tr style="background: #f9f9f9;">
+							<th>Year</th>
+							<th style="width: 90px;">Office Establishment</th>
+							<th style="width: 60px!important;">Sign Board</th>
+							<th style="width: 80px!important;">Cannot be contacted</th>
+							<th>Deceiving on location change</th>
+							<th>Equipment Requirements <br>Please tick if present</th>
+							<th>HR requirements <br>Please tick if present</th>
+							<th>Remarks</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><?php echo date('Y'); ?>
+
+								<input type="hidden" name="Year" value="<?php echo date('Y'); ?>"/>
+								<input type="hidden" name="CrpContractorFinalId" value="<?php echo $contractorDetails[0]->Id; ?>"/>
+							</td>
+							<td>
+								<select name="HasOfficeEstablishment" class="form-control input-sm input-small" style="width: 80px!important;">
+									<option value="1">Yes</option>
+									<option value="0">No</option>
+								</select>
+							</td>
+							<td>
+								<select name="HasSignBoard" class="form-control input-sm input-small" style="width: 70px!important;">
+									<option value="1">Yes</option>
+									<option value="0">No</option>
+								</select>
+							</td>
+							<td>
+								<select name="CannotBeContacted" class="form-control input-sm input-small" style="width: 70px!important;">
+									<option value="1">Yes</option>
+									<option value="0">No</option>
+								</select>
+							</td>
+							<td>
+								<select name="DeceivingOnLocationChange" class="form-control input-sm input-small" style="width: 80px!important;">
+									<option value="1">Yes</option>
+									<option value="0">No</option>
+								</select>
+							</td>
+							<td class="hr-eq-details">
+								<div class='checkbox-list'>
+									<?php foreach($eqDetails as $eqDetail): ?>
+										<?php $randomKey = randomString(); ?>
+										<input type="hidden" name="MonitoringOfficeEquipment[<?php echo $randomKey; ?>][CmnEquipmentId]" value="<?php echo $eqDetail->CmnEquipmentId; ?>">
+										<input type="hidden" name="MonitoringOfficeEquipment[<?php echo $randomKey; ?>][RegistrationNo]" value="<?php echo $eqDetail->RegistrationNo; ?>">
+										<label><input type='checkbox' name="MonitoringOfficeEquipment[<?php echo $randomKey; ?>][Checked]" value="1"/><?php echo $eqDetail->Equipment; ?><?php if((bool)$eqDetail->RegistrationNo): ?><?php echo " (".$eqDetail->RegistrationNo.")"; ?><?php endif; ?></label>
+									<?php endforeach; ?>
+								</div>
+							</td>
+							<td class="hr-eq-details">
+								<div class='checkbox-list'>
+									<?php foreach($hrDetails as $hrDetail): ?>
+										<?php $randomKey = randomString(); ?>
+										<input type="hidden" name="MonitoringOfficeHR[<?php echo $randomKey; ?>][CmnDesignationId]" value="<?php echo $hrDetail->CmnDesignationId; ?>">
+										<input type="hidden" name="MonitoringOfficeHR[<?php echo $randomKey; ?>][CIDNo]" value="<?php echo $hrDetail->CIDNo; ?>">
+										<input type="hidden" name="MonitoringOfficeHR[<?php echo $randomKey; ?>][Name]" value="<?php echo $hrDetail->Name; ?>">
+										<input type="hidden" name="MonitoringOfficeHR[<?php echo $randomKey; ?>][Sex]" value="<?php echo $hrDetail->Sex; ?>">
+										<label><input type='checkbox' name="MonitoringOfficeHR[<?php echo $randomKey; ?>][Checked]" value="1"/><?php echo $hrDetail->Designation." (".$hrDetail->Personnel.")"; ?></label>
+									<?php endforeach; ?>
+								</div>
+							</td>
+							<td><textarea style="width: 160px!important;" rows="4" name="Remarks" class="form-control input-sm input-small"></textarea></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		<br>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<label class="control-label">Monitored On</label>
+					<input type="text" name="MonitoringDate" readonly="readonly" class="datepicker input-sm required form-control" value="<?php echo date('d-m-Y'); ?>"/>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label class="control-label">Status</label>
+					<select name="MonitoringStatus" class="form-control required input-sm">
+						<option value="1">Fulfilled</option>
+						<option value="0">Not fulfilled</option>
+					</select>
+				</div>
+			</div>
+		</div><div class="clearfix"></div>
+		<div class="form-actions">
+			<div class="btn-set">
+				<button type="submit" class="btn green">Save</button>
+				<a href="<?php echo URL::to('contractor/editservices'); ?>" class="btn red">Cancel</a>
+			</div>
+		</div>
+	</div>
+	<?php echo Form::close(); ?>
+
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

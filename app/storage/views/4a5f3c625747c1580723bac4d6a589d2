@@ -1,0 +1,58 @@
+<html>
+    <body>
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="2">Work Id (Report)</th>
+                </tr>
+                <?php if($procuringAgency != ''): ?>
+                    <tr>
+                        <th><i>Agency: </i>&nbsp;<?php echo $procuringAgency; ?></th>
+                    </tr>
+                <?php endif; ?>
+                <?php if($fromDate != ''): ?>
+                    <tr>
+                        <th><i>From Date:</i>&nbsp;<?php echo $fromDate; ?></th>
+                    </tr>
+                <?php endif; ?>
+                <?php if($toDate != ''): ?>
+                    <tr>
+                        <th><i>To Date: </i>&nbsp;<?php echo $toDate; ?></th>
+                    </tr>
+                <?php endif; ?>
+                <tr>
+                    <th><i>Source: </i>&nbsp;<?php echo ($tenderSource == 0)?'All':(($tenderSource == 1)?"Etool":"CiNET"); ?></th>
+                </tr>
+                <tr>
+                    <th colspan="4"></th>
+                </tr>
+                <tr>
+                    <th>Sl. No.</th>
+                    <th>Work Id</th>
+                    <th>Name of Work</th>
+                    <th>Duration (in months)</th>
+                    <th>Class</th>
+                    <th>Category</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php $count = 1; ?>
+                <?php $__empty_1 = true; foreach($reportData as $data): $__empty_1 = false; ?>
+                    <tr>
+                        <td><?php echo $count; ?></td>
+                        <td><?php echo $data->WorkId; ?></td>
+                        <td><?php echo strip_tags($data->NameOfWork, '<br><br/><p><ul><li><ol>');; ?></td>
+                        <td><?php echo $data->ContractPeriod; ?></td>
+                        <td><?php echo $data->Class; ?></td>
+                        <td><?php echo $data->Category; ?></td>
+                    </tr>
+                    <?php $count++; ?>
+                <?php endforeach; if ($__empty_1): ?>
+                    <tr><td colspan="6" class="font-red text-center">No data to display</td></tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,95 @@
+<?php $__env->startSection('pagescripts'); ?>
+	<?php if((int)$serviceByConsultant==1): ?>
+		<script>
+			//$('#workclassificationservice').modal('show');
+			$('input.tablerowcheckbox').attr('disabled','disabled');
+		</script>
+	<?php endif; ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-cogs"></i>Edit Work Classification
+		</div>
+		<?php if((int)$serviceByConsultant==1): ?>
+			<button id="reselectchangeofcategoryclassification" type="button" class="btn green-seagreen btn-sm pull-right">Re-select Service</button>
+		<?php endif; ?>
+	</div>
+	<div class="portlet-body">
+		<?php echo Form::open(array('url' => 'consultant/mconsultantworkclassification','role'=>'form','files'=>true)); ?>
+
+		<input type="hidden" value="1" name="EditByCdb">
+		<input type="hidden" name="PostBackUrl" value="<?php echo $redirectUrl; ?>">
+		<input type="hidden" name="ServiceByConsultant" value="<?php echo $serviceByConsultant; ?>">
+		<input type="hidden" name="CrpApplicationConsultantId" value="<?php echo $consultantId; ?>" />
+		<?php if(isset($finalEdit) && (bool)$finalEdit): ?>
+			<input type="hidden" name="FinalEdit" value="1" />
+		<?php endif; ?>
+		<?php if((int)$serviceByConsultant==1): ?>
+			<div class="row">
+				<div class="col-md-6 table-responsive">
+					<p class="bold font-green-seagreen">Current Classification</p>
+					<table class="table table-bordered table-striped table-condensed">
+						<thead class="">
+							<tr>
+								<th width="40%">
+									Service Category
+								</th>
+								<th>
+									Service
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach($currentServiceClassifications as $currrentServiceClassification): ?>
+								<tr>
+									<td class="small-medium"><?php echo $currrentServiceClassification->Category; ?></td>
+									<td><?php echo $currrentServiceClassification->ApprovedService; ?></td>
+								</tr>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+				</div>
+				<div class="upgradedowngradeattachments">
+					<div class="col-md-6 table-responsive">
+						<h5 class="font-blue-madison bold">Attachments</h5>
+						<table id="upgradedowngradeattachments" class="table table-bordered table-striped table-condensed">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Document Name</th>
+									<th>Upload File</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<button type="button" class="deletetablerow"><i class="fa fa-times fa-lg"></i></button>
+									</td>
+									<td>
+										<input type="text" name="DocumentName[]" class="dontdisable form-control input-sm">
+									</td>
+									<td>
+										<input type="file" name="attachments[]" class="dontdisable input-sm" multiple="multiple" />
+									</td>
+								</tr>
+								<tr class="notremovefornew">
+									<td>
+										<button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+									</td>
+									<td colspan="2"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>	
+		<?php endif; ?>
+		<?php echo $__env->make('crps.consultantworkclassificationcontrols', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>;
+		<?php echo Form::close(); ?>
+
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

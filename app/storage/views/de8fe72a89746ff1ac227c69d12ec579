@@ -1,0 +1,13 @@
+<?php $__env->startSection('main-content'); ?>
+<div class="row">
+    <div class="col-md-12">
+    <h4 class="text-primary"><strong>Construction Professional Registration</strong>
+<!-- <a href="<?php echo URL::to('architect/default'); ?>" class="btn btn-sm btn-success">-->
+<a href="<?php echo URL::to('https://www.citizenservices.gov.bt/construction-services/'); ?>" class="btn btn-sm btn-success">
+Click here to apply for the service</a></h4>
+    <?php echo HTML::decode($content); ?>
+
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('websitemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

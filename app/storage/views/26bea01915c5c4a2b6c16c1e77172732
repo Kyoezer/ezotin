@@ -1,0 +1,69 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+<?php 
+    $route="etoolrpt.workawardedabovebelowestimate";
+?>
+   
+	<div class="portlet-title">
+		<div class="caption">
+            <?php $parameters = Input::all(); $parameters['export']='excel'; ?>
+			<i class="fa fa-cogs"></i>No. of work awarded and completed in same year  &nbsp;&nbsp;<?php if(!Input::has('export')): ?> <a href="<?php echo route($route,$parameters); ?>" class="btn btn-sm green"><i class="fa fa-file-excel-o"></i> Export to Excel</a>    <?php $parameters['export'] = 'print'; ?><a href="<?php echo route($route,$parameters); ?>" class="btn btn-sm purple" target="_blank"><i class="fa fa-print"></i> Print</a><?php endif; ?>
+		</div>
+	</div>
+	<div class="portlet-body flip-scroll">
+        <?php if(Input::get('export') != 'print'): ?>
+            <?php 
+                $url = 'etoolrpt/workawardedabovebelowestimate'; 
+                $route="etoolrpt.workawardedabovebelowestimate";
+            ?>
+       
+        <?php else: ?>
+            <?php foreach(Input::all() as $key=>$value): ?>
+                <?php if($key != 'export'): ?>
+                    <b><?php echo $key; ?>: <?php echo $value; ?></b><br>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            <br/>
+        <?php endif; ?>
+		<table class="table table-bordered table-striped table-condensed flip-content" id="contractorhumanresource">
+			<thead class="flip-content">
+				<tr>
+                    <th>Sl.No.</th>
+					<th>Name of Work</th>
+					<th>Reference No.</th>
+                    <th>Name of Firm</th>
+                    <th>CDB No.</th>
+                    <th>Project Estimated Cost</th>
+                    <th>Awarded Amount</th>
+                    <th>Status</th>
+                    
+                    
+                    
+				</tr>
+			</thead>
+			<tbody>
+            <?php $__empty_1 = true; foreach($workList as $work): $__empty_1 = false; ?>
+				<tr>
+                    <td><?php echo $start++; ?></td>
+                    <td><?php echo $work->NameOfWork; ?></td>
+                    <td><?php echo $work->ReferenceNo; ?></td>
+                    <td><?php echo $work->NameOfFirm; ?></td>
+                    <td><?php echo $work->CDBNo; ?></td>
+                    <td><?php echo $work->ProjectEstimateCost; ?></td>
+                    <td><?php echo $work->AwardedAmount; ?></td>
+                    <td><?php echo $work->estimatedStatus; ?></td>
+				</tr>
+                <?php endforeach; if ($__empty_1): ?>
+                <tr>
+                    <td colspan="14" class="font-red text-center">No data to display!</td>
+                </tr>
+                <?php endif; ?>
+			</tbody>
+		</table>
+        <?php pagination($noOfPages,Input::all(),Input::get('page'),$route); ?>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

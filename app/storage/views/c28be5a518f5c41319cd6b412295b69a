@@ -1,0 +1,38 @@
+<html>
+    <body>
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="2">Specialized Firm Service Wise Summary</th>
+                </tr>
+                <tr>
+                    <th colspan="4"></th>
+                </tr>
+                <tr>
+                <tr>
+                    <th>Specialized Firm Service</th>
+                    <th>Number of Specialized Firm</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php $total = 0; ?>
+                <?php $__empty_1 = true; foreach($reportData as $data): $__empty_1 = false; ?>
+                    <tr>
+                        <td><?php echo $data->Code; ?>-<?php echo $data->Name; ?></td>
+                        <td class="text-right"><?php echo $data->NoOfSpecializedfirm; ?><?php $total += $data->NoOfSpecializedfirm;?></td>
+                    </tr>
+                <?php endforeach; if ($__empty_1): ?>
+                    <tr><td colspan="2" class="font-red text-center">No data to display</td></tr>
+                <?php endif; ?>
+                <?php if(!empty($reportData)): ?>
+                    <tr>
+                        <td class="bold text-right">Total</td>
+                        <td class="text-right"><?php echo $total; ?></td>
+                    </tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

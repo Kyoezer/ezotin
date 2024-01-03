@@ -1,0 +1,184 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php echo HTML::script('assets/global/plugins/jstree/dist/jstree.min.js'); ?>
+
+<?php echo HTML::script('assets/cdb/pages/scripts/ui-tree.js'); ?>
+
+<?php echo HTML::script('assets/global/scripts/sys.js'); ?>
+
+<script>
+	UITree.init();
+</script>
+<?php if(empty($users[0]->Id)): ?>
+<script>
+	 $('#userregistration').bootstrapValidator({
+        fields: {
+            username: {
+                validators: {
+                    remote: {
+                        message: 'Username already taken',
+                        url: "<?php echo CONST_SITELINK.'usernameavalibility'?>",
+                        delay: 2000
+                    }
+                }
+            }
+        }
+    });
+</script>
+<?php endif; ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('pagestyles'); ?>
+	<?php echo HTML::style('assets/global/plugins/jstree/dist/themes/default/style.min.css'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption font-green-seagreen">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject">User</span>
+		</div>
+	</div>
+	<?php echo Form::open(array('url' => 'sys/muser','role'=>'form','id'=>'userregistration')); ?>
+
+	<div class="portlet-body form">
+		<div class="form-body">
+			<div class="row">
+				<div class="col-md-4 col-sm-12 col-xs-12">
+					<?php foreach($users as $user): ?>
+						 <div class="form-group">
+			                <?php echo Form::hidden('Id',$user->Id); ?>
+
+			                <?php echo Form::label('FullName','Name of User'); ?>
+
+			                <?php echo Form::text('FullName',$user->FullName,array('class'=>'form-control required')); ?>
+
+			            </div>
+                        <div class="form-group">
+                            <label for="username">
+                                User name
+                            </label>
+                            <?php echo Form::text('username',$user->username,array('class'=>'form-control required','id'=>'username')); ?>
+
+                        </div>
+			    		<div class="form-group">
+			    			<label for="email">Email </label>
+			    		    <?php echo Form::text('Email',$user->Email,array('class'=>'form-control email','id'=>'email')); ?>
+
+			    		</div>
+                        <div class="form-group">
+                            <label for="contactno">Contact No. </label>
+                            <?php echo Form::text('ContactNo',$user->ContactNo,array('class'=>'form-control number','id'=>'contactno')); ?>
+
+                        </div>
+			    		<?php if(empty($user->Id)): ?>
+			    			<input type="hidden" name="IsInsert" value="1" />
+			                <div class="form-group">
+			        		    <?php echo Form::label('password', 'Password'); ?>
+
+			        	        <input name="password" id="password" type="password" class="form-control required password" />
+			        		</div>
+			        		<div class="form-group">
+			        			<?php echo Form::label('password_confirmation', 'Re-type Password'); ?>
+
+			        	        <input name="password_confirmation" id="password_confirmation" type="password" class="form-control required confirmpassword" />
+			        		</div>
+			            <?php endif; ?>
+			            <div class="form-group">
+			            	<label>Status</label>
+							<div class="radio-list">
+								<label class="radio-inline">
+								<input type="radio" name="Status" id="optionsRadios4" value="1"  <?php if($user->Status=="1" || empty($user->Status)): ?>checked="checked"<?php endif; ?>> Active </label>
+								<label class="radio-inline">
+								<input type="radio" name="Status" id="optionsRadios5" value="0" <?php if($user->Status=="0"): ?>checked="checked"<?php endif; ?>> In-Active </label>
+							</div>
+			            </div>
+					<?php endforeach; ?>
+				</div>
+				<?php if(!(in_array(CONST_ROLE_CONTRACTOR,$oldRole) || in_array(CONST_ROLE_CONSULTANT,$oldRole) || in_array(CONST_ROLE_SPECIALIZEDTRADE,$oldRole) || in_array(CONST_ROLE_ENGINEER,$oldRole) || in_array(CONST_ROLE_ARCHITECT,$oldRole))): ?>
+				<div class="col-md-8 col-sm-12 col-xs-12">
+					<div class="table-responsive">
+						<h5 class="font-blue-madison bold">Assign a role to the user by ticking the checkbox</h5>
+						<table id="systemrolemenumap" class="table table-condensed table-striped table-bordered table-hover table-responsive">
+							<thead>
+								<tr>
+									<th width="5%"></th>
+									<th>Role</th>
+									<th>Procuring Agency</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach($roles as $role): ?>
+								<?php $randomKey=randomString();?>
+				                <tr>
+				                    <td class="text-center">
+				                        <input type="checkbox" name="sauserrolemap[<?php echo $randomKey; ?>][SysRoleId]" value="<?php echo $role->Id; ?>" class="tablerowcheckbox" <?php if((int)$role->Selected==1): ?>checked="checked"<?php endif; ?>/>
+				                    </td>
+				                    <td>
+				                    	<?php echo $role->Name; ?>
+
+				                    </td>
+				                    <td>
+				                    	<?php if((int)$role->ReferenceNo==7 || (int)$role->ReferenceNo==8): ?>
+				                    	<?php /*<select id="procuringagen-<?php echo $role->ReferenceNo; ?>" name="CmnProcuringAgencyId" class="form-control select2me tablerowcontrol" <?php if((int)$role->Selected!=1): ?>disabled="disabled"<?php endif; ?>>*/ ?>
+				                    		<?php /*<option value="">---SELECT ONE---</option>*/ ?>
+				                    		<?php /*<?php foreach($procuringAgencies as $procuringAgency): ?>*/ ?>
+				                    		<?php /*<option value="<?php echo $procuringAgency->Id; ?>" <?php if($role->CmnProcuringAgencyId==$procuringAgency->Id): ?>selected="selected"<?php endif; ?>><?php echo $procuringAgency->Name; ?></option>*/ ?>
+				                    		<?php /*<?php endforeach; ?>*/ ?>
+				                    	<?php /*</select>*/ ?>
+											<input type="hidden" name="CmnProcuringAgencyId" value="<?php echo $role->CmnProcuringAgencyId; ?>" class="idtoset tablerowcontrol" <?php if((int)$role->Selected!=1): ?>disabled="disabled"<?php endif; ?>/>
+											<?php if($role->CmnProcuringAgencyId): ?>
+												<strong>Current Procuring Agency: <?php echo $role->ProcuringAgency; ?></strong>
+											<?php endif; ?>
+											<div class="tree-demo tree_1">
+												<ul>
+													<li data-jstree='{ "opened" : false }'> Procuring Agencies
+														<ul>
+															<?php foreach($firstLevelProcuringAgencies as $firstLevel): ?>
+																<li data-id="<?php echo $firstLevel->Id; ?>" class="clickable-treeitem" data-jstree='{ "icon" : "fa fa-folder icon-state-info " }'> <?php echo $firstLevel->Name; ?>
+
+																<?php if(!empty($secondLevelProcuringAgencies[$firstLevel->Id])): ?>
+																	<ul>
+																	<?php foreach($secondLevelProcuringAgencies[$firstLevel->Id] as $secondLevel): ?>
+																		<li data-id="<?php echo $secondLevel->Id; ?>" class="clickable-treeitemchild" data-jstree='{ "icon" : "fa fa-file icon-state-success " }'> <?php echo $secondLevel->Name; ?>
+
+																			<?php if(!empty($thirdLevelProcuringAgencies[$secondLevel->Id])): ?>
+																			<ul>
+																				<?php foreach($thirdLevelProcuringAgencies[$secondLevel->Id] as $thirdLevel): ?>
+																				<li data-id="<?php echo $thirdLevel->Id; ?>" class="clickable-treeitemchild" data-jstree='{ "icon" : "fa fa-file icon-state-success " }'> <?php echo $thirdLevel->Name; ?></li>
+																				<?php endforeach; ?>
+																			</ul>
+																			<?php endif; ?>
+																		</li>
+																	<?php endforeach; ?>
+																	</ul>
+																<?php endif; ?>
+																</li>
+															<?php endforeach; ?>
+														</ul>
+													</li>
+												</ul>
+											</div>
+
+				                    	<?php endif; ?>
+				                    </td>
+				                </tr>
+				                <?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<?php endif; ?>
+			</div>
+		</div>
+		<div class="form-actions">
+			<div class="btn-set">
+				<button type="submit" class="btn green">Save</button>
+				<a href="<?php echo URL::to('sys/actionsuser'); ?>" class="btn red">Cancel</a>
+			</div>
+		</div>
+	</div>
+	<?php echo Form::close(); ?>
+
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

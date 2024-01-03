@@ -1,0 +1,162 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+            <?php $parameters = Input::all(); $parameters['export']='excel'; ?>
+			<i class="fa fa-cogs"></i>List of Architect nearing expiry &nbsp;&nbsp;<?php if(!Input::has('export')): ?> <a href="<?php echo route('architectrpt.architectexpiry',$parameters); ?>" class="btn btn-sm green"><i class="fa fa-file-excel-o"></i> Export to Excel</a>    <?php $parameters['export'] = 'print'; ?><a href="<?php echo route('architectrpt.architectexpiry',$parameters); ?>" class="btn btn-sm purple" target="_blank"><i class="fa fa-print"></i> Print</a><?php endif; ?>
+		</div>
+	</div>
+	<div class="portlet-body flip-scroll">
+        <?php if(Input::get('export') != "print"): ?>
+        <?php echo Form::open(array('url'=>Request::url(),'method'=>'get')); ?>
+
+		<div class="form-body">
+			<div class="row">
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">AR No</label>
+						<input type="text" name="ARNo" value="<?php echo Input::get('ARNo'); ?>" class="form-control" />
+					</div>
+				</div>
+                <div class="col-md-2">
+                    <label class="control-label">From</label>
+                    <div class="input-icon right">
+                        <i class="fa fa-calendar"></i>
+                        <input type="text" name="FromDate" class="form-control datepicker" value="<?php echo Input::get('FromDate'); ?>" readonly="readonly" placeholder="">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="control-label">To</label>
+                    <div class="input-icon right">
+                        <i class="fa fa-calendar"></i>
+                        <input type="text" name="ToDate" class="form-control datepicker" value="<?php echo Input::has('ToDate')?Input::get('ToDate'):date('d-m-Y'); ?>" readonly="readonly" placeholder="">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Country</label>
+                        <select class="form-control select2me" name="Country">
+                            <option value="">---SELECT ONE---</option>
+                            <?php foreach($countries as $country): ?>
+                                <option value="<?php echo $country->Name; ?>" <?php if($country->Name == Input::get('Country')): ?>selected <?php endif; ?>><?php echo $country->Name; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Dzongkhag</label>
+                        <select class="form-control select2me" name="Dzongkhag">
+                            <option value="">---SELECT ONE---</option>
+                            <?php foreach($dzongkhags as $dzongkhag): ?>
+                                <option value="<?php echo $dzongkhag->NameEn; ?>" <?php if($dzongkhag->NameEn == Input::get('Dzongkhag')): ?>selected <?php endif; ?>><?php echo $dzongkhag->NameEn; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label">Sector Type</label>
+						<select class="form-control" name="SectorType">
+							<option value="">---SELECT ONE---</option>
+                            <?php foreach($sectors as $sector): ?>
+                                <option value="<?php echo $sector->Name; ?>" <?php if($sector->Name == Input::get('SectorType')): ?>selected <?php endif; ?>><?php echo $sector->Name; ?></option>
+                            <?php endforeach; ?>
+						</select>
+					</div>
+				</div>
+     
+                <?php if(!Input::has('export')): ?>
+                    <div class="col-md-2">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="btn-set">
+                            <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                            <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                        </div>
+                    </div>
+                <?php endif; ?>
+			</div>
+		</div>
+        <?php echo Form::close(); ?>
+
+        <?php else: ?>
+            <?php foreach(Input::all() as $key=>$value): ?>
+                <?php if($key != 'export'): ?>
+                    <b><?php echo $key; ?>: <?php echo $value; ?></b><br>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            <br/>
+        <?php endif; ?>
+		<table class="table table-bordered table-striped table-condensed flip-content" id="contractorhumanresource">
+			<thead class="flip-content">
+				<tr>
+                    <th>
+                        Sl.No.
+                    </th>
+					<th class="order">
+						 AR No.
+					</th>
+					<th>
+						Name
+					</th>
+					<th class="">
+						 CID No.
+					</th>
+					<th class="">
+						 Sector
+					</th>
+					<th>
+						Country
+					</th>
+					<th class="">
+						 Dzongkhag
+					</th>
+					<th class="">
+						Gewog
+					</th>
+                    <th class="">
+                        Village
+                    </th>
+                    <th class="">
+                        Email
+                    </th>
+                    <th class="">
+                        Mobile No.
+                    </th>
+                    <th>
+                        Expiry Date
+                    </th>
+                    <th>Status</th>
+				</tr>
+			</thead>
+			<tbody>
+            <?php $__empty_1 = true; foreach($architectsList as $architect): $__empty_1 = false; ?>
+				<tr>
+                    <td><?php echo $start++; ?></td>
+                    <td><?php echo $architect->ARNo; ?></td>
+                    <td><?php echo $architect->ArchitectName; ?></td>
+                    <td><?php echo $architect->CIDNo; ?></td>
+                    <td><?php echo $architect->Sector; ?></td>
+                    <td><?php echo $architect->Country; ?></td>
+                    <td><?php echo $architect->Dzongkhag; ?></td>
+                    <td><?php echo $architect->Gewog; ?></td>
+                    <td><?php echo $architect->Village; ?></td>
+                    <td><?php echo $architect->Email; ?></td>
+                    <td><?php echo $architect->MobileNo; ?></td>
+                    <td><?php echo $architect->ExpiryDate; ?></td>
+                    <td><?php echo $architect->Status; ?></td>
+				</tr>
+            <?php endforeach; if ($__empty_1): ?>
+                <tr>
+                    <td colspan="12" class="text-center font-red">No data to display!</td>
+                </tr>
+            <?php endif; ?>
+			</tbody>
+		</table>
+        <?php pagination($noOfPages,Input::all(),Input::get('page'),"architectrpt.architectexpiry"); ?>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

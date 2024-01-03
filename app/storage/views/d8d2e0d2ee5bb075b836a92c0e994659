@@ -1,0 +1,444 @@
+<?php if(isset($isRejectedApp) && (int)$isRejectedApp==1): ?>
+<input type="hidden" value="1" name="ApplicationRejectedReapply">
+<?php endif; ?>
+<?php $ownerEngineer = false; ?>
+<?php foreach($specializedtradeGeneralInfo as $generalInfo): ?>
+<div class="form-body">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="form-group">
+				<label class="bold">Application No.</label>
+				<p class="form-control-static">
+					<?php if(!empty($generalInfo->ReferenceNo) || !empty($applicationReferenceNo)): ?>
+						<?php if(!empty($generalInfo->ReferenceNo)): ?>
+							<?php echo $generalInfo->ReferenceNo; ?>
+
+						<?php else: ?>
+							<?php echo $applicationReferenceNo; ?>
+
+						<?php endif; ?>
+					<?php else: ?>
+					<?php echo Input::old('ReferenceNo'); ?>
+
+					<?php endif; ?>
+				</p>
+				<input type="hidden" name="ReferenceNo" value="<?php if(!empty($generalInfo->ReferenceNo) || !empty($applicationReferenceNo)): ?> <?php if(!empty($generalInfo->ReferenceNo)): ?><?php echo $generalInfo->ReferenceNo; ?><?php else: ?><?php echo $applicationReferenceNo; ?><?php endif; ?> <?php else: ?><?php echo Input::old('ReferenceNo'); ?> <?php endif; ?>" />
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="control-label bold">Application Date</label>
+				<p class="form-control-static"><?php if(!empty($generalInfo->ApplicationDate)): ?><?php echo convertDateToClientFormat($generalInfo->ApplicationDate); ?><?php else: ?><?php echo convertDateToClientFormat(date('Y-m-d G:i:s')); ?><?php endif; ?></p>
+				<input type="hidden" name="ApplicationDate" value="<?php if(!empty($generalInfo->ApplicationDate)): ?><?php echo $generalInfo->ApplicationDate; ?><?php else: ?><?php echo date('Y-m-d G:i:s'); ?><?php endif; ?>" />
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<h5 class="font-blue-madison bold">General Information</h5>
+		</div>
+		<div class="col-md-3">
+			<input type="hidden" value="<?php echo $generalInfo->Id; ?>" name="Id" />
+			<div class="form-group">
+				<label class="control-label">Ownership Type <span class="font-red">*</span></label>
+				<select name="CmnOwnershipTypeId" id="CmnOwnershipTypeId" class="changeofowner select2me form-control required companyownershiptype">
+					<option value="">---SELECT ONE---</option>
+					<?php foreach($ownershipTypes as $ownershipType): ?>
+						<option data-reference="<?php echo $ownershipType->ReferenceNo; ?>" value="<?php echo $ownershipType->Id; ?>" <?php if($ownershipType->Id==Input::old('CmnOwnershipTypeId') || $ownershipType->Id==$generalInfo->CmnOwnershipTypeId): ?>selected="selected"<?php endif; ?>><?php echo $ownershipType->Name; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-3">	
+			<div class="form-group">
+				<label class="control-label">Proposed Firm/Company Name <span class="font-red">* </span> <a role="button" tabindex="0" data-toggle="popover" data-container="body" data-trigger="focus" class="popoverdefaultopen" data-placement="top" title="<span class='font-green-seagreen'>Proposed Name</span>" data-content="<p class='text-justify'>If the Name of the Firm that you have proposed for specializedfirm registration is already registered with CDB you cannot proceed with registration. Try using a different Name in such cases.</p>"><i class="fa fa-question-circle"></i></a></label>
+				<input type="text" name="NameOfFirm" value='<?php if(!empty($generalInfo->NameOfFirm)): ?><?php echo $generalInfo->NameOfFirm; ?><?php else: ?><?php echo Input::old('NameOfFirm'); ?><?php endif; ?>' class="form-control required changeoffirmname" placeholder="Proposed Name of the Firm">
+				<span class="help-block bold info-block" style="color:#3c763d">For Sole Proprietorship, please include "Construction" or "Builders" in the name</span>
+			</div>
+		</div>
+		<?php
+			$hasOldCountryId = false;
+			$oldCountryId = Input::old('CmnCountryId');
+			if(!(bool)$oldCountryId){
+				$oldCountryId = $generalInfo->CmnCountryId;
+				if((bool)$oldCountryId){
+					$hasOldCountryId = true;
+				}
+			}
+		?>
+		<div class="col-md-3">	
+			<div class="form-group">		
+				<label class="control-label">Country <span class="font-red">*</span></label>
+				<select name="CmnCountryId" id="CmnCountryId" class="form-control select2me input-sm required countryselect">
+					<option value="">---SELECT ONE---</option>
+					<?php foreach($countries as $country): ?>
+						<option value="<?php echo $country->Id; ?>" <?php if($hasOldCountryId): ?><?php if($country->Id==$oldCountryId): ?>selected="selected"<?php endif; ?> <?php else: ?> <?php if($country->Code == 10): ?>selected="selected"<?php endif; ?> <?php endif; ?>><?php echo $country->Name; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+		<div class="col-md-3">	
+			<div class="form-group">
+				<label class="control-label">Trade License No. </label>
+				<input type="text" name="TradeLicenseNo" value="<?php if(!empty($generalInfo->TradeLicenseNo)): ?><?php echo $generalInfo->TradeLicenseNo; ?><?php else: ?><?php echo Input::old('TradeLicenseNo'); ?><?php endif; ?>" class="form-control dontdisable changeoftradelicense" placeholder="Trade License No.">
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="control-label">TPN </label>
+				<input type="text" name="TPN" value="<?php if(!empty($generalInfo->TPN)): ?><?php echo $generalInfo->TPN; ?><?php else: ?><?php echo Input::old('TPN'); ?><?php endif; ?>" class="form-control dontdisable" placeholder="TPN">
+			</div>
+		</div>
+		<?php /*<div class="clearfix"></div>*/ ?>
+		
+		<?php if((int)$serviceBySpecializedtrade==1): ?>
+		<div class="changeofownerattachmentcontrol hide">
+			<div class="col-md-6 table-responsive">
+				<h5 class="font-blue-madison bold">Attach marriage certificate if ownership is transferred to spouse or census if transferred to children</h5>
+				<table id="changeofownershiptable" class="table table-bordered table-striped table-condensed">
+				
+					<tbody>
+						<tr>
+							<td>
+								<button type="button" class="deletetablerow"><i class="fa fa-times fa-lg"></i></button>
+							</td>
+							<td>
+								<input type="text" name="DocumentNameOwnerShipChange[]" value="MC scanned" class="dontdisable form-control input-sm">
+							</td>
+							<td>
+								<input type="file" name="attachmentsownershipchange[]" class="dontdisable input-sm" multiple="multiple" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<button type="button" class="deletetablerow"><i class="fa fa-times fa-lg"></i></button>
+							</td>
+							<td>
+								<input type="text" name="DocumentNameOwnerShipChange[]" value="Census" class="dontdisable form-control input-sm">
+							</td>
+							<td>
+								<input type="file" name="attachmentsownershipchange[]" class="dontdisable input-sm" multiple="multiple" />
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<button type="button" class="deletetablerow"><i class="fa fa-times fa-lg"></i></button>
+							</td>
+							<td>
+								<input type="text" name="DocumentNameOwnerShipChange[]" value="CID copy of transferee" class="dontdisable form-control input-sm">
+							</td>
+							<td>
+								<input type="file" name="attachmentsownershipchange[]" class="dontdisable input-sm" multiple="multiple" />
+							</td>
+						</tr>
+						<tr class="notremovefornew">
+							<td>
+								<button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+							</td>
+							<td colspan="2"></td>
+						</tr>
+					</tbody>
+				</table>
+				<?php echo Form::label('Reason','Reason for change of ownership',array('class'=>'control-label')); ?>
+
+				<input type="text" name="ChangeOfOwnershipRemarks" class="form-control dontdisable"/>
+			</div>
+		</div>
+		<div class="changeoffirmnameattachmentcontrol hide">
+			<div class="col-md-6 table-responsive">
+				<h5 class="font-blue-madison bold">Attach a copy of notification in print media if change in Name of Firm</h5>
+				<table id="changeoffirmnametable" class="table table-bordered table-striped table-condensed">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Document Name</th>
+							<th>Upload File</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<button type="button" class="deletetablerow"><i class="fa fa-times fa-lg"></i></button>
+							</td>
+							<td>
+								<input type="text" name="DocumentNameFirmNameChange[]" value="Notification in print media" class="dontdisable form-control input-sm">
+							</td>
+							<td>
+								<input type="file" name="attachmentsfirmnamechange[]" class="dontdisable input-sm" multiple="multiple" />
+							</td>
+						</tr>
+						<tr class="notremovefornew">
+							<td>
+								<button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+							</td>
+							<td colspan="2"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<?php endif; ?>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-12">
+			<h5 class="font-blue-madison bold">Permanent Address</h5>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="control-label">Dzongkhag <span class="font-red">*</span></label>
+				<select name="CmnDzongkhagId" class="form-control <?php if($hasOldCountryId): ?><?php if($oldCountryId == CONST_COUNTRY_BHUTAN): ?><?php echo "required "; ?><?php endif; ?><?php else: ?><?php echo "required "; ?><?php endif;?>select2me isbhutanese changeoflocation" <?php if($hasOldCountryId): ?><?php if($oldCountryId != CONST_COUNTRY_BHUTAN): ?>disabled="disabled"<?php endif; ?><?php endif;?>>
+					<option value="">---SELECT ONE---</option>
+					<?php foreach($dzongkhags as $dzongkhag): ?>
+						<option value="<?php echo $dzongkhag->Id; ?>" <?php if($dzongkhag->Id==Input::old('CmnDzongkhagId') || $dzongkhag->Id==$generalInfo->CmnDzongkhagId): ?>selected="selected"<?php endif; ?>><?php echo $dzongkhag->NameEn; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-3">	
+			<div class="form-group">
+				<label class="control-label">Gewog
+				<input type="text" class="form-control isbhutanese changeoflocation" value="<?php if(!empty($generalInfo->Gewog)): ?><?php echo $generalInfo->Gewog; ?><?php else: ?><?php echo Input::old('Gewog'); ?><?php endif; ?>" name="Gewog" <?php if($hasOldCountryId): ?><?php if($oldCountryId != CONST_COUNTRY_BHUTAN): ?>disabled="disabled"<?php endif; ?><?php endif;?>>
+			</div>
+		</div>
+		<div class="col-md-3">	
+			<div class="form-group">
+				<label class="control-label">Village
+				<input type="text" class="form-control isbhutanese changeoflocation" <?php if($hasOldCountryId): ?><?php if($oldCountryId != CONST_COUNTRY_BHUTAN): ?>disabled="disabled"<?php endif; ?><?php endif;?> value="<?php if(!empty($generalInfo->Village)): ?><?php echo $generalInfo->Village; ?><?php else: ?><?php echo Input::old('Village'); ?><?php endif; ?>" name="Village">
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<h5 class="font-blue-madison bold">Establishment Address</h5>
+			<span class="help-block bold info-block" style="color:red;">(This address will display the dzongkhag in certificate)</span>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="control-label">Dzongkhag <span class="font-red">*</span></label>
+				<select name="CmnRegisteredDzongkhagId" class="form-control <?php if($hasOldCountryId): ?><?php if($oldCountryId == CONST_COUNTRY_BHUTAN): ?><?php echo "required "; ?><?php endif; ?><?php else: ?><?php echo "required "; ?><?php endif;?>select2me isbhutanese changeoflocation" <?php if($hasOldCountryId): ?><?php if($oldCountryId != CONST_COUNTRY_BHUTAN): ?>disabled="disabled"<?php endif; ?><?php endif;?>>
+					<option value="">---SELECT ONE---</option>
+					<?php foreach($dzongkhags as $dzongkhag): ?>
+						<option value="<?php echo $dzongkhag->Id; ?>" <?php if($dzongkhag->Id==Input::old('CmnRegisteredDzongkhagId') || $dzongkhag->Id==$generalInfo->CmnRegisteredDzongkhagId): ?>selected="selected"<?php endif; ?>><?php echo $dzongkhag->NameEn; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-3">	
+			<div class="form-group">
+				<label class="control-label">Email <span class="font-red">* </span><a role="button" tabindex="0" data-toggle="popover" data-container="body" data-trigger="focus" class="popoverdefaultopen" data-placement="top" title="<span class='font-green-seagreen'>Email</span>" data-content="<p class='text-justify'>This Email address will be used as username for your account and to receive email from Construction Development Board (CDB). Please provide a valid Email address inorder not to lose important messages from CDB.</p>"><i class="fa fa-question-circle"></i></a></label>
+				<input type="text" name="Email" value="<?php if(!empty($generalInfo->Email)): ?><?php echo $generalInfo->Email; ?><?php else: ?><?php echo Input::old('Email'); ?><?php endif; ?>" class="form-control dontdisable required email" placeholder="Email">
+			</div>
+		</div>
+		<div class="col-md-3">	
+			<div class="form-group">	
+				<label class="control-label">Mobile No. <a role="button" tabindex="0" data-toggle="popover" data-container="body" data-trigger="focus" class="popoverdefaultopen" data-placement="top" title="<span class='font-green-seagreen'>Mobile No.</span>" data-content="<p class='text-justify'>This Mobile No. will be used to receive sms alerts from Construction Development Board (CDB). Please provide a valid Mobile No. registered with Tashi Cell/B-Mobile inorder not to lose important messages from CDB.</p>"><i class="fa fa-question-circle"></i></a></label>
+				<input type="text" name="MobileNo" value="<?php if(!empty($generalInfo->MobileNo)): ?><?php echo $generalInfo->MobileNo; ?><?php else: ?><?php echo Input::old('MobileNo'); ?><?php endif; ?>" class="form-control changeoflocation" data-fixedlength="8" placeholder="Mobile No.">
+			</div>
+		</div><div class="clearfix"></div>
+		<div class="col-md-3">	
+			<div class="form-group">	
+				<label class="control-label">Telephone No.
+				<input type="text" name="TelephoneNo" value="<?php if(!empty($generalInfo->TelephoneNo)): ?><?php echo $generalInfo->TelephoneNo; ?><?php else: ?><?php echo Input::old('TelephoneNo'); ?><?php endif; ?>" class="form-control changeoflocation" placeholder="Telephone">
+			</div>
+		</div>
+		<div class="col-md-3">	
+			<div class="form-group">	
+				<label class="control-label">Fax No.</label>
+				<input type="text" name="FaxNo" value="<?php if(!empty($generalInfo->FaxNo)): ?><?php echo $generalInfo->FaxNo; ?><?php else: ?><?php echo Input::old('FaxNo'); ?><?php endif; ?>" class="form-control changeoflocation" placeholder="Fax No.">
+			</div>
+		</div>
+		<div class="col-md-3">	
+			<div class="form-group">
+				<label class="control-label">Address </label>
+				<textarea class="form-control changeoflocation isnonbhutanese" name="Address"><?php if(!empty($generalInfo->Address)): ?><?php echo $generalInfo->Address; ?><?php else: ?><?php echo Input::old('Address'); ?><?php endif; ?></textarea>
+				<span class="help-block bold info-block" style="color:red;">(Office setup details)</span>
+			</div>
+		</div>
+	</div>
+</div>
+<?php endforeach; ?>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="form-body">
+			<h5 class="font-blue-madison bold">Name of Owner, Partners and/or others with Controlling Interest</h5>
+			<div class="table-responsive">
+				<table id="ownerpartnerdetails" class="table table-bordered table-striped table-condensed">
+					<?php echo Form::hidden('Model','SpecializedfirmHumanResourceFinalModel',array('class'=>'delete-model')); ?>
+
+					<thead>
+						<tr>
+							<th>
+							</th>
+							<th class="">
+								 CID/Work Permit No.
+							</th>
+							<th width="10%">
+								Salutation
+							</th>
+							<th>
+								 Name
+							</th>
+							<th width="10%">
+								 Sex
+							</th>
+							<th width="15%">
+								Nationality
+							</th>
+							<th>
+								Designation
+							</th>
+							<th>
+								Show in Certificate
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php $count=1; ?>
+						<?php $__empty_1 = true; foreach($specializedtradePartnerDetails as $specializedtradePartnerDetail): $__empty_1 = false; ?>
+						<?php $randomKey=randomString();?>
+						<tr>
+							<td>
+								<input type="hidden" class="rowreference" value="<?php echo $specializedtradePartnerDetail->Id; ?>">
+								<button type="button" class="<?php if(Input::has('final')): ?><?php echo "deletedbrow"; ?><?php else: ?><?php echo "deletetablerow"; ?><?php endif; ?>"><i class="fa fa-times"></i></button>
+							</td>
+							<td>
+								<input <?php if(Input::has('oldapplicationid')): ?>disabled="disabled"<?php endif; ?> type="text" name="<?php echo Input::has('final')?"SpecializedfirmHumanResourceFinalModel":"SpecializedfirmHumanResourceModel"; ?>[<?php echo $randomKey; ?>][CIDNo]" value="<?php echo $specializedtradePartnerDetail->CIDNo; ?>" data-id="owner-partner" class="form-control input-sm resetKeyForNew <?php if(!Input::has('oldapplicationid')): ?><?php echo "required"; ?><?php endif; ?> unique changeofowner <?php /*checkhrtr*/ ?> cidforwebservicetr">
+							</td>
+							<td>
+								<input <?php if(Input::has('oldapplicationid')): ?>disabled="disabled"<?php endif; ?> type="hidden" name="<?php echo Input::has('final')?"SpecializedfirmHumanResourceFinalModel":"SpecializedfirmHumanResourceModel"; ?>[<?php echo $randomKey; ?>][Id]" value="<?php echo $specializedtradePartnerDetail->Id; ?>" class="resetKeyForNew changeofowner"/>
+								<select <?php if(Input::has('oldapplicationid')): ?>disabled="disabled"<?php endif; ?> name="<?php echo Input::has('final')?"SpecializedfirmHumanResourceFinalModel":"SpecializedfirmHumanResourceModel"; ?>[<?php echo $randomKey; ?>][CmnSalutationId]" class="form-control input-sm resetKeyForNew <?php if(!Input::has('oldapplicationid')): ?><?php echo "required"; ?><?php endif; ?> changeofowner">
+									<option value="">---SELECT---</option>
+									<?php foreach($salutations as $salutation): ?>
+									<option value="<?php echo $salutation->Id; ?>" <?php if($salutation->Id==$specializedtradePartnerDetail->CmnSalutationId): ?>selected="selected"<?php endif; ?>><?php echo $salutation->Name; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</td>
+							<td>
+								<input <?php if(Input::has('oldapplicationid')): ?>disabled="disabled"<?php endif; ?> type="text" name="<?php echo Input::has('final')?"SpecializedfirmHumanResourceFinalModel":"SpecializedfirmHumanResourceModel"; ?>[<?php echo $randomKey; ?>][Name]" value="<?php echo $specializedtradePartnerDetail->Name; ?>" class="form-control input-sm resetKeyForNew <?php if(!Input::has('oldapplicationid')): ?><?php echo "required"; ?><?php endif; ?> changeofowner namefromwebservice">
+							</td>
+							<td>
+								<select <?php if(Input::has('oldapplicationid')): ?>disabled="disabled"<?php endif; ?> name="<?php echo Input::has('final')?"SpecializedfirmHumanResourceFinalModel":"SpecializedfirmHumanResourceModel"; ?>[<?php echo $randomKey; ?>][Sex]" class="form-control input-sm resetKeyForNew <?php if(!Input::has('oldapplicationid')): ?><?php echo "required"; ?><?php endif; ?> changeofowner sexfromwebservice">
+									<option value="">---SELECT ONE---</option>
+									<option value="M"  <?php if($specializedtradePartnerDetail->Sex=="M"): ?>selected="selected"<?php endif; ?>>Male</option>
+									<option value="F"  <?php if($specializedtradePartnerDetail->Sex=="F"): ?>selected="selected"<?php endif; ?>>Female</option>
+								</select>
+							</td>
+							<td>
+								<select <?php if(Input::has('oldapplicationid')): ?>disabled="disabled"<?php endif; ?> name="<?php echo Input::has('final')?"SpecializedfirmHumanResourceFinalModel":"SpecializedfirmHumanResourceModel"; ?>[<?php echo $randomKey; ?>][CmnCountryId]" class="form-control input-sm resetKeyForNew <?php if(!Input::has('oldapplicationid')): ?><?php echo "required"; ?><?php endif; ?> changeofowner notclearfornew countryfromwebservice">
+									<option value="">---SELECT ONE---</option>
+									<?php foreach($countries as $country): ?>
+										<option value="<?php echo $country->Id; ?>" <?php if($specializedtradePartnerDetail->CmnCountryId==$country->Id || $country->Nationality=="Bhutanese"): ?>selected="selected"<?php endif; ?>><?php echo $country->Nationality; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</td>
+							<td>
+								<select id="registration-hrdesignation" <?php if(Input::has('oldapplicationid')): ?>disabled="disabled"<?php endif; ?> name="<?php echo Input::has('final')?"SpecializedfirmHumanResourceFinalModel":"SpecializedfirmHumanResourceModel"; ?>[<?php echo $randomKey; ?>][CmnDesignationId]" class="form-control input-sm resetKeyForNew <?php if(!Input::has('oldapplicationid')): ?><?php echo "required"; ?><?php endif; ?> changeofowner">
+									<option value="">---SELECT ONE---</option>
+									<?php foreach($designations as $designation): ?>
+										<option value="<?php echo $designation->Id; ?>" data-reference="<?php echo $designation->ReferenceNo; ?>" <?php if($specializedtradePartnerDetail->CmnDesignationId==$designation->Id): ?>selected="selected"<?php if($designation->ReferenceNo == 101): $ownerEngineer = true; ?><?php endif; ?><?php endif; ?>><?php echo $designation->Name; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</td>
+							<td>
+								<input <?php if(Input::has('oldapplicationid')): ?>disabled="disabled"<?php endif; ?> type="checkbox" name="<?php echo Input::has('final')?"SpecializedfirmHumanResourceFinalModel":"SpecializedfirmHumanResourceModel"; ?>[<?php echo $randomKey; ?>][ShowInCertificate]" class="checkboxes resetKeyForNew notclearfornew addrowcheckboxsinglecheck changeofowner" value="1" <?php if((int)$specializedtradePartnerDetail->ShowInCertificate==1): ?>checked="checked"<?php endif; ?>/>
+								<input <?php if(Input::has('oldapplicationid')): ?>disabled="disabled"<?php endif; ?> type="hidden" name="<?php echo Input::has('final')?"SpecializedfirmHumanResourceFinalModel":"SpecializedfirmHumanResourceModel"; ?>[<?php echo $randomKey; ?>][IsPartnerOrOwner]" class="resetKeyForNew notclearfornew changeofowner" value="1"/>
+							</td>
+						</tr>
+						<?php $count++; ?>
+						<?php endforeach; if ($__empty_1): ?>
+							<?php $randomKey = randomString(); ?>
+							<tr>
+								<td>
+									<button type="button" class="deletetablerow"><i class="fa fa-times"></i></button>
+								</td>
+								<td>
+									<input type="text" <?php if(Input::has('oldapplicationid')): ?>disabled="disabled"<?php endif; ?> name="<?php echo Input::has('final')?"SpecializedfirmHumanResourceFinalModel":"SpecializedfirmHumanResourceModel"; ?>[<?php echo $randomKey; ?>][CIDNo]" value="" data-id="owner-partner" class="form-control input-sm resetKeyForNew <?php if(!Input::has('oldapplicationid')): ?><?php echo "required"; ?><?php endif; ?> unique changeofowner <?php /*checkhrtr*/ ?> cidforwebservicetr">
+								</td>
+								<td>
+									<input type="hidden" <?php if(Input::has('oldapplicationid')): ?>disabled="disabled"<?php endif; ?> name="<?php echo Input::has('final')?"SpecializedfirmHumanResourceFinalModel":"SpecializedfirmHumanResourceModel"; ?>[<?php echo $randomKey; ?>][Id]" value="" class="resetKeyForNew changeofowner"/>
+									<select <?php if(Input::has('oldapplicationid')): ?>disabled="disabled"<?php endif; ?> name="<?php echo Input::has('final')?"SpecializedfirmHumanResourceFinalModel":"SpecializedfirmHumanResourceModel"; ?>[<?php echo $randomKey; ?>][CmnSalutationId]" class="form-control input-sm resetKeyForNew <?php if(!Input::has('oldapplicationid')): ?><?php echo "required"; ?><?php endif; ?> changeofowner">
+										<option value="">---SELECT---</option>
+										<?php foreach($salutations as $salutation): ?>
+											<option value="<?php echo $salutation->Id; ?>"><?php echo $salutation->Name; ?></option>
+										<?php endforeach; ?>
+									</select>
+								</td>
+								<td>
+									<input type="text" <?php if(Input::has('oldapplicationid')): ?>disabled="disabled"<?php endif; ?> name="<?php echo Input::has('final')?"SpecializedfirmHumanResourceFinalModel":"SpecializedfirmHumanResourceModel"; ?>[<?php echo $randomKey; ?>][Name]" value="" class="form-control input-sm resetKeyForNew <?php if(!Input::has('oldapplicationid')): ?><?php echo "required"; ?><?php endif; ?> changeofowner namefromwebservice">
+								</td>
+								<td>
+									<select <?php if(Input::has('oldapplicationid')): ?>disabled="disabled"<?php endif; ?> name="<?php echo Input::has('final')?"SpecializedfirmHumanResourceFinalModel":"SpecializedfirmHumanResourceModel"; ?>[<?php echo $randomKey; ?>][Sex]" class="form-control input-sm resetKeyForNew <?php if(!Input::has('oldapplicationid')): ?><?php echo "required"; ?><?php endif; ?> changeofowner sexfromwebservice">
+										<option value="">---SELECT ONE---</option>
+										<option value="M">Male</option>
+										<option value="F">Female</option>
+									</select>
+								</td>
+								<td>
+									<select <?php if(Input::has('oldapplicationid')): ?>disabled="disabled"<?php endif; ?> name="<?php echo Input::has('final')?"SpecializedfirmHumanResourceFinalModel":"SpecializedfirmHumanResourceModel"; ?>[<?php echo $randomKey; ?>][CmnCountryId]" class="form-control input-sm resetKeyForNew <?php if(!Input::has('oldapplicationid')): ?><?php echo "required"; ?><?php endif; ?> changeofowner notclearfornew countryfromwebservice">
+										<option value="">---SELECT ONE---</option>
+										<?php foreach($countries as $country): ?>
+											<option value="<?php echo $country->Id; ?>" <?php if($country->Nationality=="Bhutanese"): ?>selected="selected"<?php endif; ?>><?php echo $country->Nationality; ?></option>
+										<?php endforeach; ?>
+									</select>
+								</td>
+								<td>
+									<select id="registration-hrdesignation" <?php if(Input::has('oldapplicationid')): ?>disabled="disabled"<?php endif; ?> name="<?php echo Input::has('final')?"SpecializedfirmHumanResourceFinalModel":"SpecializedfirmHumanResourceModel"; ?>[<?php echo $randomKey; ?>][CmnDesignationId]" class="form-control input-sm resetKeyForNew <?php if(!Input::has('oldapplicationid')): ?><?php echo "required"; ?><?php endif; ?> changeofowner">
+										<option value="">---SELECT ONE---</option>
+										<?php foreach($designations as $designation): ?>
+											<option value="<?php echo $designation->Id; ?>" data-reference="<?php echo $designation->ReferenceNo; ?>"><?php echo $designation->Name; ?></option>
+										<?php endforeach; ?>
+									</select>
+								</td>
+								<td>
+									<input <?php if(Input::has('oldapplicationid')): ?>disabled="disabled"<?php endif; ?> type="checkbox" name="<?php echo Input::has('final')?"SpecializedfirmHumanResourceFinalModel":"SpecializedfirmHumanResourceModel"; ?>[<?php echo $randomKey; ?>][ShowInCertificate]" class="checkboxes resetKeyForNew notclearfornew addrowcheckboxsinglecheck changeofowner" value="1" checked="checked"/>
+									<input <?php if(Input::has('oldapplicationid')): ?>disabled="disabled"<?php endif; ?> type="hidden" name="<?php echo Input::has('final')?"SpecializedfirmHumanResourceFinalModel":"SpecializedfirmHumanResourceModel"; ?>[<?php echo $randomKey; ?>][IsPartnerOrOwner]" class="resetKeyForNew notclearfornew changeofowner" value="1"/>
+								</td>
+							</tr>
+						<?php endif; ?>
+						<tr class="notremovefornew">
+							<td>
+								<button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+							</td>
+							<td colspan="7"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+	
+			
+			<?php if((bool)$isEdit): ?>
+				<div id="reasonforlocationchange">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="LocationChangeReason" class="control-label">Reason for Change of Owner </label>
+								<textarea name="LocationChangeReason" id="LocationChangeReason" class="form-control col-md-3" placeholder="Required only if you have applied for Change of Owner"><?php echo $generalInfo->LocationChangeReason; ?></textarea>
+							</div>
+							<br><br><br>
+						</div>
+
+					</div>
+				</div>
+			<?php endif; ?>
+			<div class="form-actions">
+				<div class="btn-set">
+					<?php if((int)$serviceBySpecializedtrade==1): ?>
+					<button type="submit" class="btn blue">Continue <i class="fa fa-arrow-circle-o-right"></i></button>
+					<a href="<?php echo URL::to('ezhotin/home/'.Session::get('UserViewerType')); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+					<?php else: ?>
+					<button type="submit" class="btn blue">Update <i class="fa fa-arrow-circle-o-right"></i></button>
+						<?php if(!empty($redirectUrl)): ?>
+						<a href="<?php echo URL::to($redirectUrl.'/'.$isEdit); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+						<?php else: ?> 
+						<a href="<?php echo URL::to('specializedfirm/confirmregistration'); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+						<?php endif; ?>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div> 

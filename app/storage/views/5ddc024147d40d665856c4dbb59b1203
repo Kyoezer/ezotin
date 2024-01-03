@@ -1,0 +1,164 @@
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption font-green-seagreen">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject"><?php echo $pageTitle; ?> - My Task</span>
+			<span class="caption-helper font-red-intense"><?php echo $pageTitleHelper; ?></span>
+		</div>
+		<div class="tools">
+			<a href="javascript:;" class="collapse"></a>
+		</div>
+	</div>
+	<div class="portlet-body">
+		<div class="form-body">
+			<?php echo Form::open(array('url' =>Request::URL(),'role'=>'form','method'=>'get')); ?>
+
+			<div class="row">
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label">Contractor/Firm</label>
+						<div class="ui-widget">
+							<input type="hidden" class="contractor-id" name="ContractorId" value="<?php echo Input::get('ContractorId'); ?>"/>
+							<input type="text" name="Contractor" value="<?php echo Input::get('Contractor'); ?>" class="form-control contractor-autocomplete"/>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label class="control-label">Application date between</label>
+						<div class="input-group input-large date-picker input-daterange">
+							<input type="text" name="FromDateMyTask" class="form-control datepickerfrom" value="<?php echo Input::has('FromDateMyTask')?convertDateTimeToClientFormat(Input::get('FromDateMyTask')):''; ?>" />
+							<span class="input-group-addon">
+							to </span>
+							<input type="text" name="ToDateMyTask" class="form-control datepickerto" value="<?php echo Input::has('ToDateMyTask')?convertDateTimeToClientFormat(Input::get('ToDateMyTask')):''; ?>" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<label class="control-label">|</label>
+					<div class="btn-set">
+						<button type="submit" class="btn blue-hoki btn-sm">Search</button>
+						<a href="<?php echo Request::URL(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php echo Form::close(); ?>
+
+		<div class="table-responsive">
+			<table class="table table-bordered table-striped table-condensed flip-content">
+				<thead>
+					<tr>
+						<th>
+							 Ref#
+						</th>
+						<th>
+							 Dt.
+						</th>
+						<th>
+							CDB No.
+						</th>
+						<th>
+							Ownership Type
+						</th>
+						<th>
+							 Name of Firm
+						</th>
+						<th>
+							Class
+						</th>
+						<th>
+							 Country
+						</th>
+						<th>
+							 Dzongkhag
+						</th>
+						<th>
+							Mobile#
+						</th>
+						<th>
+							Tel#
+						</th>
+						<th>
+							Email
+						</th>
+						<th>
+							Services
+						</th>
+						<th>
+							Action
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php $__empty_1 = true; foreach($contractorMyTaskLists as $contractorMyTaskList): $__empty_1 = false; ?>
+					<tr>
+						<td>
+							 <?php echo $contractorMyTaskList->ReferenceNo; ?>
+
+						</td>
+						<td>
+							 <?php echo convertDateToClientFormat($contractorMyTaskList->ApplicationDate); ?>
+
+						</td>
+						<td>
+							<?php echo $contractorMyTaskList->CDBNo; ?> 
+						</td>
+						<td>
+							<?php echo $contractorMyTaskList->OwnershipType; ?> 
+						</td>
+						<td>
+							<?php echo $contractorMyTaskList->NameOfFirm; ?> 
+						</td>
+						<td>
+							<span data-toggle="tooltip" title="<?php echo $contractorMyTaskList->ClassificationName; ?>"><?php echo $contractorMyTaskList->ClassificationCode; ?></span>
+						</td>
+						<td>
+							 <?php echo $contractorMyTaskList->Country; ?>
+
+						</td>
+						<td>
+							 <?php echo $contractorMyTaskList->Dzongkhag; ?>
+
+						</td>
+						<td>
+							 <?php echo $contractorMyTaskList->MobileNo; ?>
+
+						</td>
+						<td>
+							<?php echo $contractorMyTaskList->TelephoneNo; ?>
+
+						</td>
+						<td>
+							<?php echo $contractorMyTaskList->Email; ?>
+
+						</td>
+						<td>
+							<?php echo $contractorMyTaskList->ServiceApplied; ?>
+
+						</td>
+						<?php if(isset($isEditService)): ?>
+							<td>
+								<a href="<?php echo URL::to('contractor/editservicesdetail/'.$contractorMyTaskList->Id); ?>" class="btn default btn-xs green-seagreen editaction"><i class="fa fa-edit"></i> Edit</a>
+								<a href="<?php echo URL::to('contractor/deleteservice/'.$contractorMyTaskList->Id); ?>" class="btn default btn-xs red deleteaction"><i class="fa fa-times"></i> Delete</a>
+							</td>
+						<?php else: ?>
+							<td>
+								<a href="<?php echo URL::to('contractor/viewserviceapplicationdetails/'.$contractorMyTaskList->Id); ?>" class="btn default btn-xs green-seagreen processaction"><i class="fa fa-edit"></i> Details</a>
+							</td>
+						<?php endif; ?>
+					</tr>
+					<?php endforeach; if ($__empty_1): ?>
+					<tr>
+						<td class="font-red text-center" colspan="13">No data to display</td>
+					</tr>
+					<?php endif; ?>
+				</tbody>
+			</table>
+		</div>
+		<?php pagination($noOfPages,Input::all(),Input::get('page'),$route); ?>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,79 @@
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/global/scripts/report.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <?php $parameters = Input::all(); $parameters['export']='excel'; ?>
+                <i class="fa fa-cogs"></i>Bid Capacity Calculator
+            </div>
+        </div>
+        <div class="portlet-body flip-scroll">
+            <form role="form" class="form" method="POST" action="<?php echo URL::to('etoolrpt/calculatebidcapacity'); ?>">
+                <div class="form-body">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label">Contractor/Firm</label>
+                            <div class="ui-widget">
+                                <input type="hidden" class="contractor-id" name="ContractorId" value="<?php echo Input::get('ContractorId'); ?>"/>
+                                <input type="text" name="Contractor" value="<?php echo Input::get('Contractor'); ?>" class="form-control input-sm contractor-autocomplete"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label" for="CDBNo">Start Date</label>
+                            <input type="text" name="FromDate" value="<?php echo Input::get('FromDate'); ?>" class="form-control input-sm date-picker required">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label" for="CDBNo">End Date</label>
+                            <input type="text" name="ToDate" value="<?php echo Input::get('ToDate'); ?>" class="form-control input-sm date-picker required">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label" for="QuotedAmount">Quoted Amount</label>
+                            <input type="hidden" value="1" name="Submit">
+                            <input type="text" id="QuotedAmount" name="QuotedAmount" value="<?php echo Input::get('QuotedAmount'); ?>" class="form-control input-sm required">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="">&nbsp;</label>
+                        <div class="btn-set">
+                            <button type="submit" class="btn btn-sm blue">Calculate</button>
+                            <a href="<?php echo URL::to('etoolrpt/bidcapacitycalculator'); ?>" class="btn btn-sm red">Clear</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="clearfix"></div>
+            <?php if(Input::has('Submit')): ?>
+                <div class="col-md-6">
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                            <tr style="background: #dedede;">
+                                <th>A</th>
+                                <th>N</th>
+                                <th>B</th>
+                                <th>BID CAPACITY</th>
+                            </tr>
+                        </thead>
+                    <tbody>
+                        <tr>
+                            <td><?php echo number_format($bidCapacityArray['A'],3); ?></td>
+                            <td><?php echo $bidCapacityArray['N']; ?></td>
+                            <td><?php echo number_format($bidCapacityArray['B'],3); ?></td>
+                            <td><?php echo $result; ?></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div><div class="clearfix"></div>
+            <?php endif; ?>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,126 @@
+
+<?php $__env->startSection('content'); ?>
+    <input type="hidden" name="FullURL" value="<?php echo CONST_APACHESITELINK; ?>"/>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption font-green-seagreen">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject">List of Works</span>
+			<span class="caption-helper">The contracts listed below are all <span class="font-red-thunderbird bold"><?php if((int)$underProcess==1): ?><?php echo 'under process'; ?><?php else: ?><?php echo 'completed/terminated'; ?><?php endif; ?></span></span>
+		</div>
+	</div>
+	<div class="portlet-body">
+		<?php echo Form::open(array('url' =>Request::URL(),'role'=>'form','method'=>'get')); ?>
+
+		<div class="row">
+			<div class="col-md-2">
+				<div class="form-group">
+					<label class="control-label">Work Order No.</label>
+					<input type="text" name="WorkOrderNo" value="" class="form-control">
+				</div>
+			</div>
+			<?php if((int)$underProcess==1): ?>
+			<div class="col-md-4">
+				<div class="form-group">
+					<label class="control-label">Work Start Date Between</label>
+					<div class="input-group input-large date-picker input-daterange">
+						<input type="text" name="WorkStartDateFrom" class="form-control datepickerfrom" value="<?php echo $workStartDateFrom; ?>" />
+						<span class="input-group-addon">
+						to </span>
+						<input type="text" name="WorkStartDateTo" class="form-control datepickerto" value="<?php echo $workStartDateTo; ?>" />
+					</div>
+				</div>
+			</div>
+			<?php else: ?>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label class="control-label">Status</label>
+					<select name="WorkExecutionStatus" class="form-control">
+						<option value="">---SELECT ONE---</option>
+						<?php foreach($workExecutionStatus as $workExecutionStatus): ?>
+						<option value="<?php echo $workExecutionStatus->Id; ?>" <?php if($workExecutionStatus->Id==$workStatus): ?>selected="selected"<?php endif; ?>><?php echo $workExecutionStatus->Name; ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+			<?php endif; ?>
+			<div class="col-md-2">
+				<label class="control-label">|</label>
+				<div class="btn-set">
+					<button type="submit" class="btn blue-hoki btn-sm">Search</button>
+					<a href="<?php echo Request::URL(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+				</div>
+			</div>
+		</div>
+		<?php echo Form::close(); ?>
+
+			<table class="table table-bordered table-striped table-condensed flip-content">
+				<thead class="flip-content">
+					<tr>
+						<th>
+							Sl.No.
+						</th>
+						<th class="">
+							Name of Client
+						</th> 
+						<th style="width: 290px;">
+							Name of Work
+						</th>
+						<th width="100">
+							Contract Period (In Months)
+						</th>
+						<th>
+							Start Date
+						</th>
+						<th>
+							Completion Date
+						</th>
+	<?php /*					<?php if((int)$underProcess==0): ?>*/ ?>
+						<th>
+							Status
+						</th>
+						<?php /*<?php endif; ?>*/ ?>
+						<th>
+							Action
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php $currentProcuringAgeny=""; $slNo = 1;?>
+					<?php $__empty_1 = true; foreach($listOfWorks as $lsitOfWork): $__empty_1 = false; ?>
+					<tr>
+						<td><?php echo $slNo; ?></td>
+						<td><?php echo $lsitOfWork->NameOfClient; ?></td>
+						<td><?php echo $lsitOfWork->NameOfWork; ?></td>
+						<td><?php echo $lsitOfWork->ContractPeriod; ?></td>
+						<td><?php echo convertDateToClientFormat($lsitOfWork->WorkStartDate); ?></td>
+						<td><?php echo convertDateToClientFormat($lsitOfWork->WorkCompletionDate); ?></td>
+	<?php /*					<?php if((int)$underProcess==0): ?>*/ ?>
+						<td>
+							<?php echo $lsitOfWork->WorkExecutionStatus; ?>
+
+						</td>
+						<?php /*<?php endif; ?>*/ ?>
+						<td>
+							<?php if(Request::path()=="cb/editcompletedworklist" || Request::path()=="cb/worklist"): ?>
+							<a href="<?php echo URL::to('cb/workcompletionform/'.$lsitOfWork->Id); ?>" class="btn default btn-xs green-seagreen"><i class="fa fa-edit"></i> View</a>
+							<?php elseif(Request::path()=="cb/editbiddingformlist"): ?>
+							<a href="<?php echo URL::to('cb/biddingform?bidreference='.$lsitOfWork->Id); ?>" class="btn default btn-xs green-seagreen editaction"><i class="fa fa-edit"></i> Edit</a>
+							<?php endif; ?>
+							<a href="#" data-id="<?php echo $lsitOfWork->Id; ?>" class="btn default btn-xs bg-red-sunglo deletebid"><i class="fa fa-edit"></i> Delete</a>
+						</td>
+						<?php $currentProcuringAgeny=$lsitOfWork->ProcuringAgency; ?>
+					</tr>
+						<?php $slNo ++; ?>
+					<?php endforeach; if ($__empty_1): ?>
+					<tr>
+						<td colspan="8" class="text-center font-red">No data to display</td>
+					</tr>
+					<?php endif; ?>
+				</tbody>
+			</table>
+		
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('horizontalmenumaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

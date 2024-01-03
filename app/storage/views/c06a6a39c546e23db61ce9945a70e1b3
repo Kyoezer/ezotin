@@ -1,0 +1,349 @@
+<?php $__env->startSection('lastcdbno'); ?>
+<div class="page-toolbar">
+	<div id="dashboard-report-range" class="pull-right tooltips btn btn-fit-height grey-cascade" data-placement="top" data-original-title="Last used Engineer CDB No.">
+		<span class="thin visible-lg-inline-block">Last used CDB No.: <span class="bold"><?php echo lastUsedEngineerNo();; ?></span></span>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption font-green-seagreen">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject"><?php echo $pageTitle; ?> - My Task</span>
+		</div>
+		<div class="tools">
+			<a href="javascript:;" class="collapse"></a>
+		</div>
+	</div>
+	<div class="portlet-body">
+		<div class="form-body">
+			<?php echo Form::open(array('url' =>Request::URL(),'role'=>'form','method'=>'get')); ?>
+
+			<div class="row">
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">Engineer Type</label>
+						<select name="CmnServiceSectorTypeIdMyTask" class="form-control">
+							<option value="">---SELECT ONE---</option>
+							<?php foreach($serviceSectorTypes as $serviceSectorType): ?>
+								<option value="<?php echo $serviceSectorType->Id; ?>" <?php if($serviceSectorTypeIdMyTask==$serviceSectorType->Id): ?>selected="selected"<?php endif; ?>><?php echo $serviceSectorType->Name; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">Trade</label>
+						<select name="CmnTradeIdMyTask" class="form-control">
+							<option value="">---SELECT ONE---</option>
+							<?php foreach($trades as $trade): ?>
+								<option value="<?php echo $trade->Id; ?>" <?php if($tradeIdMyTask==$trade->Id): ?>selected="selected"<?php endif; ?>><?php echo $trade->Name; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label">Name</label>
+						<select name="CrpEngineerIdMyTask" class="form-control select2me">
+							<option value="">---SELECT ONE---</option>
+							<?php foreach($engineerMyTaskLists as $engineerMyTaskList): ?>
+								<option value="<?php echo $engineerMyTaskList->Id; ?>" <?php if($engineerIdMyTask==$engineerMyTaskList->Id): ?>selected="selected"<?php endif; ?>><?php echo $engineerMyTaskList->EngineerName; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label class="control-label">Application date between</label>
+						<div class="input-group input-large date-picker input-daterange">
+							<input type="text" name="FromDateMyTask" class="form-control datepickerfrom" value="<?php echo $fromDateMyTask; ?>" />
+							<span class="input-group-addon">
+							to </span>
+							<input type="text" name="ToDateMyTask" class="form-control datepickerto" value="<?php echo $toDateMyTask; ?>" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="btn-set">
+						<button type="submit" class="btn blue-hoki btn-sm">Search</button>
+						<a href="<?php echo Request::URL(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php echo Form::close(); ?><br />
+		<div class="table-responsive">
+			<table class="table table-bordered table-striped table-condensed">
+				<thead>
+					<tr>
+						<th>
+							 Ref#
+						</th>
+						<th>
+							 Application Dt.
+						</th>
+						<th>
+							Engineer Type
+						</th>
+						<th>
+							Trade
+						</th>
+						<th>
+							 Name
+						</th>
+						<th>
+							CID/Work Permit No.
+						</th>
+						<th>
+							 Country
+						</th>
+						<th>
+							 Dzongkhag
+						</th>
+						<th>
+							Mobile#
+						</th>
+						<th>
+							Email
+						</th>
+						<th>
+							Action
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php $__empty_1 = true; foreach($engineerMyTaskLists as $engineerMyTaskList): $__empty_1 = false; ?>
+					<tr>
+						<td>
+							<?php echo $engineerMyTaskList->ReferenceNo; ?>
+
+						</td>
+						<td>
+							<?php echo convertDateToClientFormat($engineerMyTaskList->ApplicationDate); ?>
+
+						</td>
+						<td>
+							<?php echo $engineerMyTaskList->EngineerType; ?>
+
+						</td>
+						<td>
+							<?php echo $engineerMyTaskList->Trade; ?>
+
+						</td>
+						<td>
+							<?php echo $engineerMyTaskList->Salutation.' '.$engineerMyTaskList->EngineerName; ?> 
+						</td>
+						<td>
+							<?php echo $engineerMyTaskList->CIDNo; ?>
+
+						</td>
+						<td>
+							 <?php echo $engineerMyTaskList->Country; ?>
+
+						</td>
+						<td>
+							 <?php echo $engineerMyTaskList->Dzongkhag; ?>
+
+						</td>
+						<td>
+							 <?php echo $engineerMyTaskList->MobileNo; ?>
+
+						</td>
+						<td>
+							<?php echo $engineerMyTaskList->Email; ?>
+
+						</td>
+						<td>
+							<?php if(Route::current()->getUri()=="engineer/approveregistration"): ?>
+								<a href="<?php echo URL::to('engineer/approveregistrationprocess/'.$engineerMyTaskList->Id); ?>" class="btn default btn-xs green-seagreen processaction"><i class="fa fa-edit"></i> Process</a>
+							<?php elseif(Request::path()=="engineer/approvefeepayment"): ?>
+								<a href="<?php echo URL::to('engineer/approvepaymentregistrationprocess/'.$engineerMyTaskList->Id); ?>" class="btn default btn-xs green-seagreen processaction"><i class="fa fa-edit"></i> Process</a>
+							<?php else: ?>
+								<a href="<?php echo URL::to('engineer/verifyregistrationprocess/'.$engineerMyTaskList->Id); ?>" class="btn default btn-xs green-seagreen processaction"><i class="fa fa-edit"></i> Process</a>
+							<?php endif; ?>
+								<a href="<?php echo URL::to('dropapplication'); ?>?model=EngineerModel&id=<?php echo $engineerMyTaskList->Id; ?>&redirectUrl=<?php echo $redirectUrl; ?>" class="btn default btn-xs purple dropaction"><i class="fa fa-times"></i> Drop</a>
+						</td>
+					</tr>
+					<?php endforeach; if ($__empty_1): ?>
+					<tr>
+						<td class="font-red text-center" colspan="11">No data to display</td>
+					</tr>
+					<?php endif; ?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption font-green-seagreen">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject">Pick the applications you wish to work on.<small class="font-red"><i>-Click on the arrow at right hand corner to expand the list</i></small></span>
+		</div>
+		<div class="tools">
+			<a href="javascript:;" class="expand"></a>
+		</div>
+	</div>
+	<div class="portlet-body display-hide">
+		<div class="form-body">
+			<?php echo Form::open(array('url' =>Request::URL(),'role'=>'form','method'=>'get')); ?>
+
+			<div class="row">
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">Engineer Type</label>
+						<select name="CmnServiceSectorTypeIdAll" class="form-control">
+							<option value="">---SELECT ONE---</option>
+							<?php foreach($serviceSectorTypes as $serviceSectorType): ?>
+								<option value="<?php echo $serviceSectorType->Id; ?>" <?php if($serviceSectorTypeIdAll==$serviceSectorType->Id): ?>selected="selected"<?php endif; ?>><?php echo $serviceSectorType->Name; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">Trade</label>
+						<select name="CmnTradeIdAll" class="form-control">
+							<option value="">---SELECT ONE---</option>
+							<?php foreach($trades as $trade): ?>
+								<option value="<?php echo $trade->Id; ?>" <?php if($tradeIdAll==$trade->Id): ?>selected="selected"<?php endif; ?>><?php echo $trade->Name; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label">Name</label>
+						<select name="CrpEngineerIdAll" class="form-control select2me">
+							<option value="">---SELECT ONE---</option>
+							<?php foreach($engineerLists as $engineerList): ?>
+								<option value="<?php echo $engineerList->Id; ?>" <?php if($engineerIdAll==$engineerList->Id): ?>selected="selected"<?php endif; ?>><?php echo $engineerList->EngineerName; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label class="control-label">Application date between</label>
+						<div class="input-group input-large date-picker input-daterange">
+							<input type="text" name="FromDateAll" class="form-control datepickerfrom" value="<?php echo $fromDateAll; ?>" />
+							<span class="input-group-addon">
+							to </span>
+							<input type="text" name="ToDateAll" class="form-control datepickerto" value="<?php echo $toDateAll; ?>" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="btn-set">
+						<button type="submit" class="btn blue-hoki btn-sm">Search</button>
+						<a href="<?php echo Request::URL(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php echo Form::close(); ?><br />
+		<div class="table-responsive">
+			<table class="table table-bordered table-striped table-condensed">
+				<thead>
+					<tr>
+						<th>
+							 Ref#
+						</th>
+						<th>
+							 Application Dt.
+						</th>
+						<th>
+							Engineer Type
+						</th>
+						<th>
+							Trade
+						</th>
+						<th>
+							 Name
+						</th>
+						<th>
+							CID/Work Permit No.
+						</th>
+						<th>
+							 Country
+						</th>
+						<th>
+							 Dzongkhag
+						</th>
+						<th>
+							Mobile#
+						</th>
+						<th>
+							Email
+						</th>
+						<th>
+							Action
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php $__empty_1 = true; foreach($engineerLists as $engineerList): $__empty_1 = false; ?>
+					<tr>
+						<td>
+							<?php echo $engineerList->ReferenceNo; ?>
+
+						</td>
+						<td>
+							<?php echo convertDateToClientFormat($engineerList->ApplicationDate); ?>
+
+						</td>
+						<td>
+							<?php echo $engineerList->EngineerType; ?>
+
+						</td>
+						<td>
+							<?php echo $engineerList->Trade; ?>
+
+						</td>
+						<td>
+							<?php echo $engineerList->Salutation.' '.$engineerList->EngineerName; ?> 
+						</td>
+						<td>
+							<?php echo $engineerList->CIDNo; ?>
+
+						</td>
+						<td>
+							 <?php echo $engineerList->Country; ?>
+
+						</td>
+						<td>
+							 <?php echo $engineerList->Dzongkhag; ?>
+
+						</td>
+						<td>
+							 <?php echo $engineerList->MobileNo; ?>
+
+						</td>
+						<td>
+							<?php echo $engineerList->Email; ?>
+
+						</td>
+						<td>
+							<?php if(Route::current()->getUri()=="engineer/approveregistration"): ?>
+								<a href="<?php echo URL::to('engineer/lockapplication/'.$engineerList->Id.'?redirectUrl=engineer/approveregistration'); ?>" class="btn default btn-xs green-seagreen pickaction"><i class="fa fa-edit"></i> Pick</a>
+							<?php elseif(Request::path()=="engineer/approvefeepayment"): ?>
+							<a href="<?php echo URL::to('engineer/lockapplication/'.$engineerList->Id.'?redirectUrl=engineer/approvefeepayment'); ?>" class="btn default btn-xs green-seagreen pickaction"><i class="fa fa-edit"></i> Pick</a>
+							<?php else: ?>
+								<a href="<?php echo URL::to('engineer/lockapplication/'.$engineerList->Id.'?redirectUrl=engineer/verifyregistration'); ?>" class="btn default btn-xs green-seagreen pickaction"><i class="fa fa-edit"></i> Pick</a>
+							<?php endif; ?>
+						</td>
+					</tr>
+					<?php endforeach; if ($__empty_1): ?>
+					<tr>
+						<td class="font-red text-center" colspan="11">No data to display</td>
+					</tr>
+					<?php endif; ?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

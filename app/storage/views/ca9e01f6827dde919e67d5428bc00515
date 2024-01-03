@@ -1,0 +1,53 @@
+<html>
+    <body>
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="2">Audit Memo Report (Dropped)</th>
+                </tr>
+                <?php foreach($parametersForPrint as $key=>$value): ?>
+                    <tr>
+                        <th><i><?php echo $key; ?>: </i>&nbsp;<?php echo $value; ?></th>
+                    </tr>
+                <?php endforeach; ?>
+                <tr>
+                    <th colspan="4"></th>
+                </tr>
+                <tr>
+                    <th>Name of Firm</th>
+                    <th>CDB No.</th>
+                    <th>Agency</th>
+                    <th>Audited Period</th>
+                    <th>AIN</th>
+                    <th>Para No.</th>
+                    <th>Audit Observation</th>
+                    <th>Dropped by</th>
+                    <th>Dropped on</th>
+                    <th>Remarks</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php $__empty_1 = true; foreach($reportData as $data): $__empty_1 = false; ?>
+                    <tr>
+                        <td><?php echo $data->NameOfFirm; ?></td>
+                        <td><?php echo $data->CDBNo; ?></td>
+                        <td><?php echo $data->Agency; ?></td>
+                        <td><?php echo $data->AuditedPeriod; ?></td>
+                        <td><?php echo $data->AIN; ?></td>
+                        <td><?php echo $data->ParoNo; ?></td>
+                        <td><?php echo $data->AuditObservation; ?></td>
+                        <td><?php echo $data->Dropper; ?></td>
+                        <td><?php echo convertDateToClientFormat($data->DroppedDate); ?></td>
+                        <td><?php echo $data->Remarks; ?></td>
+                    </tr>
+                <?php endforeach; if ($__empty_1): ?>
+                    <tr>
+                        <td colspan="10" class="text-center font-red">No data to display</td>
+                    </tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

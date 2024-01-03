@@ -1,0 +1,76 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php echo HTML::script('assets/global/scripts/contractor.js'); ?>
+
+	<?php /*<?php if((int)$serviceByContractor==1): ?>*/ ?>
+		<?php /*<script>*/ ?>
+			<?php /*$('#workclassificationservice').modal('show');*/ ?>
+			<?php /*$('input.tablerowcheckbox').attr('disabled','disabled');*/ ?>
+		<?php /*</script>*/ ?>
+	<?php /*<?php endif; ?>*/ ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-cogs"></i>Upgrade/Downgrade
+		</div>
+		<?php /*<?php if((int)$serviceByContractor==1): ?>*/ ?>
+			<?php /*<button id="reselectchangeofcategoryclassification" type="button" class="btn green-seagreen btn-sm pull-right">Re-select Service</button>*/ ?>
+		<?php /*<?php endif; ?>*/ ?>
+	</div>
+	<div class="portlet-body">
+		<?php $postUrl = "contractor/mcontractorworkclassification"; ?>
+		<?php if(isset($final)): ?>
+			<?php if((bool)$final): ?>
+				<?php $postUrl = "contractor/mcontractorworkclassificationfinal"; ?>
+			<?php endif; ?>
+		<?php endif; ?>
+		<?php echo Form::open(array('url' => $postUrl,'role'=>'form','files'=>true)); ?>
+
+		<input type="hidden" value="1" name="EditByCdb">
+		<input type="hidden" name="PostBackUrl" value="<?php echo $redirectUrl; ?>">
+		<input type="hidden" name="ServiceByContractor" value="<?php echo $serviceByContractor; ?>">
+		<input type="hidden" name="CrpApplicationContractorId" value="<?php echo $contractorId; ?>" />
+			<?php if(Input::has('downgrade')): ?>
+				<input type="hidden" value="1" name="downgrade"/>
+			<?php endif; ?>
+		<?php if((int)$serviceByContractor==1): ?>
+			<div id="workclassificationservice" data-backdrop="static" data-keyboard="false" class="modal fade" role="dialog" aria-labelledby="workclassificationservice" aria-hidden="true">
+			    <div class="modal-dialog modal-lg">
+			        <div class="modal-content">
+			              <div class="modal-header">
+			                <h3 class="modal-title font-green-seagreen">Service</h3>
+			              </div>
+			              <div class="modal-body">
+			              	<div class="note note-danger hide changeofcategoryclasserror">
+				                <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+				                <p class="font-red">Please tick on the checkbox if you wish to avail this service along with this application.</p>
+				            </div>
+			                <p>Would you like to avail the services listed below along with this application? Please tick on the chech box if you wish to.</p>
+			                <div class="form-group">
+								<div class="checkbox-list">
+									<label>
+									<input type="checkbox" name="ChangeInCategoryClassificationService" data-type="1" value="<?php echo CONST_SERVICETYPE_CHANGEOFCATEGORYCLASSIFICATION; ?>">Upgrade/Downgrade/Add Category/Classification</label>
+								</div>
+							</div>
+			              </div>
+			              <div class="modal-footer">
+			                <button type="button" id="changeofcategoryclassification" class="btn green-seagreen" >Yes</button>
+			                <button type="submit" class="btn red">No</button>
+			              </div>
+			        </div>
+			    </div>
+			</div>
+			
+		<?php endif; ?>
+		<?php if(!Input::has('monitoringofficeid')): ?>
+		<div class="note note-info"><strong>Note:</strong> If you are upgrading/downgrading, it is necessary to attach Letter of Undertaking
+		</div>
+		<?php endif; ?>
+		<?php echo $__env->make('crps.contractorworkclassificationcontrols', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+		<?php echo Form::close(); ?>
+
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

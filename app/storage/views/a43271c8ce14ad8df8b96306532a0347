@@ -1,0 +1,275 @@
+<?php $__env->startSection('content'); ?>
+<div class="page-bar">
+	<ul class="page-breadcrumb">
+		<li>
+			<a href="#">etool</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li>
+			<a href="#">Work Completion Form</a>
+		</li>
+	</ul>
+</div>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-cogs"></i>Work Summary
+		</div>
+		<div class="tools">
+			<a href="javascript:;" class="collapse"></a>
+		</div>
+	</div>
+	<div class="portlet-body flip-scroll">
+		<div class="row">
+            <?php foreach($tenderDetails as $tenderDetail): ?>
+            <div class="col-md-12">
+                <p><b>Name of Work:  </b><?php echo $tenderDetail->NameOfWork; ?></p>
+            </div>
+			<div class="col-md-6">
+				<table class="table table-bordered table-striped table-condensed flip-content">
+					<tbody>
+                        <tr>
+                            <td><strong>Work Id</strong></td>
+                            <td><?php echo $tenderDetail->WorkId; ?></td>
+                        </tr>
+						<tr>
+							<td><strong>Name of Contractor</strong></td>
+							<td><?php echo $tenderDetail->Contractor; ?></td>
+						</tr>
+                        <tr>
+                            <td><strong>Contract Period (in Months)</strong></td>
+                            <td><?php echo $tenderDetail->ContractPeriod; ?></td>
+                        </tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-md-6">
+				<table class="table table-bordered table-striped table-condensed flip-content">
+					<tbody>
+						<tr>
+							<td><strong>Contract Description</strong></td>
+							<td><?php echo html_entity_decode($tenderDetail->DescriptionOfWork); ?></td>
+						</tr>
+						<tr>
+							<td><strong>Category of Work</strong></td>
+							<td><?php echo $tenderDetail->Category; ?></td>
+						</tr>
+						<tr>
+							<td><strong>Class</strong></td>
+							<td><?php echo $tenderDetail->Classification; ?></td>
+						</tr>
+                        <tr>
+                            <td><strong>EMD</strong></td>
+                            <td><?php echo $tenderDetail->EMD; ?></td>
+                        </tr>
+					</tbody>
+				</table>
+			</div>
+            <?php endforeach; ?>
+		</div>
+	</div>
+</div>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-cogs"></i>Work Completion Form
+		</div>
+	</div>
+	<div class="portlet-body flip-scroll">
+        <?php echo Form::open(array('url'=>'newEtl/etlworkcompletion','files'=>'true')); ?>
+
+        <?php echo Form::hidden('Id',$tenderId); ?>
+
+        <?php foreach($completionDetails as $completionDetail): ?>
+		<div class="form-body">
+			<div class="row">
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label">Status <span class="font-red">*</span></label>
+						<select name="CmnWorkExecutionStatusId" class="form-control required workcompletionstatuscontrol">
+							<option value="">---SELECT ONE---</option>
+							<?php foreach($workStatuses as $workStatus): ?>
+                                <option value="<?php echo $workStatus->Id; ?>" data-referenceno="<?php echo $workStatus->ReferenceNo; ?>" <?php if($completionDetail->CmnWorkExecutionStatusId == $workStatus->Id): ?>selected="selected"<?php endif; ?>><?php echo $workStatus->Name; ?></option>
+                            <?php endforeach; ?>
+						</select>
+					</div>
+				</div>
+            </div>
+            <div class="workcompletedinfo <?php if(empty($completionDetail->CmnWorkExecutionStatusId) || $completionDetail->CmnWorkExecutionStatusId==CONST_CMN_WORKEXECUTIONSTATUS_TERMINATED): ?><?php echo 'hide'; ?><?php endif; ?>">
+                <div class="row">
+                <div class="col-md-3">
+					<div class="form-group">
+						<script>
+							function checkDigit(inputId)
+							{
+								var totalValue = $("#"+inputId).val();
+								if(totalValue<10000)
+								{
+									alert('Value cannot be less than 5 digit');
+									$("#"+inputId).val('');
+								}
+								
+							}
+						</script>
+						<label class="control-label">Contract Price (Initial) Nu. <span class="font-red">*</span></label>
+						<input type="text"  title="Amount should not be less than 5 digits" onchange="checkDigit(this.id)" name="ContractPriceInitial" id="ContractPriceInitial" class="form-control number required workstatuscompletedcontrol" value="<?php echo isset($completionDetail->ContractPriceInitial) ? $completionDetail->ContractPriceInitial : $tenderDetail->AwardedAmount; ?>" class="text-right">
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label">Contract Price (Final) Nu. <span class="font-red">*</span></label>
+						<input type="text" title="Amount should not be less than 5 digits" onchange="checkDigit(this.id)" name="ContractPriceFinal" id="ContractPriceFinal" onchange="validateInitailFirnalPrice()" class="form-control number required workstatuscompletedcontrol" value="<?php echo $completionDetail->ContractPriceFinal; ?>" class="text-right">
+					</div>
+				</div>
+				<script>
+					function validateInitailFirnalPrice()
+					{
+						var initialPrice = $("#ContractPriceInitial").val();
+						var ContractPriceFinal = $("#ContractPriceFinal").val();
+						var totalDifference = initialPrice - ContractPriceFinal;
+						var reply = confirm('Total difference between initial and final price is  '+totalDifference+'. Are you sure?');
+						if(reply){
+							return true;
+						}else{
+							$("#ContractPriceFinal").val('');
+							return false;
+						}
+
+					}
+ 
+ 
+
+					function checkCompletionDate(event)
+					{
+						$("#dateCommencementMessage").addClass("hidden");
+						var commencementDateFinal = $("#commencementDateFinal").val();
+						var completionDateFinal = $("#completionDateFinal").val();
+
+						if(commencementDateFinal!="" && completionDateFinal!="")   
+						{   
+							if ($.datepicker.parseDate('dd-mm-yy', commencementDateFinal) > $.datepicker.parseDate('dd-mm-yy', completionDateFinal)) {
+								$("#dateCommencementMessage").removeClass("hidden");
+								$("#completionDateFinal").val()="";
+							}
+						}
+
+					}
+				</script>
+			<?php /*<div class="row">*/ ?>
+				<div class="col-md-3">
+					<div class="form-group">
+                        <label class="control-label">Date of Commencement (Official) <span class="font-red">*</span></label>
+                        <div class="input-icon right">
+                            <i class="fa fa-calendar"></i>
+                            <input type="text" name="CommencementDateOfficial" id="commencementDateOfficial"   class="form-control required workstatuscompletedcontrol" value="<?php echo $completionDetail->CommencementDateOfficial?convertDateToClientFormat($completionDetail->CommencementDateOfficial):convertDateToClientFormat($tenderDetail->ActualStartDate); ?>" readonly>
+                        </div>
+					</div>
+				</div>
+				
+				<div class="col-md-3">
+					<div class="form-group">
+                        <label class="control-label">Date of Commencement (Actual) <span class="font-red">*</span></label>
+                        <div class="input-icon right">
+                            <i class="fa fa-calendar"></i>
+                            <input type="text" name="CommencementDateFinal" id="commencementDateFinal" onchange="checkCompletionDate()"   value="<?php echo $completionDetail->CommencementDateFinal?convertDateToClientFormat($completionDetail->CommencementDateFinal):''; ?>" class="form-control datepicker required workstatuscompletedcontrol" readonly>
+                        </div>
+					</div>
+				</div>
+                </div>
+                <div class="row">
+				<div class="col-lg-12">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Date of Completion (Official) <span class="font-red">*</span></label>
+							<div class="input-icon right">
+								<i class="fa fa-calendar"></i>
+								<input type="text" name="CompletionDateOfficial" value="<?php echo $completionDetail->CompletionDateOfficial?convertDateToClientFormat($completionDetail->CompletionDateOfficial):convertDateToClientFormat($tenderDetail->ActualEndDate); ?>" class="form-control required workstatuscompletedcontrol" readonly>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Date of Completion (Actual) <span class="font-red">*</span></label>
+							<div class="input-icon right">
+								<i class="fa fa-calendar"></i>
+								<input type="text" name="CompletionDateFinal"  id="completionDateFinal" onchange="checkCompletionDate()" class="form-control required datepicker workstatuscompletedcontrol" value="<?php echo $completionDetail->CompletionDateFinal?convertDateToClientFormat($completionDetail->CompletionDateFinal):''; ?>" readonly>
+							</div>
+						</div>
+						<div class="text-danger bold hidden" id="dateCommencementMessage">Date of completion cannot be less than date of commencement</div>
+					</div>
+					<script>
+						function validateInitailFirnalDate()
+						{
+							var initialPrice = $("#ContractPriceInitial").val();
+							var ContractPriceFinal = $("#ContractPriceFinal").val();
+							var totalDifference = initialPrice - ContractPriceFinal;
+							var reply = confirm('Total difference between initial and final price is  '+totalDifference+'. Are you sure?');
+							if(reply){
+								return true;
+							}else{  
+								$("#ContractPriceFinal").val('');
+								return false;
+							}
+
+						}
+
+					</script>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Ontime Completion (out of 30) <span class="font-red">*</span></label>
+							<input type="text" class="form-control number range required workstatuscompletedcontrol" name="OntimeCompletionScore" value="<?php echo $completionDetail->OntimeCompletionScore; ?>" data-min="0" data-max="30"/>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Quality of Execution (out of 70) <span class="font-red">*</span></label>
+							<input type="text" class="form-control number range required workstatuscompletedcontrol" name="QualityOfExecutionScore" value="<?php echo $completionDetail->QualityOfExecutionScore; ?>" data-min="0" data-max="70"/>
+						</div>
+					</div>
+				</div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label"><input type="checkbox" id="ld-toggle" name="LDImposed" value="1" <?php if($completionDetail->LDImposed == 1): ?>checked="checked"<?php endif; ?>/>LD Imposed</label>
+                        <input type="text" placeholder="No. of days" class="form-control ld-input" <?php if($completionDetail->LDImposed != 1): ?>disabled <?php endif; ?> name="LDNoOfDays" value="<?php echo isset($completionDetail->LDNoOfDays) ? $completionDetail->LDNoOfDays : ''; ?>"/>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">&nbsp;</label>
+                        <input type="text" placeholder="Amount" class="form-control ld-input" <?php if($completionDetail->LDImposed != 1): ?>disabled <?php endif; ?> name="LDAmount" value="<?php echo isset($completionDetail->LDAmount) ? $completionDetail->LDAmount : ''; ?>"/>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label"><input type="checkbox" name="Hindrance" value="1" class="enable-input" <?php if($completionDetail->Hindrance == 1): ?>checked="checked"<?php endif; ?>/>Hindrance</label>
+                        <input type="text" placeholder="No. of days" class="form-control input" <?php if($completionDetail->Hindrance != 1): ?>disabled <?php endif; ?> name="HindranceNoOfDays" value="<?php echo isset($completionDetail->HindranceNoOfDays) ? $completionDetail->HindranceNoOfDays : ''; ?>"/>
+                    </div>
+                </div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label">APS Form <span class="font-red">*</span></label>
+						<input type="file" name="APSForm" required="required" class="workstatuscompletedcontrol form-control input <?php if(!$isAdmin): ?><?php echo 'required'; ?><?php endif; ?>" />
+					</div>
+				</div>
+            </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Remarks </label>
+                <textarea name="Remarks" class="form-control"><?php echo $completionDetail->Remarks; ?></textarea>
+            </div>
+		</div>
+        <?php endforeach; ?>
+		<div class="form-actions">
+			<div class="btn-set">
+				<button type="submit" class="btn green" id="updateetoolstatus">Update</button>
+                <a href="<?php echo URL::to('newEtl/listofworksetool'); ?>" class="btn red">Cancel</a>
+			</div>
+		</div>
+        <?php echo Form::close(); ?>
+
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('horizontalmenumaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

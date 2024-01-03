@@ -1,0 +1,32 @@
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption font-green-seagreen">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject">Edit Website Header Banner</span>
+		</div>
+	</div>
+	<div class="portlet-body">
+			<?php echo Form::open(array('action'=>'UpdateBannerWebsite@updateBanner', 'files'=>true)); ?>
+
+				<div class="form-group">
+					<?php echo Form::label('bannerImage','Upload Banner'); ?>
+
+					<?php echo Form::file('bannerImage',array('class'=>'required')); ?>
+
+				</div>
+				<div class="form-actions">
+					<div class="row">
+						<div class="col-md-12">
+							<button type="submit" class="btn green">Submit <i class="fa fa-arrow-circle-o-right"></i></button>
+							<a href="<?php echo Request::url(); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+						</div>
+					</div>
+				</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+</div>	
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

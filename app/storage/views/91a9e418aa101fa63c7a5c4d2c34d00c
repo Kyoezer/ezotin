@@ -1,0 +1,106 @@
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/cdb/morris/raphael-min.js'); ?>
+
+    <?php echo HTML::script('assets/cdb/morris/modernizr-2.5.3-respond-1.1.0.min.js'); ?>
+
+    <?php echo HTML::script('assets/cdb/morris/morris.min.js'); ?>
+
+    <?php echo HTML::script('assets/global/scripts/report.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('pagestyles'); ?>
+    <?php echo HTML::style('assets/cdb/morris/morris.css'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-cogs"></i>Work Distribution by Dzongkhag and Category
+            </div>
+        </div>
+        <div class="portlet-body flip-scroll">
+            <?php echo Form::open(array('url'=>Request::url(),'method'=>'get')); ?>
+
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Dzongkhag</label>
+                            <select class="form-control select2me" name="Dzongkhag">
+                                <option value="">---SELECT ONE---</option>
+                                <?php foreach($dzongkhagsAgencies as $value): ?>
+                                    <option value="<?php echo $value->Code; ?>" <?php if($value->Code == Input::get('Dzongkhag')): ?>selected <?php endif; ?>><?php echo $value->Code; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Type</label>
+                            <?php echo Form::select('Type',array(''=>'---SELECT---',3=>'Etool',2=>'CiNet',1=>'CRPS'),Input::get('Type'),array('class'=>'form-control')); ?>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">From Date</label><div class="clearfix"></div>
+                            <div class="input-icon right">
+                                <i class="fa fa-calendar"></i>
+                                <input type="text" name="FromDate" class="form-control datepicker" value="<?php echo Input::get('FromDate'); ?>" readonly="readonly" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">To Date</label><div class="clearfix"></div>
+                            <div class="input-icon right">
+                                <i class="fa fa-calendar"></i>
+                                <input type="text" name="ToDate" class="form-control datepicker" value="<?php echo Input::has('ToDate')?Input::get('ToDate'):date('d-m-Y'); ?>" readonly="readonly" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="btn-set">
+                            <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                            <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php echo Form::close(); ?>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-condensed flip-content" id="workdistributionbyclass">
+                    <thead class="flip-content">
+                    <tr>
+                        <th>Category</th>
+                        <th>No. of works</th>
+                        <th>Contract Amount</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php $sum1 = $sum2 = 0; ?>
+                    <?php foreach($reportData as $data): ?>
+                        <tr>
+                            <td><?php echo $data->Code; ?></td>
+                            <td class="text-right"><?php echo number_format($data->NoOfWorks); ?><?php $sum1+=$data->NoOfWorks; ?></td>
+                            <td class="text-right"><input type="hidden" name="amount" value="<?php echo $data->ContractAmount; ?>"/><?php echo number_format($data->ContractAmount,2); ?><?php $sum2+=$data->ContractAmount; ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    <tr>
+                        <td class="bold text-right">Total</td>
+                        <td class="bold text-right"><?php echo $sum1; ?></td>
+                        <td class="bold text-right"><?php echo number_format($sum2,2); ?></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr/>
+            <h4><i>Works awarded by category <?php echo Input::has('FromDate')?" between ".Input::get('FromDate')." and ".(Input::has('ToDate')?Input::get('ToDate'):date('d-m-Y')):" as of ".(Input::has('ToDate')?Input::get('ToDate'):date('d-m-Y')); ?></i></h4>
+            <div id="graph" style="width: 80%;"></div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

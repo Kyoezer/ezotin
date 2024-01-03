@@ -1,0 +1,187 @@
+<?php $__env->startSection('content'); ?>
+<div class="portlet bordered light">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-cogs"></i>Evaluation
+		</div>
+	</div>
+	<div class="portlet-body flip-scroll">
+        <?php echo Form::open(array('url'=>'newEtl/evaluationetool','method'=>'get')); ?>
+
+        <div class="form-body">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Work Id</label>
+                        <input type="text" name="WorkId" value="<?php echo Input::get('WorkId'); ?>" class="form-control input-sm" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">Category</label>
+                        <select class="form-control select2me" name="ContractorCategoryId">
+                            <option value="">---SELECT ONE---</option>
+                            <?php foreach($contractorCategories as $contractorCategory): ?>
+                                <option value="<?php echo $contractorCategory->Id; ?>" <?php if($contractorCategory->Id == Input::get('ContractorCategoryId')): ?>selected <?php endif; ?>><?php echo $contractorCategory->Name.' ('.$contractorCategory->Code.')'; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label">Classification</label>
+                        <select class="form-control select2me" name="ContractorClassificationId">
+                            <option value="">---SELECT ONE---</option>
+                            <?php foreach($contractorClassifications as $contractorClassification): ?>
+                                <option value="<?php echo $contractorClassification->Id; ?>" <?php if($contractorClassification->Id == Input::get('ContractorClassificationId')): ?>selected="selected"<?php endif; ?>><?php echo $contractorClassification->Name.' ('.$contractorClassification->Code.')'; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="control-label">&nbsp;</label>
+                    <div class="btn-set">
+                        <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                        <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php echo Form::close(); ?>
+
+        <div class="panel-group accordion" id="tender-accordion">
+        <?php $count = 1; ?>
+        <?php foreach($distinctYears as $distinctYear): ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#tender-accordion" href="#collapse_<?php echo $distinctYear->Year; ?>">
+                        <?php echo $distinctYear->Year; ?>
+
+                    </a>
+                </h4>
+            </div>
+            <div id="collapse_<?php echo $distinctYear->Year; ?>" class="panel-collapse <?php if($count==1): ?><?php echo "in"; ?><?php else: ?><?php echo "collapse"; ?><?php endif; ?>">
+        		<table class="table table-bordered table-striped table-condensed flip-content">
+        			<thead class="flip-content">
+        				<tr>
+        					<th>Sl No.</th>
+        					<th>
+        						eGP Tender Id
+        					</th>
+        					<th>
+        						Work Id
+        					</th>
+        					<th class="">
+        						 Opening Dt. and Time
+        					</th>
+        					<th>
+        						Category
+        					</th>
+        					<th>
+        						Classification
+        					</th>
+        					<th class="">
+        						 Name of the Work
+        					</th>
+        					<th>
+        						Method
+        					</th>
+        					<th>
+        						Status
+        					</th>
+        					<th>
+        						Action
+        					</th>
+        				</tr>
+        			</thead>
+        			<tbody>
+                        <?php $count = 1; ?>
+                        <?php $__empty_1 = true; foreach($uploadedTenders[$distinctYear->Year] as $tender): $__empty_1 = false; ?>
+                            <tr>
+                                <td><?php echo $count; ?></td>
+                                <td>
+                                     <?php echo $tender->EGPTenderId; ?>  
+                                </td>
+                                <td>
+                                     <?php echo $tender->EtlTenderWorkId; ?>
+
+                                </td>
+                                <td class="">
+                                     <?php echo convertDateTimeToClientFormat($tender->TenderOpeningDateAndTime); ?>
+
+                                </td>
+                                <td>
+                                    <?php echo $tender->Category; ?>
+
+                                </td>
+                                <td>
+                                    <?php echo $tender->Classification; ?>
+
+                                </td>
+                                <td class="">
+                                    <?php echo strip_tags($tender->NameOfWork); ?>
+
+                                </td>
+                                <td class="">
+
+                                    <?php if($tender->Method=='OPEN_TENDERING'): ?>
+                                        Open Tendering Method
+                                    <?php elseif($tender->Method=='LIMITED_TENDERING'): ?>
+                                        Limited Tendering Method
+                                    <?php elseif($tender->Method=='DIRECT_CONTRACTING'): ?>
+                                        Direct Contracting Method
+                                    <?php elseif($tender->Method=='LIMITED_ENQUIRY'): ?>
+                                        Limited Enquiry Method
+                                    <?php endif; ?>
+                                </td>
+                               <td>
+                               <span style="color:
+                                    <?php if($tender->tenderStatus=='Awarded'): ?>
+                                        green
+                                    <?php elseif($tender->tenderStatus=='Evaluated'): ?>
+                                        purple
+                                    <?php elseif($tender->tenderStatus=='Under Process'): ?>
+                                        blue
+                                    <?php elseif($tender->tenderStatus=='Cancelled'): ?>
+                                        red
+                                    <?php endif; ?>">
+                                    <?php echo $tender->tenderStatus; ?>
+
+
+                                </span>
+                                
+                                </td>
+                                <td>
+                                    <a href="<?php echo URL::to('newEtl/evaluationcommiteeetool/'.$tender->Id); ?>" class="btn default btn-xs bg-green-haze"><i class="fa fa-edit"></i> Evaluation Commitee</a>
+                                    <a href="<?php echo URL::to('newEtl/awardingcommiteeetool/'.$tender->Id); ?>" class="btn default btn-xs purple"><i class="fa fa-edit"></i> Tender Commitee</a>
+                                    <?php if($tender->Method=='LIMITED_ENQUIRY' || $tender->Method=='SINGLE_SOURCE'): ?>
+                                        <a href="<?php echo URL::to('newEtl/workevaluationdetailssmallcontractors/'.$tender->Id); ?>" class="btn default btn-xs bg-red-sunglo"><i class="fa fa-edit"></i> Details</a>
+                                    <?php else: ?>
+                                        <a href="<?php echo URL::to(((($tender->Classification=='S') || $tender->Classification=='R'))
+                                        ?'newEtl/workevaluationdetailssmallcontractors/'.$tender->Id:'newEtl/workevaluationdetails/'.$tender->Id); ?>" class="btn default btn-xs bg-red-sunglo"><i class="fa fa-edit"></i> Details</a>
+
+                                    <?php endif; ?>
+
+
+
+
+                                </td>
+                            </tr>
+                            <?php $count++; ?>
+                        <?php endforeach; if ($__empty_1): ?>
+                            <tr>
+                                <td colspan="7" class="font-red text-center">No data to display</td>
+                            </tr>    
+                        <?php endif; ?>
+        			</tbody>
+        		</table>
+            </div>
+        </div>
+        <?php $count++; ?>
+        <?php endforeach; ?>
+        </div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('horizontalmenumaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

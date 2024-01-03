@@ -1,0 +1,111 @@
+<html>
+<head><title>Ezotin - Human Resource Details</title></head>
+<body>
+<center><u><b>CAUTION</b></u></center>
+<center><b>An engineer is allowed to execute only two work at a time for that particular firm.</b></center>
+<br/>
+<center><b>For any other Human Resource they are allowed to involve only in a single project of work</b></center>
+<center><h2>Details of CID No: <?php echo Input::get('CIDNo'); ?></h2></center>
+
+<?php if(!empty($responseArray)): ?>
+<?php if((bool)$responseArray['name']): ?>
+    <h4 style="text-align:center"><strong>From DCRC database</strong></h4>
+    <div style="text-align:center">
+    Sex: <span style="color:blue"><?php echo $responseArray['gender']; ?></span>&nbsp;|&nbsp;Name:  <span style="color:blue"><?php echo $responseArray['name']; ?></span>&nbsp;|&nbsp;Dzongkhag:  <span style="color:blue"><?php echo $responseArray['dzongkhag']; ?></span>&nbsp;|&nbsp;
+    Gewog: <span style="color:blue"><?php echo $responseArray['gewog']; ?></span>&nbsp;|&nbsp;Village: <span style="color:blue"><?php echo $responseArray['village']; ?></span>&nbsp;|&nbsp;DOB: <span style="color:blue"><?php echo $responseArray['dob']; ?></span>
+    <div>
+    <hr>
+
+<?php endif; ?>
+        
+<?php endif; ?>
+
+<?php if($hrIsEngineer): ?>
+    <?php if(count($hrWorks) > 0): ?>
+        <center>The Individual holding CID/Permit no. <?php echo Input::get('CIDNo'); ?> <?php if(isset($individualName) && !empty($individualName)): ?><?php echo "($individualName)"; ?><?php endif; ?> is engaged in following project(s):</center>
+        <?php $__empty_1 = true; foreach($hrWorks as $value): $__empty_1 = false; ?>
+            <center><strong>Work:</strong> <?php echo $value->WorkId; ?>  &nbsp;&nbsp;&nbsp;&nbsp;<strong>CDB No.:</strong> <?php echo $value->CDBNo; ?>  &nbsp;&nbsp;&nbsp;&nbsp;<strong>Procuring Agency:</strong> <?php echo $value->ProcuringAgency; ?></center>
+            <br/>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    <?php if(count($hrWorks) == 0): ?>
+        <center><b>Engineer is not engaged in any work or project</b></center>
+    <?php endif; ?>
+<?php else: ?>
+    <?php if(count($hrWorks) > 0): ?>
+        <center>The Individual holding CID/Permit no. <?php echo Input::get('CIDNo'); ?> <?php if(isset($individualName) && !empty($individualName)): ?><?php echo "($individualName)"; ?><?php endif; ?> is engaged in following project(s):</center>
+        <?php $__empty_2 = true; foreach($hrWorks as $value): $__empty_2 = false; ?>
+            <center><strong>Work:</strong> <?php echo $value->WorkId; ?>  &nbsp;&nbsp;&nbsp;&nbsp;<strong>CDB No.:</strong> <?php echo $value->CDBNo; ?> &nbsp;&nbsp;&nbsp;&nbsp; <strong>Procuring Agency:</strong> <?php echo $value->ProcuringAgency; ?></center>
+            <br/>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    <?php if(count($hrWorks) == 0): ?>
+        <center><b>Human Resource is not engaged in any work or project</b></center>
+    <?php endif; ?>
+<?php endif; ?>
+<?php if(count($checkPartnerDeregistered)>0): ?>
+    <?php foreach($checkPartnerDeregistered as $deregistered): ?>
+        <center>Owner/Partner of CDB No.: Deregistered Firm <?php echo $deregistered->CDBNo; ?> (<?php echo $deregistered->NameOfFirm; ?>)</center>
+        <br/>
+    <?php endforeach; ?>
+<?php endif; ?>
+<?php if(count($hrDetails) > 0): ?>
+    <?php foreach($hrDetails as $hrDetail): ?>
+        <center><?php if($hrDetail->IsPartnerOrOwner == 1): ?><?php echo "Owner/Partner of CDB No.:"; ?><?php else: ?><?php echo "Employee of CDB No:"; ?><?php endif; ?>  <?php echo $hrDetail->CDBNo; ?> (<?php echo $hrDetail->NameOfFirm; ?>)</center>
+        <br/>
+    <?php endforeach; ?>
+<?php else: ?>
+    <center>Employee of CDB No.: NIL</center>
+<?php endif; ?>
+            <br/>
+<?php /*Move below*/ ?>
+<?php if($hrIsGovtEmp): ?>
+    <center><h3><b>Is a Govt/Corporate Employee of <?php echo $workingAgency; ?></b></h3></center>
+<?php else: ?>
+    <?php if($hrIsEngineer): ?>
+        <?php if((bool)$govtOrCorporateOrg): ?>
+            <center>Is a Govt/Corporate Engineer of <?php echo $govtOrCorporateOrg; ?> <?php if($workingAgency!='null'): ?><?php echo $workingAgency; ?><?php endif; ?></center>
+        <?php endif; ?>
+    <?php else: ?>
+        <center>Is not a Govt/Corporate Employee</center>
+    <?php endif; ?>
+<?php endif; ?>
+<?php /*End*/ ?>
+
+<br/>
+
+<hr/>
+<center>With regard to Corporate Employee please verify with the conceerned agencies. There may be certain inconsistency.
+</center>
+<hr/>
+<center><h5 style="font-weight:bold">Attachment</h5></center>
+<center>
+<?php $__empty_3 = true; foreach($hrAttachment as $item): $__empty_3 = false; ?>
+<i class="fa fa-check"></i><a href="<?php echo $item->DocumentPath; ?>" target="_blank"><?php echo $item->DocumentName; ?></a>,
+<?php endforeach; ?>
+</center>
+<br>
+<center><b>Print this page as an evidence to prove that particular HR is engaged or not in a work or
+        project</b></center>
+<center>Printed on: <?php echo date('d m Y'); ?> By: <?php echo (isset(Auth::user()->Id))?Auth::user()->FullName:'Applicant'; ?></center>
+<?php if(Request::segment(1) == 'etoolrpt'): ?>
+    <?php $url = "etl/reports"; ?>
+<?php endif; ?>
+<?php if(Request::segment(1) == 'cinet'): ?>
+    <?php $url = "cinet/reports"; ?>
+<?php endif; ?>
+<?php if(!Input::has('from')): ?>
+
+    <?php if(!Input::has('print')): ?>
+        <br>
+        <?php /*<center><a href="#" onclick="window.history.back();" style="color: blue;">Click here to return to previous page</a></center><br/>*/ ?>
+        <center><input type="button" onclick="window.print();" value="Print"/> </center>
+    <?php endif; ?>
+<?php else: ?>
+    <center><a href="<?php echo URL::to((isset(Auth::user()->Id))?'etoolrpt/hrcheck':'hrcheck'); ?>?CIDNo=<?php echo Input::get('CIDNo'); ?>&print=true<?php if(!isset(Auth::user()->Id)): ?><?php echo "&from=true"; ?><?php endif; ?>" target="_blank" class="btn blue">Print</a>&nbsp;<button type="button" class="btn green" data-dismiss="modal">OK</button></center><br/>
+<?php endif; ?>
+<?php if(Input::get('print') == true): ?>
+    <script>window.print();</script>
+<?php endif; ?>
+</body>
+</html>

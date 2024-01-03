@@ -1,0 +1,5 @@
+<?php $__env->startSection('emailcontent'); ?>
+    <p><strong><?php echo $applicantName; ?> (CDB No.: <?php echo $cdbNo; ?>)</strong></p>
+    <p><?php echo $mailMessage; ?></p>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('emailmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

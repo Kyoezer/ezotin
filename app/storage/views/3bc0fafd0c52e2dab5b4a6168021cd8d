@@ -1,0 +1,23 @@
+<?php if(empty($engineerRegistration->Id) && $isServiceByEngineer==0): ?>
+<?php $__env->startSection('pagescripts'); ?>
+	
+<?php $__env->stopSection(); ?>
+<?php endif; ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-gift"></i>
+			<span class="caption-subject">Engineer Registration</span>
+		</div>
+	</div>
+	<div class="portlet-body form">
+		<?php echo Form::open(array('url' => 'engineer/mregistration','role'=>'form','files'=>true,'id'=>'engineerregistrationform')); ?>
+
+		<?php echo $__env->make('crps.engineerregistrationcontrols', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+		<?php echo Form::close(); ?>
+
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('homepagemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

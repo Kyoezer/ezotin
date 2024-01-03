@@ -1,0 +1,508 @@
+<?php if(!empty($humanResourceEdit[0]->Id)): ?>
+<?php $__env->startSection('pagescripts'); ?>
+	<script>
+		$('#addhumanresource').modal('show');
+	</script>
+<?php $__env->stopSection(); ?>
+<?php endif; ?>
+<?php $__env->startSection('content'); ?>
+<div id="hrcheckmodal" class="modal fade in" role="dialog" aria-labelledby="modalmessagebox" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3 id="modalmessageheader" class="modal-title font-red-intense">HR Check</h3>
+			</div>
+			<div class="modal-body">
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="eqcheckmodal" class="modal fade in" role="dialog" aria-labelledby="modalmessagebox" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3 id="modalmessageheader" class="modal-title font-red-intense">Equipment Check</h3>
+			</div>
+			<div class="modal-body">
+			</div>
+		</div>
+	</div>
+</div>
+<div id="addhumanresource" class="modal fade bs-modal-lg" role="dialog" aria-labelledby="addhumanresource" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        	<?php echo Form::open(array('url' => 'consultant/mconsultanthumanresource','role'=>'form','files'=>true)); ?>
+
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title font-green-seagreen bold">Add Human Resource</h4>
+              </div>
+              <?php foreach($humanResourceEdit as $humanResourceEditRecord): ?>
+              <div class="modal-body">
+              	<div class="row">
+              		<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">CID/Work Permit No.</label>
+							<input type="text" name="CIDNo" value="<?php if(!empty($humanResourceEditRecord->CIDNo)): ?><?php echo $humanResourceEditRecord->CIDNo; ?><?php else: ?><?php echo Input::old('CIDNo'); ?><?php endif; ?>" class="form-control input-sm required cidforwebservicemodal <?php /*check-hr-registration*/ ?>" placeholder="CID/Work Permit No.">
+						</div>
+					</div>
+              		<div class="col-md-3">
+						<div class="form-group">
+							<input type="hidden" name="Id" value="<?php echo $humanResourceEditRecord->Id; ?>" />
+							<input type="hidden" name="CrpConsultantId" value="<?php echo $consultantId; ?>" />
+							<label class="control-label">Salutation</label>
+							<select name="CmnSalutationId" id="" class="form-control input-sm required">
+								<option value="">---SELECT---</option>
+								<?php foreach($salutations as $salutation): ?>
+								<option value="<?php echo $salutation->Id; ?>" <?php if($salutation->Id==Input::old('CmnSalutationId') || $salutation->Id==$humanResourceEditRecord->CmnSalutationId): ?>selected="selected"<?php endif; ?>><?php echo $salutation->Name; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Name</label>
+							<input type="text" name="Name" value="<?php if(!empty($humanResourceEditRecord->Name)): ?><?php echo $humanResourceEditRecord->Name; ?><?php else: ?><?php echo Input::old('Name'); ?><?php endif; ?>" class="form-control input-sm required namefromwebservice" placeholder="Name">
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Sex</label>
+							<select name="Sex" id="" class="form-control input-sm required sexfromwebservice">
+								<option value="">---SELECT ONE---</option>
+								<option value="M"  <?php if($humanResourceEditRecord->Sex=="M"): ?>selected="selected"<?php endif; ?>>Male</option>
+								<option value="F"  <?php if($humanResourceEditRecord->Sex=="F"): ?>selected="selected"<?php endif; ?>>Female</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Country</label>
+							<select name="CmnCountryId" id="" class="form-control input-sm select2me required countryfromwebservice">
+								<option value="">---SELECT ONE---</option>
+								<?php foreach($countries as $country): ?>
+									<option value="<?php echo $country->Id; ?>" <?php if($country->Id==Input::old('CmnCountryId') || $country->Id==$humanResourceEditRecord->CmnCountryId || $country->Name=="Bhutan"): ?>selected="selected"<?php endif; ?>><?php echo $country->Name; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Designation</label>
+							<select name="CmnDesignationId" id="" class="form-control input-sm select2me required">
+								<option value="">---SELECT ONE---</option>
+								<?php foreach($designations as $designation): ?>
+									<option value="<?php echo $designation->Id; ?>" <?php if($designation->Id==Input::old('CmnDesignationId') || $designation->Id==$humanResourceEditRecord->CmnDesignationId): ?>selected="selected"<?php endif; ?>><?php echo $designation->Name; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Qualification</label>
+							<select name="CmnQualificationId" id="" class="form-control input-sm select2me required">
+								<option value="">---SELECT ONE---</option>
+								<?php foreach($qualifications as $qualification): ?>
+								<option value="<?php echo $qualification->Id; ?>" <?php if($qualification->Id==Input::old('CmnQualificationId') || $qualification->Id==$humanResourceEditRecord->CmnQualificationId): ?>selected="selected"<?php endif; ?>><?php echo $qualification->Name; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Trade/Field</label>
+							<select name="CmnTradeId" id="" class="form-control input-sm select2me required">
+								<option value="">---SELECT ONE---</option>
+								<?php foreach($trades as $trade): ?>
+									<option value="<?php echo $trade->Id; ?>" <?php if($trade->Id==Input::old('CmnTradeId') || $trade->Id==$humanResourceEditRecord->CmnTradeId): ?>selected="selected"<?php endif; ?>><?php echo $trade->Name; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Service Type</label>
+							<select name="CmnServiceTypeId" id="" class="form-control input-sm required">
+								<option value="">---SELECT ONE---</option>
+								<?php foreach($serviceTypes as $serviceType): ?>
+									<option value="<?php echo $serviceType->Id; ?>" <?php if($serviceType->Id==Input::old('CmnServiceTypeId') || $serviceType->Id==$humanResourceEditRecord->CmnServiceTypeId): ?>selected="selected"<?php endif; ?>><?php echo $serviceType->Name; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Joining Date</label>
+							<input type="text" name="JoiningDate" value="<?php if(!empty($humanResourceEditRecord->JoiningDate)): ?><?php echo convertDateToClientFormat($humanResourceEditRecord->JoiningDate); ?><?php else: ?><?php echo convertDateToClientFormat(Input::old('JoiningDate')); ?><?php endif; ?>" class="form-control datepicker input-sm required" placeholder="Joining Date">
+						</div>
+					</div>
+				</div>
+				<?php endforeach; ?>
+				<?php if(!empty($humanResourceEditAttachments)): ?>
+				<div class="row">
+					<div class="col-md-12 table-responsive">
+						<h5 class="font-blue-madison bold">List of Uploaded Documents</h5>
+						<table id="" class="table table-bordered table-striped table-condensed">
+							<?php echo Form::hidden('Model','ConsultantHumanResourceAttachmentModel',array('class'=>'delete-model')); ?>
+
+							<thead>
+								<tr>
+									<th>Document Name</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach($humanResourceEditAttachments as $humanResourceEditAttachment): ?>
+								<tr>
+									<?php echo Form::hidden('Id',$humanResourceEditAttachment->Id,array('class'=>'rowreference')); ?>
+
+									<td>
+										<a href="<?php echo URL::to($humanResourceEditAttachment->DocumentPath); ?>" class="editaction"><?php echo $humanResourceEditAttachment->DocumentName; ?></a>
+									</td>
+									<td>
+										<a href="#" class="deletedbrow">Delete</a>
+									</td>
+								</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<?php endif; ?>
+				<div class="row">
+					<div class="col-md-12 table-responsive">
+						<h5 class="font-blue-madison bold">Attach Documents (CV/Undertaking/Certificate/CID/ Work Permit)</h5>
+						<table id="consultanthumanresource" class="table table-bordered table-striped table-condensed">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Document Name</th>
+									<th>Upload File</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<button type="button" class="deletetablerow"><i class="fa fa-times fa-lg"></i></button>
+									</td>
+									<td>
+										<input type="text" name="DocumentName[]" value="HR Document" class="form-control input-sm <?php if(empty($humanResourceEdit[0]->Id)): ?><?php echo 'required'; ?><?php endif; ?>">
+									</td>
+									<td>
+										<input type="file" name="attachments[]" class="input-sm <?php if(empty($humanResourceEdit[0]->Id)): ?><?php echo 'required'; ?><?php endif; ?>" multiple="multiple" />
+									</td>
+								</tr>
+								<tr class="notremovefornew">
+									<td>
+										<button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+									</td>
+									<td colspan="2"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn green">Save</button>
+				<button type="button" class="btn red" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              </div>
+              <?php echo Form::close(); ?>
+
+        </div>
+    </div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light bordered" id="form_wizard_1">
+			<div class="portlet-title">
+				<div class="caption font-green-seagreen">
+					<span class="caption-subject">Consultant Registration</span> - <span class="step-title">Step 3 of 4 </span>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<div class="form-wizard">
+					<div class="form-body">
+						<ul class="nav nav-pills nav-justified steps">
+							<li class="done">
+								<a href="#tab1" data-toggle="tab" class="step">
+								<span class="number">
+								1 </span>
+								<span class="desc">
+								<i class="fa fa-check"></i> General Information </span>
+								</a>
+							</li>
+							<li class="done">
+								<a href="#tab2" data-toggle="tab" class="step">
+								<span class="number">
+								2 </span>
+								<span class="desc">
+								<i class="fa fa-check"></i> Work Classification </span>
+								</a>
+							</li>
+							<li class="active">
+								<a href="#tab3" data-toggle="tab" class="step">
+								<span class="number">
+								3 </span>
+								<span class="desc">
+								<i class="fa fa-check"></i> Human Resource </span>
+								</a>
+							</li>
+							<li>
+								<a href="#tab4" data-toggle="tab" class="step">
+								<span class="number">
+								4 </span>
+								<span class="desc">
+								<i class="fa fa-check"></i> Equipment </span>
+								</a>
+							</li>
+						</ul>
+						<div class="portlet box blue-madison">
+							<div class="portlet-title">
+								<div class="caption">
+									<i class="fa fa-check"></i>Requirements for different Category and Services
+								</div>
+							</div>
+							<div class="portlet-body">
+								<p class="bold font-red">*Scroll to View More</p>
+								<div class="scroller" style="height:230px;">
+					                <div class="row">
+					                	<div class="col-md-4">
+											<div class="table-responsive">
+												<table class="table table-bordered table-striped table-condensed">
+													<thead class="">
+														<tr>
+															<th colspan="6" class="bold">Note for Civil Engineering Services</th>
+														</tr>
+														<tr>
+															<th>Key Employees</th>
+															<th>C1 & C4</th>
+															<th>C2</th>
+															<th>C3</th>
+															<th>C5 & C6</th>
+															<th>C7</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>Manager</td>
+															<td>1</td>
+															<td>1</td>
+															<td>1</td>
+															<td>1</td>
+															<td>1</td>
+														</tr>
+														<tr>
+															<td>Engineer (Degree)</td>
+															<td>1</td>
+															<td>1*</td>
+															<td>1**</td>
+															<td>-</td>
+															<td>1</td>
+														</tr>
+														<tr>
+															<td>Engineer (Diploma)</td>
+															<td>-</td>
+															<td>-</td>
+															<td>-</td>
+															<td>1</td>
+															<td>-</td>
+														</tr>
+														<tr>
+															<td>Surveyor</td>
+															<td>-</td>
+															<td>-</td>
+															<td>-</td>
+															<td>1</td>
+															<td>-</td>
+														</tr>
+														<tr>
+															<td colspan="6">*Geo-Tech Engineer,**Social Science/Enviromental</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+					                	</div>
+										<div class="col-md-4">
+											<div class="table-responsive">
+												<table class="table table-bordered table-striped table-condensed">
+													<thead class="">
+														<tr>
+															<th colspan="5" class="bold">Note for Electrical Engineering Services</th>
+														</tr>
+														<tr>
+															<th>Key Employees</th>
+															<th>E1 & E2</th>
+															<th>E3 & E4</th>
+															<th>E5 & E6</th>
+															<th>E7</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>Manager</td>
+															<td>1</td>
+															<td>1</td>
+															<td>1</td>
+															<td>1</td>
+														</tr>
+														<tr>
+															<td>Engineer (Degree)</td>
+															<td>1 (Civil), 1 (Elect), 1 (Mech.), 1 (Hydrologistst)</td>
+															<td>1 (Civil), 1 (Elect)</td>
+															<td>1 (Elect)</td>
+															<td>-</td>
+														</tr>
+														<tr>
+															<td>Engineer (Diploma)</td>
+															<td>-</td>
+															<td>1 (Civil)</td>
+															<td>1 (Civil)</td>
+															<td>1 (Elect)</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="table-responsive">
+												<table class="table table-bordered table-striped table-condensed">
+													<thead class="">
+														<tr>
+															<th colspan="4" class="bold">Note for Architectural Services</th>
+														</tr>
+														<tr>
+															<th>Key Employees</th>
+															<th>A1</th>
+															<th>A2</th>
+															<th>A3</th>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>Architect(Bhutanese) Master/Degree</td>
+															<td>1</td>
+															<td>1</td>
+															<td>1</td>
+														</tr>
+													</tbody>
+												</table>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>	
+						</div>	
+						 <div class="table-toolbar">
+		                    <div class="row">
+		                        <div class="col-md-6">
+		                            <div class="btn-group">
+		                                <a href="#addhumanresource" data-toggle="modal" class="btn green btn-sm"> <i class="fa fa-plus"></i> Add Human Resource</a>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+						<div class="table-responsive">
+							<table class="table table-bordered table-striped table-condensed flip-content">
+								<?php echo Form::hidden('Model','ConsultantHumanResourceModel',array('class'=>'delete-model')); ?>
+
+								<thead>
+									<tr>
+										<th>
+											 Name
+										</th>
+										<th>
+											 CID/Work Permit No.
+										</th>
+										<th width="5%">
+											 Sex
+										</th>
+										<th class="">
+											 Country
+										</th>
+										<th>
+											 Qualification
+										</th>
+										<th class="">
+											 Designation
+										</th>
+										<th>
+											Service Type
+										</th>
+										<th class="">
+											Joining Date
+										</th>
+										<th class="">
+											Trade/Fields
+										</th>
+										<th>
+											Attachments(CV/UT/AT)
+										</th>
+										<th scope="col">
+											Action
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php $__empty_1 = true; foreach($consultantHumanResources as $consultantHumanResource): $__empty_1 = false; ?>
+									<tr>
+										<?php echo Form::hidden('Id',$consultantHumanResource->Id,array('class'=>'rowreference')); ?>
+
+										<td><?php echo $consultantHumanResource->Salutation.' '.$consultantHumanResource->Name; ?></td>
+										<td><?php echo $consultantHumanResource->CIDNo; ?></td>
+										<td><?php echo $consultantHumanResource->Sex; ?></td>
+										<td><?php echo $consultantHumanResource->Country; ?></td>
+										<td><?php echo $consultantHumanResource->Qualification; ?></td>
+										<td><?php echo $consultantHumanResource->Designation; ?></td>
+										<td><?php echo $consultantHumanResource->ServiceType; ?></td>
+										<td><?php echo convertDateToClientFormat($consultantHumanResource->JoiningDate); ?></td>
+										<td><?php echo $consultantHumanResource->Trade; ?></td>
+										<td>
+											<?php foreach($humanResourcesAttachments as $humanResourcesAttachment): ?>
+											<?php if($consultantHumanResource->Id==$humanResourcesAttachment->CrpConsultantHumanResourceId): ?>
+												<i class="fa fa-check"></i> <a href="<?php echo URL::to($humanResourcesAttachment->DocumentPath); ?>" class="font-blue" target="_blank"><?php echo $humanResourcesAttachment->DocumentName; ?></a><br/>
+											<?php endif; ?>
+											<?php endforeach; ?>
+										</td>
+										<td>
+											<?php if((bool)$isEdit!=null): ?>
+											<a href="<?php echo URL::to('consultant/humanresourceregistration/'.$isEdit.'?humanresourceid='.$consultantHumanResource->Id); ?>">Edit</a>&nbsp;|&nbsp;
+											<?php endif; ?>
+											<a href="#" class="deletedbrow">
+												Delete
+											</a>
+										</td>
+									</tr>
+									<?php endforeach; if ($__empty_1): ?>
+									<tr>
+										<td class="font-red" colspan="11">Please click on Add Human Resource button to start adding your human resource.</td>
+									</tr>
+									<?php endif; ?>
+								</tbody>
+							</table>
+						</div>
+						<div class="form-actions">
+							<div class="btn-set">
+								<a href="<?php echo URL::to('consultant/equipmentregistration'); ?>" class="btn blue button-next">
+									Continue <i class="m-icon-swapright m-icon-white"></i>
+								</a>
+								<?php if((bool)$isEdit!=null): ?>
+									<a href="<?php echo URL::to('consultant/confirmregistration'); ?>" class="btn blue button-next">
+										Back to Confirmation <i class="m-icon-swapright m-icon-white"></i>
+									</a>
+								<?php endif; ?>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('homepagemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

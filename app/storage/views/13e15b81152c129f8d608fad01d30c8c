@@ -1,0 +1,485 @@
+
+<?php $__env->startSection('pagescripts'); ?>
+	<?php if(!empty($humanResourceEdit[0]->Id)): ?>
+	
+		<script>
+			$('#addhumanresource').modal('show');
+		</script>
+	<?php endif; ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+	<div id="hrcheckmodal" class="modal fade in" role="dialog" aria-labelledby="modalmessagebox" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h3 id="modalmessageheader" class="modal-title font-red-intense">HR Check</h3>
+				</div>
+				<div class="modal-body">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="eqcheckmodal" class="modal fade in" role="dialog" aria-labelledby="modalmessagebox" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h3 id="modalmessageheader" class="modal-title font-red-intense">Equipment Check</h3>
+				</div>
+				<div class="modal-body">
+				</div>
+			</div>
+		</div>
+	</div>
+<?php echo Form::open(array('url' => 'certifiedbuilder/mcertifiedbuilderhumanresource','role'=>'form','files'=>true)); ?>
+
+<div id="addhumanresource" class="modal fade bs-modal-lg" role="dialog" aria-labelledby="addhumanresource" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        	<input type="hidden" value="1" name="EditByCDB">
+			<input type="hidden" name="PostBackUrl" value="<?php echo $redirectUrl; ?>">
+			<input type="hidden" name="EditPage" value="<?php echo $editPage; ?>">
+			<input type="hidden" name="NewHumanResourceSave" value="<?php echo $newHumanResourceSave; ?>">
+			<?php if(isset($afterSaveRedirect) && (int)$afterSaveRedirect==1): ?>
+			<input type="hidden" name="HasCDBEdit" value="<?php echo $afterSaveRedirect; ?>">
+			<?php endif; ?>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title font-green-seagreen bold">Add Human Resource</h4>
+            </div>
+              <?php foreach($humanResourceEdit as $humanResourceEditRecord): ?>
+              <div class="modal-body">
+              	<div class="row">
+              		<div class="col-md-3">
+						<div class="form-group">
+							<input type="hidden" name="Id" value="<?php echo $humanResourceEditRecord->Id; ?>" />
+							<input type="hidden" name="CrpSpecializedtradeId" value="<?php echo $certifiedbuilderId; ?>" />
+							<label class="control-label">Salutation</label>
+							<select name="CmnSalutationId" id="" class="form-control input-sm required">
+								<option value="">---SELECT---</option>
+								<?php foreach($salutations as $salutation): ?>
+								<option value="<?php echo $salutation->Id; ?>" <?php if($salutation->Id==Input::old('CmnSalutationId') || $salutation->Id==$humanResourceEditRecord->CmnSalutationId): ?>selected="selected"<?php endif; ?>><?php echo $salutation->Name; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">CID/Work Permit No.</label>
+							<input type="text" name="CIDNo" value="<?php if(!empty($humanResourceEditRecord->CIDNo)): ?><?php echo $humanResourceEditRecord->CIDNo; ?><?php else: ?><?php echo Input::old('CIDNo'); ?><?php endif; ?>" class="form-control input-sm required cidforwebservicemodal" placeholder="CID/Work Permit No.">
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Name</label>
+							<input type="text" name="Name" value="<?php if(!empty($humanResourceEditRecord->Name)): ?><?php echo $humanResourceEditRecord->Name; ?><?php else: ?><?php echo Input::old('Name'); ?><?php endif; ?>" class="form-control input-sm required namefromwebservice" placeholder="Name">
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Sex</label>
+							<select name="Sex" id="" class="form-control input-sm required sexfromwebservice">
+								<option value="">---SELECT ONE---</option>
+								<option value="M"  <?php if($humanResourceEditRecord->Sex=="M"): ?>selected="selected"<?php endif; ?>>Male</option>
+								<option value="F"  <?php if($humanResourceEditRecord->Sex=="F"): ?>selected="selected"<?php endif; ?>>Female</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Country</label>
+							<select name="CmnCountryId" id="" class="form-control input-sm countryfromwebservice required">
+								<option value="">---SELECT ONE---</option>
+								<?php foreach($countries as $country): ?>
+									<option value="<?php echo $country->Id; ?>" <?php if($country->Id==Input::old('CmnCountryId') || $country->Id==$humanResourceEditRecord->CmnCountryId || $country->Name=="Bhutan"): ?>selected="selected"<?php endif; ?>><?php echo $country->Name; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Designation</label>
+							<select name="CmnDesignationId" id="" class="form-control input-sm required">
+								<option value="">---SELECT ONE---</option>
+								<?php foreach($designations as $designation): ?>
+									<option value="<?php echo $designation->Id; ?>" <?php if($designation->Id==Input::old('CmnDesignationId') || $designation->Id==$humanResourceEditRecord->CmnDesignationId): ?>selected="selected"<?php endif; ?>><?php echo $designation->Name; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Qualification</label>
+							<select name="CmnQualificationId" id="" class="form-control input-sm required">
+								<option value="">---SELECT ONE---</option>
+								<?php foreach($qualifications as $qualification): ?>
+									<option value="<?php echo $qualification->Id; ?>" <?php if($qualification->Id==Input::old('CmnQualificationId') || $qualification->Id==$humanResourceEditRecord->CmnQualificationId): ?>selected="selected"<?php endif; ?>><?php echo $qualification->Name; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Trade/Field</label>
+							<select name="CmnTradeId" id="" class="form-control input-sm required">
+								<option value="">---SELECT ONE---</option>
+								<?php foreach($trades as $trade): ?>
+									<option value="<?php echo $trade->Id; ?>" <?php if($trade->Id==Input::old('CmnTradeId') || $trade->Id==$humanResourceEditRecord->CmnTradeId): ?>selected="selected"<?php endif; ?>><?php echo $trade->Name; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Service Type</label>
+							<select name="CmnServiceTypeId" id="" class="form-control input-sm required">
+								<option value="">---SELECT ONE---</option>
+								<?php foreach($serviceTypes as $serviceType): ?>
+									<option value="<?php echo $serviceType->Id; ?>" <?php if($serviceType->Id==Input::old('CmnServiceTypeId') || $serviceType->Id==$humanResourceEditRecord->CmnServiceTypeId): ?>selected="selected"<?php endif; ?>><?php echo $serviceType->Name; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label class="control-label">Joining Date</label>
+							<input type="text" name="JoiningDate" value="<?php if(!empty($humanResourceEditRecord->JoiningDate)): ?><?php echo convertDateToClientFormat($humanResourceEditRecord->JoiningDate); ?><?php else: ?><?php echo convertDateToClientFormat(Input::old('JoiningDate')); ?><?php endif; ?>" class="form-control datepicker input-sm required" placeholder="Joining Date">
+						</div>
+					</div>
+				</div>
+				<?php endforeach; ?>
+				<?php if(!empty($humanResourceEditAttachments)): ?>
+				<div class="row">
+					<div class="col-md-12 table-responsive">
+						<div class="note note-danger" style="text-transform: uppercase;">
+							<strong>MESSAGE: </strong> Please delete the documents that have been rejected / that you don't need from the list below, so that it will be easier and faster for us to verify the documents. That way, your application will be processed quicker.
+						</div>
+						<h5 class="font-blue-madison bold">List of Uploaded Documents</h5>
+						<table class="table table-bordered table-striped table-condensed">
+							<?php echo Form::hidden('Model','SpecializedfirmHumanResourceAttachmentFinalModel',array('class'=>'delete-model')); ?>
+
+							<thead>
+								<tr>
+									<th style="width:700px;">Document Name</th>
+									<th><center>Action</center></th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach($humanResourceEditAttachments as $humanResourceEditAttachment): ?>
+								<tr>
+									<input type="hidden" value="<?php echo $humanResourceEditAttachment->Id; ?>" class="rowreference"/>
+									<td>
+										<a href="<?php echo URL::to($humanResourceEditAttachment->DocumentPath); ?>" class="editaction" target="_blank"><?php echo $humanResourceEditAttachment->DocumentName; ?></a>
+									</td>
+									<td>
+										<center><a href="#" class="deletedbrow btn btn-xs purple"><i class="fa fa-times"></i> Delete</a></center>
+									</td>
+								</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+						<?php if(count($humanResourceEditAttachments)==0): ?>
+						<table class="table table-bordered table-striped table-condensed">
+							<?php echo Form::hidden('Model','SpecializedfirmHumanResourceAttachmentModel',array('class'=>'delete-model')); ?>
+
+							<tbody>
+							<?php foreach($humanResourceEditFinalAttachments as $humanResourceEditFinalAttachment): ?>
+								<tr>
+									<input type="hidden" value="<?php echo $humanResourceEditFinalAttachment->Id; ?>" class="rowreference"/>
+									<td style="width:700px;">
+										<a href="<?php echo URL::to($humanResourceEditFinalAttachment->DocumentPath); ?>" class="editaction" target="_blank"><?php echo $humanResourceEditFinalAttachment->DocumentName; ?></a>
+									</td>
+									<td>
+										<center><a href="#" class="deletedbrow btn btn-xs purple"><i class="fa fa-times"></i> Delete</a></center>
+									</td>
+								</tr>
+							<?php endforeach; ?>
+							</tbody>
+						</table>
+						<?php endif; ?>
+					</div>
+				</div>
+				<?php endif; ?>
+				<div class="row">
+					<div class="col-md-12 table-responsive">
+						<h5 class="font-blue-madison bold">Attach Documents (CV/Undertaking/Certificate/CID/ Work Permit)</h5>
+						<table id="specializedtradehumanresource" class="table table-bordered table-striped table-condensed">
+
+							<thead>
+								<tr>
+									<th></th>
+									<th>Document Name</th>
+									<th>Upload File</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+
+									<td></td>
+									<td>
+										<input type="text" name="DocumentName[]" value="CID Copy" class="form-control input-sm">
+									</td>
+									<td>
+										<input type="file" name="attachments[]" class="input-sm" multiple="multiple" />
+									</td>
+								</tr>
+								<tr>
+
+									<td></td>
+									<td>
+										<input type="text" name="DocumentName[]" value="Undertaking" class="form-control input-sm">
+									</td>
+									<td>
+										<input type="file" name="attachments[]" class="input-sm" multiple="multiple" />
+									</td>
+								</tr>
+								<tr>
+									<td></td>
+									<td>
+										<input type="text" name="DocumentName[]" value="Academic Transcripts" class="form-control input-sm">
+									</td>
+									<td>
+										<input type="file" name="attachments[]" class="input-sm" multiple="multiple" />
+									</td>
+								</tr>
+						
+							
+							</tbody>
+						</table>
+					</div>
+				</div>
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn green">Save</button>
+				<button type="button" class="btn red" data-dismiss="modal" aria-hidden="true">Cancel</button>
+              </div>
+        </div>
+    </div>
+</div>
+<?php if((int)$serviceByCertifiedbuilder==1): ?>
+	<input type="hidden" name="serviceByCertifiedbuilder" value="<?php echo $serviceByCertifiedbuilder; ?>">
+<?php endif; ?>
+<?php echo Form::close(); ?>
+
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-cogs"></i>Human Resource
+		</div>
+		<?php /*<?php if((int)$serviceByCertifiedbuilder==1): ?>*/ ?>
+			<?php /*<button id="reselecthumanresourceservice" type="button" class="btn green-seagreen btn-sm pull-right">Re-select Service</button>*/ ?>
+		<?php /*<?php endif; ?>*/ ?>
+	</div>
+	<div class="portlet-body">
+		<div class="table-toolbar">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="btn-group addhumanresourcebutton">
+                        <a href="#addhumanresource" data-toggle="modal" class="btn green btn-sm"> <i class="fa fa-plus"></i> Add Human Resource</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php if((int)$serviceByCertifiedbuilder==1): ?>
+    <div class="table-responsive">
+    	<h5 class="font-blue-madison bold">Existing Human Resource</h5>
+		<table class="table table-bordered table-striped table-condensed flip-content">
+			<?php echo Form::hidden('Model','CertifiedbuilderHumanResourceFinalModel',array('class'=>'delete-model')); ?>
+
+			<thead>
+				<tr>
+					<th scope="col">
+						 Name
+					</th>
+					<th scope="col" width="6%">
+						 CID/Work Permit No.
+					</th>
+					<th scope="col" width="5%">
+						 Sex
+					</th>
+					<th scope="col" class="">
+						 Country
+					</th>
+					<th scope="col" width="6%">
+						 Qualification
+					</th>
+				
+					<th scope="col" class="">
+						 Designation
+					</th>
+					<th scope="col" class="">
+						Joining Date
+					</th>
+					<th scope="col" class="">
+						Trade/Fields
+					</th>
+					<th>
+						Attachments(CV/UT/AT)
+					</th>
+					<?php /*<?php if((int)$serviceByCertifiedbuilder==0): ?>*/ ?>
+					<th>
+						Delete Request
+					</th>
+					<th scope="col">
+						Action
+					</th>
+					<?php /*<?php endif; ?>*/ ?>
+				</tr>
+			</thead>
+			<tbody>
+				<?php $__empty_1 = true; foreach($certifiedbuilderHumanResourcesFinal as $certifiedbuilderHumanResourceFinal): $__empty_1 = false; ?>
+				<tr>
+					<td>
+						<input type="hidden" class="rowreference" value="<?php echo $certifiedbuilderHumanResourceFinal->Id; ?>"/>
+						<?php echo $certifiedbuilderHumanResourceFinal->Name; ?>
+
+					</td>
+					<td><?php echo $certifiedbuilderHumanResourceFinal->CIDNo; ?></td>
+					<td><?php echo $certifiedbuilderHumanResourceFinal->Sex; ?></td>
+					<td><?php echo $certifiedbuilderHumanResourceFinal->Country; ?></td>
+					<td><?php echo $certifiedbuilderHumanResourceFinal->Qualification; ?></td>
+				
+					<td><?php echo $certifiedbuilderHumanResourceFinal->Designation; ?></td>
+					<td><?php echo $certifiedbuilderHumanResourceFinal->JoiningDate; ?></td>
+					<td><?php echo $certifiedbuilderHumanResourceFinal->Trade; ?></td>
+					<td>
+						<?php foreach($humanResourcesAttachmentsFinal as $humanResourcesAttachmentFinal): ?>
+						<?php if($certifiedbuilderHumanResourceFinal->Id==$humanResourcesAttachmentFinal->CrpCertifiedbuilderHumanResourceFinalId): ?>
+						<i class="fa fa-check"></i> <a href="<?php echo URL::to($humanResourcesAttachmentFinal->DocumentPath); ?>" target="_blank"><?php echo $humanResourcesAttachmentFinal->DocumentName; ?></a><br />
+						<?php endif; ?>
+						<?php endforeach; ?>
+					</td>
+					<td>
+						<center><input type="checkbox" class="senddeleterequest" data-type="1" value="<?php echo $certifiedbuilderHumanResourceFinal->Id; ?>"></center>
+					</td>
+					<?php /*<?php if((int)$serviceByCertifiedbuilder==0): ?>*/ ?>
+					<td>
+						<?php if((bool)$isEdit!=null): ?>
+							<?php if(!empty($isEditByCDBUser)): ?>
+							<a href="<?php echo URL::to($humanResourceEditRoute.'/'.$isEdit.'?humanresourceid='.$certifiedbuilderHumanResourceFinal->Id.'&redirectUrl='.$redirectUrl.'&usercdb=edit'); ?>" class="editaction">Edit</a>
+							<?php else: ?>
+								<a href="<?php echo URL::to($humanResourceEditRoute.'/'.$isEdit.'?humanresourceid='.$certifiedbuilderHumanResourceFinal->Id.'&redirectUrl='.$redirectUrl); ?>" class="editaction">Edit</a>
+							<?php endif; ?>
+							<?php /*<a href="#" class="deletedbrow">*/ ?>
+								<?php /*Delete*/ ?>
+							<?php /*</a>*/ ?>
+						<?php endif; ?>
+					</td>
+					<?php /*<?php endif; ?>*/ ?>
+
+					
+				</tr>
+				<?php endforeach; if ($__empty_1): ?>
+				<tr>
+					<td class="font-red" colspan="11">Please click on Add Human Resource button to start adding your human resource.</td>
+				</tr>
+				<?php endif; ?>
+			</tbody>
+		</table>
+	</div>
+    <?php endif; ?>
+	<div class="table-responsive">
+		<h5 class="font-blue-madison bold">Human Resource</h5>
+		<table class="table table-bordered table-striped table-condensed flip-content">
+			<?php if(!isset($changeModel)): $changeModel = false; endif; ?>
+			<?php echo Form::hidden('Model',$changeModel?'SpecializedfirmHumanResourceFinalModel':'SpecializedfirmHumanResourceModel',array('class'=>'delete-model')); ?>
+
+			<thead>
+				<tr>
+					<th scope="col">
+						 Name
+					</th>
+					<th scope="col" class="">
+						 CID/Work Permit No.
+					</th>
+					<th scope="col" width="2%">
+						 Sex
+					</th>
+					<th scope="col" class="">
+						 Country
+					</th>
+					<th scope="col" class="">
+						 Qualification
+					</th>
+				
+					<th scope="col" class="">
+						 Designation
+					</th>
+					<th scope="col" class="">
+						Joining Date
+					</th>
+					<th scope="col" class="">
+						Trade/Fields
+					</th>
+					<th scope="col" class="">
+						Attachments(CV/UT/AT)
+					</th>
+<?php /*					<?php if((int)$serviceByCertifiedbuilder==0): ?>*/ ?>
+					<th scope="col">
+						Action
+					</th>
+					<?php /*<?php endif; ?>*/ ?>
+				</tr>
+			</thead>
+			<tbody>
+				<?php $__empty_1 = true; foreach($certifiedbuilderHumanResources as $certifiedbuilderHumanResource): $__empty_1 = false; ?>
+				<tr>
+					<td>
+						<input type="hidden" class="rowreference" value="<?php echo $certifiedbuilderHumanResource->Id; ?>">
+						<?php echo $certifiedbuilderHumanResource->Name; ?>
+
+					</td>
+					<td><?php echo $certifiedbuilderHumanResource->CIDNo; ?></td>
+					<td><?php echo $certifiedbuilderHumanResource->Sex; ?></td>
+					<td><?php echo $certifiedbuilderHumanResource->Country; ?></td>
+					<td><?php echo $certifiedbuilderHumanResource->Qualification; ?></td>
+					
+					<td><?php echo $certifiedbuilderHumanResource->Designation; ?></td>
+					<td><?php echo $certifiedbuilderHumanResource->JoiningDate; ?></td>
+					<td><?php echo $certifiedbuilderHumanResource->Trade; ?></td>
+					<td>
+						<?php foreach($humanResourcesAttachments as $humanResourcesAttachment): ?>
+						<?php if($certifiedbuilderHumanResource->Id==$humanResourcesAttachment->CrpCertifiedbuilderHumanResourceId): ?>
+						<i class="fa fa-check"></i> <a href="<?php echo URL::to($humanResourcesAttachment->DocumentPath); ?>" target="_blank"><?php echo $humanResourcesAttachment->DocumentName; ?></a><br />
+						<?php endif; ?>
+						<?php endforeach; ?>
+					</td>
+					<td>
+						<input type="hidden" class="recordreference" value="<?php echo $certifiedbuilderHumanResource->Id; ?>">
+						<a href="<?php echo URL::to($humanResourceEditRoute.'/'.$isEdit.'?humanresourceid='.$certifiedbuilderHumanResource->Id.'&redirectUrl='.$redirectUrl.'&usercdb=edit&initial=true'); ?>" class="editaction">Edit</a> |
+
+						<a href="#" class="deletedbrow">
+							Delete
+						</a> 
+					</td>
+				</tr>
+				<?php endforeach; if ($__empty_1): ?>
+				<tr>
+					<td class="font-red" colspan="11">Please click on Add Human Resource button to start adding your human resource.</td>
+				</tr>
+				<?php endif; ?>
+			</tbody>
+			
+		</table>
+	</div>
+	<div class="form-actions">
+		<div class="btn-set">
+			<?php if(isset($serviceAvailCancel) && (int)$serviceAvailCancel==1): ?>
+			<a href="<?php echo URL::to($nextUrl.$certifiedbuilderId); ?>" class="btn blue button-next">
+				Done <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+			<?php else: ?>
+			<a href="<?php echo URL::to($redirectUrl.'/'.$certifiedbuilderId); ?>" class="btn blue button-next">
+				Done <i class="m-icon-swapright m-icon-white"></i>
+			</a>
+			<?php endif; ?>
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

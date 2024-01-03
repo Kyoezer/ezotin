@@ -1,0 +1,59 @@
+<?php $__env->startSection('content'); ?>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>
+					<span class="caption-subject font-green-seagreen">Website Setting</span>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<?php echo Form::open(array('action'=>'savemarqueesetting','class'=>'form-horizontal')); ?>
+
+				<div class="form-body">
+					<input type="hidden" value="<?php echo isset($details[0]->Id) ? $details[0]->Id : ''; ?>" name="Id" />
+                    <div class="form-group">
+                        <label class="control-label col-md-3">Enable Marquee
+                        </label>
+                        <div class="col-md-4">
+                            <div class="radio-list">
+                                <label class="radio-inline">
+                                    <input type="radio" id="show-heading" name="EnableMarquee" value="1" <?php if(isset($details[0]->EnableMarquee)): ?><?php if(($details[0]->EnableMarquee != 0) || $details[0]->EnableMarquee== 1): ?>checked="checked"<?php endif; ?><?php endif; ?>/>
+                                    Yes
+                                </label>
+
+                                <label class="radio-inline">
+                                    <input type="radio" id="hide-heading" name="EnableMarquee" value="0" <?php if(isset($details[0]->EnableMarquee)): ?><?php if($details[0]->EnableMarquee == 0): ?>checked="checked"<?php endif; ?><?php endif; ?>/>
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+					<div id="marquee-heading" class="form-group <?php if(isset($details[0]->EnableMarquee)): ?><?php if(($details[0]->EnableMarquee == 0) || $details[0]->EnableMarquee!= 1): ?>hide<?php endif; ?><?php endif; ?>">
+						<label for="" class="control-label col-md-3">
+							Marquee Heading
+						</label>
+						<div class="col-md-8">
+							<input type="text" value="<?php echo $details[0]->MarqueeHeading; ?>" name="MarqueeHeading" class="form-control input-sm required"/>
+						</div>
+					</div>
+
+
+				</div>
+				<div class="form-actions">
+					<div class="btn-set">
+						<button type="submit" class="btn green"><?php echo empty($details[0]->Id)?'Save':'Update'; ?></button>
+						<a href="<?php echo URL::to('web/togglemarquee'); ?>" class="btn red">Cancel</a>
+					</div>
+				</div>
+				<?php echo Form::close(); ?>
+
+			</div>
+		</div>
+	</div>	
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

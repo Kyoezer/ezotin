@@ -1,0 +1,40 @@
+<?php $__env->startSection('main-content'); ?>
+<h4 class="head-title">List of Videos</h4>
+
+<table class="table table-striped table-hover table-responsive table-condensed" style="width: 80%;" data-table="webcircular">
+	<thead>
+		<tr class="success">
+			<th>Sl#</th>
+			<th>Video</th>
+			<th>Uploaded On</th>
+		</tr>
+	</thead>
+
+	<tbody>
+		<?php $slno=1; ?>
+		<?php $__empty_1 = true; foreach($videos as $video): $__empty_1 = false; ?>
+			<tr>
+				<td><?php echo $slno++; ?></td>
+				<td>
+					<video id=0 controls width=260 height=200 >
+						<source src="<?php echo asset(asset($video->OggVideoPath)); ?>" type='video/ogg; codecs="theora, vorbis"'/>
+						<source src="<?php echo asset(asset($video->WebmVideoPath)); ?>" type='video/webm' >
+						<source src="<?php echo asset(asset($video->Mp4VideoPath)); ?>" type='video/mp4'>
+						<p>Video is not visible, most likely your browser does not support HTML5 video</p>
+					</video>
+				</td>
+				<td>
+					<?php echo convertDateTimeToClientFormat($video->UploadedDate); ?>
+
+				</td>
+			</tr>
+		<?php endforeach; if ($__empty_1): ?>
+			<tr>
+				<td colspan="3" class="text-center" style="color:red;">No videos</td>
+			</tr>
+		<?php endif; ?>
+	</tbody>
+</table>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('websitemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

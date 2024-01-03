@@ -1,0 +1,265 @@
+<?php $__env->startSection('content'); ?>
+<?php foreach($specializedTradeInformations as $specializedTradeInformation): ?>
+
+<table class="data">
+	<tbody>
+		<tr>
+			<td><b>Status</b></td>
+			<td><?php echo $generalInformation[0]->CurrentStatus == "Approved"?"Active":$generalInformation[0]->CurrentStatus; ?></td>
+		</tr>
+		<tr>
+			<td><b>SP No.</b></td>
+			<td><?php echo $generalInformation[0]->SPNo; ?></td>
+			<td><b>Email</b></td>
+			<td><?php echo $generalInformation[0]->Email; ?></td>
+		</tr>
+		<tr>
+			<td><b>Ownership Type</b></td>
+			<td><?php echo $generalInformation[0]->OwnershipType; ?></td>
+			<td><b>Telephone No.</b></td>
+			<td><?php echo $generalInformation[0]->TelephoneNo; ?></td>
+		</tr>
+		<tr>
+			<td><b>Name of Firm</b></td>
+			<td><?php echo $generalInformation[0]->NameOfFirm; ?></td>
+			<td><b>Mobile No.</b></td>
+			<td><?php echo $generalInformation[0]->MobileNo; ?></td>
+		</tr>
+		<tr>
+			<td><b>Country</b></td>
+			<td><?php echo $generalInformation[0]->Country; ?></td>
+			<td><b>Fax No.</b></td>
+			<td><?php echo $generalInformation[0]->FaxNo; ?></td>
+		</tr>
+		<tr>
+			<td><b>Dzongkhag</b></td>
+			<td><?php echo $generalInformation[0]->Dzongkhag; ?></td>
+			<td><b>Address</b></td>
+			<td><?php echo $generalInformation[0]->Address; ?></td>
+		</tr>
+		<tr>
+			<td><b>TPN</b></td>
+			<td><?php echo isset($generalInformation[0]->TPN) ? $generalInformation[0]->TPN : '--'; ?></td>
+			<td><b>Trade License No.</b></td>
+			<td><?php echo isset($generalInformation[0]->TradeLicenseNo) ? $generalInformation[0]->TradeLicenseNo : '--'; ?></td>
+		</tr>
+		<tr>
+			<td><b>Last Renewal Date</b></td>
+			<td><?php echo convertDateToClientFormat($generalInformation[0]->RenewalDate); ?></td>
+			<td><b>Expiry Date</b></td>
+			<td><?php echo convertDateToClientFormat($generalInformation[0]->RegistrationExpiryDate); ?></td>
+		</tr>
+		<tr>
+			<td><b>Initial Date</b></td>
+			<td><?php echo convertDateToClientFormat($generalInformation[0]->InitialDate); ?></td>
+
+		</tr>
+        <?php if(Input::has('type')): ?>
+        <tr>
+            <td><b>Registered Address</b></td>
+            <td><?php echo $generalInformation[0]->RegisteredAddress; ?></td>
+            <td><b>Registration Expiry Date</b></td>
+            <td><?php echo date_format(date_create($generalInformation[0]->RegistrationExpiryDate),'d-m-Y'); ?></td>
+        </tr>
+        <?php endif; ?>
+	</tbody>
+</table>
+
+<p class="heading">Name of Owner, Partners and/or others with Controlling Interest</p>
+<table class="data-large">
+	<thead>
+		<tr class="success">
+			<th class="x-x-small">Sl#</th>
+			<th>
+				Name
+			</th>
+			<th>
+				CID No.
+			</th>
+			<th>
+				Sex
+			</th>
+			<th>
+				Country
+			</th>
+			<th>
+				Designation
+			</th>
+			<th>
+				Show in Certificate
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php $sl=1;?>
+		<?php foreach($ownerPartnerDetails as $ownerPartnerDetail): ?>
+		<tr>
+			<td>
+				<?php echo $sl; ?>
+
+			</td>
+			<td>
+				<?php echo $ownerPartnerDetail->Name; ?>
+
+			</td>
+			<td>
+				<?php echo $ownerPartnerDetail->CIDNo; ?>
+
+			</td>
+			<td>
+				<?php echo $ownerPartnerDetail->Sex; ?>
+
+			</td>
+			<td>
+				<?php echo $ownerPartnerDetail->Country; ?>
+
+			</td>
+			<td>
+				<?php echo $ownerPartnerDetail->Designation; ?>
+
+			</td>
+			<td class="x-small">
+				<?php if((int)$ownerPartnerDetail->ShowInCertificate==1): ?>
+				<input type="checkbox" checked="checked" disabled="disabled">
+				<?php endif; ?>
+			</td>
+		</tr>
+		<?php $sl+=1;?>
+		<?php endforeach; ?>
+	</tbody>
+</table>
+<p class="heading">Work Category</p>
+<table class="data-large">
+	<thead>
+		<tr>
+			<th>Category</th>
+			<th>Applied</th>
+			<?php if((int)$isFinalPrint==1): ?>
+			<th>Verified</th>
+			<th>Approved</th>
+			<?php endif; ?>
+		</tr>
+	</thead>
+	<tbody>
+		<?php foreach($workClasssifications as $workClasssification): ?>
+			<tr>
+				<td>
+					<?php echo $workClasssification->Code.' ('.$workClasssification->Name.')'; ?>
+
+				</td>
+				<td class="text-center">
+					<?php if((bool)$workClasssification->CmnAppliedCategoryId!=NULL): ?>
+					<img src="assets/cdb/layout/img/tick.png" />
+					<?php else: ?>
+					<i class="fa fa-times"></i>	
+					<strong>-</strong>
+					<?php endif; ?>
+				</td>
+				<?php if((int)$isFinalPrint==1): ?>
+					<td class="text-center">
+						<?php if((bool)$workClasssification->CmnVerifiedCategoryId!=NULL): ?>
+						<img src="assets/cdb/layout/img/tick.png" />
+						<?php else: ?>
+						<strong>-</strong>
+						<?php endif; ?>
+					</td>
+					<td class="text-center">
+						<?php if((bool)$workClasssification->CmnApprovedCategoryId!=NULL): ?>
+						<img src="assets/cdb/layout/img/tick.png" />
+						<?php else: ?>
+						<strong>-</strong>
+						<?php endif; ?>
+					</td>
+				<?php endif; ?>
+			</tr>
+		<?php endforeach; ?>
+</table>
+<p class="heading">Human Resource</p>
+<table class="data-large">
+	<thead>
+		<tr>
+			<th class="x-x-small">Sl#</th>
+			<th>
+				 Name
+			</th>
+			<th>
+				 CID/Work Permit No.
+			</th>
+			<th>
+				 Sex
+			</th>
+			<th>
+				 Country
+			</th>
+			<th>
+				 Qualification
+			</th>
+			<th>
+				 Designation
+			</th>
+			<th>Joining Date</th>
+			<th>
+				Trade/Fields
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php $sl=1;?>
+		<?php foreach($specializedtradeHumanResources as $specializedtradeHumanResource): ?>
+		<tr>
+			<td>
+				<?php echo $sl; ?>
+
+			</td>
+			<td><?php echo $specializedtradeHumanResource->Name; ?></td>
+			<td><?php echo $specializedtradeHumanResource->CIDNo; ?></td>
+			<td><?php echo $specializedtradeHumanResource->Sex; ?></td>
+			<td><?php echo $specializedtradeHumanResource->Country; ?></td>
+			<td><?php echo $specializedtradeHumanResource->Qualification; ?></td>
+			<td><?php echo $specializedtradeHumanResource->Designation; ?></td>
+			<td><?php echo convertDateToClientFormat($specializedtradeHumanResource->JoiningDate); ?></td>
+			<td><?php echo $specializedtradeHumanResource->Trade; ?></td>
+		</tr>
+		<?php $sl+=1;?>
+		<?php endforeach; ?>
+	</tbody>
+</table>
+<p class="heading">Equipments</p>
+<table class="data-large">
+	<thead>
+		<tr>
+			<th class="x-x-small">Sl#</th>
+			<th>
+				Equipment Name
+			</th>
+			<th>
+				 Registration No
+			</th>
+			<th>
+				Equipment Model
+			</th>
+			<th>
+				Quantity
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php $sl=1;?>
+		<?php foreach($specializedtradeEquipments as $specializedtradeEquipment): ?>
+		<tr>
+			<td>
+				<?php echo $sl; ?>
+
+			</td>
+			<td><?php echo $specializedtradeEquipment->Name; ?></td>
+			<td><?php echo $specializedtradeEquipment->RegistrationNo; ?></td>
+			<td><?php echo $specializedtradeEquipment->ModelNo; ?></td>
+			<td><?php echo $specializedtradeEquipment->Quantity; ?></td>
+		</tr>
+		<?php $sl+=1;?>
+		<?php endforeach; ?>
+	</tbody>
+</table>
+<?php endforeach; ?>	
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('printmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

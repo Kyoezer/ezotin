@@ -1,0 +1,114 @@
+<html>
+    <body>
+        <table>
+            <thead>
+            <tr>
+                <th colspan="12">List of Architects</th>
+            </tr>
+                <?php if($arNo != ''): ?>
+                    <tr>
+                    <th><i>AR No.:</i>&nbsp;<?php echo $arNo; ?></th>
+                        </tr>
+                <?php endif; ?>
+                <?php if($fromDate != ''): ?>
+                    <tr>
+                    <th><i>From Date:</i>&nbsp;<?php echo $fromDate; ?></th>
+                        </tr>
+                <?php endif; ?>
+                <?php if($toDate != ''): ?>
+                    <tr>
+                    <th><i>To Date:</i>&nbsp;<?php echo $toDate; ?></th>
+                        </tr>
+                <?php endif; ?>
+                <?php if($country != ''): ?>
+                    <tr>
+                    <th><i>Country:</i>&nbsp;<?php echo $country; ?></th>
+                        </tr>
+                <?php endif; ?>
+                <?php if($dzongkhag != ''): ?>
+                    <tr>
+                    <th><i>Dzongkhag:</i>&nbsp;<?php echo $dzongkhag; ?></th>
+                        </tr>
+                <?php endif; ?>
+                <?php if($sector != ''): ?>
+                <tr>
+                    <th><i>Sector:</i>&nbsp;<?php echo $sector; ?></th>
+                </tr>
+                <?php endif; ?>
+                <?php if($status != ''): ?>
+                    <tr>
+                    <th><i>Status:</i>&nbsp;<?php echo $status; ?></th>
+                        </tr>
+                <?php endif; ?>
+                    <tr>
+                    <th><i>First <?php echo $limit?$limit:20; ?> Records</i></th>
+                    </tr>
+            <tr><th colspan="12"></th></tr>
+            <tr>
+                <th>
+                    Sl.No.
+                </th>
+                <th>
+                    AR No.
+                </th>
+                <th>
+                    Name
+                </th>
+                <th class="">
+                    CID No.
+                </th>
+                <th class="">
+                    Sector
+                </th>
+                <th>
+                    Country
+                </th>
+                <th class="">
+                    Dzongkhag
+                </th>
+                <th class="">
+                    Gewog
+                </th>
+                <th class="">
+                    Village
+                </th>
+                <th class="">
+                    Email
+                </th>
+                <th class="">
+                    Mobile No.
+                </th>
+                <th>
+                    Expiry Date
+                </th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php $count = 1; ?>
+            <?php $__empty_1 = true; foreach($architectsList as $architect): $__empty_1 = false; ?>
+                <tr>
+                    <td><?php echo $count; ?></td>
+                    <td><?php echo $architect->ARNo; ?></td>
+                    <td><?php echo $architect->ArchitectName; ?></td>
+                    <td><?php echo $architect->CIDNo; ?></td>
+                    <td><?php echo $architect->Sector; ?></td>
+                    <td><?php echo $architect->Country; ?></td>
+                    <td><?php echo $architect->Dzongkhag; ?></td>
+                    <td><?php echo $architect->Gewog; ?></td>
+                    <td><?php echo $architect->Village; ?></td>
+                    <td><?php echo $architect->Email; ?></td>
+                    <td><?php echo $architect->MobileNo; ?></td>
+                    <td><?php echo $architect->ExpiryDate; ?></td>
+                    <td><?php echo $architect->Status; ?></td>
+                </tr>
+                <?php $count++; ?>
+            <?php endforeach; if ($__empty_1): ?>
+                <tr>
+                    <td colspan="12" class="text-center font-red">No data to display!</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </body>
+</html>

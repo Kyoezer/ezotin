@@ -1,0 +1,99 @@
+<?php $__env->startSection('content'); ?>
+<div id="addbidsuploadedtender" class="modal fade" role="dialog" aria-labelledby="approve" aria-hidden="true">
+	<div class="modal-dialog modal-full">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3 class="modal-title font-green-seagreen">List of Uploaded Tenders</h3>
+			</div>
+			<div class="modal-body">
+				<div class="table-responsive">
+					<table class="table table-condensed table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>Ref#</th>
+								<th>Work Id</th>
+								<th>Last Dt and Time of Submission</th>
+								<th>Opening Dt. and Time</th>
+								<th>Category</th>
+								<th>Classification</th>
+								<th>Name of the Work</th>
+								<th>Contract Period (Months)</th>
+								<th>Estimated Project Cost</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php $__empty_1 = true; foreach($listOfUploadeTenders as $listOfUploadeTender): $__empty_1 = false; ?>
+							<tr>
+								<td>
+			                        <input type="hidden" name="Id" value="<?php echo $listOfUploadeTender->Id; ?>"/>
+									 <?php echo $listOfUploadeTender->ReferenceNo; ?>
+
+								</td>
+								<td>
+									 <?php echo $listOfUploadeTender->EtlTenderWorkId; ?>
+
+								</td>
+								<td>
+									 <?php echo convertDateTimeToClientFormat($listOfUploadeTender->LastDateAndTimeOfSubmission); ?>
+
+								</td>
+								<td>
+			                        <?php echo convertDateTimeToClientFormat($listOfUploadeTender->TenderOpeningDateAndTime); ?>
+
+								</td>
+								<td>
+									<?php echo $listOfUploadeTender->Category; ?>
+
+								</td>
+								<td>
+			                        <?php echo $listOfUploadeTender->Classification; ?>
+
+								</td>
+								<td>
+			                        <?php echo $listOfUploadeTender->NameOfWork; ?>
+
+								</td>
+								<td>
+									<?php echo $listOfUploadeTender->ContractPeriod; ?>
+
+								</td>
+								<td>
+									<?php echo $listOfUploadeTender->ProjectEstimateCost; ?>
+
+								</td>
+								<td>
+									<a href="<?php echo URL::to('cinet/biddingform/'.$listOfUploadeTender->Id); ?>" class="btn btn-xs green-seagreen">Add Bids</a>
+								</td>
+							</tr>
+							<?php endforeach; if ($__empty_1): ?>
+							<tr>
+								<td colspan="10" class="font-red text-center">No tender has been uploaded</td>
+							</tr>
+							<?php endif; ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn red" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-offset-2 col-md-8">
+		<div class="portlet light bordered">
+			<div class="portlet-body">
+				<div class="row">
+					<div class="col-md-12 text-center">
+						<a href="<?php echo URL::to('cinet/biddingform'); ?>" class="btn green-seagreen btn-lg">Continue to Bidding Report</a> <strong>or</strong> <a href="#addbidsuploadedtender" data-toggle="modal" class="btn blue-hoki btn-lg">Add Bids aganist a Uploaded Tender</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('horizontalmenumaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

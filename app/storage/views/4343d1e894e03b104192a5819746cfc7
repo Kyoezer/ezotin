@@ -1,0 +1,91 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+            <?php $parameters = Input::all(); $parameters['export']='excel'; $route = 'architectrpt.architectregistrationdetail';?>
+            <?php if(!Input::has('export')): ?>
+            <i class="fa fa-cogs"></i>Architect Registration Details &nbsp;&nbsp;<?php if(!Input::has('export')): ?>   <?php $parameters['export'] = 'print'; ?><a href="<?php echo route($route,$parameters); ?>" class="btn btn-sm purple" target="_blank"><i class="fa fa-print"></i> Print</a><?php endif; ?>
+		    <?php endif; ?>
+        </div>
+	</div>
+	<div class="portlet-body flip-scroll">
+        <?php if(Input::get('export') != "print"): ?>
+        <?php echo Form::open(array('url'=>str_replace('.','/',$route),'method'=>'get')); ?>
+
+		<div class="form-body">
+			<div class="row">
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">AR No</label>
+						<input type="text" name="ARNo" value="<?php echo Input::get('ARNo'); ?>" class="form-control" />
+					</div>
+				</div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Architect Name</label>
+                        <input type="text" name="ArchitectName" value="<?php echo Input::get('ArchitectName'); ?>" class="form-control"/>
+                    </div>
+                </div>
+                <?php if(!Input::has('export')): ?>
+                    <div class="col-md-2">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="btn-set">
+                            <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                            <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                        </div>
+                    </div>
+                <?php endif; ?>
+			</div>
+		</div>
+        <?php echo Form::close(); ?>
+
+        <?php else: ?>
+            <?php foreach($parametersForPrint as $key=>$value): ?>
+                <b><?php echo $key; ?>: <?php echo $value; ?></b><br>
+            <?php endforeach; ?>
+            <br/>
+        <?php endif; ?>
+		<table class="table table-bordered table-striped table-condensed flip-content" id="contractorhumanresource">
+			<thead class="flip-content">
+				<tr>
+					<th>
+						Name
+					</th>
+                    <th>Application Date</th>
+					<th class="">
+						 Type
+					</th>
+                    <th class="">
+                        Verified by
+                    </th>
+                    <th class="">
+                        Approved by
+                    </th>
+                    <th>Payment Approved by</th>
+                    <th>Rejected by</th>
+				</tr>
+			</thead>
+			<tbody>
+            <?php $__empty_1 = true; foreach($reportData as $data): $__empty_1 = false; ?>
+				<tr>
+                    <td><?php echo $data->NameOfFirm; ?> (<?php echo $data->ARNo; ?>)</td>
+                    <td><?php echo convertDateToClientFormat($data->ApplicationDate); ?></td>
+                    <td><?php echo $data->Type; ?></td>
+                    <td><?php if($data->Verifier): ?><?php echo $data->Verifier."<br/> on ".convertDateToClientFormat($data->RegistrationVerifiedDate); ?><?php endif; ?></td>
+                    <td><?php if($data->Approver): ?><?php echo $data->Approver."<br/> on ".convertDateToClientFormat($data->RegistrationApprovedDate); ?><?php endif; ?></td>
+                    <td><?php if($data->PaymentApprover): ?><?php echo $data->PaymentApprover."<br/> on ".convertDateToClientFormat($data->PaymentApprovedDate); ?><?php endif; ?></td>
+                    <td><?php if($data->Rejector): ?><?php echo $data->Rejector."<br/> on ".convertDateToClientFormat($data->RejectedDate); ?><?php endif; ?></td>
+				</tr>
+            <?php endforeach; if ($__empty_1): ?>
+                <tr>
+                    <td colspan="7" class="text-center font-red"><?php if(empty($reportData)): ?>No data to display! <?php else: ?><?php echo "Please select a Contractor or enter a CDB No"; ?><?php endif; ?></td>
+                </tr>
+            <?php endif; ?>
+			</tbody>
+		</table>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

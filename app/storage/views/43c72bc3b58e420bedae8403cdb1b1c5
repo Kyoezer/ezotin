@@ -1,0 +1,375 @@
+<?php $__env->startSection('content'); ?>
+<?php $__env->startSection('pagescripts'); ?>
+	<?php echo HTML::script('assets/global/scripts/etool.js?ver='.randomString()); ?>
+
+<?php $__env->stopSection(); ?>
+<div id="hrcheckmodal" class="modal fade in" role="dialog" aria-labelledby="modalmessagebox" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3 id="modalmessageheader" class="modal-title font-red-intense">HR Check</h3>
+			</div>
+			<div class="modal-body">
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="eqcheckmodal" class="modal fade in" role="dialog" aria-labelledby="modalmessagebox" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3 id="modalmessageheader" class="modal-title font-red-intense">Equipment Check</h3>
+			</div>
+			<div class="modal-body">
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>
+					<span class="caption-subject font-green-seagreen">Bidding Form</span>
+				</div>
+			</div>
+			<div class="portlet-body form">
+
+				<?php echo Form::open(array('url' => $model,'role'=>'form','class'=>'form-horizontal')); ?>
+
+				
+					<div class="form-body">
+						<?php foreach($contractWorkDetails as $contractWorkDetail): ?>
+						<div class="form-group">
+							<label class="control-label col-md-3">Reference No.</label>
+							<div class="col-md-7">
+								<input type="text" name="ReferenceNo" class="form-control input-sm" placeholder="ReferenceNo" value="<?php if(!empty($contractWorkDetail->ReferenceNo)): ?><?php echo $contractWorkDetail->ReferenceNo; ?><?php else: ?><?php echo Input::old('ReferenceNo'); ?><?php endif; ?>"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3">Name Of Client</label>
+							<div class="col-md-7">
+								<input type="text" name="NameOfClient" class="form-control input-sm" placeholder="Name of Client" value="<?php if(!empty($contractWorkDetail->NameOfClient)): ?><?php echo $contractWorkDetail->NameOfClient; ?><?php else: ?><?php echo Input::old('NameOfClient'); ?><?php endif; ?>"/>
+							</div>
+						</div>
+						<input type="hidden" name="Id" value="<?php echo $contractWorkDetail->Id; ?>" />
+						<input type="hidden" name="Type" value="<?php echo $type; ?>">
+						<input type="hidden" name="RedirectUrl" value="<?php echo $redirectUrl; ?>">
+						<input type="hidden" name="CmnWorkExecutionStatusId" value="<?php echo CONST_CMN_WORKEXECUTIONSTATUS_AWARDED; ?>">
+						<?php if((int)$showProcuringAgency==1): ?>
+						<div class="form-group">
+							<input type="hidden" name="ByCDB" value="1" />
+							<label class="control-label col-md-3">Procuring Agency</label>
+							<div class="col-md-4">
+								<select name="CmnProcuringAgencyId" class="form-control select2me required">
+									<option value="">---SELECT ONE---</option>
+									<?php foreach($procuringAgencies as $procuringAgency): ?>
+									<option value="<?php echo $procuringAgency->Id; ?>" <?php if($procuringAgency->Id==$contractWorkDetail->CmnProcuringAgencyId): ?>selected="selected"<?php endif; ?>><?php echo $procuringAgency->Name.' ('.$procuringAgency->Code.')'; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+						</div>
+						<?php else: ?>
+							<?php if((bool)$tenderId!=NULL): ?>
+								<input type="hidden" name="EtlTenderId" value="<?php echo $tenderId; ?>" />
+							<?php endif; ?> 
+							<input type="hidden" name="CmnProcuringAgencyId" value="<?php echo Auth::user()->CmnProcuringAgencyId; ?>" />
+						<?php endif; ?>
+						<div class="form-group">
+							<label class="control-label col-md-3">Name of the Contract Work</label>
+							<div class="col-md-7">
+								<input type="text" name="NameOfWork" class="form-control required input-sm" placeholder="Name of the work" value="<?php if(!empty($contractWorkDetail->NameOfWork)): ?><?php echo $contractWorkDetail->NameOfWork; ?><?php else: ?><?php echo Input::old('NameOfWork'); ?><?php endif; ?>"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3">Contract Description</label>
+							<div class="col-md-7">
+								<textarea name="DescriptionOfWork" class="form-control wysihtml5 required input-sm" rows="3">
+									<?php if(!empty($contractWorkDetail->DescriptionOfWork)): ?>
+										<?php echo $contractWorkDetail->DescriptionOfWork; ?>
+
+									<?php else: ?>
+										<?php echo Input::old('DescriptionOfWork'); ?>
+
+									<?php endif; ?>
+								</textarea>
+							</div>
+						</div>
+					
+						<?php if((int)$type!=0): ?>
+						<div class="form-group">
+							<label class="control-label col-md-3">Service Category</label>
+							<div class="col-md-4">
+								<select name="CmnConsultantServiceCategoryId" class="form-control required input-sm">
+									<option value="">---SELECT ONE---</option>
+									<?php foreach($consultantServiceCategories as $consultantServiceCategory): ?>
+									<option value="<?php echo $consultantServiceCategory->Id; ?>" <?php if($consultantServiceCategory->Id==$contractWorkDetail->CmnConsultantServiceCategoryId || Input::old('CmnConsultantServiceCategoryId')==$consultantServiceCategory->Id): ?>selected="selected"<?php endif; ?>><?php echo $consultantServiceCategory->Name; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3">Service Name</label>
+							<div class="col-md-4">
+								<select name="CmnConsultantServiceId" class="form-control required input-sm">
+									<option value="">---SELECT ONE---</option>
+									<?php foreach($consultantServices as $consultantService): ?>
+									<option value="<?php echo $consultantService->Id; ?>" <?php if($consultantService->Id==$contractWorkDetail->CmnConsultantServiceId || Input::old('CmnConsultantServiceId')==$consultantService->Id): ?>selected="selected"<?php endif; ?>><?php echo $consultantService->Code.' ('.$consultantService->Name.')'; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+						</div>
+						<?php endif; ?>
+						<div class="form-group">
+							<label class="control-label col-md-3">Dzongkhag</label>
+							<div class="col-md-4">
+								<select name="CmnDzongkhagId" class="form-control required input-sm">
+									<option value="">---SELECT ONE---</option>
+									<?php foreach($dzongkhags as $dzongkhag): ?>
+									<option value="<?php echo $dzongkhag->Id; ?>" <?php if($dzongkhag->Id==$contractWorkDetail->CmnDzongkhagId): ?>selected="selected"<?php endif; ?>><?php echo $dzongkhag->NameEn; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+						</div>
+						<!-- <div class="form-group">
+							<label class="control-label col-md-3">Approved Agency Estimate (Nu.)</label>
+							<div class="col-md-4">
+								<input type="text" name="ApprovedAgencyEstimate" class="form-control text-right required input-sm" placeholder="Approved Agency Estimate" value="<?php if(!empty($contractWorkDetail->ApprovedAgencyEstimate)): ?><?php echo $contractWorkDetail->ApprovedAgencyEstimate; ?><?php else: ?><?php echo Input::old('ApprovedAgencyEstimate'); ?><?php endif; ?>" />
+							</div>
+						</div> -->
+						
+						<div class="form-group">
+							<label class="control-label col-md-3">Date of Signing of Contract</label>
+							<div class="col-md-4">
+								<div class="input-icon right">
+									<i class="fa fa-calendar"></i>
+									<input type="text" name="ContractSigningDate" class="form-control datepicker required input-sm" readonly="readonly" placeholder="Date of Signing of Contract" value="<?php if(!empty($contractWorkDetail->ContractSigningDate)): ?><?php echo $contractWorkDetail->ContractSigningDate; ?><?php else: ?><?php echo Input::old('ContractSigningDate'); ?><?php endif; ?>" />
+								</div>
+							</div>
+						</div>
+						<!-- <div class="form-group">
+							<label class="control-label col-md-3">Work Order No.</label>
+							<div class="col-md-4">
+								<input type="text" name="WorkOrderNo" class="form-control required input-sm" placeholder="Work Order No" value="<?php if(!empty($contractWorkDetail->WorkOrderNo)): ?><?php echo $contractWorkDetail->WorkOrderNo; ?><?php else: ?><?php echo Input::old('WorkOrderNo'); ?><?php endif; ?>" />
+							</div>
+						</div> -->
+						<div class="form-group">
+							<label class="control-label col-md-3">Contract Period (In Months)</label>
+							<div class="col-md-4">
+								<input type="text" name="ContractPeriod" class="form-control durationnumber required number input-sm" data-alertlabel="Contract Period (In Months)" placeholder="Contract Period" value="<?php if(!empty($contractWorkDetail->ContractPeriod)): ?><?php echo $contractWorkDetail->ContractPeriod; ?><?php else: ?><?php echo Input::old('ContractPeriod'); ?><?php endif; ?>" />
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3">Start Date (Tentative)</label>
+							<div class="col-md-4">
+								<div class="input-icon right">
+									<i class="fa fa-calendar"></i>
+									<input type="text" name="WorkStartDate" class="form-control calculateenddate required input-sm" readonly="readonly" placeholder="Work Start Date" value="<?php if(!empty($contractWorkDetail->WorkStartDate) && ($contractWorkDetail->WorkStartDate != '0000-00-00')): ?><?php echo convertDateToClientFormat($contractWorkDetail->WorkStartDate); ?><?php else: ?><?php echo Input::old('WorkStartDate'); ?><?php endif; ?>" />
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3">Completion Date (Tentative)</label>
+							<div class="col-md-4">
+								<div class="input-icon right">
+									<i class="fa fa-calendar"></i>
+									<input type="text" name="WorkCompletionDate" class="form-control durationendresult required input-sm" readonly="readonly" placeholder="Work Completion Date" value="<?php if(!empty($contractWorkDetail->WorkCompletionDate) && ($contractWorkDetail->WorkCompletionDate!='0000-00-00')): ?><?php echo convertDateToClientFormat($contractWorkDetail->WorkCompletionDate); ?><?php else: ?><?php echo Input::old('WorkCompletionDate'); ?><?php endif; ?>" />
+								</div>
+							</div>	
+						</div>
+						<?php endforeach; ?>
+						<h5 class="bold font-blue-madison">Name of the <?php if((int)$type==0): ?><?php echo "Certified Builder"; ?><?php endif; ?></h5>
+						<div class="table-responsive">
+							<table id="CertifiedBuilderAdd" class="table table-bordered table-striped table-condensed">
+								<thead>
+									<tr>
+										<th>
+										</th>
+										<th width="15%">
+											CDB No.
+										</th>
+										<th>
+											Name
+										</th>
+										<th width="20%" class="numeric">
+											Contract Amount
+										</th>
+										<th width="20%" class="numeric">
+										Negotiated Amount
+										</th>
+										<th width="10%">
+											Awarded To
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php $count=0; ?>
+									<?php foreach($contractBidders as $contractBidder): ?>
+									<?php $randomKey=randomString();?>
+									<tr>
+										<td>
+											<button type="button" class="deletetablerow"><i class="fa fa-times"></i></button>
+										</td>
+										<td>
+											<input type="text" class="form-control input-sm cdbno" value="<?php echo $contractBidder->CDBNo; ?>">
+										</td>
+										
+										<td>
+										
+                                                <input type="hidden" name="CrpBiddingFormDetailModel[<?php echo $randomKey; ?>][CrpCertifiedBuilderFinalId]" value="<?php echo $contractBidder->CrpCertifiedBuilderFinalId; ?>" class="resetKeyForNew certifiedbuilder-id" />
+                                                <input type="text" class="certifiedbuilder-name form-control input-sm" value="<?php echo $contractBidder->NameOfFirm; ?>" readonly="readonly"/>
+										
+										</td>
+										<td>
+											<input type="text" name="CrpBiddingFormDetailModel[<?php echo $randomKey; ?>][BidAmount]" class="form-control input-sm resetKeyForNew text-right required number" value="<?php echo $contractBidder->BidAmount; ?>">
+										</td>
+										<td>
+											<input type="text" name="CrpBiddingFormDetailModel[<?php echo $randomKey; ?>][EvaluatedAmount]" class="form-control input-sm resetKeyForNew text-right required number" value="<?php echo $contractBidder->EvaluatedAmount; ?>">
+										</td>
+										<td>
+											<input type="checkbox" name="CrpBiddingFormDetailModel[<?php echo $randomKey; ?>][CmnWorkExecutionStatusId]" value="<?php echo CONST_CMN_WORKEXECUTIONSTATUS_AWARDED; ?>" class="form-control resetKeyForNew notclearfornew addrowcheckbox" <?php if((bool)$contractBidder->CmnWorkExecutionStatusId!=null): ?>checked="checked"<?php endif; ?>/>
+										</td>
+									</tr>
+									<?php $count++;?>
+									<?php endforeach; ?>
+									<tr class="notremovefornew">
+										<td>
+											<button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+										</td>
+										<td colspan="5"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<?php if(!isset($bidId)): ?>
+						<div class="table-responsive" id="hrandequipment">
+							<h5 class="bold font-blue-madison">Human Resource <input type="checkbox" <?php if((bool)$bidHRs[0]->CIDNo): ?>checked="checked"<?php endif; ?> class="toggle-cinet-table" id="add-hr-cinet"/></h5>
+							<table class="table table-striped table-condensed table-bordered" id="cinet-hr-table">
+								<thead>
+								<tr>
+									<th width="2%"></th>
+									<th width="20%">
+										CID No./Work Permit
+									</th>
+									<th>
+										Name
+									</th>
+									<th class="">
+										Designation
+									</th>
+									<th class="">
+										Qualification
+									</th>
+								</tr>
+								</thead>
+								<tbody>
+								<?php $bidHRCount = count($bidHRs); ?>
+								<?php foreach($bidHRs as $bidHR): ?>
+								<?php $randomKey = randomString(); ?>
+								<tr>
+									<td>
+										<button type="button" class="deletetablerow deleterowfromdb"><i class="fa fa-times fa-lg"></i></button>
+									</td>
+									<td>
+										<input type="text" name="cbHR[<?php echo $randomKey; ?>][CIDNo]" <?php if(!(bool)$bidHR->CIDNo): ?>disabled="disabled"<?php endif; ?> value="<?php echo $bidHR->CIDNo; ?>" class="form-control resetKeyForNew input-sm cidforwebservicetr cinet-hr checkHumanResource"/>
+									</td>
+									<td>
+										<input type="text" name="cbHR[<?php echo $randomKey; ?>][Name]" <?php if(!(bool)$bidHR->CIDNo): ?>disabled="disabled"<?php endif; ?> value="<?php echo $bidHR->Name; ?>" class="form-control resetKeyForNew input-sm namefromwebservice"/>
+									</td>
+									<td>
+										<select name="cbHR[<?php echo $randomKey; ?>][CmnDesignationId]" <?php if(!(bool)$bidHR->CIDNo): ?>disabled="disabled"<?php endif; ?> class="form-control resetKeyForNew input-sm">
+											<option value="">SELECT</option>
+											<?php foreach($designations as $designation): ?>
+												<option value="<?php echo $designation->Id; ?>" <?php if($bidHR->CmnDesignationId == $designation->Id): ?>selected="selected"<?php endif; ?>><?php echo $designation->Name; ?></option>
+											<?php endforeach; ?>
+										</select>
+									</td>
+									<td>
+										<select name="cbHR[<?php echo $randomKey; ?>][CmnQualificationId]" <?php if(!(bool)$bidHR->CIDNo): ?>disabled="disabled"<?php endif; ?> class="form-control resetKeyForNew input-sm">
+											<option value="">SELECT</option>
+											<?php foreach($qualifications as $qualification): ?>
+												<option value="<?php echo $qualification->Id; ?>" <?php if($bidHR->CmnQualificationId == $qualification->Id): ?>selected="selected"<?php endif; ?>><?php echo $qualification->Name; ?></option>
+											<?php endforeach; ?>
+										</select>
+									</td>
+								</tr>
+								<?php endforeach; ?>
+								<tr class="notremovefornew">
+									<td>
+										<button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+									</td>
+									<td colspan="4" class="text-right bold"></td>
+								</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="table-responsive" id="hrandequipment">
+						<h5 class="bold font-blue-madison">Equipment <input type="checkbox" <?php if((bool)$bidEquipments[0]->CmnEquipmentId): ?>checked="checked"<?php endif; ?> class="toggle-cinet-table" id="add-eq-cinet"/></h5>
+						<table class="table table-striped table-condensed table-bordered" id="cinet-eq-table">
+							<thead>
+								<tr>
+									<th style="width: 2%;"></th>
+									<th width="30%">
+										Equipment
+									</th>
+									<th class="">
+										Owned/Hired
+									</th>
+									<th width="20%">
+										Registration No.
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php foreach($bidEquipments as $bidEquipment): ?>
+								<tr>
+									<td>
+										<button type="button" class="deletetablerow deleterowfromdb"><i class="fa fa-times fa-lg"></i></button>
+									</td>
+									<td>
+										<select name="cbEquipment[<?php echo $randomKey; ?>][CmnEquipmentId]" <?php if(!(bool)$bidEquipment->CmnEquipmentId): ?>disabled="disabled"<?php endif; ?> class="form-control resetKeyForNew input-sm equipmentforwebservicetr">
+											<option value="">SELECT</option>
+											<?php foreach($equipments as $equipment): ?>
+												<option value="<?php echo $equipment->Id; ?>" <?php if($bidEquipment->CmnEquipmentId == $equipment->Id): ?>selected="selected"<?php endif; ?> data-isregistered="<?php echo $equipment->IsRegistered; ?>" data-vehicletype="<?php echo $equipment->VehicleType; ?>"><?php echo $equipment->Name; ?></option>
+											<?php endforeach; ?>
+										</select>
+									</td>
+									<td>
+										<?php echo Form::select("cbEquipment[$randomKey][OwnerOrHired]",array(''=>'SELECT','1'=>'Owned','2'=>'Hired'),$bidEquipment->OwnedOrHired,array('class'=>'form-control resetKeyForNew input-sm',(!(bool)$bidEquipment->CmnEquipmentId)?"disabled":'data-x'=>"disabled")); ?>
+
+									</td>
+									<td>
+										<input type="text" value="<?php echo $bidEquipment->RegistrationNo; ?>" <?php if(!(bool)$bidEquipment->CmnEquipmentId): ?>disabled="disabled"<?php endif; ?> name="cbEquipment[<?php echo $randomKey; ?>][RegistrationNo]" class="form-control resetKeyForNew input-sm notrequired registration-no checkEquipment" />
+									</td>
+								</tr>
+							<?php endforeach; ?>
+								<tr class="notremovefornew">
+									<td>
+										<button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+									</td>
+									<td colspan="3" class="text-right bold"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+						<?php endif; ?>
+					</div>
+					<div class="form-actions">
+						<div class="btn-set">
+							<button type="submit" class="btn green"><?php echo empty($contractWorkDetails[0]->Id)?'Save':'Update'; ?></button>
+							<a href="<?php echo URL::to(Request::url()); ?>" class="btn red">Cancel</a>
+						</div>
+					</div>
+				<?php echo Form::close(); ?>
+
+				<!-- END FORM-->
+			</div>
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

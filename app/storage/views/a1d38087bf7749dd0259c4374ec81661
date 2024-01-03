@@ -1,0 +1,72 @@
+<?php $__env->startSection('content'); ?>
+
+<div class="row">
+	<div class="col-md-12 col-xs-12 col-sm-12">
+		<h4 class="head-title">Edit Page</h4>
+		<div class="form-group">
+			<?php foreach($page_details as $pdetail): ?>
+				<?php echo Form::open(array('action'=>'WebMenuManagementController@updateSubMenuDetails', 'method'=>'POST', 'files'=>true)); ?>
+
+					<?php echo Form::label('Page Title:'); ?>
+
+					<?php echo Form::text('Title', $pdetail->Title, array('class'=>'form-control')); ?>
+
+
+					<div class="clear2"></div>
+
+					<?php echo Form::label('Select Parent Menu:'); ?>
+
+					<select name="ParentId" class="form-control select2me">
+						<option>---SELECT ONE---</option>
+						<?php $__empty_1 = true; foreach($parentList as $parentDetail): $__empty_1 = false; ?>
+							<option value="<?php echo $parentDetail->Id; ?>" <?php if($parentDetail->Id == $parentId): ?><?php echo "selected"; ?> <?php endif; ?>><?php echo $parentDetail->MenuTitle; ?></option>
+						<?php endforeach; if ($__empty_1): ?>
+							<option>Please Add a Parent Menu</option>
+						<?php endif; ?>
+					</select>
+
+					<div class="clear2"></div>
+
+					<?php echo Form::label('Page Content:'); ?>
+
+					<?php echo Form::textarea('Content', $pdetail->Content, array('class'=>'form-control')); ?>
+
+
+					<div class="clear2"></div>
+
+					<?php echo Form::label('Upload Image:'); ?>
+
+					<?php echo Form::file('Image_Upload'); ?>
+
+
+					<div class="clear2"></div>
+
+					<?php echo Form::label('Attachment:'); ?>
+
+					<?php echo Form::file('Attachment'); ?>
+
+
+					<div class="clear"></div>
+
+					<?php echo Form::hidden('Id', $pdetail->Id); ?>
+
+					<?php echo Form::hidden('imageUpload', $pdetail->ImageUpload); ?>
+
+					<?php echo Form::hidden('attachments', $pdetail->Attachment); ?>
+
+					<?php echo Form::hidden('parentId', $pdetail->ParentId); ?>
+
+
+					<?php echo Form::submit('Update', array('class'=>'btn btn-success')); ?>
+
+					<?php echo Form::reset('Clear', array('class'=>'btn btn-danger')); ?>
+
+				<?php echo Form::close(); ?>
+
+			<?php endforeach; ?>
+		</div>
+	</div>
+</div>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

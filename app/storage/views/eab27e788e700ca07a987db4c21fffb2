@@ -1,0 +1,430 @@
+<?php if(isset($isRejectedApp) && (int)$isRejectedApp==1): ?>
+<input type="hidden" value="1" name="ApplicationRejectedReapply">
+<?php endif; ?>
+<?php foreach($consultantGeneralInfo as $consultantGeneralInfo): ?>
+<div class="form-body">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="form-group">
+				<label class="bold">Application No.</label>
+				<p class="form-control-static">
+					<?php if(!empty($consultantGeneralInfo->ReferenceNo) || !empty($applicationReferenceNo)): ?>
+						<?php if(!empty($consultantGeneralInfo->ReferenceNo)): ?>
+							<?php echo $consultantGeneralInfo->ReferenceNo; ?>
+
+						<?php else: ?>
+							<?php echo $applicationReferenceNo; ?>
+
+						<?php endif; ?>
+					<?php else: ?>
+					<?php echo Input::old('ReferenceNo'); ?>
+
+					<?php endif; ?>
+				</p>
+				<input type="hidden" name="ReferenceNo" value="<?php if(!empty($consultantGeneralInfo->ReferenceNo) || !empty($applicationReferenceNo)): ?><?php if(!empty($consultantGeneralInfo->ReferenceNo)): ?> <?php echo $consultantGeneralInfo->ReferenceNo; ?><?php else: ?><?php echo $applicationReferenceNo; ?><?php endif; ?> <?php else: ?> <?php echo Input::old('ReferenceNo'); ?> <?php endif; ?>" />
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="control-label bold">Application Date</label>
+				<p class="form-control-static"><?php if(!empty($consultantGeneralInfo->ApplicationDate)): ?><?php echo convertDateToClientFormat($consultantGeneralInfo->ApplicationDate); ?><?php else: ?><?php echo convertDateToClientFormat(date('Y-m-d G:i:s')); ?><?php endif; ?></p>
+				<input type="hidden" name="ApplicationDate" value="<?php if(!empty($consultantGeneralInfo->ApplicationDate)): ?><?php echo $consultantGeneralInfo->ApplicationDate; ?><?php else: ?><?php echo date('Y-m-d G:i:s'); ?><?php endif; ?>" />
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<h5 class="font-blue-madison bold">General Information</h5>
+		</div>
+		<input type="hidden" value="<?php echo $consultantGeneralInfo->Id; ?>" name="Id" />
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="control-label">Ownership Type <span class="font-red">*</span></label>
+				<select name="CmnOwnershipTypeId" class="changeofowner select2me form-control required companyownershiptype">
+					<option value="">---SELECT ONE---</option>
+					<?php foreach($ownershipTypes as $ownershipType): ?>
+						<option data-reference="<?php echo $ownershipType->ReferenceNo; ?>" value="<?php echo $ownershipType->Id; ?>" <?php if($ownershipType->Id==Input::old('CmnOwnershipTypeId') || $ownershipType->Id==$consultantGeneralInfo->CmnOwnershipTypeId): ?>selected="selected"<?php endif; ?>><?php echo $ownershipType->Name; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="control-label">Proposed Name <span class="font-red">* </span><a role="button" tabindex="0" data-toggle="popover" data-container="body" data-trigger="focus" class="popoverdefaultopen" data-placement="top" title="<span class='font-green-seagreen'>Proposed Name</span>" data-content="<p class='text-justify'>If the Name of the Firm that you have proposed for consultant registration is already registered with CDB you cannot proceed with registration. Try using a different Name in such cases.</p>"><i class="fa fa-question-circle"></i></a></label>
+				<input type="text" name="NameOfFirm" value="<?php if(!empty($consultantGeneralInfo->NameOfFirm)): ?><?php echo $consultantGeneralInfo->NameOfFirm; ?><?php else: ?><?php echo Input::old('NameOfFirm'); ?><?php endif; ?>" class="form-control required changeoffirmname" placeholder="Proposed Name of the Firm">
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="control-label">Country <span class="font-red">*</span></label>
+				<select name="CmnCountryId" class="form-control select2me input-sm required countryselect changeoflocation">
+					<option value="">---SELECT ONE---</option>
+					<?php foreach($countries as $country): ?>
+						<option value="<?php echo $country->Id; ?>" <?php if($country->Id==Input::old('CmnCountryId') || $country->Id==$consultantGeneralInfo->CmnCountryId || $country->Name=="Bhutan"): ?>selected="selected"<?php endif; ?>><?php echo $country->Name; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div><div class="clearfix"></div>
+		<div class="col-md-3">	
+			<div class="form-group">
+				<label class="control-label">Trade License No. </label>
+				<input type="text" name="TradeLicenseNo" value="<?php if(!empty($consultantGeneralInfo->TradeLicenseNo)): ?><?php echo $consultantGeneralInfo->TradeLicenseNo; ?><?php else: ?><?php echo Input::old('TradeLicenseNo'); ?><?php endif; ?>" class="form-control dontdisable" placeholder="Trade License No.">
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="control-label">TPN </label>
+				<input type="text" name="TPN" value="<?php if(!empty($consultantGeneralInfo->TPN)): ?><?php echo $consultantGeneralInfo->TPN; ?><?php else: ?><?php echo Input::old('TPN'); ?><?php endif; ?>" class="form-control dontdisable" placeholder="TPN">
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="companyownershiptypeattachmentcontrol <?php if(empty($consultantGeneralInfo->Id) || $consultantGeneralInfo->CmnOwnershipTypeId=='1e243ef0-c652-11e4-b574-080027dcfac6' || $serviceByConsultant==1): ?><?php echo 'hide'; ?><?php endif; ?>">
+			<div class="col-md-6 table-responsive">
+				<h5 class="font-blue-madison bold">Attach Certificate of Incorporation</h5>
+				<table id="certificateofincorporation" class="table table-bordered table-striped table-condensed">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Document Name</th>
+							<th>Upload File</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<button type="button" class="deletetablerow"><i class="fa fa-times fa-lg"></i></button>
+							</td>
+							<td>
+								<input type="text" name="DocumentName[]" value="Certificate of Incorporation" class="dontdisable form-control input-sm <?php if(empty($consultantGeneralInfo->Id) && $serviceByConsultant==0): ?><?php echo 'required'; ?><?php endif; ?>">
+							</td>
+							<td>
+								<input type="file" name="attachments[]" class="dontdisable input-sm <?php if(empty($consultantGeneralInfo->Id) && $serviceByConsultant==0): ?><?php echo 'required'; ?><?php endif; ?>" multiple="multiple" />
+							</td>
+						</tr>
+						<tr class="notremovefornew">
+							<td>
+								<button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+							</td>
+							<td colspan="2"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<?php if((int)$serviceByConsultant==1): ?>
+		<div class="changeofownerattachmentcontrol hide">
+			<div class="col-md-6 table-responsive">
+				<h5 class="font-blue-madison bold">Attach marriage certificate if ownership is transferred to spouse or census if transferred to children</h5>
+				<table id="changeofownershiptable" class="table table-bordered table-striped table-condensed">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Document Name</th>
+							<th>Upload File</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<button type="button" class="deletetablerow"><i class="fa fa-times fa-lg"></i></button>
+							</td>
+							<td>
+								<input type="text" name="DocumentNameOwnerShipChange[]" value="Ownership change document" class="dontdisable form-control input-sm">
+							</td>
+							<td>
+								<input type="file" name="attachmentsownershipchange[]" class="dontdisable input-sm" multiple="multiple" />
+							</td>
+						</tr>
+						<tr class="notremovefornew">
+							<td>
+								<button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+							</td>
+							<td colspan="2"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="changeoffirmnameattachmentcontrol hide">
+			<div class="col-md-6 table-responsive">
+				<h5 class="font-blue-madison bold">Attach a copy of notification in print media if change in Name of Firm</h5>
+				<table id="changeoffirmnametable" class="table table-bordered table-striped table-condensed">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Document Name</th>
+							<th>Upload File</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>
+								<button type="button" class="deletetablerow"><i class="fa fa-times fa-lg"></i></button>
+							</td>
+							<td>
+								<input type="text" name="DocumentNameFirmNameChange[]" value="Document for change of Firm Name" class="dontdisable form-control input-sm">
+							</td>
+							<td>
+								<input type="file" name="attachmentsfirmnamechange[]" class="dontdisable input-sm" multiple="multiple" />
+							</td>
+						</tr>
+						<tr class="notremovefornew">
+							<td>
+								<button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+							</td>
+							<td colspan="2"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<?php endif; ?>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<h5 class="font-blue-madison bold">Permanent Address</h5>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="control-label">Dzongkhag <span class="font-red">*</span></label>
+				<select name="CmnDzongkhagId" class="form-control select2me isbhutanese required changeoflocation">
+					<option value="">---SELECT ONE---</option>
+					<?php foreach($dzongkhags as $dzongkhag): ?>
+						<option value="<?php echo $dzongkhag->Id; ?>" <?php if($dzongkhag->Id==Input::old('CmnDzongkhagId') || $dzongkhag->Id==$consultantGeneralInfo->CmnDzongkhagId): ?>selected="selected"<?php endif; ?>><?php echo $dzongkhag->NameEn; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-3">	
+			<div class="form-group">
+				<label class="control-label">Gewog <span class="font-red">*</span></label>
+				<input type="text" class="changeoflocation form-control isbhutanese" value="<?php if(!empty($consultantGeneralInfo->Gewog)): ?><?php echo $consultantGeneralInfo->Gewog; ?><?php else: ?><?php echo Input::old('Gewog'); ?><?php endif; ?>" name="Gewog">
+			</div>
+		</div>
+		<div class="col-md-3">	
+			<div class="form-group">
+				<label class="control-label">Village <span class="font-red">*</span></label>
+				<input type="text" class="changeoflocation form-control isbhutanese	" value="<?php if(!empty($consultantGeneralInfo->Village)): ?><?php echo $consultantGeneralInfo->Village; ?><?php else: ?><?php echo Input::old('Village'); ?><?php endif; ?>" name="Village">
+			</div>
+		</div>	
+		<?php /*<div class="col-md-3">	
+			<div class="form-group">
+				<label class="control-label">Address <span class="font-red">*</span></label>
+				<textarea class="form-control required changeoflocation" name="RegisteredAddress"><?php if(!empty($consultantGeneralInfo->RegisteredAddress)): ?><?php echo $consultantGeneralInfo->RegisteredAddress; ?><?php else: ?><?php echo Input::old('RegisteredAddress'); ?><?php endif; ?></textarea>
+			</div>
+		</div>*/ ?>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<h5 class="font-blue-madison bold">Correspondence Address</h5>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="control-label">Dzongkhag <span class="font-red">*</span></label>
+				<select name="CmnRegisteredDzongkhagId" class="form-control select2me isbhutanese required changeoflocation">
+					<option value="">---SELECT ONE---</option>
+					<?php foreach($dzongkhags as $dzongkhag): ?>
+						<option value="<?php echo $dzongkhag->Id; ?>" <?php if($dzongkhag->Id==Input::old('CmnRegisteredDzongkhagId') || $dzongkhag->Id==$consultantGeneralInfo->CmnRegisteredDzongkhagId): ?>selected="selected"<?php endif; ?>><?php echo $dzongkhag->NameEn; ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="control-label">Office Establishment Address <span class="font-red">*</span></label>
+				<input type="text" class="form-control required changeoflocation" name="Address" value="<?php if(!empty($consultantGeneralInfo->Address)): ?><?php echo $consultantGeneralInfo->Address; ?><?php else: ?><?php echo Input::old('Address'); ?><?php endif; ?>" />
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="control-label">Email <span class="font-red">* </span><a role="button" tabindex="0" data-toggle="popover" data-container="body" data-trigger="focus" class="popoverdefaultopen" data-placement="top" title="<span class='font-green-seagreen'>Email</span>" data-content="<p class='text-justify'>This Email address will be used as username for your account and to receive email from Construction Development Board (CDB). Please provide a valid Email address inorder not to lose important messages from CDB.</p>"><i class="fa fa-question-circle"></i></a></label>
+				<input type="text" name="Email" value="<?php if(!empty($consultantGeneralInfo->Email)): ?><?php echo $consultantGeneralInfo->Email; ?><?php else: ?><?php echo Input::old('Email'); ?><?php endif; ?>" class="form-control required" placeholder="Email">
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="control-label">Mobile No. <span class="font-red">* </span><a role="button" tabindex="0" data-toggle="popover" data-container="body" data-trigger="focus" class="popoverdefaultopen" data-placement="top" title="<span class='font-green-seagreen'>Mobile No.</span>" data-content="<p class='text-justify'>This Mobile No. will be used to receive sms alerts from Construction Development Board (CDB). Please provide a valid Mobile No. registered with Tashi Cell/B-Mobile inorder not to lose important messages from CDB.</p>"><i class="fa fa-question-circle"></i></a></label>	
+				<input type="text" name="MobileNo" value="<?php if(!empty($consultantGeneralInfo->MobileNo)): ?><?php echo $consultantGeneralInfo->MobileNo; ?><?php else: ?><?php echo Input::old('MobileNo'); ?><?php endif; ?>" class="form-control number fixedlengthvalidate changeoflocation
+changeoflocation" data-fixedlength="8" placeholder="Mobile No.">
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="control-label">Telephone No. <span class="font-red">*</span></label>
+				<input type="text" name="TelephoneNo" value="<?php if(!empty($consultantGeneralInfo->TelephoneNo)): ?><?php echo $consultantGeneralInfo->TelephoneNo; ?><?php else: ?><?php echo Input::old('TelephoneNo'); ?><?php endif; ?>" class="form-control required changeoflocation
+changeoflocation" placeholder="Telephone">
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="control-label">Fax No.</label>
+				<input type="text" name="FaxNo" value="<?php if(!empty($consultantGeneralInfo->FaxNo)): ?><?php echo $consultantGeneralInfo->FaxNo; ?><?php else: ?><?php echo Input::old('FaxNo'); ?><?php endif; ?>" class="form-control changeoflocation
+changeoflocation" placeholder="Fax No.">
+			</div>
+		</div>
+	</div>
+</div>
+<?php endforeach; ?>
+<div class="row">
+	<div class="col-md-12">
+		<div class="form-body">
+			<h5 class="font-blue-madison bold">Name of Owner, Partners and/or others with Controlling Intrest</h5>
+			<div class="table-responsive">
+				<table id="ownerpartnerdetails" class="table table-bordered table-striped table-condensed">
+					<thead>
+						<tr>
+							<th>
+							</th>
+							<th class="">
+								 CID/Work Permit No.
+							</th>
+							<th width="10%">
+								Salutation
+							</th>
+							<th>
+								 Name
+							</th>
+							<th width="10%">
+								 Sex
+							</th>
+							<th class="">
+								Country
+							</th>
+							<th>
+								Designation
+							</th>
+							<th>
+								Show in Certificate
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php $count=1; ?>
+						<?php $__empty_1 = true; foreach($consultantPartnerDetails as $consultantPartnerDetail): $__empty_1 = false; ?>
+						<?php $randomKey=randomString();?>
+						<tr>
+							<td>
+								<button type="button" class="deletetablerow"><i class="fa fa-times"></i></button>
+							</td>
+							<td>
+								<input type="text" name="ConsultantHumanResourceModel[<?php echo $randomKey; ?>][CIDNo]" value="<?php echo $consultantPartnerDetail->CIDNo; ?>" class="form-control input-sm resetKeyForNew required changeofowner <?php /*checkhrtr*/ ?> cidforwebservicetr">
+							</td>
+							<td>
+								<input type="hidden" name="ConsultantHumanResourceModel[<?php echo $randomKey; ?>][Id]" value="<?php echo $consultantPartnerDetail->Id; ?>" class="resetKeyForNew"/>
+								<select name="ConsultantHumanResourceModel[<?php echo $randomKey; ?>][CmnSalutationId]" class="form-control input-sm resetKeyForNew required changeofowner">
+									<option value="">---SELECT---</option>
+									<?php foreach($salutations as $salutation): ?>
+									<option value="<?php echo $salutation->Id; ?>" <?php if($salutation->Id==$consultantPartnerDetail->CmnSalutationId): ?>selected="selected"<?php endif; ?>><?php echo $salutation->Name; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</td>
+							<td>
+								<input type="text" name="ConsultantHumanResourceModel[<?php echo $randomKey; ?>][Name]" value="<?php echo $consultantPartnerDetail->Name; ?>" class="form-control input-sm resetKeyForNew required changeofowner namefromwebservice">
+							</td>
+							<td>
+								<select name="ConsultantHumanResourceModel[<?php echo $randomKey; ?>][Sex]" class="form-control input-sm resetKeyForNew required changeofowner sexfromwebservice">
+									<option value="">---SELECT ONE---</option>
+									<option value="M"  <?php if($consultantPartnerDetail->Sex=="M"): ?>selected="selected"<?php endif; ?>>Male</option>
+									<option value="F"  <?php if($consultantPartnerDetail->Sex=="F"): ?>selected="selected"<?php endif; ?>>Female</option>
+								</select>
+							</td>
+							<td>
+								<select name="ConsultantHumanResourceModel[<?php echo $randomKey; ?>][CmnCountryId]" class="form-control input-sm resetKeyForNew required changeofowner notclearfornew countryfromwebservice">
+									<option value="">---SELECT ONE---</option>
+									<?php foreach($countries as $country): ?>
+										<option value="<?php echo $country->Id; ?>" <?php if($consultantPartnerDetail->CmnCountryId==$country->Id || $country->Name=="Bhutan"): ?>selected="selected"<?php endif; ?>><?php echo $country->Name; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</td>
+							<td>
+								<select name="ConsultantHumanResourceModel[<?php echo $randomKey; ?>][CmnDesignationId]" class="form-control input-sm resetKeyForNew changeofowner">
+									<option value="">---SELECT ONE---</option>
+									<?php foreach($designations as $designation): ?>
+										<option value="<?php echo $designation->Id; ?>" <?php if($consultantPartnerDetail->CmnDesignationId==$designation->Id): ?>selected="selected"<?php endif; ?>><?php echo $designation->Name; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</td>
+							<td>
+								<input type="checkbox" name="ConsultantHumanResourceModel[<?php echo $randomKey; ?>][ShowInCertificate]" class="checkboxes resetKeyForNew notclearfornew addrowcheckboxsinglecheck changeofowner" value="1" <?php if((int)$consultantPartnerDetail->ShowInCertificate==1 || (empty($consultantPartnerDetail->ShowInCertificate) && $count==1)): ?>checked="checked"<?php endif; ?>/>
+								<input type="hidden" name="ConsultantHumanResourceModel[<?php echo $randomKey; ?>][IsPartnerOrOwner]" class="resetKeyForNew notclearfornew changeofowner" value="1"/>
+							</td>
+						</tr>
+						<?php $count++; ?>
+						<?php endforeach; if ($__empty_1): ?>
+							<?php $randomKey = randomString(); ?>
+							<tr>
+								<td>
+									<button type="button" class="deletetablerow"><i class="fa fa-times"></i></button>
+								</td>
+								<td>
+									<input type="text" name="ConsultantHumanResourceModel[<?php echo $randomKey; ?>][CIDNo]" value="" class="form-control input-sm resetKeyForNew required <?php /*checkhrtr*/ ?> changeofowner cidforwebservicetr">
+								</td>
+								<td>
+									<input type="hidden" name="ConsultantHumanResourceModel[<?php echo $randomKey; ?>][Id]" value="" class="resetKeyForNew"/>
+									<select name="ConsultantHumanResourceModel[<?php echo $randomKey; ?>][CmnSalutationId]" class="form-control input-sm resetKeyForNew required changeofowner">
+										<option value="">---SELECT---</option>
+										<?php foreach($salutations as $salutation): ?>
+											<option value="<?php echo $salutation->Id; ?>" ><?php echo $salutation->Name; ?></option>
+										<?php endforeach; ?>
+									</select>
+								</td>
+								<td>
+									<input type="text" name="ConsultantHumanResourceModel[<?php echo $randomKey; ?>][Name]" value="" class="form-control input-sm resetKeyForNew required changeofowner namefromwebservice">
+								</td>
+								<td>
+									<select name="ConsultantHumanResourceModel[<?php echo $randomKey; ?>][Sex]" class="form-control input-sm resetKeyForNew required changeofowner sexfromwebservice">
+										<option value="">---SELECT ONE---</option>
+										<option value="M">Male</option>
+										<option value="F">Female</option>
+									</select>
+								</td>
+								<td>
+									<select name="ConsultantHumanResourceModel[<?php echo $randomKey; ?>][CmnCountryId]" class="form-control input-sm resetKeyForNew required changeofowner notclearfornew countryfromwebservice">
+										<option value="">---SELECT ONE---</option>
+										<?php foreach($countries as $country): ?>
+											<option value="<?php echo $country->Id; ?>" <?php if($country->Name=="Bhutan"): ?>selected="selected"<?php endif; ?>><?php echo $country->Name; ?></option>
+										<?php endforeach; ?>
+									</select>
+								</td>
+								<td>
+									<select name="ConsultantHumanResourceModel[<?php echo $randomKey; ?>][CmnDesignationId]" class="form-control input-sm resetKeyForNew changeofowner">
+										<option value="">---SELECT ONE---</option>
+										<?php foreach($designations as $designation): ?>
+											<option value="<?php echo $designation->Id; ?>" ><?php echo $designation->Name; ?></option>
+										<?php endforeach; ?>
+									</select>
+								</td>
+								<td>
+									<input type="checkbox" name="ConsultantHumanResourceModel[<?php echo $randomKey; ?>][ShowInCertificate]" class="checkboxes resetKeyForNew notclearfornew addrowcheckboxsinglecheck changeofowner" value="1" checked="checked"/>
+									<input type="hidden" name="ConsultantHumanResourceModel[<?php echo $randomKey; ?>][IsPartnerOrOwner]" class="resetKeyForNew notclearfornew changeofowner" value="1"/>
+								</td>
+							</tr>
+						<?php endif; ?>
+						<tr class="notremovefornew">
+							<td>
+								<button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+							</td>
+							<td colspan="7"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="form-actions">
+				<div class="btn-set">
+					<?php if((bool)$isEdit==null): ?>
+					<button type="submit" class="btn blue">Continue <i class="fa fa-arrow-circle-o-right"></i></button>
+					<a href="<?php echo URL::to('ezhotin/home/'.Session::get('UserViewerType')); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+					<?php else: ?>
+					<button type="submit" class="btn blue">Update <i class="fa fa-arrow-circle-o-right"></i></button>
+						<?php if(!empty($redirectUrl)): ?>
+							<a href="<?php echo URL::to($redirectUrl.'/'.$isEdit); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+						<?php else: ?>
+							<a href="<?php echo URL::to('consultant/confirmregistration'); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+						<?php endif; ?>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

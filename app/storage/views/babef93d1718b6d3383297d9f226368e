@@ -1,0 +1,61 @@
+<?php $__env->startSection('content'); ?>
+	<?php if($nonBhutanese): ?>
+		<center><strong style="color: darkorange; z-index: 999999; font-weight: bolder;">"ONLY FOR INTERNATIONAL COMPETITIVE BIDDING"</strong></center>
+	<?php endif; ?>
+<table class="with-outer-border-only">
+	<tbody>
+		<tr>
+			<td class="small-medium">CDB Registration No.:</td>
+			<td class="certificate-detail"><?php echo $info[0]->CDBNo; ?></td>
+			<td rowspan="4" class="text-center">
+				<p class="heading">Contractor's Name & CID No.</p><br />
+				<span class="certificate-detail"><i><?php echo $contractorName; ?></i><br />
+				<i>(<?php echo $contractorCIDNo; ?>)</i></span>
+			</td>
+		</tr>
+		<tr>
+			<td class="small-medium">Initial Registration Dt.:</td>
+			<td class="certificate-detail"><?php echo convertDateToClientFormat($InitialDate); ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium">Up-Gr/Revalidation Dt.:</td>
+			<td class="certificate-detail"><?php echo convertDateToClientFormat($info[0]->ApplicationDate); ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium">Registration Expiry Dt.:</td>
+			<td class="certificate-detail"><?php echo convertDateToClientFormat($info[0]->RegistrationExpiryDate); ?></td>
+		</tr>
+	</tbody>
+</table>
+<p class="description">
+	This is to certify that M/s <i><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="certificate-detail"><?php echo $info[0]->NameOfFirm; ?></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></i> <?php if($nonBhutanese): ?><?php echo "from"; ?><?php else: ?><?php echo "of"; ?><?php endif; ?> <i><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="certificate-detail"><?php if($nonBhutanese): ?><?php echo $info[0]->Country; ?><?php else: ?><?php echo $info[0]->Dzongkhag; ?><?php endif; ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></strong></i> <?php if(!$nonBhutanese): ?><?php echo "Dzongkhag"; ?><?php endif; ?> is a<?php if($nonBhutanese): ?><?php echo " <u><strong>Non-Bhutanese</strong></u>"; ?><?php endif; ?> registered Construction Firm with the Construction Development Board. The firm is registered in the following categories and classifications:
+</p>
+<table class="data-large">
+	<thead>
+		<tr class="success">
+			<th>
+				Category
+			</th>
+			<th>
+				Classification
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php foreach($contractorWorkClassifications as $contractorWorkClassification): ?>
+		<tr>
+			<td><?php echo $contractorWorkClassification->Code.' - '.$contractorWorkClassification->Category; ?></td>
+			<td class="certificate-detail">
+				<?php if((bool)$contractorWorkClassification->ApprovedClassification!=NULL): ?>
+				<?php echo $contractorWorkClassification->ApprovedClassification; ?>
+
+				<?php else: ?> 
+				<strong>-</strong>
+				<?php endif; ?>
+			</td>
+		</tr>
+		<?php endforeach; ?>
+	</tbody>
+</table>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('certificatemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

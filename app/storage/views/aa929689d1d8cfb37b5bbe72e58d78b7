@@ -1,0 +1,52 @@
+<?php $__env->startSection('content'); ?>
+    <div class="portlet light bordered">
+        <?php foreach($hrDetails as $details): ?>
+         
+        <div class="portlet-body flip-scroll">
+            <?php if(Input::get('export')!='print'): ?>
+            <?php echo Form::open(array('url'=>'etoolsysadm/replaceCinetHR','method'=>'post')); ?>
+
+            <div class="form-body">
+                <div class="row">
+                    <?php echo Form::hidden('Id',$details->Id); ?>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">CID Number</label>
+                            <input type="text" class="form-control input-sm" value="<?php echo $details->CIDNo; ?>"/>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">New CID Number</label>
+                            <input type="text" class="form-control input-sm required" name="CID_No" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">New Name</label>
+                            <input type="text" class="form-control input-sm required" name="Name" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Request Letter No</label>
+                            <input type="text" class="form-control input-sm required" name="RequestLetterNo" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="btn-set">
+                            <button type="submit" class="btn blue-hoki btn-sm updateaction">Replace</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php echo Form::close(); ?>
+
+            <?php endif; ?>
+        </div>
+        <?php endforeach; ?>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

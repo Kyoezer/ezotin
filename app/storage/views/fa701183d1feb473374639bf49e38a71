@@ -1,0 +1,181 @@
+<?php $__env->startSection('content'); ?>
+<div>
+    <table>
+        <thead>
+        <tr>
+            <th colspan="12"><?php if(isset($overrunReport)): ?><?php echo "Cost overrun report"; ?><?php else: ?><?php echo "Contractor's Track Record"; ?><?php endif; ?></th>
+        </tr>
+        <tr>
+            <th colspan="12"></th>
+        </tr>
+        <?php if($cdbNo != ''): ?>
+            <tr>
+                <th colspan="6"><i>CDB No:</i>&nbsp;<?php echo $cdbNo; ?></th>
+            </tr>
+        <?php endif; ?>
+        <?php if($dzongkhag != ''): ?>
+            <tr>
+                <th colspan="6"><i>Dzongkhag:</i>&nbsp;<?php echo $dzongkhag; ?></th>
+            </tr>
+        <?php endif; ?>
+        <?php if($category != ''): ?>
+            <tr>
+                <th colspan="6"><i>Category:</i>&nbsp;<?php echo $category; ?></th>
+            </tr>
+        <?php endif; ?>
+        <?php if($procuringAgency != ''): ?>
+            <tr>
+                <th colspan="6" style="text-align: left;"><i>Procuring Agency:</i>&nbsp;<?php echo $procuringAgency; ?></th>
+            </tr>
+        <?php endif; ?>
+        <tr><th colspan="13"></th></tr>
+        <tr class="border-column">
+            <th>Sl.No.</th>
+            <?php if(!isset($overrunReport)): ?>
+                <th>Year</th>
+            <?php else: ?>
+                <?php if($overrunReport != 2): ?>
+                    <th>Year</th>
+                <?php endif; ?>
+            <?php endif; ?>
+            <?php if(isset($overrunReport) && $overrunReport == 1): ?>
+                <th>
+                    Firm
+                </th>
+            <?php endif; ?>
+            <th>Agency</th>
+            <?php if(!isset($overrunReport)): ?>
+                <th>Work Id</th>
+                <th>Work Name</th>
+                <th>Category</th>
+            <?php else: ?>
+                <?php if($overrunReport != 2): ?>
+                    <th>Work Id</th>
+                    <th>Work Name</th>
+                    <th>Category</th>
+                <?php endif; ?>
+            <?php endif; ?>
+
+            <th>Awarded Amount (Nu.)</th>
+            <th>Final Amount (Nu.)</th>
+            <?php if(isset($overrunReport)): ?>
+                <th>Cost Overrun (Nu.)</th>
+            <?php endif; ?>
+            <?php if(!isset($overrunReport)): ?>
+                <th>Dzongkhag</th>
+                <th>Status</th>
+                <th>APS scoring</th>
+                <th>APS (100)</th>
+                <th>Remarks</th>
+            <?php else: ?>
+                <?php if($overrunReport != 2): ?>
+                    <th>Dzongkhag</th>
+                    <th>Status</th>
+                    <th>APS scoring</th>
+                    <th>APS (100)</th>
+                    <th>Remarks</th>
+                <?php endif; ?>
+            <?php endif; ?>
+
+        </tr>
+        </thead>
+        <tbody>
+        <?php $count = 1; $awardedAmount = 0; $totalCostOverrun = 0;?>
+        <?php $__empty_1 = true; foreach($workDetails as $workDetail): $__empty_1 = false; ?>
+            <tr>
+                <td><?php echo $count; ?></td>
+                <?php if(!isset($overrunReport)): ?>
+                    <td><?php echo $workDetail->Year; ?></td>
+                <?php else: ?>
+                    <?php if($overrunReport != 2): ?>
+                        <td><?php echo $workDetail->Year; ?></td>
+                    <?php endif; ?>
+                <?php endif; ?>
+                <?php if(isset($overrunReport) && $overrunReport == 1): ?>
+                    <td>
+                        <?php echo $workDetail->Contractor; ?> (<?php echo $workDetail->CDBNo; ?>)
+                    </td>
+                <?php endif; ?>
+                <td><?php echo $workDetail->Agency; ?></td>
+                <?php if(!isset($overrunReport)): ?>
+                    <td><?php echo $workDetail->WorkId; ?></td>
+                    <td><?php echo strip_tags($workDetail->NameOfWork); ?></td>
+                    <td><?php echo $workDetail->Category; ?></td>
+                <?php else: ?>
+                    <?php if($overrunReport != 2): ?>
+                        <td><?php echo $workDetail->WorkId; ?></td>
+                        <td><?php echo strip_tags($workDetail->NameOfWork); ?></td>
+                        <td><?php echo $workDetail->Category; ?></td>
+                    <?php endif; ?>
+                <?php endif; ?>
+
+                <td class="text-right"><?php echo number_format($workDetail->AwardedAmount,2); ?></td>
+                <td class="text-right"><?php echo number_format($workDetail->FinalAmount,2); ?></td>
+                <?php if(isset($overrunReport)): ?>
+                    <?php $costOverRun = (doubleval($workDetail->FinalAmount)-doubleval($workDetail->AwardedAmount)); $totalCostOverrun+=$costOverRun; ?>
+                    <td class="text-right"><?php echo number_format($costOverRun,2); ?></td>
+                <?php endif; ?>
+
+                <?php if(!isset($overrunReport)): ?>
+                    <td><?php echo $workDetail->Dzongkhag; ?></td>
+                    <td><?php echo $workDetail->Status; ?><?php $awardedAmount+=($workDetail->ReferenceNo == 3001)?1:0;?></td>
+                    <td>
+                        <?php if((int)$workDetail->APS == 100) {
+                            $points = 10;
+                        }
+                        if(((int)$workDetail->APS < 100) && ((int)$workDetail->APS >= 50)) {
+                            $points = 10 - (ceil((100 - (int)$workDetail->APS) / 5));
+                        }
+                        if((int)$workDetail->APS < 50){
+                            $points = 0;
+                        }
+                        ?>
+                        <?php echo $points; ?>
+
+                    </td>
+                    <td><?php echo $workDetail->APS; ?></td>
+                    <td><?php echo $workDetail->Remarks; ?></td>
+                <?php else: ?>
+                    <?php if($overrunReport != 2): ?>
+                        <td><?php echo $workDetail->Dzongkhag; ?></td>
+                        <td><?php echo $workDetail->Status; ?><?php $awardedAmount+=($workDetail->ReferenceNo == 3001)?1:0;?></td>
+                        <td>
+                            <?php if((int)$workDetail->APS == 100) {
+                                $points = 10;
+                            }
+                            if(((int)$workDetail->APS < 100) && ((int)$workDetail->APS >= 50)) {
+                                $points = 10 - (ceil((100 - (int)$workDetail->APS) / 5));
+                            }
+                            if((int)$workDetail->APS < 50){
+                                $points = 0;
+                            }
+                            ?>
+                            <?php echo $points; ?>
+
+                        </td>
+                        <td><?php echo $workDetail->APS; ?></td>
+                        <td><?php echo $workDetail->Remarks; ?></td>
+                    <?php endif; ?>
+                <?php endif; ?>
+
+            </tr>
+            <?php $count++ ?>
+        <?php endforeach; if ($__empty_1): ?>
+            <tr><td colspan="<?php if(isset($overrunReport)): ?><?php if($overrunReport == 1): ?><?php echo "15"; ?><?php else: ?><?php echo "5"; ?><?php endif; ?> <?php else: ?><?php echo "13"; ?>}<?php endif; ?>" class="font-red text-center">No data to display</td></tr>
+        <?php endif; ?>
+        <?php if(isset($overrunReport)): ?>
+            <?php if(count($workDetails) > 0): ?>
+                <tr>
+                    <td colspan="<?php if(isset($overrunReport)): ?><?php if($overrunReport == 1): ?><?php echo "9"; ?><?php else: ?><?php echo "4"; ?><?php endif; ?> <?php endif; ?>" class="bold text-right">Total:</td>
+                    <td class="text-right"><?php echo number_format($totalCostOverrun); ?></td>
+                    <?php if($overrunReport == 1): ?>
+                        <td colspan="5"></td>
+                    <?php endif; ?>
+                </tr>
+            <?php endif; ?>
+        <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportexcelmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

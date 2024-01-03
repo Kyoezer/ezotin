@@ -1,0 +1,57 @@
+<html>
+    <body>
+        <table>
+            <thead>
+            <tr>
+                <th colspan="13">List of Consultant with service avail</th>
+            </tr>
+            <?php foreach($parametersForPrint as $key=>$value): ?>
+                <tr>
+                    <th><?php echo $key; ?>:</th><th> <?php echo $value; ?></th>
+                </tr>
+            <?php endforeach; ?>
+            <tr><th colspan="13"></th></tr>
+            <tr>
+                <th>
+                    Sl.No.
+                </th>
+                <th class="order">
+                CDB No.
+                </th>
+                <th>
+                    Name of Firm
+                </th>
+                <th>
+                    Application Date
+                </th>
+                <th class="">
+                    Application Approved Date
+                </th>
+                <th class="">
+                    Service Type
+                </th>
+                      
+            </tr>
+            </thead>
+            <tbody>
+            <?php $count = 1; ?>
+            <?php $__empty_1 = true; foreach($consultantLists as $consultant): $__empty_1 = false; ?>
+            <tr>
+                    <td><?php echo $count; ?></td>
+                    <td><?php echo $consultant->CDBNo; ?></td>
+                    <td><?php echo $consultant->NameOfFirm; ?></td>
+                    <td><?php echo $consultant->ApplicationDate; ?></td>
+                    <td><?php echo $consultant->RegistrationApprovedDate; ?></td>
+                    <td><?php echo $consultant->ServiceType; ?></td>
+       
+                </tr>
+                <?php $count++; ?>
+            <?php endforeach; if ($__empty_1): ?>
+                <tr>
+                    <td colspan="14" class="text-center font-red">No data to display!</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,65 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php echo HTML::script('assets/global/scripts/sys.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption font-green-seagreen">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject">Edit Services for Application # 6353 (CDB No. 6276)</span>
+		</div>
+	</div>
+	<?php echo Form::open(array('url' => 'contractor/saveeditedservice','role'=>'form','id'=>'roleregistration')); ?>
+
+	<div class="portlet-body form">
+		<div class="form-body">
+			<div class="row">
+				<div class="col-md-6">
+					<?php foreach($applicationDetails as $application): ?>
+					<strong>Firm Name:</strong> <?php echo $application->NameOfFirm.' ('.$application->CDBNo.')'; ?><br>
+					<strong>Application No:</strong> <?php echo $application->ReferenceNo; ?> <br>
+					<strong>Application Date:</strong> <?php echo convertDateToClientFormat($application->ApplicationDate); ?> <br>
+					<?php endforeach; ?>
+					<?php echo Form::hidden('Id',$application->Id); ?>
+
+					<div class="table-responsive">
+					<h5 class="font-blue-hoki bold">Services</h5>
+						<table id="sysrolemenumap" class="table table-condensed table-striped table-bordered table-hover table-responsive">
+							<thead>
+								<tr>
+									<th>Services Name</th>
+									<th width="5%">Applied</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach($services as $service): ?>
+									<?php $randomKey = randomString(); ?>
+									<tr>
+										<td>
+											<?php echo $service->Service; ?>
+
+										</td>
+										<td class="text-center">
+											<input type="checkbox" name="detailtable[<?php echo $randomKey; ?>][CmnServiceTypeId]" value="<?php echo $service->Id; ?>" class="toggle-hidden" <?php if((bool)$service->Check): ?>checked="checked"<?php endif; ?>/>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-actions">
+			<div class="btn-set">
+				<button type="submit" class="btn green">Update</button>
+				<a href="<?php echo URL::to('contractor/editservices'); ?>" class="btn red">Cancel</a>
+			</div>
+		</div>
+	</div>
+	<?php echo Form::close(); ?>
+
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

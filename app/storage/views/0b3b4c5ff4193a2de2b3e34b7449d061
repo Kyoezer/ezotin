@@ -1,0 +1,75 @@
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/global/scripts/contractor.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption font-green-seagreen">
+                        <i class="fa fa-cogs"></i>
+                        <span class="caption-subject">Edit Audit Memo</span>
+                        <?php /*<a href="<?php echo URL::to('contractor/addtraining'); ?>" class="btn btn-xs green"><i class="fa fa-plus"></i> Add New</a>*/ ?>
+                        <?php /*<a href="<?php echo URL::to('contractor/deletetraining'); ?>" class="btn btn-xs purple"><i class="fa fa-times"></i> Delete</a>*/ ?>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <?php echo Form::open(array("url"=>URL::to("contractor/saveeditedaudit"))); ?>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-condensed table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 36%;">Firm</th>
+                                <th>Agency</th>
+                                <th>Audit Period</th>
+                                <th>AIN</th>
+                                <th>Para No.</th>
+                                <th>Audit Observation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $__empty_1 = true; foreach($details as $detail): $__empty_1 = false; ?>
+                                <tr>
+                                    <td>
+                                        <?php echo $detail->Contractor; ?>
+
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="Id" value="<?php echo $detail->Id; ?>"/>
+                                        <input type="text" class="form-control input-sm" name="Agency" value="<?php echo $detail->Agency; ?>"/>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control input-sm" name="AuditedPeriod" value="<?php echo $detail->AuditedPeriod; ?>"/>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control input-sm" name="AIN" value="<?php echo $detail->AIN; ?>"/>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control input-sm" name="ParoNo" value="<?php echo $detail->ParoNo; ?>"/>
+                                    </td>
+                                    <td>
+                                        <textarea class="form-control" name="AuditObservation"><?php echo $detail->AuditObservation; ?></textarea>
+                                    </td>
+                                </tr>
+
+                            <?php endforeach; if ($__empty_1): ?>
+                                <tr>
+                                    <td colspan=6" class="text-center font-red">No data to display!</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+
+                    <button type="submit" class="btn btn-sm green"><i class="fa fa-save"></i> Save</button>
+                    <a href="<?php echo URL::to("contractor/auditmemo"); ?>" class="btn btn-sm purple"><i class="m-icon-swapleft m-icon-white"></i> Back</a>
+                    <?php echo Form::close(); ?>
+
+                </div>
+        </div>
+    </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

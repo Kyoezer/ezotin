@@ -1,0 +1,11 @@
+<?php $__env->startSection('main-content'); ?>
+<div class="row">
+	<div class="col-md-12">
+		<h4 class="head-title">Organogram</h4>
+		<center>
+			<?php echo HTML::image('uploads/organogram_2016.jpg','',array('class'=>'img-responsive')); ?>
+
+		</center>
+	</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('websitemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

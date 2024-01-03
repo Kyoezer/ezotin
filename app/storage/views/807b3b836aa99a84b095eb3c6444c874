@@ -1,0 +1,106 @@
+<?php $__env->startSection('content'); ?>
+<?php foreach($specializedTradeInformations as $specializedTradeInformation): ?>
+<p class="heading">Registration Details</p>
+<table class="data-large">
+	<tbody>
+		<?php if((int)$isFinalPrint==1): ?>
+		<tr>
+			<td class="small-medium"><strong>Current Status</strong></td>
+			<td><?php echo $specializedTradeInformation->CurrentStatus; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>SP No. </strong></td>
+			<td><?php echo $specializedTradeInformation->SPNo; ?></td>
+		</tr>
+		<?php endif; ?>
+		<tr>
+			<td class="small-medium"><strong>Name</strong></td>
+			<td><?php echo $specializedTradeInformation->Name; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>CID No.</strong></td>
+			<td><?php echo $specializedTradeInformation->CIDNo; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Dzongkhag</strong></td>
+			<td><?php echo $specializedTradeInformation->Dzongkhag; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Gewog</strong></td>
+			<td><?php echo $specializedTradeInformation->Gewog; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Village</strong></td>
+			<td><?php echo $specializedTradeInformation->Village; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Email</strong></td>
+			<td><?php echo $specializedTradeInformation->Email; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Mobile No.</strong></td>
+			<td><?php echo $specializedTradeInformation->MobileNo; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Telephone No.</strong></td>
+			<td><?php echo $specializedTradeInformation->TelephoneNo; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Employer Name</strong></td>
+			<td><?php echo 'M/s.'.$specializedTradeInformation->EmployerName; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Employer Address</strong></td>
+			<td><?php echo $specializedTradeInformation->EmployerAddress; ?></td>
+		</tr>
+	</tbody>
+</table>
+<p class="heading">Work Category</p>
+<table class="data-large">
+	<thead>
+		<tr>
+			<th>Category</th>
+			<th>Applied</th>
+			<?php if((int)$isFinalPrint==1): ?>
+			<th>Verified</th>
+			<th>Approved</th>
+			<?php endif; ?>
+		</tr>
+	</thead>
+	<tbody>
+		<?php foreach($workClasssifications as $workClasssification): ?>
+			<tr>
+				<td>
+					<?php echo $workClasssification->Code.' ('.$workClasssification->Name.')'; ?>
+
+				</td>
+				<td class="text-center">
+					<?php if((bool)$workClasssification->CmnAppliedCategoryId!=NULL): ?>
+					<img src="assets/cdb/layout/img/tick.png" />
+					<?php else: ?>
+					<i class="fa fa-times"></i>	
+					<strong>-</strong>
+					<?php endif; ?>
+				</td>
+				<?php if((int)$isFinalPrint==1): ?>
+					<td class="text-center">
+						<?php if((bool)$workClasssification->CmnVerifiedCategoryId!=NULL): ?>
+						<img src="assets/cdb/layout/img/tick.png" />
+						<?php else: ?>
+						<strong>-</strong>
+						<?php endif; ?>
+					</td>
+					<td class="text-center">
+						<?php if((bool)$workClasssification->CmnApprovedCategoryId!=NULL): ?>
+						<img src="assets/cdb/layout/img/tick.png" />
+						<?php else: ?>
+						<strong>-</strong>
+						<?php endif; ?>
+					</td>
+				<?php endif; ?>
+			</tr>
+		<?php endforeach; ?>
+</table>
+<?php endforeach; ?>	
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('printmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

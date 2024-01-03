@@ -1,0 +1,132 @@
+<html>
+    <body>
+        <table>
+            <thead>
+            <tr>
+                <th colspan="13">List of Expired Engineers</th>
+            </tr>
+                <?php if($cdbNo != ''): ?>
+                    <tr>
+                    <th><i>CDB No.:</i>&nbsp;<?php echo $cdbNo; ?></th>
+                        </tr>
+                <?php endif; ?>
+                <?php if($fromDate != ''): ?>
+                    <tr>
+                    <th><i>From Date:</i>&nbsp;<?php echo $fromDate; ?></th>
+                        </tr>
+                <?php endif; ?>
+                <?php if($toDate != ''): ?>
+                    <tr>
+                    <th><i>To Date:</i>&nbsp;<?php echo $toDate; ?></th>
+                        </tr>
+                <?php endif; ?>
+                <?php if($country != ''): ?>
+                    <tr>
+                    <th><i>Country:</i>&nbsp;<?php echo $country; ?></th>
+                        </tr>
+                <?php endif; ?>
+                <?php if($dzongkhag != ''): ?>
+                    <tr>
+                    <th><i>Dzongkhag:</i>&nbsp;<?php echo $dzongkhag; ?></th>
+                        </tr>
+                <?php endif; ?>
+                <?php if($trade != ''): ?>
+                <tr>
+                    <th><i>Trade:</i>&nbsp;<?php echo $trade; ?></th>
+                </tr>
+                <?php endif; ?>
+                <?php if($sector != ''): ?>
+                <tr>
+                    <th><i>Sector:</i>&nbsp;<?php echo $sector; ?></th>
+                </tr>
+                <?php endif; ?>
+                <?php if($status != ''): ?>
+                    <tr>
+                    <th><i>Status:</i>&nbsp;<?php echo $status; ?></th>
+                        </tr>
+                <?php endif; ?>
+                <tr>
+                    <th><i>First <?php echo $limit?$limit:20; ?> Records</i></th>
+                </tr>
+            <tr><th colspan="13"></th></tr>
+            <tr>
+                <th>
+                    Sl.No.
+                </th>
+                <th>
+                    CDB No.
+                </th>
+                <th>
+                    Name
+                </th>
+                <th class="">
+                    CID No.
+                </th>
+                <th class="">
+                    Sector
+                </th>
+                <th>
+                    Trade
+                </th>
+                <th>
+                    Country
+                </th>
+                <th class="">
+                    Dzongkhag
+                </th>
+                <th class="">
+                    Gewog
+                </th>
+                <th class="">
+                    Village
+                </th>
+                <th class="">
+                    Email
+                </th>
+                <th class="">
+                    Mobile No.
+                </th>
+                <th>
+                    Expiry Date
+                </th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php $count = 1; ?>
+            <?php $__empty_1 = true; foreach($engineersList as $engineer): $__empty_1 = false; ?>
+                <tr>
+                    <td><?php echo $count; ?></td>
+                    <td><?php echo $engineer->CDBNo; ?></td>
+                    <td><?php echo $engineer->EngineerName; ?></td>
+                    <td><?php echo $engineer->CIDNo; ?></td>
+                    <td><?php echo $engineer->Sector; ?></td>
+                    <td><?php echo $engineer->Trade; ?></td>
+                    <td><?php echo $engineer->Country; ?></td>
+                    <td><?php echo $engineer->Dzongkhag; ?></td>
+                    <td><?php echo $engineer->Gewog; ?></td>
+                    <td><?php echo $engineer->Village; ?></td>
+                    <td><?php echo $engineer->Email; ?></td>
+                    <td><?php echo $engineer->MobileNo; ?></td>
+                    <td><?php echo $engineer->ExpiryDate; ?></td>
+                    			<td >
+					
+							<?php if($engineer->ExpiryDate<=date('Y-m-d G:i:s')): ?>
+							<p class="font-red bold warning">Expired</p>
+							<?php else: ?>
+							<?php echo convertDateToClientFormat($engineer->ExpiryDate); ?>
+
+							<?php endif; ?>
+					
+					</td>
+                </tr>
+                <?php $count++; ?>
+            <?php endforeach; if ($__empty_1): ?>
+                <tr>
+                    <td colspan="14" class="font-red text-center">No data to display!</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </body>
+</html>

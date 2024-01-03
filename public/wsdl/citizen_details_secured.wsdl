@@ -1,0 +1,542 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns1="http://dto.ws.dcrc.gov.bt" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://business.ws.dcrc.gov.bt" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:intf="http://business.ws.dcrc.gov.bt" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://business.ws.dcrc.gov.bt">
+   <wsp:Policy xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" wsu:Id="UTOverTransport">
+      <wsp:ExactlyOne>
+         <wsp:All>
+            <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+               <wsp:Policy>
+                  <sp:TransportToken>
+                     <wsp:Policy>
+                        <sp:HttpsToken RequireClientCertificate="false"/>
+                     </wsp:Policy>
+                  </sp:TransportToken>
+                  <sp:AlgorithmSuite>
+                     <wsp:Policy>
+                        <sp:Basic256/>
+                     </wsp:Policy>
+                  </sp:AlgorithmSuite>
+                  <sp:Layout>
+                     <wsp:Policy>
+                        <sp:Lax/>
+                     </wsp:Policy>
+                  </sp:Layout>
+                  <sp:IncludeTimestamp/>
+               </wsp:Policy>
+            </sp:TransportBinding>
+            <sp:SignedSupportingTokens xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+               <wsp:Policy>
+                  <sp:UsernameToken sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient"/>
+               </wsp:Policy>
+            </sp:SignedSupportingTokens>
+         </wsp:All>
+      </wsp:ExactlyOne>
+   </wsp:Policy>
+   <wsdl:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://business.ws.dcrc.gov.bt">
+         <import namespace="http://dto.ws.dcrc.gov.bt"/>
+         <element name="getCitizenDetails">
+            <complexType>
+               <sequence>
+                  <element name="cid" type="string"/>
+               </sequence>
+            </complexType>
+         </element>
+         <element name="getCitizenDetailsResponse">
+            <complexType>
+               <sequence>
+                  <element name="getCitizenDetailsReturn" type="tns1:CitizenDetails"/>
+               </sequence>
+            </complexType>
+         </element>
+         <element name="getParentDetail">
+            <complexType>
+               <sequence>
+                  <element name="cid" type="string"/>
+               </sequence>
+            </complexType>
+         </element>
+         <element name="getParentDetailResponse">
+            <complexType>
+               <sequence>
+                  <element name="getParentDetailReturn" type="tns1:ParentDetail"/>
+               </sequence>
+            </complexType>
+         </element>
+         <element name="getPresentAddress">
+            <complexType>
+               <sequence>
+                  <element name="cid" type="string"/>
+               </sequence>
+            </complexType>
+         </element>
+         <element name="getPresentAddressResponse">
+            <complexType>
+               <sequence>
+                  <element name="getPresentAddressReturn" type="tns1:PresentAddress"/>
+               </sequence>
+            </complexType>
+         </element>
+         <element name="getCIDStatus">
+            <complexType>
+               <sequence>
+                  <element name="cid" type="string"/>
+               </sequence>
+            </complexType>
+         </element>
+         <element name="getCIDStatusResponse">
+            <complexType>
+               <sequence>
+                  <element name="getCIDStatusReturn" type="tns1:CIDStatus"/>
+               </sequence>
+            </complexType>
+         </element>
+         <element name="getContactDetails">
+            <complexType>
+               <sequence>
+                  <element name="cid" type="string"/>
+               </sequence>
+            </complexType>
+         </element>
+         <element name="getContactDetailsResponse">
+            <complexType>
+               <sequence>
+                  <element name="getContactDetailsReturn" type="string"/>
+               </sequence>
+            </complexType>
+         </element>
+         <element name="getSpouseDetails">
+            <complexType>
+               <sequence>
+                  <element name="cid" type="string"/>
+               </sequence>
+            </complexType>
+         </element>
+         <element name="getSpouseDetailsResponse">
+            <complexType>
+               <sequence>
+                  <element maxOccurs="unbounded" name="getSpouseDetailsReturn" type="tns1:SpouseDetails"/>
+               </sequence>
+            </complexType>
+         </element>
+         <element name="getHOHDetails">
+            <complexType>
+               <sequence>
+                  <element name="household" type="string"/>
+               </sequence>
+            </complexType>
+         </element>
+         <element name="getHOHDetailsResponse">
+            <complexType>
+               <sequence>
+                  <element name="getHOHDetailsReturn" type="tns1:CitizenDetails"/>
+               </sequence>
+            </complexType>
+         </element>
+         <element name="getCitizenImage">
+            <complexType>
+               <sequence>
+                  <element name="cidNo" type="string"/>
+               </sequence>
+            </complexType>
+         </element>
+         <element name="getCitizenImageResponse">
+            <complexType>
+               <sequence>
+                  <element name="getCitizenImageReturn" type="tns1:CitizenImage"/>
+               </sequence>
+            </complexType>
+         </element>
+      </schema>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://dto.ws.dcrc.gov.bt">
+         <complexType name="CitizenDetails">
+            <sequence>
+               <element name="cidNo" nillable="true" type="string"/>
+               <element name="country" nillable="true" type="string"/>
+               <element name="dob" nillable="true" type="string"/>
+               <element name="fatherName" nillable="true" type="string"/>
+               <element name="firstIssuedDate" nillable="true" type="string"/>
+               <element name="firstName" nillable="true" type="string"/>
+               <element name="gender" nillable="true" type="string"/>
+               <element name="householdNo" nillable="true" type="string"/>
+               <element name="lastName" nillable="true" type="string"/>
+               <element name="middleName" nillable="true" type="string"/>
+               <element name="mobileNumber" nillable="true" type="string"/>
+               <element name="motherName" nillable="true" type="string"/>
+               <element name="occupation" nillable="true" type="string"/>
+               <element name="permDzongkhagId" nillable="true" type="string"/>
+               <element name="permDzongkhagName" nillable="true" type="string"/>
+               <element name="permGewogId" nillable="true" type="string"/>
+               <element name="permGewogName" nillable="true" type="string"/>
+               <element name="permHouseNo" nillable="true" type="string"/>
+               <element name="permThramNo" nillable="true" type="string"/>
+               <element name="permVillageSerialNo" nillable="true" type="string"/>
+               <element name="permvillageName" nillable="true" type="string"/>
+               <element name="placeOfBirth" nillable="true" type="string"/>
+            </sequence>
+         </complexType>
+         <complexType name="ParentDetail">
+            <sequence>
+               <element name="fatherCID" nillable="true" type="string"/>
+               <element name="fatherName" nillable="true" type="string"/>
+               <element name="motherCID" nillable="true" type="string"/>
+               <element name="motherName" nillable="true" type="string"/>
+            </sequence>
+         </complexType>
+         <complexType name="PresentAddress">
+            <sequence>
+               <element name="CID" nillable="true" type="string"/>
+               <element name="presentDzongkhagId" nillable="true" type="string"/>
+               <element name="presentDzongkhagName" nillable="true" type="string"/>
+               <element name="presentGewogId" nillable="true" type="string"/>
+               <element name="presentGewogName" nillable="true" type="string"/>
+               <element name="presentHouseNo" nillable="true" type="string"/>
+               <element name="presentThramNo" nillable="true" type="string"/>
+               <element name="presentVillageName" nillable="true" type="string"/>
+               <element name="presentVillageSerialNo" nillable="true" type="string"/>
+            </sequence>
+         </complexType>
+         <complexType name="CIDStatus">
+            <sequence>
+               <element name="CID" nillable="true" type="string"/>
+               <element name="expirationDate" nillable="true" type="string"/>
+               <element name="issueDate" nillable="true" type="string"/>
+               <element name="status" nillable="true" type="string"/>
+            </sequence>
+         </complexType>
+         <complexType name="SpouseDetails">
+            <sequence>
+               <element name="firstName" nillable="true" type="string"/>
+               <element name="lastName" nillable="true" type="string"/>
+               <element name="middleName" nillable="true" type="string"/>
+               <element name="recordDate" nillable="true" type="string"/>
+               <element name="spouseCID" nillable="true" type="string"/>
+            </sequence>
+         </complexType>
+         <complexType name="CitizenImage">
+            <sequence>
+               <element name="cidNo" nillable="true" type="string"/>
+               <element name="leftThumb" nillable="true" type="base64Binary"/>
+               <element name="photo" nillable="true" type="base64Binary"/>
+               <element name="rightThumb" nillable="true" type="base64Binary"/>
+            </sequence>
+         </complexType>
+      </schema>
+   </wsdl:types>
+   <wsdl:message name="getHOHDetailsRequest">
+      <wsdl:part name="parameters" element="impl:getHOHDetails"/>
+   </wsdl:message>
+   <wsdl:message name="getHOHDetailsResponse">
+      <wsdl:part name="parameters" element="impl:getHOHDetailsResponse"/>
+   </wsdl:message>
+   <wsdl:message name="getSpouseDetailsRequest">
+      <wsdl:part name="parameters" element="impl:getSpouseDetails"/>
+   </wsdl:message>
+   <wsdl:message name="getSpouseDetailsResponse">
+      <wsdl:part name="parameters" element="impl:getSpouseDetailsResponse"/>
+   </wsdl:message>
+   <wsdl:message name="getCitizenDetailsRequest">
+      <wsdl:part name="parameters" element="impl:getCitizenDetails"/>
+   </wsdl:message>
+   <wsdl:message name="getCitizenDetailsResponse">
+      <wsdl:part name="parameters" element="impl:getCitizenDetailsResponse"/>
+   </wsdl:message>
+   <wsdl:message name="getPresentAddressRequest">
+      <wsdl:part name="parameters" element="impl:getPresentAddress"/>
+   </wsdl:message>
+   <wsdl:message name="getPresentAddressResponse">
+      <wsdl:part name="parameters" element="impl:getPresentAddressResponse"/>
+   </wsdl:message>
+   <wsdl:message name="getCitizenImageRequest">
+      <wsdl:part name="parameters" element="impl:getCitizenImage"/>
+   </wsdl:message>
+   <wsdl:message name="getCitizenImageResponse">
+      <wsdl:part name="parameters" element="impl:getCitizenImageResponse"/>
+   </wsdl:message>
+   <wsdl:message name="getCIDStatusRequest">
+      <wsdl:part name="parameters" element="impl:getCIDStatus"/>
+   </wsdl:message>
+   <wsdl:message name="getCIDStatusResponse">
+      <wsdl:part name="parameters" element="impl:getCIDStatusResponse"/>
+   </wsdl:message>
+   <wsdl:message name="getParentDetailRequest">
+      <wsdl:part name="parameters" element="impl:getParentDetail"/>
+   </wsdl:message>
+   <wsdl:message name="getParentDetailResponse">
+      <wsdl:part name="parameters" element="impl:getParentDetailResponse"/>
+   </wsdl:message>
+   <wsdl:message name="getContactDetailsRequest">
+      <wsdl:part name="parameters" element="impl:getContactDetails"/>
+   </wsdl:message>
+   <wsdl:message name="getContactDetailsResponse">
+      <wsdl:part name="parameters" element="impl:getContactDetailsResponse"/>
+   </wsdl:message>
+   <wsdl:portType xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" name="citizen_details_securedPortType" wsp:PolicyURIs="#UTOverTransport">
+      <wsdl:operation name="getHOHDetails">
+         <wsdl:input message="impl:getHOHDetailsRequest"/>
+         <wsdl:output message="impl:getHOHDetailsResponse" wsaw:Action="http://business.ws.dcrc.gov.bt/CitizenDetailsService/getHOHDetailsResponse"/>
+      </wsdl:operation>
+      <wsdl:operation name="getSpouseDetails">
+         <wsdl:input message="impl:getSpouseDetailsRequest"/>
+         <wsdl:output message="impl:getSpouseDetailsResponse" wsaw:Action="http://business.ws.dcrc.gov.bt/CitizenDetailsService/getSpouseDetailsResponse"/>
+      </wsdl:operation>
+      <wsdl:operation name="getCitizenDetails">
+         <wsdl:input message="impl:getCitizenDetailsRequest"/>
+         <wsdl:output message="impl:getCitizenDetailsResponse" wsaw:Action="http://business.ws.dcrc.gov.bt/CitizenDetailsService/getCitizenDetailsResponse"/>
+      </wsdl:operation>
+      <wsdl:operation name="getPresentAddress">
+         <wsdl:input message="impl:getPresentAddressRequest"/>
+         <wsdl:output message="impl:getPresentAddressResponse" wsaw:Action="http://business.ws.dcrc.gov.bt/CitizenDetailsService/getPresentAddressResponse"/>
+      </wsdl:operation>
+      <wsdl:operation name="getCitizenImage">
+         <wsdl:input message="impl:getCitizenImageRequest"/>
+         <wsdl:output message="impl:getCitizenImageResponse" wsaw:Action="http://business.ws.dcrc.gov.bt/CitizenDetailsService/getCitizenImageResponse"/>
+      </wsdl:operation>
+      <wsdl:operation name="getCIDStatus">
+         <wsdl:input message="impl:getCIDStatusRequest"/>
+         <wsdl:output message="impl:getCIDStatusResponse" wsaw:Action="http://business.ws.dcrc.gov.bt/CitizenDetailsService/getCIDStatusResponse"/>
+      </wsdl:operation>
+      <wsdl:operation name="getParentDetail">
+         <wsdl:input message="impl:getParentDetailRequest"/>
+         <wsdl:output message="impl:getParentDetailResponse" wsaw:Action="http://business.ws.dcrc.gov.bt/CitizenDetailsService/getParentDetailResponse"/>
+      </wsdl:operation>
+      <wsdl:operation name="getContactDetails">
+         <wsdl:input message="impl:getContactDetailsRequest"/>
+         <wsdl:output message="impl:getContactDetailsResponse" wsaw:Action="http://business.ws.dcrc.gov.bt/CitizenDetailsService/getContactDetailsResponse"/>
+      </wsdl:operation>
+   </wsdl:portType>
+   <wsdl:binding name="citizen_details_securedSoap11Binding" type="impl:citizen_details_securedPortType">
+      <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+      <wsdl:operation name="getHOHDetails">
+         <soap:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getSpouseDetails">
+         <soap:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getCitizenDetails">
+         <soap:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getPresentAddress">
+         <soap:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getCitizenImage">
+         <soap:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getParentDetail">
+         <soap:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getCIDStatus">
+         <soap:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getContactDetails">
+         <soap:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:binding name="citizen_details_securedSoap12Binding" type="impl:citizen_details_securedPortType">
+      <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+      <wsdl:operation name="getHOHDetails">
+         <soap12:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap12:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap12:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getSpouseDetails">
+         <soap12:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap12:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap12:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getCitizenDetails">
+         <soap12:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap12:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap12:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getPresentAddress">
+         <soap12:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap12:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap12:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getCitizenImage">
+         <soap12:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap12:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap12:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getParentDetail">
+         <soap12:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap12:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap12:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getCIDStatus">
+         <soap12:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap12:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap12:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getContactDetails">
+         <soap12:operation soapAction="" style="document"/>
+         <wsdl:input>
+            <soap12:body use="literal"/>
+         </wsdl:input>
+         <wsdl:output>
+            <soap12:body use="literal"/>
+         </wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:binding name="citizen_details_securedHttpBinding" type="impl:citizen_details_securedPortType">
+      <http:binding verb="POST"/>
+      <wsdl:operation name="getHOHDetails">
+         <http:operation location="getHOHDetails"/>
+         <wsdl:input>
+            <mime:content type="text/xml" part="parameters"/>
+         </wsdl:input>
+         <wsdl:output>
+            <mime:content type="text/xml" part="parameters"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getSpouseDetails">
+         <http:operation location="getSpouseDetails"/>
+         <wsdl:input>
+            <mime:content type="text/xml" part="parameters"/>
+         </wsdl:input>
+         <wsdl:output>
+            <mime:content type="text/xml" part="parameters"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getCitizenDetails">
+         <http:operation location="getCitizenDetails"/>
+         <wsdl:input>
+            <mime:content type="text/xml" part="parameters"/>
+         </wsdl:input>
+         <wsdl:output>
+            <mime:content type="text/xml" part="parameters"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getPresentAddress">
+         <http:operation location="getPresentAddress"/>
+         <wsdl:input>
+            <mime:content type="text/xml" part="parameters"/>
+         </wsdl:input>
+         <wsdl:output>
+            <mime:content type="text/xml" part="parameters"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getCitizenImage">
+         <http:operation location="getCitizenImage"/>
+         <wsdl:input>
+            <mime:content type="text/xml" part="parameters"/>
+         </wsdl:input>
+         <wsdl:output>
+            <mime:content type="text/xml" part="parameters"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getParentDetail">
+         <http:operation location="getParentDetail"/>
+         <wsdl:input>
+            <mime:content type="text/xml" part="parameters"/>
+         </wsdl:input>
+         <wsdl:output>
+            <mime:content type="text/xml" part="parameters"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getCIDStatus">
+         <http:operation location="getCIDStatus"/>
+         <wsdl:input>
+            <mime:content type="text/xml" part="parameters"/>
+         </wsdl:input>
+         <wsdl:output>
+            <mime:content type="text/xml" part="parameters"/>
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getContactDetails">
+         <http:operation location="getContactDetails"/>
+         <wsdl:input>
+            <mime:content type="text/xml" part="parameters"/>
+         </wsdl:input>
+         <wsdl:output>
+            <mime:content type="text/xml" part="parameters"/>
+         </wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
+   <wsdl:service name="citizen_details_secured">
+      <wsdl:port name="citizen_details_securedHttpsSoap11Endpoint" binding="impl:citizen_details_securedSoap11Binding">
+         <soap:address location="https://Srv3-Esb.g2c.local:8243/services/citizen_details_secured.citizen_details_securedHttpsSoap11Endpoint"/>
+      </wsdl:port>
+      <wsdl:port name="citizen_details_securedHttpsSoap12Endpoint" binding="impl:citizen_details_securedSoap12Binding">
+         <soap12:address location="https://Srv3-Esb.g2c.local:8243/services/citizen_details_secured.citizen_details_securedHttpsSoap12Endpoint"/>
+      </wsdl:port>
+      <wsdl:port name="citizen_details_securedHttpsEndpoint" binding="impl:citizen_details_securedHttpBinding">
+         <http:address location="https://Srv3-Esb.g2c.local:8243/services/citizen_details_secured.citizen_details_securedHttpsEndpoint"/>
+      </wsdl:port>
+   </wsdl:service>
+</wsdl:definitions>

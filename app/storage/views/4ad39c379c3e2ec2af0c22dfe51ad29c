@@ -1,0 +1,142 @@
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/global/scripts/report.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <?php $parameters = Input::all(); $parameters['export']='excel'; ?>
+                <i class="fa fa-cogs"></i>Work History &nbsp;&nbsp;<?php if(!Input::has('export')): ?> <a href="<?php echo route('etoolrpt.agencyworkhistory',$parameters); ?>" class="btn btn-sm green"><i class="fa fa-file-excel-o"></i> Export to Excel</a>    <?php $parameters['export'] = 'print'; ?><a href="<?php echo route('etoolrpt.agencyworkhistory',$parameters); ?>" class="btn btn-sm purple" target="_blank"><i class="fa fa-print"></i> Print</a><?php endif; ?>
+            </div>
+        </div>
+        <div class="portlet-body flip-scroll">
+            <?php if(Input::get('export') != 'print'): ?>
+            <?php echo Form::open(array('url'=>Request::url(),'method'=>'get')); ?>
+
+            <div class="note note-info">Please select at least one parameter to view results</div>
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Year</label>
+                            <select class="form-control select2me" name="Year">
+                                <option value="">---SELECT ONE---</option>
+                                <?php $yearStart = 2000; $yearEnd = (int)date('Y') + 10; ?>
+                                <?php for($i = $yearStart; $i<=$yearEnd; $i++): ?>
+                                    <option value="<?php echo $i; ?>" <?php if(Input::get('Year')==$i): ?>selected="selected"<?php endif; ?>><?php echo $i; ?></option>
+                                <?php endfor; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label">Work Start From</label>
+                        <div class="input-icon right">
+                            <i class="fa fa-calendar"></i>
+                            <input type="text" name="FromDate" class="form-control input-sm datepicker" value="<?php echo Input::get('FromDate'); ?>" readonly="readonly" placeholder="">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label">To</label>
+                        <div class="input-icon right">
+                            <i class="fa fa-calendar"></i>
+                            <input type="text" name="ToDate" class="form-control input-sm datepicker" value="<?php echo Input::get('ToDate'); ?>" readonly="readonly" placeholder="">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Status</label>
+                            <select class="form-control select2me" name="Status">
+                                <option value="">All</option>
+                                <option value="3001" <?php if(Input::get('Status') == '3001'): ?>selected="selected"<?php endif; ?>>Awarded</option>
+                                <option value="3003" <?php if(Input::get('Status') == '3003'): ?>selected="selected"<?php endif; ?>>Completed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Classification</label>
+                            <select class="form-control select2me" name="classification">
+                                <option value="">---SELECT ONE---</option>
+                                <?php foreach($classifications as $classification): ?>
+                                    <option value="<?php echo $classification->classification; ?>" <?php if($classification->classification == Input::get('classification')): ?>selected <?php endif; ?>><?php echo $classification->classification; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Category</label>
+                            <select class="form-control select2me" name="Category">
+                                <option value="">---SELECT ONE---</option>
+                                <?php foreach($categories as $category): ?>
+                                    <option value="<?php echo $category->ProjectCategory; ?>" <?php if($category->ProjectCategory == Input::get('Category')): ?>selected <?php endif; ?>><?php echo $category->ProjectCategory; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <?php if(!Input::has('export')): ?>
+                        <div class="col-md-2">
+                            <label class="control-label">&nbsp;</label>
+                            <div class="btn-set">
+                                <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                                <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php echo Form::close(); ?>
+
+            <?php else: ?>
+                <?php foreach(Input::all() as $key=>$value): ?>
+                    <?php if($key != 'export'): ?>
+                        <b><?php echo $key; ?>: <?php echo $value; ?></b><br>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+                    <br/>
+            <?php endif; ?>
+            <table class="table table-bordered table-striped table-condensed flip-content" id="">
+                <thead class="flip-content">
+                    <tr>
+                        <th>Sl#</th>
+                        <th>Year</th>
+                        <th>Work Id</th>
+                        <th>Name of Work</th>
+                        <th>Description</th>
+                        <th>Final Amount</th>
+                        <th>CDB No.</th>
+                        <th>Contractor</th>
+                        <th>Category</th>
+                        <th>Classification</th>
+                        <th>Dzongkhag</th>
+                        <th>Work Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php $__empty_1 = true; foreach($reportData as $data): $__empty_1 = false; ?>
+                    <tr>
+                        <td><?php echo $start++; ?></td>
+                        <td><?php echo $data->Year; ?></td>
+                        <td><?php echo $data->WorkId; ?></td>
+                        <td><?php echo $data->NameOfWork; ?></td>
+                        <td><?php echo $data->DescriptionOfWork; ?></td>
+                        <td><?php echo $data->FinalAmount; ?></td>
+                        <td><?php echo $data->CDBNo; ?></td>
+                        <td><?php echo $data->Contractor; ?></td>
+                        <td><?php echo $data->ProjectCategory; ?></td>
+                        <td><?php echo $data->classification; ?></td>
+                        <td><?php echo $data->Dzongkhag; ?></td>
+                        <td><?php echo $data->WorkStatus; ?></td>
+                    </tr>
+                <?php endforeach; if ($__empty_1): ?>
+
+                    <tr><td colspan="11" class="font-red text-center">No data to display</td></tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+            <?php pagination($noOfPages,Input::all(),Input::get('page'),"etoolrpt.selfworkhistory"); ?>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

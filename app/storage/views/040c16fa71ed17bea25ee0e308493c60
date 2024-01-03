@@ -1,0 +1,116 @@
+<?php $__env->startSection('content'); ?>
+    <div class="row">
+        <div class="col-md-12">
+			
+			<?php if(Session::get('successfully')): ?>
+                        <div class="alert alert-success alert-block">
+                            <button type="button" class="close" data-dismiss="alert">x</button>
+                            <strong><?php echo Session::get('successfully'); ?></strong>
+                        </div>
+                    <?php endif; ?>
+			<?php if(Session::get('successreviewer')): ?>
+                        <div class="alert alert-success alert-block">
+                            <button type="button" class="close" data-dismiss="alert">x</button>
+                            <strong><?php echo Session::get('successreviewer'); ?></strong>
+                        </div>
+                    <?php endif; ?>
+			<?php if(Session::get('approved')): ?>
+                        <div class="alert alert-success alert-block">
+                            <button type="button" class="close" data-dismiss="alert">x</button>
+                            <strong><?php echo Session::get('approved'); ?></strong>
+                        </div>
+                    <?php endif; ?>		
+			<?php if(Session::get('rejection')): ?>
+                        <div class="alert alert-danger alert-block">
+                            <button type="button" class="close" data-dismiss="alert">x</button>
+                            <strong><?php echo Session::get('rejection'); ?></strong>
+                        </div>
+                    <?php endif; ?>
+                    <?php if(Session::get('jcclaim')): ?>
+                        <div class="alert alert-success alert-block">
+                            <button type="button" class="close" data-dismiss="alert">x</button>
+                            <strong><?php echo Session::get('jcclaim'); ?></strong>
+                        </div>
+                    <?php endif; ?>
+                    <?php if(Session::get('jcalreadyclaim')): ?>
+                        <div class="alert alert-warning alert-block">
+                            <button type="button" class="close" data-dismiss="alert">x</button>
+                            <strong><?php echo Session::get('jcalreadyclaim'); ?></strong>
+                        </div>
+                    <?php endif; ?>
+                    
+            <div class="portlet light bordered">
+                <div class="portlet-body form">
+                    <!-- Striped table -->
+                    <div class="table-responsive card pmd-card">
+                        <!-- Table -->
+                        <table class="table pmd-table table-striped">
+                            <thead class="thead">
+                                <h3><b>Journal Coordinator </b><b id="Editor">( Managing Editor )</b></h3>
+                                <p class="home"><b>Group Task Table / </b><a href="journalcoordinatormytask"> My Task Table </a></p>
+                                <tr>
+                                    <th>Sl</th>
+                                    <th>Application No</th>
+                                    <th>Title</th>
+                                    <th>Submitted Date</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $i = 1; ?>
+                                <?php foreach($grouptask as $detail): ?>
+                                    <tr>
+                                        <td><?php echo $i++; ?></td>
+                                        <td><?php echo $detail->Application_No; ?></td>
+                                        <td class="title"><?php echo $detail->Name_of_Title; ?></td>
+                                        <td><?php echo date('d/m/Y', strtotime($detail->CreatedOn)); ?></td>
+                                        <td class="status"><b><?php echo $detail->Task_Status; ?></b></td>
+                                         <td>
+                                            <a
+                                                href="<?php echo url('/web/journalclaimapplication/' . $detail->Application_No); ?>">
+                                                <button class="btn btn-primary" type="button">Claim Application</button>
+                                            </a>
+                                        </td> 
+                                    </tr>
+                                <?php endforeach; ?>
+                               
+                                
+                            </tbody>
+                            
+                        </table>
+                        
+                        
+                </div>
+            </div>
+        </div>
+        <style>
+            .thead{
+		 background-color: lightgray   
+	}
+    .thead_mytask{
+        background-color: lightblue
+            }
+            .center{
+                text-align: center;
+                margin-bottom: 2cm;
+            }
+            textarea{
+                border: hidden;
+                width: 7cm;
+                background: #10000000;
+                resize: none;
+            }
+            .title{
+                max-width: 9cm;
+            }
+	#Editor{
+            color: green;
+        }
+	.status{
+                max-width: 5cm;
+            }
+        </style>
+    <?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

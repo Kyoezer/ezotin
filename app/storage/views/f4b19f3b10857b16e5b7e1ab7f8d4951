@@ -1,0 +1,115 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php echo HTML::script('assets/global/scripts/sys.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption font-green-seagreen">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject">Monitoring Report</span>
+
+		</div>
+	</div>
+	<?php echo Form::open(array('url' => URL::to('monitoringreport/saveoffice'),'role'=>'form','id'=>'roleregistration')); ?>
+
+	<div class="portlet-body flip-scroll">
+		<div class="form-body">
+			<div class="row">
+				<div class="col-md-12"><h4><strong>Office Establishment</strong></h4></div>
+			</div>
+		</div>
+			<div class="table-responsive">
+				<table class="table table-condensed table-bordered table-responsive flip-content" id="monitoring-office">
+					<thead class="flip-content">
+						<tr style="background: #f9f9f9;">
+							<th>Year</th>
+							<th style="width: 90px;">Office Establishment</th>
+							<th style="width: 60px!important;">Sign Board</th>
+							<th style="width: 80px!important;">Cannot be contacted</th>
+							<th>Deceiving on location change</th>
+							<th>Equipment Requirements</th>
+							<th>HR requirements</th>
+							<th>Remarks</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><?php echo isset($monitoringDetails[0]->Id)?$monitoringDetails[0]->Year:date('Y'); ?>
+
+								<input type="hidden" name="Year" value="<?php echo isset($monitoringDetails[0]->Id)?$monitoringDetails[0]->Year:date('Y'); ?>"/>
+								<input type="hidden" name="Id" value="<?php echo $monitoringDetails[0]->Id; ?>"/>
+								<input type="hidden" name="CrpContractorFinalId" value="<?php echo $monitoringDetails[0]->CrpContractorFinalId; ?>"/>
+							</td>
+							<td>
+								<?php echo Form::select('HasOfficeEstablishment',array('1'=>'Yes','0'=>'No'),$monitoringDetails[0]->HasOfficeEstablishment,array('class'=>'form-control input-sm input-small','style'=>'width: 80px!important;')); ?>
+
+							</td>
+							<td>
+								<?php echo Form::select('HasSignBoard',array('1'=>'Yes','0'=>'No'),$monitoringDetails[0]->HasSignBoard,array('class'=>'form-control input-sm input-small','style'=>'width: 70px!important;')); ?>
+
+							</td>
+							<td>
+								<?php echo Form::select('CannotBeContacted',array('1'=>'Yes','0'=>'No'),$monitoringDetails[0]->CannotBeContacted,array('class'=>'form-control input-sm input-small','style'=>'width: 70px!important;')); ?>
+
+							</td>
+							<td>
+								<?php echo Form::select('DeceivingOnLocationChange',array('1'=>'Yes','0'=>'No'),$monitoringDetails[0]->DeceivingOnLocationChange,array('class'=>'form-control input-sm input-small','style'=>'width: 80px!important;')); ?>
+
+							</td>
+							<td class="hr-eq-details">
+								<div class='checkbox-list'>
+									<?php foreach($monitoringEquipmentDetails as $eqDetail): ?>
+										<?php $randomKey = randomString(); ?>
+										<input type="hidden" name="MonitoringOfficeEquipment[<?php echo $randomKey; ?>][CmnEquipmentId]" value="<?php echo $eqDetail->CmnEquipmentId; ?>">
+										<input type="hidden" name="MonitoringOfficeEquipment[<?php echo $randomKey; ?>][RegistrationNo]" value="<?php echo $eqDetail->RegistrationNo; ?>">
+										<label><input type='checkbox' name="MonitoringOfficeEquipment[<?php echo $randomKey; ?>][Checked]" value="1" <?php if($eqDetail->Checked == 1): ?>checked="checked"<?php endif; ?>/><?php echo $eqDetail->Equipment; ?><?php if((bool)$eqDetail->RegistrationNo): ?><?php echo " (".$eqDetail->RegistrationNo.")"; ?><?php endif; ?></label>
+									<?php endforeach; ?>
+								</div>
+							</td>
+							<td class="hr-eq-details">
+								<div class='checkbox-list'>
+									<?php foreach($monitoringHRDetails as $hrDetail): ?>
+										<?php $randomKey = randomString(); ?>
+										<input type="hidden" name="MonitoringOfficeHR[<?php echo $randomKey; ?>][CmnDesignationId]" value="<?php echo $hrDetail->CmnDesignationId; ?>">
+										<input type="hidden" name="MonitoringOfficeHR[<?php echo $randomKey; ?>][CIDNo]" value="<?php echo $hrDetail->CIDNo; ?>">
+										<input type="hidden" name="MonitoringOfficeHR[<?php echo $randomKey; ?>][Name]" value="<?php echo $hrDetail->Name; ?>">
+										<input type="hidden" name="MonitoringOfficeHR[<?php echo $randomKey; ?>][Sex]" value="<?php echo $hrDetail->Sex; ?>">
+										<label><input type='checkbox' name="MonitoringOfficeHR[<?php echo $randomKey; ?>][Checked]" value="1" <?php if($hrDetail->Checked == 1): ?>checked="checked"<?php endif; ?>/><?php echo $hrDetail->Designation." (".$hrDetail->Personnel.")"; ?></label>
+									<?php endforeach; ?>
+								</div>
+							</td>
+							<td><textarea style="width: 160px!important;" rows="4" name="Remarks" class="form-control input-sm input-small"><?php echo $monitoringDetails[0]->Remarks; ?></textarea></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		<br>
+		<div class="row">
+			<div class="col-md-3">
+				<div class="form-group">
+					<label class="control-label">Monitored On</label>
+					<input type="text" name="MonitoringDate" class="datepicker input-sm required form-control" value="<?php echo convertDateToClientFormat($monitoringDetails[0]->MonitoringDate); ?>"/>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label class="control-label">Status</label>
+					<?php echo Form::select("MonitoringStatus",array('1'=>"Fulfilled",'0'=>"Not fulfilled"),$monitoringDetails[0]->MonitoringStatus,array('class'=>'form-control required input-sm')); ?>
+
+				</div>
+			</div>
+		</div><div class="clearfix"></div>
+		<br>
+		<div class="form-actions">
+			<div class="btn-set">
+				<button type="submit" class="btn green">Update</button>
+				<a href="<?php echo URL::to('monitoringreport/officelist'); ?>" class="btn red">Cancel</a>
+			</div>
+		</div>
+	</div>
+	<?php echo Form::close(); ?>
+
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

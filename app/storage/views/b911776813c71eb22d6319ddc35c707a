@@ -1,0 +1,4 @@
+<?php $__env->startSection('content'); ?>
+<h4>Welcome</h4>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

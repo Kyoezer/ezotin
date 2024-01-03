@@ -1,0 +1,279 @@
+<?php if(isset($isRejectedApp) && (int)$isRejectedApp==1): ?>
+<input type="hidden" value="1" name="ApplicationRejectedReapply">
+<?php endif; ?>
+ <!-- BEGIN FORM-->
+<div class="form-body">
+	<?php foreach($specializedtradeRegistrations as $SpecializedTradeRegistration): ?>
+	<div class="row">
+		<div class="col-md-9">
+			<div class="form-group">
+				<input type="hidden" value="<?php echo $SpecializedTradeRegistration->Id; ?>" name="Id" />
+				<input type="hidden" value="<?php echo $newGeneralInfoSave; ?>" name="NewGeneralInfoSave">
+				<?php if((int)$isServiceBySpecializedTrade==1): ?>
+				<input type="hidden" value="<?php echo $specializedTradeFinalTableId; ?>" name="CrpSpecializedTradeId" />
+				<?php endif; ?>
+				<label class="bold">Application No.</label>
+				<p class="form-control-static">
+					<?php if(!empty($SpecializedTradeRegistration->ReferenceNo) || !empty($applicationReferenceNo)): ?>
+						<?php if(!empty($SpecializedTradeRegistration->ReferenceNo)): ?>
+							<?php echo $SpecializedTradeRegistration->ReferenceNo; ?>
+
+						<?php else: ?>
+							<?php echo $applicationReferenceNo; ?>
+
+						<?php endif; ?>
+					<?php else: ?>
+						<?php echo Input::old('ReferenceNo'); ?>
+
+					<?php endif; ?>
+				</p>
+				<input type="hidden" name="ReferenceNo" value="<?php if(!empty($SpecializedTradeRegistration->ReferenceNo) || !empty($applicationReferenceNo)): ?><?php if(!empty($SpecializedTradeRegistration->ReferenceNo)): ?><?php echo $SpecializedTradeRegistration->ReferenceNo; ?><?php else: ?><?php echo $applicationReferenceNo; ?><?php endif; ?>@else<?php echo Input::old('ReferenceNo'); ?><?php endif; ?>" />
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				<label class="bold">Application Date</label>
+				<p class="form-control-static"><?php if(!empty($SpecializedTradeRegistration->ApplicationDate)): ?><?php echo convertDateToClientFormat($SpecializedTradeRegistration->ApplicationDate); ?><?php else: ?><?php echo convertDateToClientFormat(date('Y-m-d G:i:s')); ?><?php endif; ?></p>
+				<input type="hidden" name="ApplicationDate" value="<?php if(!empty($SpecializedTradeRegistration->ApplicationDate)): ?><?php echo $SpecializedTradeRegistration->ApplicationDate; ?><?php else: ?><?php echo date('Y-m-d G:i:s'); ?><?php endif; ?>" />
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-8">
+			<div class="row">
+				<div class="col-md-12"><h5 class="font-blue-madison bold">Registration Detail</h5></div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label for="CIDNo">CID No.<span class="font-red">*</span></label>				
+						<input type="text" name="CIDNo" value="<?php if(!empty($SpecializedTradeRegistration->CIDNo)): ?><?php echo $SpecializedTradeRegistration->CIDNo; ?><?php else: ?><?php echo Input::old('CIDNo'); ?><?php endif; ?>" class="form-control input-sm required cidforwebservice" />
+					</div>
+					<div class="form-group">	
+						<label for="CmnSalutationId">Salutation<span class="font-red">*</span></label>
+						<select name="CmnSalutationId" id="" class="form-control input-sm required">
+							<option value="">---SELECT ONE---</option>
+							<?php foreach($salutations as $salutation): ?>
+							<option value="<?php echo $salutation->Id; ?>" <?php if($salutation->Id==Input::old('CmnSalutationId') || $salutation->Id==$SpecializedTradeRegistration->CmnSalutationId): ?>selected="selected"<?php endif; ?>><?php echo $salutation->Name; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="CmnSalutationId">Name <span class="font-red">*</span></label>
+						<input type="text" name="Name" value="<?php if(!empty($SpecializedTradeRegistration->Name)): ?><?php echo $SpecializedTradeRegistration->Name; ?><?php else: ?><?php echo Input::old('Name'); ?><?php endif; ?>" class="form-control input-sm required namefromwebservice" placeholder="">
+					</div>
+					<div class="form-group">	
+						<label for="CmnDzongkhagId">Dzongkhag <span class="font-red">*</span></label>			
+						<select name="CmnDzongkhagId" class="form-control input-sm required dzongkhagfromwebservice">
+							<option value="">---SELECT ONE---</option>
+							<?php foreach($dzongkhags as $dzongkhag): ?>
+								<option value="<?php echo $dzongkhag->Id; ?>" <?php if($dzongkhag->Id==Input::old('CmnDzongkhagId') || $dzongkhag->Id==$SpecializedTradeRegistration->CmnDzongkhagId): ?>selected="selected"<?php endif; ?>><?php echo $dzongkhag->NameEn; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="Gewog">Gewog <span class="font-red">*</span></label>
+						<input type="text" name="Gewog" value="<?php if(!empty($SpecializedTradeRegistration->Gewog)): ?><?php echo $SpecializedTradeRegistration->Gewog; ?><?php else: ?><?php echo Input::old('Gewog'); ?><?php endif; ?>" class="form-control input-sm required gewogfromwebservice" />
+					</div>
+					<div class="form-group">	
+						<label for="">Village <span class="font-red">*</span></label>
+						<input type="text" name="Village" value="<?php if(!empty($SpecializedTradeRegistration->Village)): ?><?php echo $SpecializedTradeRegistration->Village; ?><?php else: ?><?php echo Input::old('Village'); ?><?php endif; ?>" class="form-control input-sm required villagefromwebservice" />
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label for="Email">Email <span class="font-red">*</span><a role="button" tabindex="0" data-toggle="popover" data-container="body" data-trigger="focus" class="popoverdefaultopen" data-placement="top" title="<span class='font-green-seagreen'>Email</span>" data-content="<p class='text-justify'>This Email address will be used as username for your account and to receive email from Construction Development Board (CDB). Please provide a valid Email address inorder not to lose important messages from CDB.</p>"><i class="fa fa-question-circle"></i></a></label>
+						<input type="text" name="Email" value="<?php if(!empty($SpecializedTradeRegistration->Email)): ?><?php echo $SpecializedTradeRegistration->Email; ?><?php else: ?><?php echo Input::old('Email'); ?><?php endif; ?>" class="form-control input-sm required" />
+					</div>
+					<div class="form-group">	
+						<label for="MobileNo">Mobile No. <span class="font-red">*</span><a role="button" tabindex="0" data-toggle="popover" data-container="body" data-trigger="focus" class="popoverdefaultopen" data-placement="top" title="<span class='font-green-seagreen'>Mobile No.</span>" data-content="<p class='text-justify'>This Mobile No. will be used to receive sms alerts from Construction Development Board (CDB). Please provide a valid Mobile No. registered with Tashi Cell/B-Mobile inorder not to lose important messages from CDB.</p>"><i class="fa fa-question-circle"></i></a></label>
+						<input type="text" name="MobileNo" value="<?php if(!empty($SpecializedTradeRegistration->MobileNo)): ?><?php echo $SpecializedTradeRegistration->MobileNo; ?><?php else: ?><?php echo Input::old('MobileNo'); ?><?php endif; ?>" class="form-control input-sm required" />
+					</div>
+					<div class="form-group">	
+						<label for="MobileNo">Telephone No. </label>
+						<input type="text" name="TelephoneNo" value="<?php if(!empty($SpecializedTradeRegistration->TelephoneNo)): ?><?php echo $SpecializedTradeRegistration->TelephoneNo; ?><?php else: ?><?php echo Input::old('TelephoneNo'); ?><?php endif; ?>" class="form-control input-sm" />
+					</div>
+					<div class="form-group">	
+						<label for="EmployerName">Employer Name</label>
+						<input type="text" name="EmployerName" value="<?php if(!empty($SpecializedTradeRegistration->EmployerName)): ?><?php echo $SpecializedTradeRegistration->EmployerName; ?><?php else: ?><?php echo Input::old('EmployerName'); ?><?php endif; ?>" class="form-control input-sm" />
+					</div>
+					<div class="form-group">	
+						<label for="EmployerAddress">Employer Address</label>
+						<input type="text" name="EmployerAddress" value="<?php if(!empty($SpecializedTradeRegistration->EmployerAddress)): ?><?php echo $SpecializedTradeRegistration->EmployerAddress; ?><?php else: ?><?php echo Input::old('EmployerAddress'); ?><?php endif; ?>" class="form-control input-sm">
+					</div>
+					<div class="form-group">
+						<label for="TPN">TPN</label>
+						<input type="text" name="TPN" value="<?php if(!empty($SpecializedTradeRegistration->TPN)): ?><?php echo $SpecializedTradeRegistration->TPN; ?><?php else: ?><?php echo Input::old('TPN'); ?><?php endif; ?>" class="form-control input-sm">
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php endforeach; ?>
+		<?php if(empty($editWorkClassificationsByCDB)): ?>
+		<div class="col-md-4">
+			<h5 class="font-blue-madison bold">Category Information</h5>
+			<label class="">Please tick the checkbox to select a category</label>				
+			<table class="table table-bordered table-striped table-condensed">
+				<thead>
+					<tr>
+						<th width="5%" class="table-checkbox"></th>
+						<th>Category</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach($categories as $category): ?>
+						<tr>
+							<td>
+								<input type="checkbox" class="tablerowcheckbox" value="1" <?php if($category->CategoryId==$category->CmnAppliedCategoryId): ?>checked="checked"<?php endif; ?>/>
+								<input type="hidden" name="CmnAppliedCategoryId[]" value="<?php echo $category->CategoryId; ?>" class="tablerowcontrol" <?php if($category->CategoryId!=$category->CmnAppliedCategoryId): ?>disabled="disabled"<?php endif; ?>/>
+							</td>
+							<td>
+								<?php echo $category->Code.'-'.$category->Name; ?>
+
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+		<?php else: ?> 
+		<div class="col-md-4 table-responsive">
+			<h5 class="font-blue-madison bold">Edit Category Information</h5>
+			<input type="hidden" name="CmnEditCategoryByCDB" value="1">
+			<table class="table table-bordered table-striped table-condensed">
+				<thead>
+					<tr>
+						<th width="5%" class="table-checkbox"></th>
+						<th>Category</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach($editWorkClassificationsByCDB as $editWorkClassificationByCDB): ?>
+						<tr>
+							<td>
+								<input type="checkbox" class="tablerowcheckbox" value="1" <?php if($editWorkClassificationByCDB->CategoryId==$editWorkClassificationByCDB->CmnApprovedCategoryId): ?>checked="checked"<?php endif; ?>/>
+								<input type="hidden" name="CmnAppliedCategoryId[]" value="<?php echo $editWorkClassificationByCDB->CategoryId; ?>" class="tablerowcontrol" <?php if($editWorkClassificationByCDB->CategoryId!=$editWorkClassificationByCDB->CmnApprovedCategoryId): ?>disabled="disabled"<?php endif; ?>/>
+								<input type="hidden" name="CmnVerifiedCategoryId[]" value="<?php echo $editWorkClassificationByCDB->CategoryId; ?>" class="tablerowcontrol" <?php if($editWorkClassificationByCDB->CategoryId!=$editWorkClassificationByCDB->CmnApprovedCategoryId): ?>disabled="disabled"<?php endif; ?>/>
+								<input type="hidden" name="CmnApprovedCategoryId[]" value="<?php echo $editWorkClassificationByCDB->CategoryId; ?>" class="tablerowcontrol" <?php if($editWorkClassificationByCDB->CategoryId!=$editWorkClassificationByCDB->CmnApprovedCategoryId): ?>disabled="disabled"<?php endif; ?>/>
+							</td>
+							<td>
+								<?php echo $editWorkClassificationByCDB->Code.'-'.$editWorkClassificationByCDB->Name; ?>
+
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+		<?php endif; ?>
+	</div>
+	<div class="row">
+		<?php if(isset($oldUploads) && !empty($oldUploads)): ?>
+		<div class="col-md-6 table-responsive">
+			<h5 class="font-blue-madison bold">Existing Documents</h5>
+			<table class="table table-bordered table-striped table-condensed">
+				<thead>
+					<tr>
+						<th>Document Name</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php $__empty_1 = true; foreach($oldUploads as $oldUpload): $__empty_1 = false; ?>
+					<tr>
+						<td>
+							<?php echo $oldUpload->DocumentName; ?>
+
+						</td>
+						<td>
+							<a href="<?php echo URL::to($oldUpload->DocumentPath); ?>" target="_blank">View</a>|
+							<a href="#" class="">Delete</a>
+						</td>
+					</tr>
+					<?php endforeach; if ($__empty_1): ?>
+					<tr>
+						<td colspan="2">No new documents attached</td>
+					</tr>
+					<?php endif; ?>
+				</tbody>
+			</table>
+		</div>
+		<?php endif; ?>
+		<?php if(!empty($specializedtradeRegistrationAttachments)): ?>
+		<div class="col-md-6 table-responsive">
+			<h5 class="font-blue-madison bold">Uploaded Files</h5>
+			<table class="table table-bordered table-striped table-condensed">
+				<thead>
+					<tr>
+						<th>Document Name</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php $__empty_1 = true; foreach($specializedtradeRegistrationAttachments as $specializedtradeRegistrationAttachment): $__empty_1 = false; ?>
+					<tr>
+						<td>
+							<?php echo $specializedtradeRegistrationAttachment->DocumentName; ?>
+
+						</td>
+						<td>
+							<a href="<?php echo URL::to($specializedtradeRegistrationAttachment->DocumentPath); ?>" target="_blank">View</a> |
+							<a href="#" class="">Delete</a>
+						</td>
+					</tr>
+					<?php endforeach; if ($__empty_1): ?>
+					<tr>
+						<td colspan="2" class="font-red text-center">No data to display</td>
+					</tr>
+					<?php endif; ?>
+				</tbody>
+			</table>
+		</div>
+		<?php endif; ?>
+		<div class="col-md-6 table-responsive">
+			<h5 class="font-blue-madison bold">Attach Academic Certificate and other relevant documents if any.</h5>
+			<table id="engineerattachments" class="table table-bordered table-striped table-condensed">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Document Name</th>
+						<th>Upload File</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<button type="button" class="deletetablerow"><i class="fa fa-times fa-lg"></i></button>
+						</td>
+						<td>
+							<input type="text" name="DocumentName[]" value="Document" class="form-control input-sm <?php if(empty($specializedtradeRegistrations[0]->Id) && $isServiceBySpecializedTrade==0): ?><?php echo 'required'; ?><?php endif; ?>">
+						</td>
+						<td>
+							<input type="file" name="attachments[]" class="input-sm <?php if(empty($specializedtradeRegistrations[0]->Id) && $isServiceBySpecializedTrade==0): ?><?php echo 'required'; ?><?php endif; ?>" multiple="multiple" />
+						</td>
+					</tr>
+					<tr class="notremovefornew">
+						<td>
+							<button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+						</td>
+						<td colspan="2"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="form-actions">
+	<div class="btn-set">
+		<?php if((bool)$specializedTradeId==null): ?>
+		<button type="submit" class="btn green">Register <i class="fa fa-arrow-circle-o-right"></i></button>
+		<a href="<?php echo URL::to('ezhotin/home/'.Session::get('UserViewerType')); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+		<?php else: ?>
+		<button type="submit" class="btn green">Update <i class="fa fa-arrow-circle-o-right"></i></button>
+			<?php if(!empty($redirectUrl)): ?>
+			<a href="<?php echo URL::to($redirectUrl.'/'.$specializedTradeId); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+			<?php else: ?>
+			<a href="<?php echo URL::to('specializedtrade/confirmregistration'); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+			<?php endif; ?>
+		<?php endif; ?>
+	</div>
+</div>
+<!-- END FORM-->

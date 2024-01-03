@@ -1,0 +1,85 @@
+<html>
+    <body>
+        <table>
+            <thead>
+            <tr>
+                <th colspan="13">List of Revoked/Suspended/Debarred Contractors</th>
+            </tr>
+            <?php foreach($parametersForPrint as $key=>$value): ?>
+                <tr>
+                    <th><?php echo $key; ?>:</th><th> <?php echo $value; ?></th>
+                </tr>
+            <?php endforeach; ?>
+            <tr><th colspan="13"></th></tr>
+            <tr>
+                <th>
+                    Sl.No.
+                </th>
+                <th class="order">
+                    CDB No.
+                </th>
+                <th>
+                    Firm/Name
+                </th>
+                <th class="">
+                    Address
+                </th>
+                <th class="">
+                    Country
+                </th>
+                <th>
+                    Dzongkhag
+                </th>
+                <th>
+                    Tel.No.
+                </th>
+                <th class="">
+                    Mobile No.
+                </th>
+                <th class="">
+                    W1
+                </th>
+                <th class="">
+                    W2
+                </th>
+                <th class="">
+                    W3
+                </th>
+                <th class="">
+                    W4
+                </th>
+                <th>
+                    Expiry Date
+                </th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php $count = 1; ?>
+            <?php $__empty_1 = true; foreach($contractorLists as $contractor): $__empty_1 = false; ?>
+                <tr>
+                    <td><?php echo $count; ?></td>
+                    <td><?php echo $contractor->CDBNo; ?></td>
+                    <td><?php echo $contractor->NameOfFirm; ?></td>
+                    <td><?php echo $contractor->Address; ?></td>
+                    <td><?php echo $contractor->Country; ?></td>
+                    <td><?php echo $contractor->Dzongkhag; ?></td>
+                    <td><?php echo $contractor->TelephoneNo; ?></td>
+                    <td><?php echo $contractor->MobileNo; ?></td>
+                    <td><?php echo $contractor->Classification1; ?></td>
+                    <td><?php echo $contractor->Classification2; ?></td>
+                    <td><?php echo $contractor->Classification3; ?></td>
+                    <td><?php echo $contractor->Classification4; ?></td>
+                    <td><?php echo convertDateToClientFormat($contractor->ExpiryDate); ?></td>
+                    <td><?php echo $contractor->Status; ?></td>
+                </tr>
+                <?php $count++; ?>
+            <?php endforeach; if ($__empty_1): ?>
+                <tr>
+                    <td colspan="14" class="text-center font-red">No data to display!</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </body>
+</html>

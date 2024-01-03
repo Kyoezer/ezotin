@@ -1,0 +1,87 @@
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/cdb/morris/raphael-min.js'); ?>
+
+    <?php echo HTML::script('assets/cdb/morris/modernizr-2.5.3-respond-1.1.0.min.js'); ?>
+
+    <?php echo HTML::script('assets/cdb/morris/morris.min.js'); ?>
+
+    <?php echo HTML::script('assets/global/scripts/report.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('pagestyles'); ?>
+    <?php echo HTML::style('assets/cdb/morris/morris.css'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+            <?php $parameters = Input::all(); $parameters['export']='excel'; ?>
+			<i class="fa fa-cogs"></i>List of Contractors having adverse records &nbsp;&nbsp;<?php if(!Input::has('export')): ?><?php $parameters['export'] = 'print'; ?><a href="<?php echo route('contractorrpt.contractorswithadvrecords',$parameters); ?>" class="btn btn-sm purple" target="_blank"><i class="fa fa-print"></i> Print</a><?php endif; ?>
+		</div>
+	</div>
+	<div class="portlet-body flip-scroll">
+        <?php if(Input::get('export') != 'print'): ?>
+        <?php echo Form::open(array('url'=>Request::url(),'method'=>'get')); ?>
+
+		<div class="form-body">
+			<div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Date Between</label>
+                        <div class="input-group input-large date-picker input-daterange">
+                            <input type="text" name="FromDate" class="form-control datepickerfrom" value="<?php echo Input::get('FromDate'); ?>" />
+						<span class="input-group-addon">
+						to </span>
+                            <input type="text" name="ToDate" class="form-control datepickerto" value="<?php echo Input::get('ToDate'); ?>" />
+                        </div>
+                    </div>
+                </div>
+                <?php if(!Input::has('export')): ?>
+                    <div class="col-md-2">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="btn-set">
+                            <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                            <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                        </div>
+                    </div>
+                <?php endif; ?>
+			</div>
+		</div>
+        <?php echo Form::close(); ?>
+
+        <?php else: ?>
+            <?php if(Input::has('FromDate')): ?>
+            <b>From Date: <?php echo Input::get('FromDate'); ?></b> <br/>
+            <?php endif; ?>
+            <?php if(Input::has('ToDate')): ?>
+            <b>To Date: <?php echo Input::get('ToDate'); ?></b> <br/>
+            <?php endif; ?>
+        <?php endif; ?>
+            <table class="table table-bordered table-striped table-condensed flip-content" >
+                <thead class="flip-content">
+                    <tr>
+                        <th class="text-center">Sl.No.</th>
+                        <th class="text-center">CDB No.</th>
+                        <th class="text-center">Name</th>
+                        <th class="text-center col-md-1">Date</th>
+                        <th class="text-center">Adverse Records</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($reportData as $data): ?>
+                        <tr>
+                        <td><?php echo $start++; ?></td>
+                        <td><?php echo $data->CDBNo; ?></td>
+                        <td><?php echo $data->NameOfFirm; ?></td>
+                        <td><?php echo convertDateToClientFormat($data->Date); ?></td>
+                        <td><?php echo html_entity_decode($data->AdverseRecords); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <?php pagination($noOfPages,Input::all(),Input::get('page'),"contractorrpt.contractorswithadvrecords"); ?>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

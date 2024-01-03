@@ -1,0 +1,87 @@
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/global/scripts/etool.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <input type="hidden" name="URL" value="<?php echo CONST_APACHESITELINK; ?>"/>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-gift"></i>Set Organizational Strength Parameters
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <!-- BEGIN FORM-->
+                    <?php echo Form::open(array('url' => "newEtl/savebidevaluationparameters",'role'=>'form','class'=>'form-horizontal form-row-seperated')); ?>
+
+                    <div class="form-body">
+
+                        <div class="portlet box green-meadow">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="fa fa-gift"></i> Organizational Strength</div>
+                            </div>
+                            <div class="portlet-body">
+                                <?php foreach($organizationalStrength as $os): ?>
+                                    <?php $randomKey = randomString(); ?>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-6"><?php echo $os->Name; ?> <span class="font-red">*</span></label>
+                                        <div class="col-md-2">
+                                            <input type="hidden" name="EtlBidEvaluationParameters[<?php echo $randomKey; ?>][Id]" value="<?php echo $os->Id; ?>" />
+                                            <input type="text" name="EtlBidEvaluationParameters[<?php echo $randomKey; ?>][Points]" value="<?php echo $os->Points; ?>" class="form-control required number input-sm" />
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                        <div class="portlet box blue-madison">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="fa fa-gift"></i> Employment of VTI Graduate/Local Skilled Labour</div>
+                            </div>
+                            <div class="portlet-body">
+                                <?php foreach($employmentOfVTI as $vti): ?>
+                                    <?php $randomKey = randomString(); ?>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-6"><?php echo $vti->Name; ?> <span class="font-red">*</span></label>
+                                        <div class="col-md-2">
+                                            <input type="hidden" name="EtlBidEvaluationParameters[<?php echo $randomKey; ?>][Id]" value="<?php echo $vti->Id; ?>" />
+                                            <input type="text" name="EtlBidEvaluationParameters[<?php echo $randomKey; ?>][Points]" value="<?php echo $vti->Points; ?>" class="form-control required number input-sm" />
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                        <div class="portlet box purple-medium">
+                            <div class="portlet-title">
+                                <div class="caption"><i class="fa fa-gift"></i> Commitment of Internships to VTI Graduate </div>
+                            </div>
+                            <div class="portlet-body">
+                                <?php foreach($commitmentOfInternship as $internship): ?>
+                                    <?php $randomKey = randomString(); ?>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-6"><?php echo $internship->Name; ?> <span class="font-red">*</span></label>
+                                        <div class="col-md-2">
+                                            <input type="hidden" name="EtlBidEvaluationParameters[<?php echo $randomKey; ?>][Id]" value="<?php echo $internship->Id; ?>" />
+                                            <input type="text" name="EtlBidEvaluationParameters[<?php echo $randomKey; ?>][Points]" value="<?php echo $internship->Points; ?>" class="form-control required number input-sm" />
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="btn-set">
+                            <button type="submit" class="btn green">Save</button>
+                            <a href="<?php echo Request::url(); ?>" class="btn red">Cancel</a>
+                        </div>
+                    </div>
+                    <?php echo Form::close(); ?>
+
+                    <!-- END FORM-->
+                </div>
+            </div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

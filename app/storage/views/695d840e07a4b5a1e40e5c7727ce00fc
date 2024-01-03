@@ -1,0 +1,117 @@
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/global/scripts/report.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <?php $parameters = Input::all(); $parameters['export']='excel'; ?>
+                <i class="fa fa-cogs"></i>Replace/Release Report &nbsp;&nbsp;<?php if(!Input::has('export')): ?> <a href="<?php echo route('contractorrpt.constructionpersonnel',$parameters); ?>" class="btn btn-sm green"><i class="fa fa-file-excel-o"></i> Export to Excel</a>    <?php $parameters['export'] = 'print'; ?><a href="<?php echo route('contractorrpt.constructionpersonnel',$parameters); ?>" class="btn btn-sm purple" target="_blank"><i class="fa fa-print"></i> Print</a><?php endif; ?>
+            </div>
+        </div>
+        <div class="portlet-body dont-flip">
+            <?php echo Form::open(array('url'=>Request::url(),'method'=>'get')); ?>
+
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label">Work Id</label>
+                            <input type="text" class="form-control input-sm" value="<?php echo Input::get('WorkId'); ?>" name="WorkId"/>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label">CDB No</label>
+                            <input type="text" class="form-control input-sm" value="<?php echo Input::get('CDBNo'); ?>" name="CDBNo"/>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label">From</label>
+                        <div class="input-icon right">
+                            <i class="fa fa-calendar"></i>
+                            <input type="text" name="FromDate" class="form-control input-sm datepicker" value="<?php echo Input::get('FromDate'); ?>" readonly="readonly" placeholder="">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label">To</label>
+                        <div class="input-icon right">
+                            <i class="fa fa-calendar"></i>
+                            <input type="text" name="ToDate" class="form-control input-sm datepicker" value="<?php echo Input::get('ToDate'); ?>" readonly="readonly" placeholder="">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label">Operation</label>
+                            <?php echo Form::select('Type',array(''=>'All','Replace'=>'Replace','Release'=>'Release'),Input::get('Type'),array('class'=>'form-control input-sm')); ?>
+
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label">User</label>
+                            <select name="User" class="form-control input-sm select2me">
+                                <option value="">All</option>
+                                <?php foreach($users as $user): ?>
+                                    <option value="<?php echo $user->User; ?>" <?php if($user->User == Input::get('User')): ?>selected="selected"<?php endif; ?>><?php echo $user->User; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <?php if(!Input::has('export')): ?>
+                        <div class="col-md-2">
+                            <div class="btn-set">
+                                <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                                <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php echo Form::close(); ?>
+
+            <br>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-condensed dont-flip" id="">
+                    <thead class="dont-flip">
+                    <tr>
+                        <th>Sl #</th>
+                        <th>User</th>
+                        <th>Work Id</th>
+                        <th>CDB No</th>
+                        <th>Old CID No/Registration No</th>
+                        <th>New CID No/Registration No</th>
+                        <th>Operation</th>
+                        <th>Date</th>
+                        <th>Reference Doc</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php $count = 1;?>
+                    <?php $__empty_1 = true; foreach($reportData as $data): $__empty_1 = false; ?>
+                        <tr>
+                            <td><?php echo $count++; ?></td>
+                            <td><?php echo $data->User; ?></td>
+                            <td><?php echo $data->WorkId; ?></td>
+                            <td><?php echo $data->CDBNo; ?></td>
+                            <td><?php echo $data->HrEqOldId; ?></td>
+                            <td><?php echo $data->HrEqNewId; ?></td>
+                            <td><?php echo $data->Operation; ?></td>
+                            <td><?php echo convertDateTimeToClientFormat($data->Date); ?></td>
+                            <td><?php echo $data->RefDoc; ?></td>
+                        </tr>
+                    <?php endforeach; if ($__empty_1): ?>
+                        <tr>
+                            <td colspan="9" class="text-center font-red">No data to display</td>
+                        </tr>
+                    <?php endif; ?>
+                    </tbody>
+                </table>
+                <?php pagination($noOfPages,Input::all(),Input::get('page'),"etoolrpt.replacereleasereport"); ?>
+            </div>
+        </div>
+
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,101 @@
+<?php $__env->startSection('pagescripts'); ?>
+	<?php echo HTML::script('assets/global/scripts/contractor.js'); ?>
+
+	<?php if((int)$serviceByContractor==1): ?>
+		<script>
+			$('#generalinfoservice').modal('show');
+		</script>
+	<?php endif; ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-cogs"></i>Edit General Information
+		</div>
+		<?php if((int)$serviceByContractor==1): ?>
+			<button id="reselectchangeownerlocation" type="button" class="btn green-seagreen btn-sm pull-right">Re-select Services</button>
+		<?php endif; ?>
+	</div>
+	<div class="portlet-body">
+		<?php echo Form::open(array('url' =>$postRouteReference,'role'=>'form','id'=>'changeoflocationaddressserviceform','files'=>true)); ?>
+
+		<input type="hidden" value="1" name="EditByCdb">
+		<input type="hidden" value="<?php echo $newGeneralInfoSave; ?>" name="NewGeneralInfoSave">
+		<input type="hidden" name="PostBackUrl" value="<?php echo $redirectUrl; ?>">
+		<?php echo Form::hidden('OldApplicationId',Input::has('oldapplicationid')?Input::get('oldapplicationid'):''); ?>
+
+		<?php if((int)$serviceByContractor==1): ?>
+			<input type="hidden" id="is-service-application" value="1"/>
+			<input type="hidden" name="CrpContractorId" value="<?php echo $isServiceByContractor; ?>">
+			<?php if((int)$isRenewalService==1): ?>
+			<input type="hidden" name="RenewalService" value="<?php echo CONST_SERVICETYPE_RENEWAL; ?>" />
+			<?php endif; ?>
+			<input type="hidden" name="ServiceByContractor" value="<?php echo $serviceByContractor; ?>" />
+			<div id="generalinfoservice" class="modal fade" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="generalinfoservice" aria-hidden="true">
+			    <div class="modal-dialog modal-lg">
+			        <div class="modal-content">
+			              <div class="modal-header">
+			                <h3 class="modal-title font-green-seagreen">Service</h3>
+			              </div>
+			              <div class="modal-body">
+			              	<div class="note note-danger hide locationownererror">
+				                <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+				                <p class="font-red">You should atleast select one of the services.</p>
+				            </div>
+							  <div class="note note-danger hide refresherattachmenterror">
+								  <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+								  <p class="font-red">Please upload your refresher course certificate</p>
+							  </div>
+			                <p>Would you like to avail the services listed below along with this application? Please tick on the check box if you wish to.</p>
+			                <div class="form-group">
+								<div class="checkbox-list" id="services-list">
+									<label>
+										<input type="checkbox" <?php if(isset($hasExpired)): ?><?php if((int)$isRenewalService == 0 && $hasExpired): ?>disabled="disabled"<?php endif; ?><?php endif; ?> data-servicetype="1" name="ChangeOfLocationOwner[]" value="<?php echo CONST_SERVICETYPE_CHANGELOCATION; ?>" data-type="1"> Change of Location</label>
+									<label>
+										<input type="checkbox" <?php if(isset($hasExpired)): ?><?php if((int)$isRenewalService == 0 && $hasExpired): ?>disabled="disabled"<?php endif; ?><?php endif; ?> data-servicetype="1" name="ChangeOfLocationOwner[]" value="<?php echo CONST_SERVICETYPE_CHANGEOWNER; ?>" data-type="2"> Change of Owner</label>
+									<label>
+										<input type="checkbox" <?php if(isset($hasExpired)): ?><?php if((int)$isRenewalService == 0 && $hasExpired): ?>disabled="disabled"<?php endif; ?><?php endif; ?> data-servicetype="1" name="ChangeOfLocationOwner[]" value="<?php echo CONST_SERVICETYPE_CHANGEOFFIRMNAME; ?>" data-type="3"> Change of Firm Name</label>
+									<label>
+										<input type="checkbox" <?php if(isset($hasExpired)): ?><?php if((int)$isRenewalService == 0 && $hasExpired): ?>disabled="disabled"<?php endif; ?><?php endif; ?> data-servicetype="1" name="ChangeOfLocationOwner[]" value="<?php echo CONST_SERVICETYPE_INCORPORATION; ?>" data-type="4"> Incorporation</label>
+									<label>
+										<input type="checkbox" <?php if(isset($hasExpired)): ?><?php if((int)$isRenewalService == 0 && $hasExpired): ?>disabled="disabled"<?php endif; ?><?php endif; ?> data-servicetype="2" class="other-service" name="OtherServices[]" value="<?php echo CONST_SERVICETYPE_CHANGEOFCATEGORYCLASSIFICATION; ?>"> Upgrade/Downgrade/Add Category/Classification</label>
+									<label>
+									<input type="checkbox" data-servicetype="2" class="other-service" name="OtherServices[]" value="<?php echo CONST_SERVICETYPE_UPDATEHUMANRESOURCE; ?>"> Update Human Resource</label>
+									<label>
+									<input type="checkbox" data-servicetype="2" class="other-service" name="OtherServices[]" value="<?php echo CONST_SERVICETYPE_UPDATEEQUIPMENT; ?>"> Update Equipment</label>
+								</div>
+							</div>
+							  <?php if(Input::has('srenew') && $isRejectedApp == 1): ?>
+								  <input type="hidden" id="IsRejected" value="1"/>
+								  <?php if(isset($refreshersCourseCertificate)): ?>
+									  <a href="<?php echo asset($refreshersCourseCertificate); ?>">Refresher's Course Certificate</a>
+								  <?php endif; ?>
+							  <?php endif; ?>
+						  	<?php if(Input::has('srenew')): ?>
+							  <?php if($isRejectedApp == 1): ?>
+								  <h5 style="color:#f00;">Upload refresher course certificate again only if Rejected!</h5>
+							  <?php endif; ?>
+								<div class="form-group">
+									<input type="hidden" name="DocumentName[]" value="Refresher Course Certificate" />
+									<label>Refresher Course Certificate</label>
+									<input type="file" name="attachments[]" class="input-sm" />
+								</div>
+							<?php endif; ?>
+			              </div>
+			              <div class="modal-footer">
+			                <?php /*<button type="button" id="changeoflocationowner" class="btn green-seagreen" >Yes</button>*/ ?>
+			                <?php /*<button type="submit" id="submit-services" class="btn red">No</button>*/ ?>
+			                <button type="submit" id="changeoflocationowner" class="btn green-seagreen services-btn">Continue</button>
+			              </div>
+			        </div>
+			    </div>
+			</div>
+		<?php endif; ?>
+		<?php echo $__env->make('crps.contractorgeneralinfocontrols', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>;
+		<?php echo Form::close(); ?>
+
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

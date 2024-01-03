@@ -1,0 +1,60 @@
+<?php $__env->startSection('content'); ?>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>
+					<span class="caption-subject font-green-seagreen">View/Edit Training</span>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="table-responsive">
+					<table class="table table-striped table-condensed table-hover table-bordered" data-table="webtrainingdetails">
+						<thead>
+							<tr class="success">
+								<th>Sl#</th>
+								<th>Title</th>
+								<th width="30%">Description</th>
+								<th>Training For</th>
+								<th width="10%">Start Dt.</th>
+								<th width="10%">End Dt.</th>
+								<th>Last Dt. of Registration</th>
+								<th>Max Participants</th>
+								<th>Show in Marquee</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<?php $__empty_1 = true; foreach($listOfTraining as $trainingDetails): $__empty_1 = false; ?>
+								<tr>
+									<td><?php echo $slno++; ?></td>
+									<td><?php echo $trainingDetails->TrainingTitle; ?></td>
+									<td><?php echo substr(strip_tags($trainingDetails->TrainingDescription),0,150); ?></td>
+									<td><?php echo $trainingDetails->TrainingType; ?></td>
+									<td><?php echo convertDateToClientFormat($trainingDetails->StartDate); ?></td>
+									<td><?php echo convertDateToClientFormat($trainingDetails->EndDate); ?></td>
+									<td><?php echo convertDateToClientFormat($trainingDetails->LastDateForRegistration); ?></td>
+									<td><?php echo (bool)$trainingDetails->MaxParticipants?$trainingDetails->MaxParticipants:'--'; ?></td>
+									<td><?php echo ($trainingDetails->ShowInMarquee == 1)?"Yes":"No"; ?></td>
+									<td>
+										<a href="<?php echo URL::to('web/registeredfortraining/'.$trainingDetails->TrainingId.'?ref='.$trainingDetails->ReferenceNo); ?>" class="btn green-seagreen btn-xs">Registered Trainees <i class="fa fa-eye"></i></a>
+										<a href="<?php echo URL::to('web/addtrainingform/'.$trainingDetails->TrainingId); ?>" class="btn blue-hoki btn-xs">Edit <i class="fa fa-pencil-square-o"></i></a>
+										<a data-id="<?php echo $trainingDetails->TrainingId; ?>" href="#" class="delete-websiteentry btn green btn-xs">Delete&nbsp;<i class="fa fa-times"></i></a>
+									</td>
+								</tr>
+							<?php endforeach; if ($__empty_1): ?>
+								<tr>
+									<td colspan="9" class="text-center" style="color:#FE0000">No data to display</td>
+								</tr>
+							<?php endif; ?>
+						</tbody>
+					</table>
+				</div>	
+			</div>
+		</div>
+	</div>
+</div> 	
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

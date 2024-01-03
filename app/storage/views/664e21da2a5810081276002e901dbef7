@@ -1,0 +1,151 @@
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/global/scripts/etool.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <input type="hidden" name="URL" value="<?php echo CONST_APACHESITELINK; ?>"/>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-cogs"></i>Reports
+		</div>
+	</div>
+	<div class="portlet-body">
+        <div class="container etoolreport-container">
+            <?php if(in_array(1,$etoolReports)): ?>
+            <div class="row">
+                <div class="col-md-3">1. Contractor's Work in Hand</div>
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <input name="parameter" type="hidden" value="CDBNo"/>
+                            <div class="col-md-9"><input type="text" class="form-control input-sm" placeholder="CDBNo"/></div>
+                            <div class="col-md-3"><a href="<?php echo URL::to('etoolrpt/contractorworkinhand'); ?>" class="btn btn-sm blue-hoki">View</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <?php endif; ?>
+            <?php if(in_array(2,$etoolReports)): ?>
+            <div class="row">
+                <div class="col-md-3">2. Contractor's Human Resource</div>
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <input name="parameter" type="hidden" value="CDBNo"/>
+                            <div class="col-md-9"><input type="text" class="form-control input-sm" placeholder="CDBNo"/></div>
+                            <div class="col-md-3"><a href="<?php echo URL::to('etoolrpt/contractorhumanresource'); ?>" class="btn btn-sm blue-hoki">View</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <?php endif; ?>
+            <?php if(in_array(3,$etoolReports)): ?>
+            <div class="row">
+                <div class="col-md-3">3. Contractor's Equipment Details</div>
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <input name="parameter" type="hidden" value="CDBNo"/>
+                            <div class="col-md-9"><input type="text" class="form-control input-sm" placeholder="CDBNo"/></div>
+                            <div class="col-md-3"><a href="<?php echo URL::to('etoolrpt/contractorequipment'); ?>" class="btn btn-sm blue-hoki">View</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <?php endif; ?>
+            <?php if(in_array(4,$etoolReports)): ?>
+            <div class="row">
+                <div class="col-md-3">4. Work Details</div>
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <input name="parameter" type="hidden" value="WorkId"/>
+                            <div class="col-md-9"><input type="text" class="form-control input-sm" placeholder="Work Id"/></div>
+                            <div class="col-md-3"><a href="<?php echo URL::to('etoolrpt/workdetails'); ?>" class="btn btn-sm blue-hoki">View</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <?php endif; ?>
+            <?php if(in_array(5,$etoolReports)): ?>
+            <div class="row">
+                <div class="col-md-3">5. Contractor's Information</div>
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <input name="parameter" type="hidden" value="CDBNo"/>
+                            <div class="col-md-9"><input type="text" class="form-control input-sm" placeholder="CDBNo"/></div>
+                            <div class="col-md-3"><a href="<?php echo URL::to('etoolrpt/contractorinfo'); ?>" id="contractor-info" class="btn btn-sm blue-hoki">View</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <?php endif; ?>
+            <?php if(in_array(6,$etoolReports)): ?>
+            <div class="row">
+                <div class="col-md-3">6. Human Resource Check</div>
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <input name="parameter" type="hidden" value="CIDNo"/>
+                            <div class="col-md-9"><input type="text" class="form-control input-sm" placeholder="CID No (Human)"/></div>
+                            <div class="col-md-3"><a href="<?php echo URL::to('etoolrpt/hrcheck'); ?>" class="btn btn-sm blue-hoki">View</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <?php endif; ?>
+            <?php if(in_array(7,$etoolReports)): ?>
+            <div class="row">
+                <div class="col-md-3">7. Equipment Check</div>
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <input name="parameter" type="hidden" value="RegistrationNo"/>
+                            <div class="col-md-9"><input type="text" class="form-control input-sm" placeholder="Registration No. (Equipment)"/></div>
+                            <div class="col-md-3"><a href="<?php echo URL::to('etoolrpt/equipmentcheck'); ?>" class="btn btn-sm blue-hoki">View</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <?php endif; ?>
+            <?php if(in_array(8,$etoolReports)): ?>
+            <div class="row">
+                <div class="col-md-3">8. Evaluation Details (for L and M)</div>
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <input name="parameter" type="hidden" value="WorkId"/>
+                            <div class="col-md-9"><input type="text" class="form-control input-sm" placeholder="Work Id"/></div>
+                            <div class="col-md-3"><a href="<?php echo URL::to('etoolrpt/evaluationdetails'); ?>" class="btn btn-sm blue-hoki">View</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <?php endif; ?>
+            <?php if(in_array(9,$etoolReports)): ?>
+                <div class="row">
+                    <div class="col-md-3">9. Bid Capacity Calculator</div>
+                    <div class="col-md-8">
+                        <div class="col-md-6">
+                            <input name="parameter" type="hidden" value="WorkId"/>
+                            <div class="col-md-3"><a href="<?php echo URL::to('etoolrpt/bidcapacitycalculator'); ?>" class="btn btn-sm blue-hoki">Click here.</a></div>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+            <?php endif; ?>
+        </div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('horizontalmenumaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

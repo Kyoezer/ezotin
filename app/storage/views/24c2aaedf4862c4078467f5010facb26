@@ -1,0 +1,233 @@
+<?php $__env->startSection('content'); ?>
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <?php $parameters = Input::all(); $parameters['export']='excel'; ?>
+                <i class="fa fa-cogs"></i>Replace HR/Equipment for Work Id: <?php echo Input::get('WorkId'); ?>
+
+            </div>
+        </div>
+        <div class="portlet-body flip-scroll">
+            <?php if(Input::get('export')!='print'): ?>
+            <?php echo Form::open(array('url'=>Request::url(),'method'=>'post')); ?>
+
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Work Id</label>
+                            <input type="text" class="form-control input-sm" name="WorkId" value="<?php echo Input::get('WorkId'); ?>"/>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="btn-set">
+                            <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                            <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php echo Form::close(); ?>
+
+            <?php endif; ?>
+            <?php if(isset($tenderDetails[0]->TenderId) && $tenderDetails[0]->TenderId): ?>
+            <h4 class="bold">Work Details</h4>
+            <table class="table table-bordered table-condensed">
+                <tbody>
+                    <?php foreach($tenderDetails as $tenderDetail): ?>
+                        <tr>
+                            <td class="bold text-right">Name of work:</td>
+                            <td><?php echo $tenderDetail->NameOfWork; ?></td>
+                            <td class="bold text-right">Work ID:</td>
+                            <td><?php echo $tenderDetail->WorkId; ?></td>
+                            <td class="bold text-right">Procuring Agency:</td>
+                            <td><?php echo $tenderDetail->ProcuringAgency; ?></td>
+                            <td class="bold text-right">Class & Category:</td>
+                            <td><?php echo $tenderDetail->Classification.", ".$tenderDetail->Category; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="bold text-right">Dzongkhag:</td>
+                            <td><?php echo $tenderDetail->Dzongkhag; ?></td>
+                            <td class="bold text-right">Estimated Project Cost:</td>
+                            <td><?php echo $tenderDetail->ProjectEstimateCost; ?></td>
+                            <td class="bold text-right">Contract Period:</td>
+                            <td><?php echo $tenderDetail->ContractPeriod." month(s)"; ?></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+
+            <h4 class="bold">Individuals Equipment Details</h4>
+                <?php foreach($bidContractors as $bidContractor): ?>
+                    <table class="table table-condensed table-bordered">
+                        <thead>
+                            <tr style="border-bottom: 1px solid #DDDDDD;">
+                                <th>CDB No.: </th>
+                                <th colspan="6"><?php echo $cdbNos[$bidContractor->Id][0]->CDBNo; ?> <?php if($bidContractor->JointVenture == 1): ?><?php echo "(Joint Venture)"; ?><?php endif; ?></th>
+                            </tr>
+                            <tr>
+                                <th>Sl.No.</th>
+                                <th>Equipment Name</th>
+                                <th>Registration No.</th>
+                                <th>Tier</th>
+                                <th>Type</th>
+                                <th>Point</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $count = 1; ?>
+                            <?php foreach($contractorEquipments[$bidContractor->Id] as $contractorEquipment): ?>
+                                <tr>
+                                    <td><?php echo $count; ?></td>
+                                    <td><?php echo $contractorEquipment->Equipment; ?></td>
+                                    <td><?php echo $contractorEquipment->RegistrationNo; ?></td>
+                                    <td><?php echo $contractorEquipment->Tier; ?></td>
+                                    <td><?php echo ($contractorEquipment->OwnedOrHired == 2)?"Hired":"Owned"; ?></td>
+                                    <td><?php echo $contractorEquipment->Points; ?></td>
+                                    <td class="text-center"><a href="<?php echo URL::to("etoolsysadm/replaceequipment/$contractorEquipment->Id"); ?>" >Replace</a> | <a href="<?php echo URL::to("etoolsysadm/releaseequipment/$contractorEquipment->Id"); ?>" >Release</a></td>
+                                </tr>
+                                <?php $count++; ?>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endforeach; ?>
+
+                <h4 class="bold">Individuals Human Resource Details</h4>
+                <?php foreach($bidContractors as $bidContractor): ?>
+                    <table class="table table-condensed table-bordered">
+                        <thead>
+                        <tr style="border-bottom: 1px solid #DDDDDD;">
+                            <th>CDB No.: </th>
+                            <th colspan="6"><?php echo $cdbNos[$bidContractor->Id][0]->CDBNo; ?> <?php if($bidContractor->JointVenture == 1): ?><?php echo "(Joint Venture)"; ?><?php endif; ?></th>
+                        </tr>
+                        <tr>
+                            <th>Sl.No.</th>
+                            <th>HR Name</th>
+                            <th>CID No.</th>
+                            <th>Qualification</th>
+                            <th>Tier</th>
+                            <th>Point</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php $count = 1; ?>
+                        <?php foreach($contractorHRs[$bidContractor->Id] as $contractorHR): ?>
+                            <tr>
+                                <td><?php echo $count; ?></td>
+                                <td><?php echo $contractorHR->Designation; ?></td>
+                                <td><?php echo $contractorHR->CIDNo; ?></td>
+                                <td><?php echo $contractorHR->Qualification; ?></td>
+                                <td><?php echo $contractorHR->Tier; ?></td>
+                                <td><?php echo $contractorHR->Points; ?></td>
+                                <td class="text-center"><a href="<?php echo URL::to("etoolsysadm/replacehr/$contractorHR->Id"); ?>" class="">Replace</a> | <a href="<?php echo URL::to("etoolsysadm/releasehr/$contractorHR->Id"); ?>" class="">Release</a></td>
+                            </tr>
+                            <?php $count++; ?>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endforeach; ?>
+                <h4 class="bold">Contractor Details</h4>
+                <?php $count = 1; ?>
+                <?php foreach($bidContractors as $bidContractor): ?>
+                    <?php
+                        $technicalScore = $contractorScores[$bidContractor->Id][0]->Score1+$contractorScores[$bidContractor->Id][0]->Score2+$contractorScores[$bidContractor->Id][0]->Score3+$contractorScores[$bidContractor->Id][0]->Score4+$contractorScores[$bidContractor->Id][0]->Score5+$contractorScores[$bidContractor->Id][0]->Score6;
+                        $preferenceScore = ($contractorScores[$bidContractor->Id][0]->Score7+$contractorScores[$bidContractor->Id][0]->Score8+$contractorScores[$bidContractor->Id][0]->Score9)/10;
+                        $financialScore = ($technicalScore>=$qualifyingScore)?(90 * ($lowestBid/$contractorAmounts[$bidContractor->Id][0]->FinancialBidQuoted)):0;
+                        $grandTotal = ($technicalScore>=$qualifyingScore)?($financialScore + $preferenceScore):0;
+                    ?>
+                    <table class="table table-bordered table-condensed">
+                        <tbody>
+                            <tr>
+                                <td class="bold">CDB No.</td>
+                                <td colspan="2" style="font-size: 13pt;"><?php echo $cdbNos[$bidContractor->Id][0]->CDBNo; ?> <?php if($bidContractor->JointVenture == 1): ?><?php echo "(Joint Venture)"; ?><?php endif; ?></td>
+                            </tr>
+                            <tr>
+                                <td rowspan="4" class="bold">Capability</td>
+                                <td>Similar Work Experience</td>
+                                <td><?php echo $contractorScores[$bidContractor->Id][0]->Score1; ?></td>
+                            </tr>
+                            <tr>
+                                <td>Access to adequate equipment</td>
+                                <td><?php echo $contractorScores[$bidContractor->Id][0]->Score2; ?></td>
+                            </tr>
+                            <tr>
+                                <td>Availability of skilled manpower</td>
+                                <td><?php echo $contractorScores[$bidContractor->Id][0]->Score3; ?></td>
+                            </tr>
+                            <tr>
+                                <td>Average performance score from previous work</td>
+                                <td><?php echo $contractorScores[$bidContractor->Id][0]->Score4; ?></td>
+                            </tr>
+
+                            <tr>
+                                <td rowspan="3" class="bold">Capacity</td>
+                                <td>Bid Capacity</td>
+                                <td><?php echo $contractorScores[$bidContractor->Id][0]->Score5; ?></td>
+                            </tr>
+                            <tr>
+                                <td>Credit Line avaliable</td>
+                                <td><?php echo $contractorScores[$bidContractor->Id][0]->Score6; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="bold text-right">Total</td>
+                                <td><b><?php echo $contractorScores[$bidContractor->Id][0]->Score6+$contractorScores[$bidContractor->Id][0]->Score5+$contractorScores[$bidContractor->Id][0]->Score4+$contractorScores[$bidContractor->Id][0]->Score3+$contractorScores[$bidContractor->Id][0]->Score2+$contractorScores[$bidContractor->Id][0]->Score1; ?></b></td>
+                            </tr>
+
+                            <tr>
+                                <td rowspan="4" class="bold">Preference Score</td>
+                                <td>Status(incorporated, proprietorship, JV etc.)</td>
+                                <td><?php echo $contractorScores[$bidContractor->Id][0]->Score7; ?></td>
+                            </tr>
+                            <tr>
+                                <td>Employment of VTI Graduates/local skilled labour</td>
+                                <td><?php echo $contractorScores[$bidContractor->Id][0]->Score8; ?></td>
+                            </tr>
+                            <tr>
+                                <td>Commitment for internships to VIT graduates</td>
+                                <td><?php echo $contractorScores[$bidContractor->Id][0]->Score9; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="bold text-right">Total</td>
+                                <td><b><?php echo $contractorScores[$bidContractor->Id][0]->Score9+$contractorScores[$bidContractor->Id][0]->Score8+$contractorScores[$bidContractor->Id][0]->Score7; ?></b> (Out of 10% = <b><?php echo ($contractorScores[$bidContractor->Id][0]->Score9+$contractorScores[$bidContractor->Id][0]->Score8+$contractorScores[$bidContractor->Id][0]->Score7)/10; ?></b>)</td>
+                            </tr>
+
+                            <tr>
+                                <td rowspan="4" class="bold">Financial</td>
+                                <td>Quoted Amount</td>
+                                <td><?php echo $contractorAmounts[$bidContractor->Id][0]->FinancialBidQuoted; ?></td>
+                            </tr>
+                            <tr>
+                                <td>Negotiated Amount</td>
+                                <td><?php echo $contractorAmounts[$bidContractor->Id][0]->ContractPriceFinal; ?></td>
+                            </tr>
+                            <tr>
+                                <td>(+)(-) Estimation %</td>
+                                <td><?php echo round((($contractorAmounts[$bidContractor->Id][0]->Amount-$tenderDetail->ProjectEstimateCost)/$tenderDetail->ProjectEstimateCost * 100),2); ?></td>
+                            </tr>
+                            <tr>
+                                <td class="bold text-right">Financial Score</td>
+                                <td class="bold"><?php echo $financialScore; ?></td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2" class="bold">Result</td>
+                                <td class="bold text-right">Grand Total</td>
+                                <td class="bold"><?php echo $grandTotal; ?></td>
+                            </tr>
+                            <tr>
+                                <td class="bold text-right">Status</td>
+                                <td class="bold"><?php if(($contractorStatuses[$bidContractor->Id][0]->AwardedAmount != NULL)&& ($contractorStatuses[$bidContractor->Id][0]->AwardedAmount>0)): ?><?php echo $tenderDetails[0]->Status; ?><?php else: ?> <?php if($contractorScores[$bidContractor->Id][0]->Score10 == 0): ?><?php echo "Not Qualified"; ?><?php else: ?><?php echo "H$count"; ?><?php endif; ?> <?php endif; ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <?php $count++; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

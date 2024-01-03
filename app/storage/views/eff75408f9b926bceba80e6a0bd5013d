@@ -1,0 +1,78 @@
+<html>
+    <body>
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="2"><?php if((int)$type == 1): ?><?php echo "APS"; ?><?php elseif((int)$type ==2): ?><?php echo "Ontime Completion score"; ?><?php else: ?><?php echo "Quality of Execution score"; ?><?php endif; ?> of Completed Contractor</th>
+                </tr>
+                <?php if($fromDate != ''): ?>
+                    <tr>
+                        <th><i>From Date:</i>&nbsp;<?php echo $fromDate; ?></th>
+                    </tr>
+                <?php endif; ?>
+                <?php if($toDate != ''): ?>
+                    <tr>
+                        <th><i>To Date:</i>&nbsp;<?php echo $toDate; ?></th>
+                    </tr>
+                <?php endif; ?>
+                <tr>
+                    <th colspan="4"></th>
+                </tr>
+                <tr>
+                    <th>Sl.No.</th>
+                    <th>CDB No.</th>
+                    <th>Contractor</th>
+                    <th>Year</th>
+                    <th>Agency</th>
+                    <th>Work Id</th>
+                    <th>Work Name</th>
+                    <th>Category</th>
+                    <th>Awarded Amount</th>
+                    <th>Final Amount</th>
+                    <th>Dzongkhag</th>
+                    <th>Status</th>
+ <th>Work Start Date</th>
+ <th>Work Completion Date</th>
+                    <?php if((int)$type == 1 || (int)$type == 2): ?>
+                        <th>Ontime Completion</th>
+                    <?php endif; ?>
+                    <?php if((int)$type == 1 || (int)$type == 3): ?>
+                        <th>Quality of Execution</th>
+                    <?php endif; ?>
+                </tr>
+                </thead>
+                <tbody>
+                <?php $start = 1; ?>
+                <?php foreach($reportData as $workDetail): ?>
+                    <tr>
+                        <td><?php echo $start++; ?></td>
+                        <td><?php echo $workDetail->CDBNo; ?></td>
+                        <td><?php echo $workDetail->Contractor; ?></td>
+                        <td><?php echo $workDetail->Year; ?></td>
+                        <td><?php echo $workDetail->Agency; ?></td>
+                        <td><?php echo $workDetail->WorkId; ?></td>
+                        <td><?php echo strip_tags($workDetail->NameOfWork); ?></td>
+                        <td><?php echo $workDetail->Category; ?></td>
+                        <td><?php echo $workDetail->AwardedAmount; ?></td>
+                        <td><?php echo $workDetail->FinalAmount; ?></td>
+                        <td><?php echo $workDetail->Dzongkhag; ?></td>
+                        <td><?php echo $workDetail->Status; ?></td>
+<td><?php echo $workDetail->WorkStartDate; ?></td>
+<td><?php echo $workDetail->WorkCompletionDate; ?></td>
+                        <?php if((int)$type == 1 || (int)$type == 2): ?>
+                            <td>
+                                <?php echo $workDetail->OntimeCompletionScore; ?>
+
+                            </td>
+                        <?php endif; ?>
+                        <?php if((int)$type == 1 || (int)$type == 3): ?>
+                            <td><?php echo $workDetail->QualityOfExecutionScore; ?></td>
+                        <?php endif; ?>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

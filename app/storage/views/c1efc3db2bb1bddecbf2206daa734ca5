@@ -1,0 +1,98 @@
+<html>
+    <body>
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="2">LD Report</th>
+                </tr>
+                <?php if($cdbNo != '--'): ?>
+                    <tr>
+                        <th><i>CDB No.: </i>&nbsp;<?php echo $cdbNo; ?></th>
+                    </tr>
+                <?php endif; ?>
+                <?php if($workId != '--'): ?>
+                    <tr>
+                        <th><i>Work Id: </i>&nbsp;<?php echo $workId; ?></th>
+                    </tr>
+                <?php endif; ?>
+
+                <tr>
+                    <th colspan="4"></th>
+                </tr>
+                <tr>
+                    <th>
+                        Sl.No.
+                    </th>
+                    <th>
+                        Firm
+                    </th>
+                    <th>Name of Work</th>
+                    <th>WorkId</th>
+                    <th>Amount</th>
+                    <th class="">
+                        Start Date
+                    </th>
+                    <th class="">
+                        End Date
+                    </th>
+                    <th class="">
+                        LD No. of Days
+                    </th>
+                    <th class="">
+                        LD Amount
+                    </th>
+                    <th class="">
+                        Remarks
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php $count = 1; ?>
+                <?php $__empty_1 = true; foreach($ldWorks as $data): $__empty_1 = false; ?>
+                    <tr>
+                        <td><?php echo $count++; ?></td>
+                        <td><?php echo $data->Contractors; ?></td>
+                        <td><?php echo $data->NameOfWork; ?></td>
+                        <td><?php echo $data->WorkId; ?></td>
+                        <?php if($data->CmnWorkExecutionStatusId == CONST_CMN_WORKEXECUTIONSTATUS_AWARDED): ?>
+                            <td>
+                                <?php echo $data->AwardedAmount; ?>
+
+                            </td>
+                            <td>
+                                <?php echo convertDateToClientFormat($data->ActualStartDate); ?>
+
+                            </td>
+                            <td>
+                                <?php echo convertDateToClientFormat($data->ActualEndDate); ?>
+
+                            </td>
+                        <?php else: ?>
+                            <td>
+                                <?php echo $data->ContractPriceFinal; ?>
+
+                            </td>
+                            <td>
+                                <?php echo convertDateToClientFormat($data->CommencementDateFinal); ?>
+
+                            </td>
+                            <td>
+                                <?php echo convertDateToClientFormat($data->CompletionDateFinal); ?>
+
+                            </td>
+                        <?php endif; ?>
+                        <td><?php echo $data->LDNoOfDays; ?></td>
+                        <td><?php echo $data->LDAmount; ?></td>
+                        <td><?php echo $data->Remarks; ?></td>
+                    </tr>
+                <?php endforeach; if ($__empty_1): ?>
+                    <tr>
+                        <td colspan="10" class="text-center font-red">No data to display!</td>
+                    </tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

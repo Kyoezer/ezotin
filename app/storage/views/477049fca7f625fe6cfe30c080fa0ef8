@@ -1,0 +1,78 @@
+<?php $__env->startSection('content'); ?>
+<div class="row">
+	<div class="col-md-offset-2 col-md-8">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption font-green-seagreen">
+					<i class="fa fa-cogs"></i>
+					<span class="caption-subject">Application for Renewal</span>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<blockquote>
+					<p class="text-justify">
+						While renewing your certificate you can also change other information.
+					</p>
+				</blockquote>
+				<?php if($hasLateRenewal): ?>
+				<div class="note note-danger">
+		          	<p>Seems like your registration already expired on <?php echo convertDateToClientFormat($hasLateFeeAmount[0]->RegistrationExpiryDate); ?>. The total number of days late is <?php echo $hasLateFeeAmount[0]->PenaltyNoOfDays; ?> days. However 30 days is considered as grace period which means the late fee that would have been imposed is waived. Penalty amount is <?php echo $hasLateFeeAmount[0]->PenaltyLateFeeAmount; ?> per day.</p>
+					<?php $noOfDaysAfterGracePeriod=$hasLateFeeAmount[0]->PenaltyNoOfDays-30; ?>
+					<?php if($noOfDaysAfterGracePeriod>0): ?>
+					<p>Total number of days late after grace period is <?php echo $noOfDaysAfterGracePeriod; ?>. Total of Nu. <?php echo number_format($noOfDaysAfterGracePeriod*$hasLateFeeAmount[0]->PenaltyLateFeeAmount); ?> will be imposed as penalty for late renewal of your CDB certificate.</p>
+					<?php endif; ?>
+		        </div>
+		        <?php endif; ?>
+				<div class="col-md-12">
+					<h4 class="font-green-seagreen">Renewal of CDB Certificate Fee Structure</h4>
+					<table class="table table-bordered table-striped table-condensed">
+						<thead>
+							<tr>
+								<th>Engineer Type</th>
+								<th>Application Type</th>
+								<th class="text-right">Amount</th>
+								<th width="20%">Validity (yrs)</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<?php if($serviceSectorType==CONST_CMN_SERVICESECTOR_GOVT): ?>
+									<td>Goverment</td>
+								<?php else: ?>
+									<td>Private</td>
+								<?php endif; ?>
+								<td>Renewal of CDB Certificate</td>
+								<td class="text-right">
+									<?php if(empty($feeDetails[0]->RenewalFee)): ?>
+										-
+									<?php else: ?>
+									<?php echo number_format($feeDetails[0]->RenewalFee,2); ?>
+
+									<?php endif; ?>
+								</td>
+								<td class="text-center">
+									<?php if(empty($feeDetails[0]->RenewalValidity)): ?>
+										-
+									<?php else: ?>
+									<?php echo $feeDetails[0]->RenewalValidity; ?>
+
+									<?php endif; ?>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>	
+				<div class="form-actions">
+					<div class="row">
+						<div class="col-md-12">
+							<a href="<?php echo URL::to('engineer/applyrenewalregistrationdetails/'.$engineerId.'?redirectUrl=engineer/profile'); ?>" class="btn green">Proceed <i class="fa fa-arrow-circle-o-right"></i></a>
+							<a href="<?php echo URL::to('engineer/profile'); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('horizontalmenumaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

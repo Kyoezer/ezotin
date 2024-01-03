@@ -1,0 +1,152 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+            <?php $parameters = Input::all(); $parameters['export']='excel';  $route = 'ezotinrpt.servicesavailed'; ?>
+                <i class="fa fa-cogs"></i>Report of Services Availed &nbsp;&nbsp;<?php if(!Input::has('export')): ?> <a href="<?php echo route($route,$parameters); ?>" class="btn btn-sm green"><i class="fa fa-file-excel-o"></i> Export to Excel </a>   <?php $parameters['export'] = 'print'; ?><a href="<?php echo route($route,$parameters); ?>" class="btn btn-sm purple" target="_blank"><i class="fa fa-print"></i> Print</a><?php endif; ?>
+		</div>
+	</div>
+	<div class="portlet-body flip-scroll">
+        <?php if(Input::get('export') != 'print'): ?>
+        <?php echo Form::open(array('url'=>Request::url(),'method'=>'get')); ?>
+
+		<div class="form-body">
+			<div class="row">
+                <div class="col-md-2">
+                    <label class="control-label">From</label>
+                    <div class="input-icon right">
+                        <i class="fa fa-calendar"></i>
+                        <input type="text" name="FromDate" class="form-control input-sm datepicker" value="<?php echo Input::get('FromDate'); ?>" readonly="readonly" placeholder="">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="control-label">To</label>
+                    <div class="input-icon right">
+                        <i class="fa fa-calendar"></i>
+                        <input type="text" name="ToDate" class="form-control input-sm datepicker" value="<?php echo Input::get('ToDate'); ?>" readonly="readonly" placeholder="">
+                    </div>
+                </div>
+                <?php if(!Input::has('export')): ?>
+                    <div class="col-md-2">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="btn-set">
+                            <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                            <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                        </div>
+                    </div>
+                <?php endif; ?>
+			</div>
+		</div>
+        <?php echo Form::close(); ?>
+
+        <?php else: ?>
+            <?php foreach(Input::except('export') as $key=>$value): ?>
+                <b><?php echo $key; ?>: <?php echo $value; ?></b><br>
+            <?php endforeach; ?>
+            <br/>
+        <?php endif; ?>
+            <br>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-condensed flip-content" id="contractorhumanresource">
+                    <thead class="flip-content">
+                        <tr>
+                            <th>Applicant Type</th>
+                            <th>
+                                Service Type
+                            </th>
+                            <th class="text-right">
+                                 No. of times Availed
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $contractorCount = $consultantCount = $architectCount = $engineerCount = $spCount = 0; ?>
+                        <tr>
+                            <td class="bold">Contractor</td>
+                            <td>New Registration</td>
+                            <td class="text-right"><?php echo $contractorNewRegistrations; ?><?php $contractorCount+= $contractorNewRegistrations;?></td>
+                        </tr>
+                        <?php foreach($contractorServices as $contractorServiceName => $contractorService): ?>
+                            <tr>
+                                <td class="bold"></td>
+                                <td><?php echo $contractorServiceV[$contractorService]['Name']; ?></td>
+                                <td class="text-right"><?php echo $contractorServiceV[$contractorService]['Count']; ?><?php $contractorCount+= $contractorServiceV[$contractorService]['Count'];?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <tr>
+                            <td colspan="2" class="text-right bold">
+                                Total for Contractors: </td>
+                            <td class="text-right"><?php echo $contractorCount; ?></td>
+                        </tr>
+                        <tr>
+                            <td class="bold">Consultant</td>
+                            <td>New Registration</td>
+                            <td class="text-right"><?php echo $consultantNewRegistrations; ?><?php $consultantCount+= $consultantNewRegistrations;?></td>
+                        </tr>
+                        <?php foreach($consultantServices as $consultantServiceName => $consultantService): ?>
+                            <tr>
+                                <td class="bold"></td>
+                                <td><?php echo $consultantServiceV[$consultantService]['Name']; ?></td>
+                                <td class="text-right"><?php echo $consultantServiceV[$consultantService]['Count']; ?><?php $consultantCount+= $consultantServiceV[$consultantService]['Count'];?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <tr>
+                            <td colspan="2" class="text-right bold">
+                                Total for Consultants: </td>
+                            <td class="text-right"><?php echo $consultantCount; ?></td>
+                        </tr>
+
+                        <tr>
+                            <td class="bold">Architect</td>
+                            <td>New Registration</td>
+                            <td class="text-right"><?php echo $architectNewRegistrations; ?><?php $architectCount+= $architectNewRegistrations;?></td>
+                        </tr>
+                        <?php foreach($architectServices as $architectServiceName => $architectService): ?>
+                            <tr>
+                                <td class="bold"></td>
+                                <td><?php echo $architectServiceV[$architectService]['Name']; ?></td>
+                                <td class="text-right"><?php echo $architectServiceV[$architectService]['Count']; ?><?php $architectCount+= $architectServiceV[$architectService]['Count'];?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <tr>
+                            <td colspan="2" class="text-right bold">
+                                Total for Architects: </td>
+                            <td class="text-right"><?php echo $architectCount; ?></td>
+                        </tr>
+
+                        <tr>
+                            <td class="bold">Specialized Trade</td>
+                            <td>New Registration</td>
+                            <td class="text-right"><?php echo $spNewRegistrations; ?><?php $spCount+= $spNewRegistrations;?></td>
+                        </tr>
+                        <?php foreach($spServices as $spServiceName => $spService): ?>
+                            <tr>
+                                <td class="bold"></td>
+                                <td><?php echo $spServiceV[$spService]['Name']; ?></td>
+                                <td class="text-right"><?php echo $spServiceV[$spService]['Count']; ?><?php $spCount+= $spServiceV[$spService]['Count'];?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <tr>
+                            <td colspan="2" class="text-right bold">
+                                Total for Specialized Traders: </td>
+                            <td class="text-right"><?php echo $spCount; ?></td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" class="text-right bold">
+                                Grand Total: </td>
+                            <td class="text-right"><?php echo $spCount+$architectCount+$contractorCount+$consultantCount; ?></td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div><div class="clearfix"></div>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

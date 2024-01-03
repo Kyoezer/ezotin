@@ -1,0 +1,226 @@
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption font-green-seagreen">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject">Edit/Delete User</span>
+		</div>
+	</div>
+	<div class="portlet-body">
+		<div class="row">
+			<div class="tabbable-custom nav-justified">
+				<ul class="nav nav-tabs nav-justified" id="add-detail-tab">
+					<li class="active">
+						<a href="#crps" data-toggle="tab">
+							CRPS
+						</a>
+					</li>
+					<li>
+						<a href="#etool" data-toggle="tab">
+							Etool</a>
+					</li>
+					<li>
+						<a href="#cinet" data-toggle="tab">
+							Cinet</a>
+					</li>
+					<li>
+						<a href="#etoolcinet" data-toggle="tab">
+							Etool & Cinet
+						</a>
+					</li>
+					<li>
+						<a href="#applicant" data-toggle="tab">
+							Applicant
+						</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane" id="etool">
+						<div class="table-responsive col-md-12 col-sm-12 col-xs-12">
+							<table id="tablefilters_1" class="table table-condensed table-striped table-bordered table-hover table-responsive">
+								<thead>
+								<tr>
+									<th>Sl#</th>
+									<th class="order">Role</th>
+									<th>User Full Name</th>
+									<th>Username</th>
+									<th>Agency</th>
+									<th>Action</th>
+								</tr>
+								</thead>
+								<tbody>
+								<?php $slNo = 1; ?>
+								<?php foreach($etoolUsers as $etoolUser): ?>
+									<tr>
+										<td><?php echo $slNo++; ?></td>
+										<td>
+											<?php echo $etoolUser->Role; ?>
+
+										</td>
+										<td><?php echo $etoolUser->FullName; ?></td>
+										<td><?php echo $etoolUser->username; ?></td>
+										<td><?php echo $etoolUser->Agency; ?></td>
+										<td>
+											<a href="<?php echo URL::to('sys/user/'.$etoolUser->Id); ?>" class="resetuserpassword btn default btn-xs green-seagreen"><i class="fa fa-edit"></i>Edit</a>|
+											<a href="<?php echo URL::to('sys/deleteuser/'.$etoolUser->Id); ?>" class="resetuserpassword btn default btn-xs red"><i class="fa fa-times"></i>Delete</a>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					<div class="tab-pane" id="cinet">
+						<div class="table-responsive col-md-12 col-sm-12 col-xs-12">
+							<table id="tablefilters_1" class="table table-condensed table-striped table-bordered table-hover table-responsive">
+								<thead>
+								<tr>
+									<th>Sl#</th>
+									<th class="order">Role</th>
+									<th>User Full Name</th>
+									<th>Username</th>
+									<th>Agency</th>
+									<th>Action</th>
+								</tr>
+								</thead>
+								<tbody>
+								<?php $slNo = 1; ?>
+								<?php foreach($cinetUsers as $cinetUser): ?>
+									<tr>
+										<td><?php echo $slNo++; ?></td>
+										<td>
+											<?php echo $cinetUser->Role; ?>
+
+										</td>
+										<td><?php echo $cinetUser->FullName; ?></td>
+										<td><?php echo $cinetUser->username; ?></td>
+										<td><?php echo $cinetUser->Agency; ?></td>
+										<td>
+											<a href="<?php echo URL::to('sys/user/'.$cinetUser->Id); ?>" class="resetuserpassword btn default btn-xs green-seagreen"><i class="fa fa-edit"></i>Edit</a>|
+											<a href="<?php echo URL::to('sys/deleteuser/'.$cinetUser->Id); ?>" class="resetuserpassword btn default btn-xs red"><i class="fa fa-times"></i>Delete</a>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					<div class="tab-pane" id="etoolcinet">
+						<div class="table-responsive col-md-12 col-sm-12 col-xs-12">
+							<table id="tablefilters_1" class="table table-condensed table-striped table-bordered table-hover table-responsive">
+								<thead>
+								<tr>
+									<th>Sl#</th>
+									<th class="order">Role</th>
+									<th>User Full Name</th>
+									<th>Username</th>
+									<th>Agency</th>
+									<th>Action</th>
+								</tr>
+								</thead>
+								<tbody>
+								<?php $slNo=1; ?>
+								<?php foreach($etoolCinetUsers as $etoolCinetUser): ?>
+									<tr>
+										<td><?php echo $slNo++; ?></td>
+										<td>
+											<?php echo $etoolCinetUser->Role; ?>
+
+										</td>
+										<td><?php echo $etoolCinetUser->FullName; ?></td>
+										<td><?php echo $etoolCinetUser->username; ?></td>
+										<td><?php echo $etoolCinetUser->Agency; ?></td>
+										<td>
+											<a href="<?php echo URL::to('sys/user/'.$etoolCinetUser->Id); ?>" class="resetuserpassword btn default btn-xs green-seagreen"><i class="fa fa-edit"></i>Edit</a>|
+											<a href="<?php echo URL::to('sys/deleteuser/'.$etoolCinetUser->Id); ?>" class="resetuserpassword btn default btn-xs red"><i class="fa fa-times"></i>Delete</a>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					<div class="tab-pane active" id="crps">
+						<div class="table-responsive col-md-12 col-sm-12 col-xs-12">
+							<table id="tablefilters_1" class="table table-condensed table-striped table-bordered table-hover table-responsive">
+								<thead>
+								<tr>
+									<th>Sl#</th>
+									<th class="order">Role</th>
+									<th>User Full Name</th>
+									<th>Username</th>
+									<th>Agency</th>
+									<th>Action</th>
+								</tr>
+								</thead>
+								<tbody>
+								<?php $slNo=1; ?>
+								<?php foreach($crpsUsers as $crpsUser): ?>
+									<tr>
+										<td><?php echo $slNo++; ?></td>
+										<td>
+											<?php echo $crpsUser->Role; ?>
+
+										</td>
+										<td><?php echo $crpsUser->FullName; ?></td>
+										<td><?php echo $crpsUser->username; ?></td>
+										<td><?php echo $crpsUser->Agency; ?></td>
+										<td>
+											<a href="<?php echo URL::to('sys/user/'.$crpsUser->Id); ?>" class="resetuserpassword btn default btn-xs green-seagreen"><i class="fa fa-edit"></i>Edit</a>|
+											<a href="<?php echo URL::to('sys/deleteuser/'.$crpsUser->Id); ?>" class="resetuserpassword btn default btn-xs red"><i class="fa fa-times"></i>Delete</a>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					<div class="tab-pane" id="applicant">
+						<div class="table-responsive col-md-12 col-sm-12 col-xs-12">
+							<table id="tablefilters_1" class="table table-condensed table-striped table-bordered table-hover table-responsive">
+								<thead>
+								<tr>
+									<th>Sl#</th>
+									<th class="order">Role</th>
+									<th>CDB No.</th>
+									<th>User Full Name</th>
+									<th>Username</th>
+									<th>Action</th>
+								</tr>
+								</thead>
+								<tbody>
+								<?php $slNo = 1; ?>
+								<?php foreach($applicantUsers as $applicantUser): ?>
+									<tr>
+										<td><?php echo $slNo++; ?></td>
+										<td>
+											<?php echo $applicantUser->Role; ?>
+
+										</td>
+										<td><?php echo $applicantUser->CDBNo; ?></td>
+										<td><?php echo $applicantUser->FullName; ?></td>
+										<td><?php echo $applicantUser->username; ?></td>
+
+										<td>
+											<a href="<?php echo URL::to('sys/user/'.$applicantUser->Id); ?>" class="resetuserpassword btn default btn-xs green-seagreen"><i class="fa fa-edit"></i>Edit</a>|
+											<a href="<?php echo URL::to('sys/deleteuser/'.$applicantUser->Id); ?>" class="resetuserpassword btn default btn-xs red"><i class="fa fa-times"></i>Delete</a>
+										</td>
+									</tr>
+								<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

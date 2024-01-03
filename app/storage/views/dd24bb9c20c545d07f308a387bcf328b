@@ -1,0 +1,31 @@
+<?php $__env->startSection('main-content'); ?>
+<div class="row">
+<div class="col-md-12">
+<?php foreach($advertisementDetails as $advertisementDetail): ?>
+	<h4 class="head-title"><?php echo HTML::decode($advertisementDetail->Title); ?>
+
+		</h4>
+		<iframe src="https://www.facebook.com/plugins/share_button.php?href=<?php echo Request::url(); ?>&layout=button_count&size=small&mobile_iframe=true&width=88&height=20&appId" width="88" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+		<br>
+
+	<span style="font-size: 9pt;"><strong>Posted on <?php echo date_format(date_create($advertisementDetail->CreatedOn),'jS F, Y'); ?></strong></span><br><br>
+	<?php if($advertisementDetail->Image != NULL): ?>
+		<img src="<?php echo asset($advertisementDetail->Image); ?>" class="" height="200" width="200"/>
+		<br>
+	<?php endif; ?>
+	<?php echo HTML::decode($advertisementDetail->Content); ?>
+
+	<div class="clear"></div>
+	<?php if(count($attachments)>0): ?>
+		<?php foreach($attachments as $attachment): ?>
+			<a href="<?php echo asset($attachment->AttachmentPath); ?>" class="btn btn-xs btn-primary"><?php echo $attachment->AttachmentName; ?>&nbsp;<span class="fa fa-download"></span></a>
+				<br><br>
+		<?php endforeach; ?>
+	<?php endif; ?>
+
+<?php endforeach; ?>
+	<br>
+
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('websitemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

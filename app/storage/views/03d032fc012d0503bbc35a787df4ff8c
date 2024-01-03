@@ -1,0 +1,21 @@
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-gift"></i>
+			<span class="caption-subject">Engineer Registration</span>
+		</div>
+	</div>
+	<div class="portlet-body form">
+		<?php echo Form::open(array('url' => 'engineer/mregistration','role'=>'form','files'=>true)); ?>
+
+		<input type="hidden" value="1" name="EditByCdb">
+		<input type="hidden" name="PostBackUrl" value="<?php echo $redirectUrl; ?>">
+		<input type="hidden" name="IsServiceByEngineer" value="<?php echo $isServiceByEngineer; ?>">
+		<?php echo $__env->make('crps.engineerregistrationcontrols', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>;
+		<?php echo Form::close(); ?>
+
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

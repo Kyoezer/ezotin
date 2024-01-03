@@ -1,0 +1,207 @@
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject"><?php echo $pageTitle; ?></span>
+		</div>
+	</div>
+	<div class="portlet-body flip-scroll">
+		<div class="form-body">
+			<?php echo Form::open(array('url' =>Request::URL(),'role'=>'form','method'=>'get')); ?>
+
+			<div class="row">
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">CDB No.</label>
+						<input type="text" name="CDBNo" class="form-control" value="<?php echo $CDBNo; ?>">
+					</div>
+				</div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Contractor/Firm</label>
+                        <div class="ui-widget">
+                            <input type="hidden" class="contractor-id" name="ContractorId" value="<?php echo Input::get('ContractorId'); ?>"/>
+                            <input type="text" name="Contractor" value="<?php echo Input::get('Contractor'); ?>" class="form-control contractor-autocomplete"/>
+                        </div>
+                    </div>
+                </div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">Proprietor's CID</label>
+						<input type="text" name="CIDNo" class="form-control" value="<?php echo Input::get('CIDNo'); ?>">
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">Trade License No.</label>
+						<input type="text" name="TradeLicenseNo" class="form-control" value="<?php echo Input::get('TradeLicenseNo'); ?>">
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<?php if($isMonitoring): ?>
+							<label class="control-label">Monitored Between</label>
+						<?php else: ?>
+							<label class="control-label">Approved Between</label>
+						<?php endif; ?>
+						<div class="input-group input-large date-picker input-daterange">
+							<input type="text" name="FromDate" class="form-control date-picker" value="<?php echo Input::get('FromDate'); ?>" />
+						<span class="input-group-addon">
+						to </span>
+							<input type="text" name="ToDate" class="form-control date-picker" value="<?php echo Input::get('ToDate'); ?>" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">No. of Rows</label>
+                        <?php echo Form::select('Limit',array(10=>10,20=>20,30=>30,'All'=>'All'),Input::has('Limit')?Input::get('Limit'):20,array('class'=>'form-control')); ?>
+
+                    </div>
+                </div>
+				<div class="col-md-2">
+					<label class="control-label">&nbsp;</label>
+					<div class="btn-set">
+						<button type="submit" class="btn blue-hoki btn-sm">Search</button>
+						<a href="<?php echo Request::Url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+					</div>
+				</div>
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+		<div class="table-responsive">
+			<table class="table table-bordered table-striped table-condensed flip-content">
+			<thead class="flip-content">
+				<tr>
+					<th>
+						CDB No.
+					</th>
+					<th>
+						Ownership Type
+					</th>
+					<th>
+						Name of Firm
+					</th>
+					<th>
+						Class
+					</th>
+					<th>
+						 Country
+					</th>
+					<th>
+						 Dzongkhag
+					</th>
+					<th>
+						Mobile#
+					</th>
+					<th>
+						Tel#
+					</th>
+					<th>
+						Email
+					</th>
+					<th>Status</th>
+					<?php if($isMonitoring): ?>
+						<th class="col-md-2">
+							Action
+						</th>
+					<?php else: ?>
+						<th>
+							Certificate
+						</th>
+						<th>
+							Info.
+						</th>
+						<th>
+							Expiry Date
+						</th>
+					<?php endif; ?>
+				</tr>
+			</thead>
+			<tbody>
+				<?php $__empty_1 = true; foreach($contractorLists as $contractorList): $__empty_1 = false; ?>
+				<tr>
+					<td>
+						 <?php echo $contractorList->CDBNo; ?>
+
+					</td>
+					<td>
+						 <?php echo $contractorList->OwnershipType; ?>
+
+					</td>
+					<td>
+						<?php echo $contractorList->NameOfFirm; ?> 
+					</td>
+					<td>
+						<?php echo $contractorList->ClassificationCode; ?> 
+					</td>
+					<td>
+						 <?php echo $contractorList->Country; ?>
+
+					</td>
+					<td>
+						 <?php echo $contractorList->Dzongkhag; ?>
+
+					</td>
+					<td>
+						 <?php echo $contractorList->MobileNo; ?>
+
+					</td>
+					<td>
+						<?php echo $contractorList->TelephoneNo; ?>
+
+					</td>
+					<td>
+						<?php echo $contractorList->Email; ?>
+
+					</td>
+					<td>
+						<?php if((int)$contractorList->StatusReference == 12003): ?>
+							<?php if($contractorList->RegistrationExpiryDate<=date('Y-m-d G:i:s')): ?>
+								Expired
+							<?php else: ?>
+								Valid/Approved
+							<?php endif; ?>
+						<?php else: ?>
+							<?php echo $contractorList->Status; ?>
+
+						<?php endif; ?>
+					</td>
+					<?php if($isMonitoring): ?>
+						<td>
+							<?php if((int)$contractorList->StatusReference == 12003): ?>
+								1. <a href="<?php echo URL::to('contractor/monitoringreportoffice/'.$contractorList->Id); ?>">Office Establistment</a>
+								<br>
+								2. <a href="<?php echo URL::to('contractor/monitoringreportsites/'.$contractorList->Id); ?>">Sites</a>
+							<?php endif; ?>
+						</td>
+					<?php else: ?>
+						<td>
+							<?php if((int)$contractorList->StatusReference == 12003): ?>
+								<a href="<?php echo URL::to('contractor/certificate/'.$contractorList->Id); ?>" class="btn default btn-xs blue" target='_blank'><i class="fa fa-edit"></i> View/Print</a>
+							<?php endif; ?>
+						</td>
+						<td>
+							<a href="<?php echo URL::to($link.$contractorList->Id); ?>" class="btn default btn-xs green-seagreen <?php if($linkText=="Edit"): ?><?php echo "editaction"; ?><?php endif; ?>" <?php if($linkText=="View/Print"): ?><?php echo "target='_blank'"; ?><?php endif; ?>><i class="fa fa-edit"></i> <?php echo $linkText; ?></a>
+						</td>
+						<td>
+							<?php if((int)$contractorList->StatusReference == 12003): ?>
+								<a href="<?php echo URL::to('contractor/changeexpirydate/'.$contractorList->Id); ?>" class="btn default btn-xs green"><i class="fa fa-edit"></i> Change</a>
+							<?php endif; ?>
+						</td>
+					<?php endif; ?>
+				</tr>
+				<?php endforeach; if ($__empty_1): ?>
+				<tr>
+					<td class="font-red text-center" colspan="14">No data to display</td>
+				</tr>
+				<?php endif; ?>
+			</tbody>
+		</table>
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

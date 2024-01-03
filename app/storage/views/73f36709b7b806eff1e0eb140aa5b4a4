@@ -1,0 +1,147 @@
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject">Edit News/Notices</span>
+			<span class="caption-helper font-red">- Use the filters provided below to customize your search</span>
+		</div>
+	</div>
+	<div class="portlet-body">
+		<div id="addnesandnoticebox" class="form-body">
+			<?php echo Form::open(array('url' =>Request::URL(),'role'=>'form','method'=>'get')); ?>
+
+			<input type="hidden" class="rowreferencemodel" value="SysNewsAndNotificationModel">
+			<div class="row">
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">Message For</label>
+						<select name="MessageFor" class="form-control required">
+							<option value="">---SELECT ONE---</option>
+							<option value="1" <?php if((int)$messageFor==1): ?>selected="selected"<?php endif; ?>>CRPS Users</option>
+							<option value="2" <?php if((int)$messageFor==2): ?>selected="selected"<?php endif; ?>>Etool Users</option>
+							<option value="3" <?php if((int)$messageFor==3): ?>selected="selected"<?php endif; ?>>CiNet Users</option>
+							<option value="4" <?php if((int)$messageFor==4): ?>selected="selected"<?php endif; ?>>Contractors</option>
+							<option value="5" <?php if((int)$messageFor==5): ?>selected="selected"<?php endif; ?>>Consultants</option>
+							<option value="6" <?php if((int)$messageFor==6): ?>selected="selected"<?php endif; ?>>Architects</option>
+							<option value="7" <?php if((int)$messageFor==7): ?>selected="selected"<?php endif; ?>>Engineers</option>
+							<option value="8" <?php if((int)$messageFor==8): ?>selected="selected"<?php endif; ?>>Specialzied Trade</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">Message Displayed In</label>
+						<select name="DisplayIn" class="form-control required">
+							<option value="">---SELECT ONE---</option>
+							<option value="1" <?php if((int)$displayIn==1): ?>selected="selected"<?php endif; ?>>Login Page</option>
+							<option value="2" <?php if((int)$displayIn==2): ?>selected="selected"<?php endif; ?>>Dashboard</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label class="control-label">Message Date</label>
+						<div class="input-group input-large date-picker input-daterange">
+							<input type="text" name="MessageDateFrom" class="form-control datepickerfrom" value="<?php echo $messageDateFrom; ?>" />
+							<span class="input-group-addon">
+							to </span>
+							<input type="text" name="MessageDateTo" class="form-control datepickerto" value="<?php echo $messageDateTo; ?>" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">No. of Rows</label>
+                        <?php echo Form::select('Limit',array(10=>10,20=>20,30=>30,'All'=>'All'),Input::has('Limit')?Input::get('Limit'):20,array('class'=>'form-control')); ?>
+
+                    </div>
+                </div>
+				<div class="col-md-2">
+					<label>|</label>
+					<div class="btn-set">
+						<button type="submit" class="btn blue-hoki btn-sm">Search</button>
+						<a href="<?php echo Request::Url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+					</div>
+				</div>
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+		<table class="table table-bordered table-striped table-condensed flip-content">
+			<thead class="flip-content">
+				<tr>
+					<th>Sl#</th>
+					<th>
+						Message For
+					</th>
+					<th>
+						Displayed In
+					</th>
+					<th>
+						Date
+					</th>
+					<th width="50%">
+						 News/Notices
+					</th>
+					<th>
+						Action
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php $slNo = 1; ?>
+				<?php $__empty_1 = true; foreach($messages as $message): $__empty_1 = false; ?>
+				<tr>
+					<td><?php echo $slNo++; ?></td>
+					<td>
+						<input type="hidden" value="<?php echo $message->Id; ?>" class="rowreference">
+						<?php if((int)$message->MessageFor==1): ?>
+						CRPS Users
+						<?php elseif((int)$message->MessageFor==2): ?>
+						Etool Users
+						<?php elseif((int)$message->MessageFor==3): ?>
+						CiNet Users
+						<?php elseif((int)$message->MessageFor==4): ?>
+						Contractors
+						<?php elseif((int)$message->MessageFor==5): ?>
+						Consultants
+						<?php elseif((int)$message->MessageFor==6): ?>
+						Architects
+						<?php elseif((int)$message->MessageFor==7): ?>
+						Engineers
+						<?php elseif((int)$message->MessageFor==8): ?>
+						Specialized Trades
+						<?php endif; ?>
+					</td>
+					<td>
+						<?php if((int)$message->DisplayIn==1): ?>
+						Login Page
+						<?php else: ?>
+						Dasboard
+						<?php endif; ?>
+					</td>
+					<td>
+						<?php echo convertDateToClientFormat($message->Date); ?>
+
+					</td>
+					<td>
+						 <?php echo html_entity_decode($message->Message); ?>
+
+					</td>
+					<td>
+						<a href="<?php echo URL::to('sys/addnewsnotice/'.$message->Id); ?>" class="btn default btn-xs green-seagreen"><i class="fa fa-edit"></i>Edit</a>|
+						<button type="button" class="btn default btn-xs red removerowdbconfirmation"><i class="fa fa-times"></i>Delete</button>
+					</td>
+				</tr>
+				<?php endforeach; if ($__empty_1): ?>
+				<tr>
+					<td class="font-red text-center" colspan="10">No data to display</td>
+				</tr>
+				<?php endif; ?>
+			</tbody>
+		</table>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

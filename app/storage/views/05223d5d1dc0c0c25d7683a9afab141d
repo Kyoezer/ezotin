@@ -1,0 +1,142 @@
+<?php $__env->startSection('content'); ?>
+<?php foreach($engineerInformations as $engineerInformation): ?>
+<?php if((int)$isFinalPrint==0): ?>
+<p class="heading">Registration Fee Structure</p>
+ <table class="data-large">
+	<thead>
+		<tr>
+			<th>Type</th>
+			<th width="20%" class="text-center">Validity (yrs)</th>
+			<th class="text-right">Amount</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php $totalFeesApplicable=0; ?>
+		<?php foreach($feeDetails as $feeDetail): ?>
+		<tr>
+			<td class="text-center"><?php echo $feeDetail->SectorType; ?></td>
+			<td class="text-center">
+				<?php if(empty($feeDetail->RegistrationValidity)): ?>
+					-
+				<?php else: ?>
+				<?php echo $feeDetail->RegistrationValidity; ?>
+
+				<?php endif; ?>
+			</td>
+			<td class="text-right">
+				<?php if(empty($feeDetail->NewRegistrationFee)): ?>
+					-
+				<?php else: ?>
+				<?php echo number_format($feeDetail->NewRegistrationFee,2); ?>
+
+				<?php endif; ?>
+			</td>
+			<?php $totalFeesApplicable+=$feeDetail->NewRegistrationFee; ?>
+		</tr>
+		<?php endforeach; ?>
+		<tr>
+			<td colspan="2" class="bold text-right">
+				Total
+			</td>
+			<td class="text-right">
+				<?php echo number_format($totalFeesApplicable,2); ?>
+
+			</td>
+		</tr>
+	</tbody>
+</table>
+<strong>NOTE: </strong>These fees are subject to change by the final approver. Please do not make payment based on this.
+<br>
+<?php endif; ?>
+<p class="heading">Registration Details</p>
+<table class="data-large">
+	<tbody>
+		<?php if((int)$isFinalPrint==1): ?>
+		<tr>
+			<td class="small-medium"><strong>Current Status</strong></td>
+			<td><?php echo $engineerInformation->CurrentStatus; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>CDB No. </strong></td>
+			<td><?php echo $engineerInformation->CDBNo; ?></td>
+		</tr>
+		<?php endif; ?>
+		<tr>
+			<td class="small-medium"><strong>Type of Engineer </strong></td>
+			<td><?php echo $engineerInformation->EngineerType; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Trade </strong></td>
+			<td><?php echo $engineerInformation->Trade; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Name</strong></td>
+			<td><?php echo $engineerInformation->Name; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>CID No./Work Permit No.</strong></td>
+			<td><?php echo $engineerInformation->CIDNo; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Country</strong></td>
+			<td><?php echo $engineerInformation->Country; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Dzongkhag</strong></td>
+			<td><?php echo $engineerInformation->Dzongkhag; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Gewog</strong></td>
+			<td><?php echo $engineerInformation->Gewog; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Village</strong></td>
+			<td><?php echo $engineerInformation->Village; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Email</strong></td>
+			<td><?php echo $engineerInformation->Email; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Mobile No.</strong></td>
+			<td><?php echo $engineerInformation->MobileNo; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Employer Name</strong></td>
+			<td>
+				<?php if(!empty($engineerInformation->EmployerName)): ?>
+					<?php echo 'M/s.'.$engineerInformation->EmployerName; ?>
+
+				<?php endif; ?>
+			</td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Employer Address</strong></td>
+			<td><?php echo $engineerInformation->EmployerAddress; ?></td>
+		</tr>
+	</tbody>
+</table>
+<p class="heading">Professional Qualification</p>
+<table class="data-large">
+	<tbody>
+		<tr>
+			<td class="small-medium"><strong>Qualification</strong></td>
+			<td><?php echo $engineerInformation->Qualification; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Year of Graduation</strong></td>
+			<td><?php echo $engineerInformation->GraduationYear; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>Name of University</strong></td>
+			<td><?php echo $engineerInformation->NameOfUniversity; ?></td>
+		</tr>
+		<tr>
+			<td class="small-medium"><strong>University Country</strong></td>
+			<td><?php echo $engineerInformation->UniversityCountry; ?></td>
+		</tr>
+	</tbody>
+</table>
+<?php endforeach; ?>	
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('printmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

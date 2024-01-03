@@ -1,0 +1,135 @@
+<?php $__env->startSection('pagescripts'); ?>
+	<?php echo HTML::script('ckeditor/ckeditor.js'); ?>
+
+	<script>
+        CKEDITOR.replace( 'editor' ,{
+            toolbar: [
+                { name: 'document', items: [ 'Print' ] },
+//                { name: 'clipboard', items: [ 'Undo', 'Redo' ] },
+                { name: 'clipboard', groups: [ 'Clipboard', 'Undo','Redo' ] },
+                { name: 'styles', items: [ 'Format', 'Font', 'FontSize' ] },
+                { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline','Subscript','Superscript', 'Strike', 'RemoveFormat', 'CopyFormatting' ] },
+                { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+                { name: 'align', items: [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
+                { name: 'links', items: [ 'Link', 'Unlink' ] },
+                { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },
+                { name: 'insert', items: [ 'Image', 'Table' ] },
+                { name: 'tools', items: [ 'Maximize' ] },
+                { name: 'editing', items: [ 'Scayt' ] }
+            ],
+		});
+	</script>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>
+					<span class="caption-subject font-green-seagreen">Post Advertisements</span>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<?php echo Form::open(array('action'=>'WebAddAdvertisement@addAdvertisementDetails', 'class'=>'form-horizontal', 'files'=>true)); ?>
+
+				<?php foreach($advertisement as $detail): ?>
+				<div class="form-body">
+					<?php echo Form::hidden('Id',$detail->Id); ?>
+
+					<?php echo Form::label('Title:'); ?>
+
+					<?php echo Form::text('Title', $detail->Title, array('class'=>'form-control','autofocus','placeholder'=>'File Name')); ?>
+
+					<?php echo Form::label('Circular Content:'); ?>
+
+					<?php echo Form::textarea('Content', $detail->Content, array('class'=>'form-control summernote','id'=>'editor')); ?>
+
+					<?php echo Form::label('Upload Image:'); ?>
+
+					<?php echo Form::file('ImageUpload'); ?>
+
+					<?php if(isset($detail->Image) && !empty($detail->Image)): ?>
+						<span>
+						<img src="<?php echo asset($detail->Image); ?>" width="400" height="400"/>
+						<i data-id="<?php echo $detail->Id; ?>" class="fa fa-times delete-ad-img"></i>
+						</span>
+					<?php endif; ?>
+					<br><br>
+<?php /*					<?php echo Form::label('Upload File:'); ?>*/ ?>
+					<div class="col-md-7">
+						<caption>Upload File:</caption>
+						<table id="ad-attachment" class="table table-condensed table-bordered">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Document Name</th>
+									<th style="width: 250px;">File</th>
+								</tr>
+							</thead>
+							<tbody>
+							<tr>
+								<td>
+									<button type="button" class="deletetablerow"><i class="fa fa-times fa-lg"></i></button>
+								</td>
+								<td>
+									<input type="text" name="AttachmentName[]" class="form-control input-sm" />
+								</td>
+								<td>
+									<input type="file" name="FileUpload[]" class="form-control input-sm" />
+								</td>
+							</tr>
+							<tr class="notremovefornew">
+								<td>
+									<button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+								</td>
+								<td colspan="2"></td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="clearfix"></div>
+					<?php if(count($attachments) > 0): ?>
+						<br>
+						<?php $count = 1; ?>
+						<?php foreach($attachments as $attachment): ?>
+							<span>
+							<a href="<?php echo asset($attachment->AttachmentPath); ?>" target="_blank"><?php echo $attachment->AttachmentName; ?></a>
+							<i data-id="<?php echo $attachment->Id; ?>" class="fa fa-times delete-ad-attachment"></i>
+							</span> <br>
+						<?php endforeach; ?>
+					<?php endif; ?>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-md-2 pull-left">Show in Marquee
+
+					</label>
+					<div class="col-md-4">
+						<div class="radio-list">
+							<label class="radio-inline">
+								<input type="radio" name="ShowInMarquee" value="1" <?php if(isset($detail->ShowInMarquee)): ?><?php if($detail->ShowInMarquee == 1): ?>checked="checked"<?php endif; ?><?php else: ?>checked="checked"<?php endif; ?>/>
+								Yes
+							</label>
+
+							<label class="radio-inline">
+								<input type="radio" name="ShowInMarquee" value="0" <?php if($detail->ShowInMarquee == 0): ?>checked="checked"<?php endif; ?> />
+								No
+							</label>
+						</div>
+					</div>
+				</div>
+				<?php endforeach; ?>
+				<div class="form-actions">
+					<div class="btn-set">
+						<button type="submit" class="btn green">Save</button>
+						<a href="<?php echo URL::to('web/editadvertisements'); ?>" class="btn red">Cancel</a>
+					</div>
+				</div>
+				<?php echo Form::close(); ?>
+
+			</div>
+		</div>
+	</div>		
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

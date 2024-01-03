@@ -1,0 +1,108 @@
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/global/scripts/report.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <?php $parameters = Input::all(); $parameters['export']='excel'; ?>
+                <i class="fa fa-cogs"></i>Agency Wise Work Awarded and Completed &nbsp;&nbsp;<?php if(!Input::has('export')): ?> <a href="<?php echo route('etoolrpt.agencywisework',$parameters); ?>" class="btn btn-sm green"><i class="fa fa-file-excel-o"></i> Export to Excel</a>    <?php $parameters['export'] = 'print'; ?><a href="<?php echo route('etoolrpt.agencywisework',$parameters); ?>" class="btn btn-sm purple" target="_blank"><i class="fa fa-print"></i> Print</a><?php endif; ?>
+            </div>
+        </div>
+        <div class="portlet-body flip-scroll">
+            <?php if(Input::get('export') != 'print'): ?>
+            <?php echo Form::open(array('url'=>Request::url(),'method'=>'get')); ?>
+
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Ministry</label><div class="clearfix"></div>
+                            <select name="Ministry" class="form-control">
+                                <option value="">All</option>
+                                <?php foreach($ministries as $ministry): ?>
+                                    <option value="<?php echo $ministry->Name; ?>" <?php if(Input::get('Ministry') == $ministry->Name): ?>selected="selected"<?php endif; ?>><?php echo $ministry->Name; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">From Date</label><div class="clearfix"></div>
+                            <div class="input-icon right">
+                                <i class="fa fa-calendar"></i>
+                                <input type="text" name="FromDate" class="form-control datepicker" value="<?php echo Input::get('FromDate'); ?>" readonly="readonly" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">To Date</label><div class="clearfix"></div>
+                            <div class="input-icon right">
+                                <i class="fa fa-calendar"></i>
+                                <input type="text" name="ToDate" class="form-control datepicker" value="<?php echo Input::has('ToDate')?Input::get('ToDate'):date('d-m-Y'); ?>" readonly="readonly" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                    <?php if(!Input::has('export')): ?>
+                        <div class="col-md-2">
+                            <label class="control-label">&nbsp;</label>
+                            <div class="btn-set">
+                                <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                                <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php echo Form::close(); ?>
+
+            <?php else: ?>
+                <?php foreach(Input::all() as $key=>$value): ?>
+                    <?php if($key != 'export'): ?>
+                        <b><?php echo $key; ?>: <?php echo $value; ?></b><br>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+                    <br/>
+            <?php endif; ?>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-condensed flip-content" id="">
+                    <thead class="flip-content">
+                        <tr>
+                            <th>Sl#</th>
+                            <th>Agency</th>
+                            <th>No. of Awarded Works</th>
+                            <th>No. of Completed Works</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php $count = 1; $noAwarded = $noCompleted = $total = 0; ?>
+                    <?php $__empty_1 = true; foreach($reportData as $data): $__empty_1 = false; ?>
+                        <tr>
+                            <td><?php echo $count++; ?></td>
+                            <td><?php echo $data->Agency; ?></td>
+                            <td class="text-right"><?php echo $data->NoAwarded; ?><?php $noAwarded += $data->NoAwarded;?></td>
+                            <td class="text-right"><?php echo $data->NoCompleted; ?><?php $noCompleted += $data->NoCompleted;?></td>
+                            <td class="text-right"><?php echo $data->NoAwarded+$data->NoCompleted; ?><?php $total += $data->NoAwarded+$data->NoCompleted;?></td>
+                        </tr>
+                    <?php endforeach; if ($__empty_1): ?>
+
+                        <tr><td colspan="5" class="font-red text-center">No data to display</td></tr>
+                    <?php endif; ?>
+                    <?php if(!empty($reportData)): ?>
+                        <tr>
+                            <td class="bold text-right" colspan="2">Total</td>
+                            <td class="text-right"><?php echo $noAwarded; ?></td>
+                            <td class="text-right"><?php echo $noCompleted; ?></td>
+                            <td class="text-right"><?php echo $total; ?></td>
+                        </tr>
+                    <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

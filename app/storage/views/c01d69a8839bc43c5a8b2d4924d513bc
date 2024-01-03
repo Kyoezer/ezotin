@@ -1,0 +1,84 @@
+<?php $__env->startSection('content'); ?>
+<div class="col-md-4">
+	<div class="portlet light bordered">
+		<div class="portlet-title">
+			<div class="caption font-green-seagreen">
+				<i class="fa fa-gift"></i>
+				<span class="caption-subject">Consultant Service Category</span>
+			</div>
+		</div>
+		<div class="portlet-body form">
+			<?php echo Form::open(array('url' => 'consultant/mservicecategory','role'=>'form')); ?>
+
+			<?php foreach($editServiceCategories as $editServiceCategory): ?>
+				<input type="hidden" name="Id" value="<?php echo $editServiceCategory->Id; ?>">
+				<div class="form-body">
+					<div class="form-group">
+						<label class="control-label">Code</label>
+						<input type="text" name="Code" class="form-control" placeholder="Code" value="<?php if(!empty($editServiceCategory->Code)): ?><?php echo $editServiceCategory->Code; ?><?php else: ?><?php echo Input::old('Code'); ?><?php endif; ?>">
+					</div>
+					<div class="form-group">
+						<label class="ontrol-label">Name</label>
+						<input type="text" name="Name" class="form-control" placeholder="Name" value="<?php if(!empty($editServiceCategory->Name)): ?><?php echo $editServiceCategory->Name; ?><?php else: ?><?php echo Input::old('Name'); ?><?php endif; ?>">
+					</div>
+				</div>
+				<div class="form-actions">
+					<div class="row">
+						<div class="col-md-12">
+							<button type="submit" class="btn green">Save</button>
+							<a href="<?php echo URL::to(Request::url()); ?>" class="btn red">Cancel</a>
+						</div>
+					</div>
+				</div>
+			<?php endforeach; ?>
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+</div>
+<div class="col-md-8">
+	<div class="portlet light bordered">
+		<div class="portlet-title">
+			<div class="caption font-green-seagreen">
+				<i class="fa fa-gift"></i>Edit/Delete Consultant Services
+			</div>
+		</div>
+		<div class="portlet-body">
+			<table id="tablefilters_1" class="table table-bordered table-striped table-condensed">
+	            <thead>
+	                <tr>
+	                    <th>
+	                        Code
+	                    </th>
+	                    <th class="order">
+	                        Name
+	                    </th>
+	                    <th>
+	                        Actions
+	                    </th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                <?php foreach($serviceCategories as $serviceCategory): ?>
+	                <tr>
+	                    <td>
+	                        <?php echo $serviceCategory->Code; ?>
+
+	                    </td>
+	                    <td>
+	                    	 <?php echo $serviceCategory->Name; ?>
+
+	                    </td>
+	                    <td>
+	                        <a href="<?php echo Request::url().'?sref='.$serviceCategory->Id; ?>" class="editaction">Edit</a>|
+	                        <a href="#" class="deleteaction">Delete</a>
+	                    </td>
+	                </tr>
+	                <?php endforeach; ?>
+	            </tbody>
+	        </table>
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

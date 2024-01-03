@@ -1,0 +1,69 @@
+<html>
+<head><title>Ezotin - Equipment Details</title></head>
+<body>
+    <center><u><b>CAUTION</b></u></center>
+    <center><b>An equipment is allowed to execute only one work at a time for that particular firm.</b></center>
+    <center><h2>Details of Registration No: <?php echo Input::get('RegistrationNo')?Input::get('RegistrationNo'):'----'; ?></h2></center>
+    <?php if(!empty($responseArray)): ?>
+
+    <?php if(count($responseArray)>0): ?>
+        <center>
+            <h4><strong>From RSTA database</strong></h4>
+        <?php foreach($responseArray as $index=>$array): ?>
+            Owner: <span style="color:#0b3e7d;"><?php echo $array['Owner']; ?></span>&nbsp; | &nbsp;Owner CID: <span style="color:#0b3e7d;"><?php echo $array['CIDNo']; ?></span>&nbsp; | &nbsp;Vehicle Type: <span style="color:#0b3e7d;"><?php echo $array['VehicleType']; ?></span>
+            | &nbsp;Vehicle Model: <span style="color:#0b3e7d;"><?php echo $array['VehicleModel']; ?></span>| &nbsp;Chassis Number:<span style="color:#0b3e7d;"><?php echo $array['chassisNumber']; ?></span>| &nbsp;Engine Number: <span style="color:#0b3e7d;"><?php echo $array['engineNumber']; ?></span>| &nbsp;Expiry Date:<span style="color:#0b3e7d;"> <?php echo $array['ExpiryDate']; ?>  </span>
+            <br>
+        <?php endforeach; ?>
+        <br/>
+        <strong>In case of RSTA registered equipment kindly verify with RSTA if there are any mismatch in ownership as the RSTA data is currently under migration and stabilization.</strong>
+        </center>
+            <hr>
+    <?php else: ?>
+        <?php if((bool)$vehicleTypeFromDB): ?>
+            <center>
+                <b>Vehicle Type: <?php echo $vehicleTypeFromDB; ?></b>
+            </center>
+        <?php endif; ?>
+    <?php endif; ?>
+    <?php $__empty_1 = true; foreach($equipmentOwner as $owner): $__empty_1 = false; ?>
+        <center><b>Equipment is owned by <?php echo $owner->NameOfFirm." (CDB No. ".$owner->CDBNo.")"; ?></b></center>
+    <?php endforeach; if ($__empty_1): ?>
+    <?php endif; ?>
+    <br>
+    <?php if(count($equipmentDetails)>0): ?>
+        <center><b>Equipment is engaged in <?php echo count($equipmentDetails); ?> Work(s)</b></center>
+    <?php endif; ?>
+    <?php $__empty_1 = true; foreach($equipmentDetails as $value): $__empty_1 = false; ?>
+        <center><b>Work: </b><?php echo $value->WorkId; ?> &nbsp;&nbsp;&nbsp;&nbsp;   <b>ProcuringAgency: </b><?php echo $value->ProcuringAgency; ?></center>
+        <br/>
+    <?php endforeach; if ($__empty_1): ?>
+        <center>This equipment is not engaged in any work at this time.</center>
+    <?php endif; ?>
+    <br/>
+    <hr/>
+    <?php else: ?>
+        <p><center><strong>No details about this equipment</strong></center></p>
+    <?php endif; ?>
+    <center><b>Print this page as an evidence to prove that particular equipment is engaged or not in a work or
+            project</b></center>
+    <center>Printed on: <?php echo date('d m Y'); ?> By: <?php echo (isset(Auth::user()->Id))?Auth::user()->FullName:'Applicant'; ?></center>
+    <?php if(Request::segment(1) == 'etoolrpt'): ?>
+        <?php $url = "etl/reports"; ?>
+    <?php endif; ?>
+    <?php if(Request::segment(1) == 'cinet'): ?>
+        <?php $url = "cinet/reports"; ?>
+    <?php endif; ?>
+    <?php if(!Input::has('from')): ?>
+        <?php /*<center><a href="#" onclick="window.history.back();" style="color: blue;">Click here to return to previous page</a></center><br/>*/ ?>
+        <?php if(!Input::has('print')): ?>
+            <br>
+            <center><input type="button" onclick="window.print();" value="Print"/> </center>
+        <?php endif; ?>
+    <?php else: ?>
+        <center><a href="<?php echo URL::to((isset(Auth::user()->Id))?'etoolrpt/equipmentcheck':'equipmentcheck'); ?>?RegistrationNo=<?php echo Input::get('RegistrationNo'); ?>&print=true<?php if(!isset(Auth::user()->Id)): ?><?php echo "&from=true"; ?><?php endif; ?>" target="_blank" class="btn blue">Print</a>&nbsp;<button type="button" class="btn green" data-dismiss="modal">OK</button></center><br/>
+    <?php endif; ?>
+    <?php if(Input::get('print') == true): ?>
+        <script>window.print();</script>
+    <?php endif; ?>
+</body>
+</html>

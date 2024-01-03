@@ -1,0 +1,5 @@
+<?php $__env->startSection('emailcontent'); ?>
+<p><?php echo $mailMessage; ?></p>
+<!-- Callout Panel -->                           
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('emailmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

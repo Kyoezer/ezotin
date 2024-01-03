@@ -1,0 +1,455 @@
+<?php $__env->startSection('content'); ?>
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/global/scripts/etool.js?ver='.randomString()); ?>
+
+      <script>
+        if($('input[name="ShowModal"]').val() == 1){
+            $("#addcontractorssmall").modal('show');
+        }else{
+            //$('.cdbno').val('');
+            //$('.contractor-id').val('');
+            //$('input[name="FinancialBidQuoted"]').val('');
+        }
+    </script>
+    <?php if(Session::has('savedsuccessmessage')): ?>
+        <?php if(Input::get('currentTab') == 'contractorequipment'): ?>
+            <?php $append = 'an Equipment'; ?>
+        <?php else: ?>
+            <?php $append = 'a Human Resource'; ?>
+        <?php endif; ?>
+        <script>
+            //alert("You have successfully added <?php echo $append; ?>");
+        </script>
+    <?php endif; ?>
+<?php $__env->stopSection(); ?>
+  <?php if(empty($tenders)): ?>
+	<?php $contractorArray = $addContractors; ?>
+<?php else: ?>
+	<?php $contractorArray = $tenders; ?>
+<?php endif; ?>
+<input type="hidden" name="URL" id="x" value="<?php echo URL::to('/');; ?>"/>
+<div id="equipmentrstamodal" class="modal fade in" role="dialog" aria-labelledby="modalmessagebox" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3 id="" class="modal-title font-red-intense">Equipment Details</h3>
+            </div>
+            <div class="modal-body">
+                
+            </div>
+        </div>
+    </div>
+</div>
+<div id="addcontractormodal" class="modal fade in" role="dialog" aria-labelledby="modalmessagebox" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3 id="modalmessageheader" class="modal-title font-red-intense">Add Contractor</h3>
+            </div>
+            <?php echo Form::open(array('url'=>'etl/etlsaveaddcontractor')); ?>
+
+				
+				 <?php foreach($contractorArray as $tender): ?>
+
+					<?php echo Form::hidden('ContractorType','SMALL'); ?>
+
+					<?php echo Form::hidden('Id',$edit?$tender->Id:'',array('id'=>'editId')); ?>
+
+					<?php echo Form::hidden('EtlTenderId',$tenderId,array('class'=>'etltenderid')); ?>
+
+					<?php echo Form::hidden('CurrentTab',Input::has('currentTab')?'#'.Input::get('currentTab'):'#contractorhumanresource'); ?>
+
+				<?php endforeach; ?>
+				
+<?php /* 
+				<?php echo Form::hidden('Id',(isset($bidContractors[0])?$bidContractors[0]->Id:'')); ?>
+
+                <?php echo Form::hidden('Source','1'); ?>
+
+                <?php echo Form::hidden('EtlTenderId',$tenderId); ?>
+
+                <?php echo Form::hidden('CurrentTab','XX'); ?> */ ?>
+            <div class="modal-body">
+                <table class="table table-bordered" id="ContractorAdd">
+					<thead>
+						<tr>
+							<th>CDB No.</th>
+							<th>Name</th>
+						</tr>
+					</thead>
+                    <tbody>
+					<?php foreach($contractorList as $contList): ?>
+                        <tr> 
+                            <td class="col-md-4">
+								<input type="text" class="form-control input-sm cdbno required" value="<?php echo $contList->CDBNo; ?>" placeholder="CDB No.">
+                            </td>
+                            <td>
+                                <input type="hidden" name="Contractor[AAAAA][CrpContractorFinalId]" value="<?php echo $contList->CrpContractorFinalId; ?>" class="contractor-id"/>
+                                <input type="text" class="contractorName required form-control input-sm contractor-name" value="<?php echo $contList->NameOfFirm; ?>" readonly="readonly"/>
+                            </td>
+                        </tr>
+						<?php endforeach; ?>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Financial Bid Quoted <span class="font-red">*</span></label>
+                             <?php foreach($contractorArray as $tender): ?>
+								<input type="text" name="FinancialBidQuoted" value="<?php echo $edit?$tender->FinancialBidQuoted:''; ?>" class="form-control required input-sm" placeholder="Financial Bid Quoted">
+							<?php endforeach; ?>
+							
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="btn-set">
+                    <button type="submit" class="btn green">Save</button>
+                    <button type="button" class="btn red" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+            <?php echo Form::close(); ?>
+
+        </div>
+    </div>
+</div>
+
+<div id="hrcheckmodal" class="modal fade in" role="dialog" aria-labelledby="modalmessagebox" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3 id="modalmessageheader" class="modal-title font-red-intense">HR Check</h3>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="eqcheckmodal" class="modal fade in" role="dialog" aria-labelledby="modalmessagebox" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h3 id="modalmessageheader" class="modal-title font-red-intense">Equipment Check</h3>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-bar">
+	<ul class="page-breadcrumb">
+		<li>
+			<a href="#">e-tool</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li>
+			<a href="#">Add Contractor</a>
+		</li>
+	</ul>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Add Contractor
+				</div>
+			</div>
+			<div class="portlet-body form flip-scroll">
+				<!-- BEGIN FORM-->etool
+                <?php echo Form::open(array('url'=>'etl/etlsaveaddcontractor')); ?>
+
+				
+				<?php echo Form::hidden('ContractorType','SMALL'); ?>
+
+                <?php echo Form::hidden('MaxHrPoints',$maxHrPoints); ?>
+
+                <?php echo Form::hidden('MaxEqPoints',$maxEqPoints); ?>
+
+                <?php echo Form::hidden('CurrentTab',Input::has('currentTab')?'#'.Input::get('currentTab'):'#contractorhumanresource'); ?>
+
+					<div class="form-body">
+                      
+                        <?php foreach($contractorArray as $tender): ?>
+                            <?php echo Form::hidden('Id',$edit?$tender->Id:''); ?>
+
+                            <?php echo Form::hidden('EtlTenderId',$tenderId); ?>
+
+                            <h4 class="bold">Work Id : <span class="font-green-seagreen "><?php echo $tender->WorkId; ?></span></h4>
+                            <p><span class="bold">Nameetooletooletooletooletooletooletooletool : </span><?php echo $tender->NameOfWork; ?></p>
+                            <p><span class="bold">Description : </span><?php echo $tender->DescriptionOfWork; ?></p>
+                            <p><span class="bold">Dzongkhag : </span><?php echo $tender->Dzongkhag; ?></p><br/>
+                        <?php /*Modal content was here*/ ?>
+                        <?php endforeach; ?>
+						<div class="row">
+							<div class="col-md-12">
+								<h5 class="font-green-seagreen bold">Add Human Resource/Equipment</h5>
+								<div class="tabbable-custom nav-justified">
+									<ul class="nav nav-tabs nav-justified" id="add-detail-tab">
+										<li class="active">
+											<a href="#contractorhumanresource" data-toggle="tab">
+											Human Resource</a>
+										</li>
+										<li>
+											<a href="#contractorequipment" data-toggle="tab">
+											Equipments</a>
+										</li>
+									</ul>
+									<div class="tab-content">
+										<div class="tab-pane active" id="contractorhumanresource">
+											<h5 class="bold">Human Resource Criteria</h5>
+											<table class="table table-bordered table-striped table-condensed flip-content">
+												<thead class="flip-content">
+													<tr>
+														<th>
+															Sl No.
+														</th>
+														<th class="">
+															 Designation
+														</th>
+														<th class="">
+															 Qualification
+														</th>
+																						
+													</tr>
+												</thead>
+												<tbody>
+                                                    <?php $count = 1; ?>
+                                                    <?php $__empty_1 = true; foreach($criteriaHR as $hr): $__empty_1 = false; ?>
+													<tr>
+														<td>
+															<?php echo $count; ?>
+
+														</td>
+														<td>
+															<?php echo $hr->Designation; ?>
+
+														</td>
+														<td>
+															<?php echo $hr->Qualification; ?>
+
+														</td>
+														
+													</tr>
+                                                    <?php $count++; ?>
+                                                    <?php endforeach; if ($__empty_1): ?>
+                                                        <tr><td colspan="5" class="text-center font-red">No data to display</td></tr>
+                                                    <?php endif; ?>
+													<?php $hrCount = $count;?>
+												</tbody>
+											</table>
+                                            <a href="#addcontractormodal" data-toggle="modal" class="btn purple"><?php if($edit): ?>Edit Contractor's Quoted Amount <?php else: ?> Add Contractor <?php endif; ?></a>
+                                            <br><br>
+											<?php if($hrCount>1){?>
+                                            <h5 class="bold">Human Resource for Work Id <?php echo $tender->WorkId; ?> <?php if($contractorCDBNos != ''): ?>(CDB No.: <?php echo $contractorCDBNos[0]->CDBNo; ?>)<?php endif; ?></h5>
+											<table class="table table-bordered table-striped table-condensed flip-content table-togglecontrols" id="addcontractor-hr">
+												<thead class="flip-content">
+													<tr>
+														<th></th>
+														<th width="20%">
+															CID No./Work Permit
+														</th>
+                                                        <th>
+                                                            Name
+                                                        </th>
+														<th class="">
+															 Designation
+														</th>
+														<th class="">
+															 Qualification
+														</th>
+																				
+													</tr>
+												</thead>
+												<tbody>
+                                                <?php $hrTotal = 0; ?>
+                                                    <?php foreach($contractorHR as $contHR): ?>
+                                                    <?php $randomKey = randomString(); ?>
+													<tr>
+                                                        <td>
+                                                            <button type="button" class="deletetablerow deleterowfromdb"><i class="fa fa-times fa-lg"></i></button>
+                                                        </td>
+														<td>
+															<div class="input-group">
+																 <input type="hidden" name="EtlContractorHumanResource[<?php echo $randomKey; ?>][Id]" value="<?php echo $contHR->Id; ?>" data-table="etlcontractorhumanresource" class="row-id not-required resetKeyForNew"/>
+																<input id="newpassword" class="form-control <?php /*checkhrtr*/ ?> cidforwebservicetr  resetKeyForNew input-sm input-large etool-hr checkHumanResource" type="text" name="EtlContractorHumanResource[<?php echo $randomKey; ?>][CIDNo]" placeholder="CID No." value="<?php echo $contHR->CIDNo; ?>">
+															</div>
+														</td>
+                                                        <td>
+                                                            <div class="input-group">
+                                                                <input class="form-control  resetKeyForNew input-sm input-large hr-name namefromwebservice" type="text" name="EtlContractorHumanResource[<?php echo $randomKey; ?>][Name]" placeholder="Name" value="<?php echo $contHR->Name; ?>">
+                                                            </div>
+                                                        </td>
+														<td>
+															<!--OLD CODE COMMENTED BY PRAMOD 
+															<select name="EtlContractorHumanResource[<?php echo $randomKey; ?>][CmnDesignationId]" id="designation" class="form-control input-sm EtlHrDesignationId resetKeyForNew">
+																<option value="">---SELECT ONE---</option>
+                                                                <?php foreach($hrDesignations as $hrDesignation): ?>
+                                                                    <option value="<?php echo $hrDesignation->Id; ?>" <?php if($edit): ?><?php if($hrDesignation->EtlTierId != $contHR->EtlTierId): ?>class="hide" disabled="disabled"<?php endif; ?><?php endif; ?>  data-criteriaHRId="<?php echo $hrDesignation->EtlCriteriaHumanResourceId; ?>" <?php if(($contHR->CmnDesignationId == $hrDesignation->Id)&&($hrDesignation->EtlTierId == $contHR->EtlTierId)): ?> selected="selected" <?php endif; ?> <?php if(!$edit): ?>class="hide"<?php endif; ?> data-tierid="<?php echo $hrDesignation->EtlTierId; ?>" <?php if(!$edit): ?>disabled="disabled"<?php endif; ?>><?php echo $hrDesignation->Designation; ?></option>
+                                                                <?php endforeach; ?>
+															</select>-->
+															<select name="EtlContractorHumanResource[<?php echo $randomKey; ?>][CmnDesignationId]" id="designation" class="form-control input-sm EtlSmallHrDesignationId resetKeyForNew">
+																<option value="">---SELECT ONE---</option>
+                                                                <?php foreach($hrDesignations as $hrDesignation): ?>
+                                                                    <!--<option value="<?php echo $hrDesignation->Id; ?>" <?php if($contHR->EtlTierId == $hrDesignation->Id): ?>selected="selected"<?php endif; ?>><?php echo $hrDesignation->Designation; ?></option>-->	
+																	<option value="<?php echo $hrDesignation->Id; ?>" <?php if($edit): ?><?php if($hrDesignation->EtlTierId != $contHR->EtlTierId): ?> <?php endif; ?><?php endif; ?>  data-criteriaHRId="<?php echo $hrDesignation->EtlCriteriaHumanResourceId; ?>" <?php if(($contHR->CmnDesignationId == $hrDesignation->Id)): ?> selected="selected" <?php endif; ?> <?php if(!$edit): ?> <?php endif; ?> data-tierid="<?php echo $hrDesignation->EtlTierId; ?>" <?php if(!$edit): ?> <?php endif; ?>><?php echo $hrDesignation->Designation; ?></option>
+															    <?php endforeach; ?>
+															</select>
+														</td>
+														<td>
+															<select name="EtlContractorHumanResource[<?php echo $randomKey; ?>][Qualification]" id="" class="form-control input-sm EtlHrQualificationId resetKeyForNew etool-total">
+																<option value="">---SELECT ONE---</option>
+                                                                <?php foreach($hrQualifications as $hrQualification): ?>
+                                                                    <option value="<?php echo htmlspecialchars_decode($hrQualification->Qualification); ?>" <?php if($edit): ?><?php if($hrQualification->CmnDesignationId != $contHR->CmnDesignationId): ?> <?php endif; ?><?php endif; ?> <?php if((htmlspecialchars_decode($contHR->Qualification) == htmlspecialchars_decode($hrQualification->Qualification)) && ($hrQualification->CmnDesignationId == $contHR->CmnDesignationId)): ?>selected="selected"<?php endif; ?> <?php if(!$edit): ?><?php endif; ?> data-tierid="<?php echo $hrQualification->EtlTierId; ?>" data-designationid="<?php echo $hrQualification->CmnDesignationId; ?>" data-points="<?php echo $hrQualification->Points; ?>" <?php if(!$edit): ?><?php endif; ?>><?php echo $hrQualification->Qualification; ?></option>
+                                                                <?php endforeach; ?>
+															</select>
+														</td>
+														</tr>
+													<?php endforeach; ?>
+														<tr class="notremovefornew">
+															<td>
+																<button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+															</td>
+														</tr>
+                                                    
+												</tbody>
+											</table>
+											<?php }?>
+										</div>
+										<div class="tab-pane" id="contractorequipment">
+											<h5 class="bold">Equipment Criteria</h5>
+											<table class="table table-bordered table-striped table-condensed flip-content">
+												<thead class="flip-content">
+													<tr>
+														<th>
+															Sl No.
+														</th>
+														<th class="">
+															 Name
+														</th>
+														<th class="">
+															 Quantity
+														</th>
+													</tr>
+												</thead>
+												<tbody>
+                                                    <?php $count = 1; ?>
+                                                    <?php $__empty_1 = true; foreach($criteriaEquipments as $eq): $__empty_1 = false; ?>
+													<tr>
+														<td>
+															<?php echo $count; ?>
+
+														</td>
+														<td>
+															<?php echo $eq->Equipment; ?>
+
+														</td>
+														<td>
+															<?php echo $eq->Quantity; ?>
+
+														</td>
+													</tr>
+                                                    <?php $count++; ?>
+                                                    <?php endforeach; if ($__empty_1): ?>
+                                                        <tr><td colspan="5" class="text-center font-red">No data to display</td></tr>
+                                                    <?php endif; ?>
+													<?php $equipmentCount = $count;?>
+												</tbody>
+											</table>
+                                            <a href="#addcontractormodal" data-toggle="modal" class="btn purple"><?php if($edit): ?>Edit Contractor's Quoted Amount  <?php else: ?> Add Contractor <?php endif; ?></a>
+                                            <br><br>
+											<?php if($equipmentCount>1){?>
+                                            <h5 class="bold">Equipments for <?php echo $tender->WorkId; ?> <?php if($contractorCDBNos != ''): ?>(CDB No.: <?php echo $contractorCDBNos[0]->CDBNo; ?>)<?php endif; ?></h5>
+											<table class="table table-bordered table-striped table-condensed flip-content table-togglecontrols" id="addContractorEquipments">
+												<thead class="flip-content">
+													<tr>
+														<th></th>
+
+														<th class="">
+															 Name
+														</th>
+														<th class="">
+															 Owned/Hired
+														</th>
+                                                        <th width="20%">
+                                                            Registration No.
+                                                        </th>
+													</tr>
+												</thead>
+												<tbody>
+                                                <?php $eqTotal = 0; ?>
+                                                    <?php foreach($contractorEquipments as $contEquipment): ?>
+                                                    <?php $randomKey = randomString(); ?>
+													<tr class="eq-container">
+                                                        <td>
+                                                            <button type="button" class="deletetablerow deleterowfromdb"><i class="fa fa-times fa-lg"></i></button>
+                                                        </td>
+														<td>
+															<input type="hidden" value="<?php echo $contEquipment->Id; ?>" name="EtlContractorEquipment[<?php echo $randomKey; ?>][Id]" data-table="etlcontractorequipment" class="row-id not-required resetKeyForNew"/>
+															<!--OLD CODE COMMENTED BY PRAMOD
+															 <select name="EtlContractorEquipment[<?php echo $randomKey; ?>][CmnEquipmentId]" id="" class="form-control equipment equipmentforwebservicetr input-sm EtlEqEquipmentId resetKeyForNew"> 
+															 -->
+
+																<select name="EtlContractorEquipment[<?php echo $randomKey; ?>][CmnEquipmentId]" id="" class="form-control equipment equipmentforwebservicetr input-sm  resetKeyForNew">
+																<option value="">---SELECT ONE---</option>
+																<?php foreach($eqEquipments as $eqEquipment): ?>
+                                                                    <option value="<?php echo $eqEquipment->Id; ?>" data-isregistered="<?php echo $eqEquipment->IsRegistered; ?>" data-vehicletype="<?php echo $eqEquipment->VehicleType; ?>" data-quantity="<?php echo $eqEquipment->Quantity; ?>" data-criteriaeqid="<?php echo $eqEquipment->EtlCriteriaEQId; ?>" <?php if($edit): ?><?php if($eqEquipment->EtlTierId != $contEquipment->EtlTierId): ?><?php endif; ?><?php endif; ?> <?php if(($contEquipment->CmnEquipmentId == $eqEquipment->Id) ): ?>selected="selected"<?php else: ?> <?php endif; ?> data-tierid="<?php echo $eqEquipment->EtlTierId; ?>" data-points="<?php echo number_format(round($eqEquipment->Points,3),3); ?>" ><?php echo $eqEquipment->Equipment; ?></option>
+                                                                <?php endforeach; ?>
+															</select>
+														</td>
+														<td>
+															<input type="hidden" name="EtlContractorEquipment[<?php echo $randomKey; ?>][Quantity]" value="1" class="form-control  number resetKeyForNew input-sm" value="" />
+														    <select name="EtlContractorEquipment[<?php echo $randomKey; ?>][OwnedOrHired]" autocomplete="off" class="form-control input-sm resetKeyForNew etool-total">
+                                                                <option value="">---SELECT ONE---</option>
+                                                                <option value="1" <?php if($contEquipment->OwnedOrHired == 1): ?>selected="selected"<?php endif; ?>>Owned</option>
+                                                                <option value="2" <?php if($contEquipment->OwnedOrHired == 2): ?>selected="selected"<?php endif; ?>>Hired</option>
+                                                            </select>
+                                                            <input type="hidden" name="EtlContractorEquipment[<?php echo $randomKey; ?>][Points]" value="<?php if($contEquipment->OwnedOrHired == 1): ?><?php echo $contEquipment->Points; ?><?php endif; ?><?php if($contEquipment->OwnedOrHired == 2): ?><?php echo $contEquipment->Points; ?><?php endif; ?>" class="form-control resetKeyForNew not-required input-sm calculatedpoints" value="" />
+                                                        </td>
+                                                        <td>
+                                                            <div class="input-group">
+
+                                                                <input id="newpassword" class="form-control input-sm input-large resetKeyForNew registration-no checkEquipment " value="<?php echo $contEquipment->RegistrationNo; ?>" type="text" name="EtlContractorEquipment[<?php echo $randomKey; ?>][RegistrationNo]" placeholder="Registration No.">
+                                                            </div>
+                                                        </td>
+													</tr>
+                                                    <?php endforeach; ?>
+													<tr class="notremovefornew">
+                                                        <td>
+                                                            <button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+                                                        </td>
+                                                        <td colspan="4" class="text-right bold"></td>
+                                                    </tr>
+                                                   
+												</tbody>
+											</table>
+											<?php }?>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-actions">
+						<div class="btn-set">
+                            <a href="<?php echo URL::to('etl/workevaluationdetailssmallcontractors/'.$tenderId); ?>" class="btn blue"><i class="m-icon-swapleft m-icon-white"></i>&nbsp;Back</a>
+                            <button type="submit" class="btn green" id="saveAddContractor">Save</button>
+							<a href="<?php echo URL::to('etl/workevaluationdetailssmallcontractors/'.$tenderId); ?>" class="btn red">Cancel</a>
+						</div>
+					</div>
+				<?php echo Form::close(); ?>
+
+				<!-- END FORM-->
+			</div>
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('horizontalmenumaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

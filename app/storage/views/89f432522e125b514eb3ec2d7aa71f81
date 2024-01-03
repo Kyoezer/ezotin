@@ -1,0 +1,101 @@
+<?php $__env->startSection('content'); ?>
+ <div class="col-md-4">
+	<div class="portlet light bordered">
+		<div class="portlet-title">
+			<div class="caption font-green-seagreen">
+				<i class="fa fa-gift"></i> 
+				<span class="caption-subject">Division</span>
+			</div>
+		</div>
+		<div class="portlet-body form">
+			<?php echo Form::open(array('url' => 'master/savedivision','role'=>'form')); ?>
+
+				<?php foreach($divisions as $division): ?>
+				<div class="form-body">
+					<input type="hidden" name="Id" value="<?php echo $division->Id; ?>" />
+					<div class="form-group">
+						<label class="control-label">Code</label>
+						<input type="text" name="Code" class="form-control" placeholder="Code" value="<?php echo $division->Code; ?>" />
+					</div>
+					<div class="form-group">
+						<label class="control-label">Name</label>
+						<input type="text" name="Name" class="form-control required" placeholder="Name" value="<?php echo $division->Name; ?>" />
+					</div>
+					<div class="form-group">
+						<label class="control-label">Under</label>
+						<select name="CmnProcuringAgencyId" class="form-control select2me required">
+							<option value="">---SELECT---</option>
+							<?php foreach($parentPAs as $parentPA): ?>
+								<option value="<?php echo $parentPA->Id; ?>" <?php if($division->CmnProcuringAgencyId == $parentPA->Id): ?>selected="selected"<?php endif; ?>><?php echo $parentPA->Name; ?> (<?php echo $parentPA->Code; ?>)</option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+				</div>
+				<?php endforeach; ?>
+				<div class="form-actions">
+					<div class="row">
+						<div class="col-md-12">
+							<button type="submit" class="btn green">Save</button>
+							<a href="<?php echo URL::to('master/division'); ?>" class="btn red">Cancel</a>
+						</div>
+					</div>
+				</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+</div>
+<div class="col-md-8">
+	<div class="portlet light bordered">
+		<div class="portlet-title">
+			<div class="caption font-green-seagreen">
+				<i class="fa fa-gift"></i> 
+				<span class="caption-subject"><?php echo 'Edit/Delete Division'; ?></span>
+			</div>
+		</div>
+		<div class="portlet-body">
+			<table id="tablefilters_1" class="table table-bordered table-striped table-condensed">
+	            <thead>
+	                <tr>
+	                    <th>
+	                        Code
+	                    </th>
+	                    <th class="order">
+	                        Division
+	                    </th>
+						<th>
+							Department
+						</th>
+	                    <th>
+	                        Actions
+	                    </th>
+	                </tr>
+	            </thead>
+	            <tbody>
+	                <?php foreach($saved as $value): ?>
+	                <tr>
+	                    <td>
+	                        <?php echo $value->Code; ?>
+
+	                    </td>
+	                    <td>
+	                        <?php echo $value->Name; ?>
+
+	                    </td>
+						<td>
+							<?php echo $value->Division; ?>
+
+						</td>
+	                    <td>
+	                        <a href="<?php echo URL::to('master/division').'/'.$value->Id; ?>" class="editaction">Edit</a>|
+	                        <a href="<?php echo URL::to('master/deletedivision')."/$value->Id"; ?>" class="deleteaction">Delete</a>
+	                    </td>
+	                </tr>
+	                <?php endforeach; ?>
+	            </tbody>
+	        </table>
+		</div>
+	</div>
+</div><div class="clearfix"></div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

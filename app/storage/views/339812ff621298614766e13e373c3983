@@ -1,0 +1,19 @@
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/global/scripts/etool.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet bordered light">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-cogs"></i>Click on parameter to edit
+		</div>
+	</div>
+	<div class="portlet-body flip-scroll">
+        <?php foreach($pointTypes as $pointType): ?>
+            <a href="<?php echo URL::to("etoolsysadm/editevaluationparameters/$pointType->Id"); ?>"><?php echo $pointType->Name; ?></a> <br/>
+        <?php endforeach; ?>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

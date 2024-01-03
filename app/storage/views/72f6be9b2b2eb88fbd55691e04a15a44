@@ -1,0 +1,67 @@
+<html>
+    <body>
+        <table>
+            <thead>
+            <tr>
+                <th colspan="13">Specialized Firm Application Details</th>
+            </tr>
+            <?php foreach($parametersForPrint as $key=>$value): ?>
+                <tr>
+                    <th><?php echo $key; ?>:</th><th> <?php echo $value; ?></th>
+                </tr>
+            <?php endforeach; ?>
+            <tr><th colspan="13"></th></tr>
+            <tr>
+                    <th>Sl #</th>
+                    <th>Application</th>
+					<th>
+						Name of Firm
+					</th>
+                    <th>
+						SP No.
+					</th>
+					<th class="">
+						 Type
+					</th>
+                    <th>Current Status</th>
+                    <th class="">
+                        Verified by
+                    </th>
+                    <th class="">
+                        Approved by
+                    </th>
+                    <th>Payment Approved by</th>
+                    <th>Rejected by</th>
+                    <th>Remarks By Rejector</th>
+                    <th>Currently Picked By</th>
+				</tr>
+            </thead>
+            <tbody>
+            <?php $count = 1; ?>
+            <?php $__empty_1 = true; foreach($specializedfirmLists as $specializedfirm): $__empty_1 = false; ?>
+                       <tr>
+        
+                    <td><?php echo $count; ?></td>
+                    <td><?php echo $specializedfirm->ReferenceNo; ?> <br> <?php echo $specializedfirm->ApplicationDate; ?></td>
+                    <td><?php echo $specializedfirm->NameOfFirm; ?> </td>
+                    <td><?php echo $specializedfirm->SPNo; ?> </td>
+                    <td><?php echo $specializedfirm->ServiceType; ?></td>
+                    <td><?php echo $specializedfirm->CurrentStatus; ?></td>
+              
+                    <td><?php echo $specializedfirm->VerifiedBy; ?> <br> <?php echo $specializedfirm->RegistrationVerifiedDate; ?></td>
+                    <td><?php echo $specializedfirm->AprroverBy; ?> <br> <?php echo $specializedfirm->RegistrationApprovedDate; ?></td>
+                    <td><?php echo $specializedfirm->PaymentApprover; ?> <br> <?php echo $specializedfirm->RegistrationPaymentApprovedDate; ?></td>
+                    <td><?php echo $specializedfirm->RejectedBy; ?> <br> <?php echo $specializedfirm->RejectedDate; ?></td>
+                    <td><?php echo $specializedfirm->RemarksByRejector; ?></td>
+                    <td><?php echo $specializedfirm->CurrentlyPickedBy; ?></td>
+                </tr>
+                <?php $count++; ?>
+            <?php endforeach; if ($__empty_1): ?>
+                <tr>
+                    <td colspan="14" class="text-center font-red">No data to display!</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </body>
+</html>

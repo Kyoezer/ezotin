@@ -1,0 +1,73 @@
+<?php $__env->startSection('main-content'); ?>
+<div class="row">
+<div class="col-md-12">
+<h4 class="text-primary"><strong><?php echo $downloadTitle; ?></strong></h4>
+<div class="row">
+	<div class="col-md-12">
+		<div class="table-responsive">
+			<table class="table table-bordered table-striped table-hover table-responsive">
+				<thead>
+					<tr class="success">
+						<th>Sl#</th>
+						<th>Category</th>
+						<th>File Name</th>
+						<th>Word</th>
+						<th>PDF</th>
+						<th>Other</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php $curCategory=''; ?>
+					<?php $__empty_1 = true; foreach($downloadDetails as $downloadDetail): $__empty_1 = false; ?>
+						<tr>
+							<td><?php echo $slno++; ?></td>
+							<td>
+								<?php if($curCategory!=$downloadDetail->CategoryName): ?>
+									<strong><span class="text-primary"><?php echo $downloadDetail->CategoryName; ?></span></strong>
+								<?php endif; ?>
+							</td>
+							<td><?php echo $downloadDetail->FileName; ?></td>
+							<?php if(!empty($downloadDetail->Word) && !empty($downloadDetail->PDF) && !empty($downloadDetail->PDF)): ?>
+								<td>
+									<a href="<?php echo asset($downloadDetail->Word); ?>" class="btn btn-xs btn-primary" target="_blank">Word <span class="fa fa-download"></span></a>
+								</td>
+								<td>
+									<a href="<?php echo asset($downloadDetail->PDF); ?>" class="btn btn-xs btn-danger" target="_blank">PDF <span class="fa fa-download"></span></a>
+								</td>
+								<td>
+									<a href="<?php echo asset($downloadDetail->Other); ?>" class="btn btn-xs btn-success" target="_blank">Other <span class="fa fa-download"></span></a>
+								</td>
+							<?php elseif(!empty($downloadDetail->Word)): ?>
+								<td>
+									<a href="<?php echo asset($downloadDetail->Word); ?>" class="btn btn-xs btn-primary" target="_blank">Word <span class="fa fa-download"></span></a>
+								</td>
+								<td>-</td>
+								<td>-</td>
+							<?php elseif(!empty($downloadDetail->PDF)): ?>
+								<td>-</td> 
+								<td>
+									<a href="<?php echo asset($downloadDetail->PDF); ?>" class="btn btn-xs btn-danger" target="_blank">PDF <span class="fa fa-download"></span></a>
+								</td>
+								<td>-</td>
+							<?php else: ?>
+								<td>-</td> 
+								<td>-</td>
+								<td>
+									<a href="<?php echo asset($downloadDetail->Other); ?>" class="btn btn-xs btn-success" target="_blank">Download <span class="fa fa-download"></span></a>
+								</td>	
+							<?php endif; ?>	
+						</tr>
+						<?php $curCategory=$downloadDetail->CategoryName; ?>
+					<?php endforeach; if ($__empty_1): ?>
+						<tr>
+							<td colspan="5" class="text-center">No data to display</td>
+						</tr>	
+					<?php endif; ?>
+				</tbody>
+			</table>
+		</div>	
+	</div>
+</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('websitemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

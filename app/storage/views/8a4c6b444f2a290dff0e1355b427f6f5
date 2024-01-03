@@ -1,0 +1,57 @@
+<html>
+    <body>
+        <table>
+            <thead>
+            <tr>
+                <th colspan="13">List of Architect with service avail</th>
+            </tr>
+            <?php foreach($parametersForPrint as $key=>$value): ?>
+                <tr>
+                    <th><?php echo $key; ?>:</th><th> <?php echo $value; ?></th>
+                </tr>
+            <?php endforeach; ?>
+            <tr><th colspan="13"></th></tr>
+            <tr>
+                <th>
+                    Sl.No.
+                </th>
+                <th class="order">
+                AR No.
+                </th>
+                <th>
+                    Name 
+                </th>
+                <th>
+                    Application Date
+                </th>
+                <th class="">
+                    Application Approved Date
+                </th>
+                <th class="">
+                    Service Type
+                </th>
+                      
+            </tr>
+            </thead>
+            <tbody>
+            <?php $count = 1; ?>
+            <?php $__empty_1 = true; foreach($architectLists as $architect): $__empty_1 = false; ?>
+            <tr>
+                    <td><?php echo $count; ?></td>
+                    <td><?php echo $architect->ARNo; ?></td>
+                    <td><?php echo $architect->Name; ?></td>
+                    <td><?php echo $architect->ApplicationDate; ?></td>
+                    <td><?php echo $architect->RegistrationApprovedDate; ?></td>
+                    <td><?php echo $architect->ServiceType; ?></td>
+       
+                </tr>
+                <?php $count++; ?>
+            <?php endforeach; if ($__empty_1): ?>
+                <tr>
+                    <td colspan="14" class="text-center font-red">No data to display!</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </body>
+</html>

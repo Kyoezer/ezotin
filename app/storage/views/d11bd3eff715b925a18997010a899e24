@@ -1,0 +1,166 @@
+<?php $__env->startSection('content'); ?>
+
+<h4 class="head-title">Main Menu List</h4>
+
+<div class="row">
+	<div class="col-md-12 col-xs-12 col-sm-12">
+		<table class="table table-condensed table-striped table-hover table-responsive">
+			<thead>
+				<tr class="success">
+					<th>Sl#</th>
+					<th>Title</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<?php foreach($parentMenuList as $listDetail): ?>
+					<tr>
+						<td><?php echo $slno++; ?></td>
+						<td><?php echo $listDetail->Title; ?></td>
+						<td>
+							<?php if($slno>2): ?>
+							<a href="<?php echo URL::to('web/menuitemmoveup/'.$listDetail->Id); ?>" class="btn btn-info btn-xs">Move Up <i class="fa fa-arrow-circle-up"></i></a>
+							<?php else: ?>
+								<a href="#" class="btn btn-info btn-xs" disabled="disabled">Move Up <i class="fa fa-arrow-circle-up"></i></a>
+							<?php endif; ?>
+							<?php if(($slno-1)<count($parentMenuList)): ?>
+							<a href="<?php echo URL::to('web/menuitemmovedown/'.$listDetail->Id); ?>" class="btn btn-info btn-xs">Move Down <i class="fa fa-arrow-circle-down"></i></a>
+							<?php else: ?>
+									<a href="#" class="btn btn-info btn-xs" disabled="disabled">Move Down <i class="fa fa-arrow-circle-down"></i></a>
+							<?php endif; ?>
+							<?php if($listDetail->ShowInWebsite == 0): ?>
+								<a href="<?php echo URL::to('web/mainmenuactivate/'.$listDetail->Id); ?>" class="btn btn-success btn-xs">Enable</a>
+							<?php else: ?>
+								<a href="<?php echo URL::to('web/mainmenudeactivate/'.$listDetail->Id); ?>" class="btn btn-default btn-xs">Disable</a>
+							<?php endif; ?>
+							<?php /*<a href="<?php echo URL::to('web/showinfooter/'.$listDetail->Id); ?>" class="btn btn-success btn-xs">Show in Footer</a>*/ ?>
+							<a href="<?php echo URL::to('web/menuitemdelete/'.$listDetail->Id); ?>" class="btn btn-danger btn-xs">Delete</a>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div class="clear2" style="border-top:1px #33C963 solid;"></div>
+
+<h4 class="head-title clear">Sub Menu List</h4>
+
+<?php echo Form::open(array('url'=>'web/managemenus','method'=>'get','class'=>'form-group')); ?>
+
+	<div class="row">
+		<div class="col-md-3">
+			<?php echo Form::label('Select Parent Menu'); ?>
+
+			<select name="ParentId" class="form-control select2me">
+				<option>---SELECT ONE---</option>
+				<?php $__empty_1 = true; foreach($parentList as $parentDetail): $__empty_1 = false; ?>
+					<option value="<?php echo $parentDetail->Id; ?>" <?php if($parentDetail->Id == $parentId): ?><?php echo "selected"; ?> <?php endif; ?>><?php echo $parentDetail->Title; ?></option>
+				<?php endforeach; if ($__empty_1): ?>
+					<option>Please Add a Parent Menu</option>
+				<?php endif; ?>
+			</select>
+		</div>
+
+		<div class="col-md-6 col-xs-12 col-sm-12">
+			<?php echo Form::label('Action'); ?> <br />
+			<input type="submit" value="List Items" class="btn btn-success">
+			<input type="reset" value="Clear" class="btn btn-danger">
+		</div>
+	</div>
+<?php echo Form::close(); ?>
+
+
+<div class="row">
+	<div class="col-md-12 col-xs-12 col-sm-12">
+		<table class="table table-condensed table-striped table-hover table-responsive">
+			<thead>
+				<tr class="success">
+					<th>Sl#</th>
+					<th>Parent Menu</th>
+					<th>Title</th>
+					<th>Content</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<?php $__empty_1 = true; foreach($subMenuList as $listDetail): $__empty_1 = false; ?>
+					<tr>
+						<td><?php echo $slno1++; ?></td>
+						<td><?php echo $listDetail->Title; ?></td>
+						<td><?php echo $listDetail->Title; ?></td>
+						<td><?php echo e(Str::limit(HTML::decode($listDetail->Content), 50, '...')); ?></td>
+						<td>
+							<a href="<?php echo URL::to('web/editsubmenu/'.$listDetail->Id); ?>" class="btn btn-primary btn-xs">Edit <i class="fa fa-pencil-square-o"></i></a>
+							<?php if($slno1>2): ?>
+								<a href="<?php echo URL::to('web/submenuitemmoveup/'.$listDetail->Id); ?>" class="btn btn-info btn-xs">Move Up <i class="fa fa-arrow-circle-up"></i></a>
+							<?php else: ?>
+								<a href="#" disabled="disabled" class="btn btn-info btn-xs">Move Up <i class="fa fa-arrow-circle-up"></i></a>
+							<?php endif; ?>
+							<?php if(($slno1-1)<count($subMenuList)): ?>
+								<a href="<?php echo URL::to('web/submenuitemmovedown/'.$listDetail->Id); ?>" class="btn btn-info btn-xs">Move Down <i class="fa fa-arrow-circle-down"></i></a>
+							<?php else: ?>
+								<a href="#" disabled="disabled" class="btn btn-info btn-xs">Move Down <i class="fa fa-arrow-circle-down"></i></a>
+							<?php endif; ?>
+
+							<?php if($listDetail->ShowInWebsite == 0): ?>
+								<a href="<?php echo URL::to('web/submenuactivate/'.$listDetail->Id); ?>" class="btn btn-success btn-xs">Enable</a>
+							<?php else: ?>
+								<a href="<?php echo URL::to('web/submenudeactivate/'.$listDetail->Id); ?>" class="btn btn-default btn-xs">Disable</a>
+							<?php endif; ?>
+
+<?php /*							<a href="<?php echo URL::to('web/showinfooter/'.$listDetail->Id); ?>" class="btn btn-success btn-xs">Show in Footer</a>*/ ?>
+							<a href="<?php echo URL::to('web/submenuitemdelete/'.$listDetail->Id); ?>" class="btn btn-danger btn-xs">Delete</a>
+						</td>
+					</tr>
+				<?php endforeach; if ($__empty_1): ?>
+					<tr>
+						<td colspan="6" class="text-center" style="color:red;">No Sub-Items to Display</td>
+					</tr>
+				<?php endif; ?>				
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div class="clear2" style="border-top:1px #33C963 solid;"></div>
+
+<?php /*<h4 class="head-title clear">Footer Menu</h4>*/ ?>
+
+<?php /*<div class="row">*/ ?>
+	<?php /*<div class="col-md-12 col-xs-12 col-sm-12">*/ ?>
+		<?php /*<table class="table table-condensed table-striped table-hover table-responsive">*/ ?>
+			<?php /*<thead>*/ ?>
+				<?php /*<tr class="success">*/ ?>
+					<?php /*<th>Sl#</th>*/ ?>
+					<?php /*<th>Title</th>*/ ?>
+					<?php /*<th>Action</th>*/ ?>
+				<?php /*</tr>*/ ?>
+			<?php /*</thead>*/ ?>
+
+			<?php /*<tbody>*/ ?>
+				<?php /*<?php $__empty_1 = true; foreach($footerList as $footerListDetails): $__empty_1 = false; ?>*/ ?>
+					<?php /*<tr>*/ ?>
+						<?php /*<td><?php echo $slno2++; ?></td>*/ ?>
+						<?php /*<td><?php echo $footerListDetails->Title; ?></td>*/ ?>
+						<?php /*<td>*/ ?>
+							<?php /*<a href="<?php echo URL::to('web/footeritemmoveup/'.$footerListDetails->Id); ?>" class="btn btn-info btn-xs">Move Up <i class="fa fa-arrow-circle-up"></i></a>*/ ?>
+							<?php /*<a href="<?php echo URL::to('web/footeritemmovedown/'.$footerListDetails->Id); ?>" class="btn btn-info btn-xs">Move Down <i class="fa fa-arrow-circle-down"></i></a>*/ ?>
+							<?php /*<a href="<?php echo URL::to('web/removefromfooter/'.$footerListDetails->Id); ?>" class="btn btn-default btn-xs">Disable</a>*/ ?>
+						<?php /*</td>*/ ?>
+					<?php /*</tr>*/ ?>
+				<?php /*<?php endforeach; if ($__empty_1): ?>*/ ?>
+					<?php /*<tr>*/ ?>
+						<?php /*<td colspan="4" class="text-center" style="color:red;">No Items Placed In Footer</td>*/ ?>
+					<?php /*</tr>*/ ?>
+				<?php /*<?php endif; ?>*/ ?>
+			<?php /*</tbody>*/ ?>
+		<?php /*</table>*/ ?>
+	<?php /*</div>*/ ?>
+<?php /*</div>*/ ?>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

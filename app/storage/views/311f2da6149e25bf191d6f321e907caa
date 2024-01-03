@@ -1,0 +1,80 @@
+<?php $__env->startSection('content'); ?>
+	<?php if((int)Input::get('ref')==1 || (int)Input::get('ref') == 8): ?>
+	<table class="data-large">
+		<thead>
+			<tr>
+				<th>Sl#</th>
+				<th>CDB No.</th>
+				<th>Name of Firm</th>
+				<th>Class</th>
+				<th>Name of Participant</th>
+				<th>CID/Work Permit No. of Participant</th>
+				<th>Designation</th>
+				<th>Email</th>
+				<th>Contact No.</th>
+				<th>Registered On</th>
+			</tr>	
+		</thead>
+		<tbody>
+			<?php $sl=1; ?>
+			<?php $__empty_1 = true; foreach($listOfRegisteredTraniees as $listOfRegisteredTraniee): $__empty_1 = false; ?>
+			<tr>
+				<td><?php echo $sl; ?></td>
+				<td><?php echo $listOfRegisteredTraniee->CDBNo; ?></td>
+				<td><?php echo $listOfRegisteredTraniee->NameOfFirm; ?></td>
+				<td><?php echo $listOfRegisteredTraniee->ClassCode; ?></td>
+				<td><?php echo $listOfRegisteredTraniee->FullName; ?></td>
+				<td><?php echo $listOfRegisteredTraniee->CIDNoOfParticipant; ?></td>
+				<td><?php echo $listOfRegisteredTraniee->Designation; ?></td>
+				<td><?php echo $listOfRegisteredTraniee->Email; ?></td>
+				<td><?php echo $listOfRegisteredTraniee->ContactNo; ?></td>
+				<td><?php echo convertDateTimeToClientFormat($listOfRegisteredTraniee->CreatedOn); ?></td>
+			</tr>
+			<?php $sl++; ?>
+			<?php endforeach; if ($__empty_1): ?>
+			<tr>
+				<td colspan="10" class="text-center font-red">No Registered Traniees</td>
+			</tr>
+			<?php endif; ?>
+		</tbody>
+	</table>
+	<?php else: ?>
+	<table class="data-large">
+		<thead>
+			<tr>
+				<th>Sl#</th>
+				<th>Name of Participant</th>
+				<th>CID/Work Permit No. of Participant</th>
+				<th>Agency</th>
+				<th>Designation</th>
+				<th>Email</th>
+				<th>Contact No.</th>
+				<th>Registered On</th>
+				<th>Venue</th>
+			</tr>	
+		</thead>
+		<tbody>
+			<?php $sl=1; ?>
+			<?php $__empty_1 = true; foreach($listOfRegisteredTraniees as $listOfRegisteredTraniee): $__empty_1 = false; ?>
+			<tr>
+				<td><?php echo $sl; ?></td>
+				<td><?php echo $listOfRegisteredTraniee->FullName; ?></td>
+				<td><?php echo $listOfRegisteredTraniee->CIDNoOfParticipant; ?></td>
+				<td><?php echo $listOfRegisteredTraniee->Agency; ?></td>
+				<td><?php echo $listOfRegisteredTraniee->Designation; ?></td>
+				<td><?php echo $listOfRegisteredTraniee->Email; ?></td>
+				<td><?php echo $listOfRegisteredTraniee->ContactNo; ?></td>
+				<td><?php echo convertDateTimeToClientFormat($listOfRegisteredTraniee->CreatedOn); ?></td>
+				<td><?php echo $listOfRegisteredTraniee->venue; ?></td>
+			</tr>
+			<?php $sl++; ?>
+			<?php endforeach; if ($__empty_1): ?>
+			<tr>
+				<td colspan="8" class="text-center font-red">No Registered Traniees</td>
+			</tr>
+			<?php endif; ?>
+		</tbody>
+	</table>
+	<?php endif; ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('printmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

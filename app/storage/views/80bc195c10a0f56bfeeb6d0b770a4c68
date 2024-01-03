@@ -1,0 +1,47 @@
+<html>
+    <body>
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="2">List of Engaged Hr</th>
+                </tr>
+         
+                <tr>
+                    <th colspan="4"></th>
+                </tr>
+                <tr>
+                        <th>Sl.No.</th>
+                        <th>CDB No</th>
+                        <th>Name</th>
+                        <th>CIDNo</th>
+                        <th>Designation</th>
+                  
+                        <th>Work Id</th>
+                  
+                        <th>Agency Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php $count = 1; ?>
+                <?php $__empty_1 = true; foreach($reportData as $data): $__empty_1 = false; ?>
+                <tr>
+                            <td><?php echo $count; ?></td>
+                            <td><?php echo $data->CDBNo; ?></td>
+                            <td><?php echo $data->hrName; ?></td>
+                            <td><?php echo $data->cidNo; ?></td>
+                            <td><?php echo $data->Designation; ?></td>
+                          
+                            <td><?php echo $data->WorkId; ?></td>
+                          
+                            <td><?php echo $data->procuringAgency; ?></td>
+                        </tr>
+                    <?php $count++ ?>
+                <?php endforeach; if ($__empty_1): ?>
+                    <tr><td colspan="4" class="font-red text-center">No data to display</td></tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

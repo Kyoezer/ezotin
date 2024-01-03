@@ -1,0 +1,36 @@
+<?php $__env->startSection('main-content'); ?>
+<h4 class="text-primary"><strong><i class="fa fa-list"></i> <?php echo $pageTitle; ?></strong></h4>
+<div class="row">
+	<div class="col-md-12 table-responsive">
+		<table class="table table-bordered table-hover table-condensed">
+			<thead>
+				<tr class="success">
+					<th>Sl#</th>
+					<th>Type</th>
+					<th>Title</th>
+					<th>Content</th>
+					<th>Date</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php $__empty_1 = true; foreach($circularDetails as $circularDetail): $__empty_1 = false; ?>
+					<tr>
+						<td><?php echo $slNo++; ?></td>
+						<td><?php echo strip_tags(html_entity_decode($circularDetail->CircularName)); ?></td>
+						<td><?php echo strip_tags(html_entity_decode($circularDetail->Title)); ?></td>
+						<td><?php echo HTML::decode(Str::limit(strip_tags(html_entity_decode($circularDetail->Content)), 100, '...')); ?></td>
+						<td><?php echo date_format(date_create($circularDetail->CreatedOn),'d-m-Y'); ?></td>
+						<td><a href="<?php echo URL::to('web/circulardetails/'.$circularDetail->Id.'?backRoute='.$backRoute); ?>" class="btn btn-info btn-xs">View</a></td>
+					</tr>
+				<?php endforeach; if ($__empty_1): ?>
+					<tr>
+					<td colspan="6" class="text-center font-red" style="color:red;">No news/events!</td>
+					</tr>
+				<?php endif; ?>
+			</tbody>
+		</table>
+	</div>	
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('websitemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

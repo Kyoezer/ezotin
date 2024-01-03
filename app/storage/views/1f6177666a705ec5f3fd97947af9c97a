@@ -1,0 +1,181 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+            <?php $parameters = Input::all(); $parameters['export']='excel'; ?>
+			<i class="fa fa-cogs"></i>List of Contractors whose registration is expiring &nbsp;&nbsp;<?php if(!Input::has('export')): ?> <a href="<?php echo route('contractorrpt.listofexpirycontractor',$parameters); ?>" class="btn btn-sm green"><i class="fa fa-file-excel-o"></i> Export to Excel</a>    <?php $parameters['export'] = 'print'; ?><a href="<?php echo route('contractorrpt.listofexpirycontractor',$parameters); ?>" class="btn btn-sm purple" target="_blank"><i class="fa fa-print"></i> Print</a><?php endif; ?>
+		</div>
+	</div>
+	<div class="portlet-body flip-scroll">
+        <?php if(Input::get('export') != "print"): ?>
+        <?php echo Form::open(array('url'=>Request::url(),'method'=>'get')); ?>
+
+		<div class="form-body">
+			<div class="row">
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">CDB No</label>
+						<input type="text" name="CDBNo" value="<?php echo Input::get('CDBNo'); ?>" class="form-control" />
+					</div>
+				</div>
+                <div class="col-md-2">
+                    <label class="control-label">From</label>
+                    <div class="input-icon right">
+                        <i class="fa fa-calendar"></i>
+                        <input type="text" name="FromDate" class="form-control datepicker" value="<?php echo Input::get('FromDate'); ?>" readonly="readonly" placeholder="">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="control-label">To</label>
+                    <div class="input-icon right">
+                        <i class="fa fa-calendar"></i>
+                        <input type="text" name="ToDate" class="form-control datepicker" value="<?php echo Input::has('ToDate')?Input::get('ToDate'):date('d-m-Y'); ?>" readonly="readonly" placeholder="">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Country</label>
+                        <select class="form-control select2me" name="Country">
+                            <option value="">---SELECT ONE---</option>
+                            <?php foreach($countries as $country): ?>
+                                <option value="<?php echo $country->Name; ?>" <?php if($country->Name == Input::get('Country')): ?>selected <?php endif; ?>><?php echo $country->Name; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Dzongkhag</label>
+                        <select class="form-control select2me" name="Dzongkhag">
+                            <option value="">---SELECT ONE---</option>
+                            <?php foreach($dzongkhags as $dzongkhag): ?>
+                                <option value="<?php echo $dzongkhag->NameEn; ?>" <?php if($dzongkhag->NameEn == Input::get('Dzongkhag')): ?>selected <?php endif; ?>><?php echo $dzongkhag->NameEn; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">Classification</label>
+						<select class="form-control" name="Classification">
+							<option value="">---SELECT ONE---</option>
+                            <?php foreach($contractorClassifications as $contractorClassification): ?>
+                                <option value="<?php echo $contractorClassification->Code; ?>" <?php if($contractorClassification->Code == Input::get('Classification')): ?>selected="selected"<?php endif; ?>><?php echo $contractorClassification->Name.' ('.$contractorClassification->Code.')'; ?></option>
+                            <?php endforeach; ?>
+						</select>
+					</div>
+				</div>
+       
+                <?php if(!Input::has('export')): ?>
+                    <div class="col-md-2">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="btn-set">
+                            <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                            <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                        </div>
+                    </div>
+                <?php endif; ?>
+			</div>
+		</div>
+        <?php echo Form::close(); ?>
+
+        <?php else: ?>
+            <?php foreach(Input::all() as $key=>$value): ?>
+                <?php if($key != 'export'): ?>
+                    <b><?php echo $key; ?>: <?php echo $value; ?></b><br>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            <br/>
+        <?php endif; ?>
+		<table class="table table-bordered table-striped table-condensed flip-content" id="contractorhumanresource">
+			<thead class="flip-content">
+            <tr>
+                    <th>
+                        Sl.No.
+                    </th>
+					<th class="order">
+						 CDB No.
+					</th>
+					<th>
+						Firm/Name
+					</th>
+					<th class="">
+						 Proprietor Name
+					</th>
+					<th class="">
+						 Gender
+					</th>
+					<th class="">
+						 Address
+					</th>
+					<th class="">
+						 Country
+					</th>
+					<th>
+						Dzongkhag
+					</th>
+					<th>
+						Tel.No.
+					</th>
+					
+					<th class="">
+						 Mobile No.
+					</th>
+					<th class="">
+						W1
+					</th>
+                    <th class="">
+                        W2
+                    </th>
+                    <th class="">
+                        W3
+                    </th>
+                    <th class="">
+                        W4
+                    </th>
+                    <th>
+                        Expiry Date
+                    </th>
+                    <th>Status</th>
+
+                    <th>Refresher Course <br> Modules Attended</th>
+
+				</tr>
+			</thead>
+			<tbody>
+            <?php $__empty_1 = true; foreach($contractorList as $contractor ): $__empty_1 = false; ?>
+            <tr>
+                    <td><?php echo $start++; ?></td>
+                    <td><?php echo $contractor->CDBNo; ?></td>
+                    <td><?php echo $contractor->NameOfFirm; ?></td>
+                    <td><?php echo $contractor->ownerName; ?></td>
+                    <td><?php echo $contractor->gender; ?></td>
+                    <td><?php echo $contractor->Address; ?></td>
+                    <td><?php echo $contractor->Country; ?></td>
+                    <td><?php echo $contractor->Dzongkhag; ?></td>
+                    <td><?php echo $contractor->TelephoneNo; ?></td>
+                    <td><?php echo $contractor->MobileNo; ?></td>
+                    <td><?php echo $contractor->Classification1; ?></td>
+                    <td><?php echo $contractor->Classification2; ?></td>
+                    <td><?php echo $contractor->Classification3; ?></td>
+                    <td><?php echo $contractor->Classification4; ?></td>
+                    <td><?php echo convertDateTimeToClientFormat($contractor->ExpiryDate); ?></td>
+                    <td><?php echo $contractor->Status; ?></td>
+
+                    <td><?php if(isset($contractor->RefresherCourseModules)): ?><?php echo $contractor->RefresherCourseModules; ?><?php endif; ?></td>
+
+				</tr>
+            <?php endforeach; if ($__empty_1): ?>
+                <tr>
+                    <td colspan="12" class="text-center font-red">No data to display!</td>
+                </tr>
+            <?php endif; ?>
+			</tbody>
+		</table>
+        <?php pagination($noOfPages,Input::all(),Input::get('page'),"contractorrpt.listofexpirycontractor"); ?>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

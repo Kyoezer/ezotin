@@ -1,0 +1,90 @@
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/global/scripts/etool.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="#"><i class="fa fa-gavel"></i>E-Tool System Adm.</a>
+                <i class="fa fa-angle-right"></i>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-keyboard-o"></i>Reset Result for Work Id <?php echo $workId; ?></a>
+            </li>
+        </ul>
+    </div>
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-cogs"></i>Change Awarded
+            </div>
+            <div class="tools">
+                <a href="javascript:;" class="collapse"></a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <?php $__empty_1 = true; foreach($tender as $value): $__empty_1 = false; ?>
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-bordered table-striped table-condensed flip-content">
+                            <tbody>
+                            <tr>
+                                <td width="30%"><strong>Work Id</strong></td>
+                                <td>
+                                    <?php echo Input::get('WorkId'); ?>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><strong>Project Cost Estimate</strong></td>
+                                <td><?php echo $value->ProjectEstimateCost; ?></td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><strong>Name of Work</strong></td>
+                                <td><?php echo $value->NameOfWork; ?></td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><strong>Tentative Start Date</strong></td>
+                                <td><?php echo convertDateToClientFormat($value->TentativeStartDate); ?></td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><strong>Awarded To</strong></td>
+                                <td><?php echo $awardedTo[0]->Contractor; ?></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table table-bordered table-striped table-condensed flip-content">
+                            <tbody>
+                            <tr>
+                                <td width="30%"><strong>Class, Category</strong></td>
+                                <td><?php echo $value->Class.", ".$value->Category; ?></td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><strong>Dzongkhag</strong></td>
+                                <td><?php echo $value->Dzongkhag; ?></td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><strong>Contract Description</strong></td>
+                                <td><?php echo html_entity_decode($value->DescriptionOfWork); ?></td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><strong>Tentative End Date</strong></td>
+                                <td><?php echo convertDateToClientFormat($value->TentativeEndDate); ?></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            <?php endforeach; if ($__empty_1): ?>
+            <?php endif; ?>
+            <a href="<?php echo URL::to('etoolsysadm/resetworkresult/'.$value->Id); ?>" class="btn btn-sm red updateaction"><i class="fa fa-refresh"></i> Reset Result</a>
+            <?php if($value->CmnWorkExecutionStatusId == CONST_CMN_WORKEXECUTIONSTATUS_COMPLETED): ?>
+                <a href="<?php echo URL::to('etoolsysadm/resettoawarded/'.$value->Id); ?>" class="btn btn-sm purple updateaction"><i class="fa fa-refresh"></i> Reset to Awarded</a>
+            <?php endif; ?>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

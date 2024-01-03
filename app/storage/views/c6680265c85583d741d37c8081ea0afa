@@ -1,0 +1,152 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php echo HTML::script('assets/global/scripts/sys.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption font-green-seagreen">
+					<i class="fa fa-cogs"></i>
+					<span class="caption-subject">Manage Engineer Profile <a href="<?php echo URL::to("etoolsysadm/importcorporateengineer"); ?>" class="btn btn-sm blue"><i class="fa fa-plus"></i> Add</a>&nbsp;<a href="<?php echo URL::to("etoolsysadm/deletecorporateengineer"); ?>" class="btn btn-sm red"><i class="fa fa-times"></i> Delete</a></span>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<div class="form-body">
+					<?php echo Form::open(array('url' =>Request::URL(),'role'=>'form','method'=>'get')); ?>
+
+						<div class="row">
+							<div class="col-md-2">
+								<div class="form-group">
+									<label class="control-label">CID No.</label>
+									<input type="text" name="CIDNo" value="<?php echo Input::get('CIDNo'); ?>" class="form-control input-sm"/>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label class="control-label">Name</label>
+									<input type="text" name="NameOfEngineer" value="<?php echo Input::get('NameOfEngineer'); ?>" class="form-control input-sm"/>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="form-group">
+									<label for="agency" class="control-label">Agency</label>
+									<select name="Agency" class="form-control input-sm select2me">
+										<option value="">---SELECT---</option>
+										<?php foreach($agencies as $agency): ?>
+											<option value="<?php echo $agency->Agency; ?>" <?php if($agency->Agency == Input::get('Agency')): ?>selected="selected"<?php endif; ?>><?php echo $agency->Agency; ?></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-2">
+			                    <div class="form-group">
+			                        <label class="control-label">No. of Rows</label>
+			                        <?php echo Form::select('Limit',array(10=>10,20=>20,30=>30,'All'=>'All'),Input::has('Limit')?Input::get('Limit'):20,array('class'=>'form-control input-sm')); ?>
+
+			                    </div>
+			                </div>
+							<div class="col-md-2">
+								<label>&nbsp;</label>
+								<div class="btn-set">
+									<button type="submit" class="btn blue-hoki btn-sm">Search</button>
+									<a href="<?php echo Request::URL(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<?php echo Form::close(); ?>
+
+					<div class="table-responsive">
+						<table class="dont-flip table table-bordered table-condensed table-striped">
+							<thead>
+								<tr class="success">
+									<th>Sl#</th>
+									<th>
+										CID No.
+									</th>
+									<th>
+										Name
+									</th>
+									<th>
+										Agency
+									</th>
+									<th>
+										Action
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php $slNo = 1; ?>
+								<?php foreach($govermentEngineers as $govermentEngineer): ?>
+								<tr>
+									<td><?php echo $slNo++; ?></td>
+									<td>
+										<input type="hidden" value="<?php echo $govermentEngineer->Id; ?>" class="engineerid" />
+										<input type="hidden" value="<?php echo $govermentEngineer->CIDNo; ?>" class="cidno" />
+										<input type="hidden" value="<?php echo $govermentEngineer->EngineerName; ?>" class="nameofengineer" />
+										<?php echo $govermentEngineer->CIDNo; ?>
+
+									</td>
+									<td>
+										<?php echo $govermentEngineer->EngineerName; ?>
+
+									</td>
+									<td>
+										<?php echo $govermentEngineer->EmployerName; ?>
+
+									</td>
+									<td>
+										<button type="button" class="btn red relieveengineer btn-xs">Relieve</button>
+									</td>
+								</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+</div>
+<div id="manageengineerprofiledialog" class="modal fade" role="dialog" aria-labelledby="manageengineerprofiledialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<?php echo Form::open(array('url' => 'etoolsysadm/relieveengineer','role'=>'form','id'=>'relievegovermentengineer')); ?>
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3 class="modal-title font-red">Manage Engineer Profile</h3>
+			</div>
+			<div class="modal-body">
+				<input type="hidden" name="RedirectRoute" value="verifyregistration">
+				<p class="bold">Are you sure you want to relieve the Engineer?</p>
+				<input type="hidden" name="EngineerReference" class="relieveengineerid" />
+				<div class="form-group">
+					<label><strong>CID No: </strong><span class="cidnoofengineerdisplay"></span></label><br />
+					<label><strong>Name: </strong><span class="nameofengineerdisplay"></span></label>
+				</div>
+				<div class="form-group">
+					<label>Relieving Date</label>
+					<div class="input-icon right">
+						<i class="fa fa-calendar"></i>
+						<input type="text" name="RelievingDate" class="form-control datepicker required" value="<?php echo date('d-m-Y'); ?>"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label>Relieving Letter No.</label>
+					<input type="text" name="RelievingLetterNo" class="form-control required" />
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button id="relievegovermentengineersubmit" type="button" class="btn green">Relieve</button>
+				<button class="btn red" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+</div>	
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

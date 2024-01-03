@@ -1,0 +1,455 @@
+<?php $__env->startSection('content'); ?>
+	<div class="portlet light bordered">
+		<div class="portlet-title">
+			<div class="caption">
+				<i class="fa fa-cogs"></i>Individual Task Report
+			</div>
+		</div>
+		<div class="portlet-body flip-scroll">
+			<?php if(Input::get('export') != 'print'): ?>
+				<?php echo Form::open(array('url'=>Request::url(),'method'=>'get')); ?>
+
+				<div class="form-body">
+					<div class="row">
+						<div class="col-md-2">
+							<label class="control-label">From</label>
+							<div class="input-icon right">
+								<i class="fa fa-calendar"></i>
+								<input type="text" name="FromDate" class="form-control input-sm datepicker" value="<?php echo Input::get('FromDate'); ?>" readonly="readonly" placeholder="">
+							</div>
+						</div>
+						<div class="col-md-2">
+							<label class="control-label">To</label>
+							<div class="input-icon right">
+								<i class="fa fa-calendar"></i>
+								<input type="text" name="ToDate" class="form-control input-sm datepicker" value="<?php echo Input::get('ToDate'); ?>" readonly="readonly" placeholder="">
+							</div>
+						</div>
+						<?php if($isAdmin): ?>
+						<div class="col-md-3">
+							<label class="control-label">User</label>
+							<select class="form-control select2me" name="UserId">
+								<option value="">---SELECT ONE---</option>
+								<?php foreach($crpsUsers as $crpsUser): ?>
+									<option value="<?php echo $crpsUser->Id; ?>" <?php if($crpsUser->Id == Input::get('UserId')): ?>selected <?php endif; ?>><?php echo $crpsUser->FullName; ?> (<?php echo $crpsUser->username; ?>)</option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+						<?php endif; ?>
+						<?php if(!Input::has('export')): ?>
+							<div class="col-md-2">
+								<label class="control-label">&nbsp;</label>
+								<div class="btn-set">
+									<button type="submit" class="btn blue-hoki btn-sm">Search</button>
+									<a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+								</div>
+							</div>
+						<?php endif; ?>
+					</div>
+				</div>
+				<?php echo Form::close(); ?>
+
+			<?php else: ?>
+				<?php foreach(Input::except('export') as $key=>$value): ?>
+					<b><?php echo $key; ?>: <?php echo $value; ?></b><br>
+				<?php endforeach; ?>
+				<br/>
+			<?php endif; ?>
+			<?php if(in_array(101,$userAllPrivileges)): ?>
+				<div class="col-md-12"><br><span class="h3" style="color:#4f51a9; text-decoration:underline;"><strong>User Approval (<?php echo $userPendingCount; ?> pending)</strong></span></div>
+
+				<?php foreach($userApproveCount as $userApprove): ?>
+					<div class="col-md-2">
+						<br>
+						<span class="h4"><strong><?php echo $userApprove->Type; ?></strong></span><br>
+						Approved: <?php echo $userApprove->Total; ?>
+
+					</div>
+				<?php endforeach; ?>
+			<?php endif; ?>
+			<?php if(in_array(201,$userAllPrivileges) || in_array(202,$userAllPrivileges) || in_array(203,$userAllPrivileges) || in_array(204,$userAllPrivileges) || in_array(205,$userAllPrivileges)
+			 || in_array(206,$userAllPrivileges) || in_array(207,$userAllPrivileges) || in_array(208,$userAllPrivileges) || in_array(209,$userAllPrivileges) || in_array(210,$userAllPrivileges)): ?>
+				<div class="col-md-12"><br><span class="h3" style="color:#4f51a9; text-decoration:underline;"><strong>Verification (<?php echo $verificationPending; ?> pending) </strong></span></div>
+				<?php if(in_array(201,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Contractor Registration</strong></span><br>
+						Verified: <?php echo $contractorRV; ?> <br>
+					</div>
+				<?php endif; ?>
+				<?php if(in_array(202,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Consultant Registration</strong></span><br>
+						Verified: <?php echo $consultantRV; ?> <br>
+					</div>
+				<?php endif; ?>
+				<?php if(in_array(203,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Architect Registration</strong></span><br>
+						Verified: <?php echo $architectRV; ?> <br>
+					</div>
+				<?php endif; ?>
+				<?php if(in_array(204,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Engineer Registration</strong></span><br>
+						Verified: <?php echo $engineerRV; ?> <br>
+					</div>
+				<?php endif; ?>
+				<?php if(in_array(205,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Specialized Trade Registration</strong></span><br>
+						Verified: <?php echo $spRV; ?> <br>
+					</div>
+				<?php endif; ?>
+			<div class="clearfix"></div>
+				<?php if(in_array(206,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Contractor Service</strong></span><br>
+						<?php foreach($contractorServices as $contractorServiceName => $contractorService): ?>
+							<strong> <?php echo $contractorServiceV[$contractorService]['Name']; ?></strong>-
+							Verified: <?php echo $contractorServiceV[$contractorService]['Count']; ?> <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if(in_array(207,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Consultant Service</strong></span><br>
+						<?php foreach($consultantServices as $consultantServiceName => $consultantService): ?>
+							<strong> <?php echo $consultantServiceV[$consultantService]['Name']; ?></strong>-
+							Verified: <?php echo $consultantServiceV[$consultantService]['Count']; ?> <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if(in_array(208,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Architect Service</strong></span><br>
+						<?php foreach($architectServices as $architectServiceName => $architectService): ?>
+							<strong><?php echo $architectServiceV[$architectService]['Name']; ?></strong>-
+							Verified: <?php echo $architectServiceV[$architectService]['Count']; ?>  <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if(in_array(209,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Engineer Service</strong></span><br>
+						<?php foreach($engineerServices as $engineerServiceName => $engineerService): ?>
+							<strong><?php echo $engineerServiceV[$engineerService]['Name']; ?></strong>-
+							Verified: <?php echo $engineerServiceV[$engineerService]['Count']; ?> <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if(in_array(210,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Specialized Trade Service</strong></span><br>
+						<?php foreach($spServices as $specializedTradeServiceName => $specializedTradeService): ?>
+							<strong> <?php echo $specializedTradeServiceV[$specializedTradeService]['Name']; ?></strong>-
+							Verified: <?php echo $specializedTradeServiceV[$specializedTradeService]['Count']; ?> <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			<?php endif; ?>
+
+			<hr>
+
+			<?php if(in_array(301,$userAllPrivileges) || in_array(302,$userAllPrivileges) || in_array(303,$userAllPrivileges) || in_array(304,$userAllPrivileges) || in_array(305,$userAllPrivileges)
+			 || in_array(306,$userAllPrivileges) || in_array(307,$userAllPrivileges) || in_array(308,$userAllPrivileges) || in_array(309,$userAllPrivileges) || in_array(310,$userAllPrivileges)): ?>
+				<div class="col-md-12"><br><span class="h3" style="color:#4f51a9; text-decoration:underline;"><strong>Approval (<?php echo $approvalPending; ?> pending)</strong></span></div>
+				<?php if(in_array(301,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Contractor Registration</strong></span><br>
+						Approved: <?php echo $contractorRA; ?> <br>
+					</div>
+				<?php endif; ?>
+				<?php if(in_array(302,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Consultant Registration</strong></span><br>
+						Approved: <?php echo $consultantRA; ?> <br>
+					</div>
+				<?php endif; ?>
+				<?php if(in_array(303,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Architect Registration</strong></span><br>
+						Approved: <?php echo $architectRA; ?> <br>
+					</div>
+				<?php endif; ?>
+				<?php if(in_array(304,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Engineer Registration</strong></span><br>
+						Approved: <?php echo $engineerRA; ?> <br>
+					</div>
+				<?php endif; ?>
+				<?php if(in_array(305,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Specialized Trade Registration</strong></span><br>
+						Approved: <?php echo $spRA; ?> <br>
+					</div>
+				<?php endif; ?>
+				<div class="clearfix"></div>
+				<?php if(in_array(306,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Contractor Service</strong></span><br>
+						<?php foreach($contractorServices as $contractorServiceName => $contractorService): ?>
+							<strong> <?php echo $contractorServiceA[$contractorService]['Name']; ?></strong>-
+							Approved: <?php echo $contractorServiceA[$contractorService]['Count']; ?> <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if(in_array(307,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Consultant Service</strong></span><br>
+						<?php foreach($consultantServices as $consultantServiceName => $consultantService): ?>
+							<strong> <?php echo $consultantServiceA[$consultantService]['Name']; ?></strong>-
+							Approved: <?php echo $consultantServiceA[$consultantService]['Count']; ?> <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if(in_array(308,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Architect Service</strong></span><br>
+						<?php foreach($architectServices as $architectServiceName => $architectService): ?>
+							<strong><?php echo $architectServiceA[$architectService]['Name']; ?></strong>-
+							Approved: <?php echo $architectServiceA[$architectService]['Count']; ?>  <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if(in_array(309,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Engineer Service</strong></span><br>
+						<?php foreach($engineerServices as $engineerServiceName => $engineerService): ?>
+							<strong><?php echo $engineerServiceA[$engineerService]['Name']; ?></strong>-
+							Approved: <?php echo $engineerServiceA[$engineerService]['Count']; ?> <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if(in_array(310,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Specialized Trade Service</strong></span><br>
+						<?php foreach($spServices as $specializedTradeServiceName => $specializedTradeService): ?>
+							<strong> <?php echo $specializedTradeServiceA[$specializedTradeService]['Name']; ?></strong>-
+							Approved: <?php echo $specializedTradeServiceA[$specializedTradeService]['Count']; ?> <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			<?php endif; ?>
+
+			<hr>
+
+			<?php if(in_array(401,$userAllPrivileges) || in_array(402,$userAllPrivileges) || in_array(403,$userAllPrivileges) || in_array(404,$userAllPrivileges) || in_array(405,$userAllPrivileges)
+			 || in_array(406,$userAllPrivileges) || in_array(407,$userAllPrivileges) || in_array(408,$userAllPrivileges) || in_array(409,$userAllPrivileges) || in_array(410,$userAllPrivileges)): ?>
+				<div class="col-md-12"><br><span class="h3" style="color:#4f51a9; text-decoration:underline;"><strong>Payment Approval (<?php echo $paymentPending; ?> pending)</strong></span></div>
+				<?php if(in_array(401,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Contractor Registration</strong></span><br>
+						Payment Approved: <?php echo $contractorRPA; ?> <br>
+					</div>
+				<?php endif; ?>
+				<?php if(in_array(402,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Consultant Registration</strong></span><br>
+						Payment Approved: <?php echo $consultantRPA; ?> <br>
+					</div>
+				<?php endif; ?>
+				<?php if(in_array(403,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Architect Registration</strong></span><br>
+						Payment Approved: <?php echo $architectRPA; ?> <br>
+					</div>
+				<?php endif; ?>
+				<?php if(in_array(404,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Engineer Registration</strong></span><br>
+						Payment Approved: <?php echo $engineerRPA; ?> <br>
+					</div>
+				<?php endif; ?>
+				<div class="clearfix"></div>
+				<?php if(in_array(406,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Contractor Service</strong></span><br>
+						<?php foreach($contractorServices as $contractorServiceName => $contractorService): ?>
+							<strong> <?php echo $contractorServicePA[$contractorService]['Name']; ?></strong>-
+							Payment Approved: <?php echo $contractorServicePA[$contractorService]['Count']; ?> <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if(in_array(407,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Consultant Service</strong></span><br>
+						<?php foreach($consultantServices as $consultantServiceName => $consultantService): ?>
+							<strong> <?php echo $consultantServicePA[$consultantService]['Name']; ?></strong>-
+							Payment Approved: <?php echo $consultantServicePA[$consultantService]['Count']; ?> <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if(in_array(408,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Architect Service</strong></span><br>
+						<?php foreach($architectServices as $architectServiceName => $architectService): ?>
+							<strong><?php echo $architectServicePA[$architectService]['Name']; ?></strong>-
+							Payment Approved: <?php echo $architectServicePA[$architectService]['Count']; ?>  <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if(in_array(409,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Engineer Service</strong></span><br>
+						<?php foreach($engineerServices as $engineerServiceName => $engineerService): ?>
+							<strong><?php echo $engineerServicePA[$engineerService]['Name']; ?></strong>-
+							Payment Approved: <?php echo $engineerServicePA[$engineerService]['Count']; ?> <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if(in_array(410,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Specialized Trade Service</strong></span><br>
+						<?php foreach($spServices as $specializedTradeServiceName => $specializedTradeService): ?>
+							<strong> <?php echo $specializedTradeServicePA[$specializedTradeService]['Name']; ?></strong>-
+							Payment Approved: <?php echo $specializedTradeServicePA[$specializedTradeService]['Count']; ?> <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			<?php endif; ?>
+
+			<hr>
+			<?php if(in_array(201,$userAllPrivileges) || in_array(202,$userAllPrivileges) || in_array(203,$userAllPrivileges) || in_array(204,$userAllPrivileges) || in_array(205,$userAllPrivileges)
+			 || in_array(206,$userAllPrivileges) || in_array(207,$userAllPrivileges) || in_array(208,$userAllPrivileges) || in_array(209,$userAllPrivileges) || in_array(210,$userAllPrivileges) || in_array(301,$userAllPrivileges) || in_array(302,$userAllPrivileges) || in_array(303,$userAllPrivileges) || in_array(304,$userAllPrivileges) || in_array(305,$userAllPrivileges)
+			 || in_array(306,$userAllPrivileges) || in_array(307,$userAllPrivileges) || in_array(308,$userAllPrivileges) || in_array(309,$userAllPrivileges) || in_array(310,$userAllPrivileges) || in_array(401,$userAllPrivileges) || in_array(402,$userAllPrivileges) || in_array(403,$userAllPrivileges) || in_array(404,$userAllPrivileges) || in_array(405,$userAllPrivileges)
+			 || in_array(406,$userAllPrivileges) || in_array(407,$userAllPrivileges) || in_array(408,$userAllPrivileges) || in_array(409,$userAllPrivileges) || in_array(410,$userAllPrivileges)): ?>
+				<div class="col-md-12"><br><span class="h3" style="color:#4f51a9; text-decoration:underline;"><strong>Rejection</strong></span></div>
+				<?php if(in_array(401,$userAllPrivileges) || in_array(301,$userAllPrivileges) || in_array(201,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Contractor Registration</strong></span><br>
+						Rejected: <?php echo $contractorRR; ?> <br>
+					</div>
+				<?php endif; ?>
+				<?php if(in_array(402,$userAllPrivileges) || in_array(302,$userAllPrivileges) || in_array(202,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Consultant Registration</strong></span><br>
+						Rejected: <?php echo $consultantRR; ?> <br>
+					</div>
+				<?php endif; ?>
+				<?php if(in_array(403,$userAllPrivileges) || in_array(303,$userAllPrivileges) || in_array(203,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Architect Registration</strong></span><br>
+						Rejected: <?php echo $architectRR; ?> <br>
+					</div>
+				<?php endif; ?>
+				<?php if(in_array(404,$userAllPrivileges) || in_array(304,$userAllPrivileges) || in_array(204,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Engineer Registration</strong></span><br>
+						Rejected: <?php echo $engineerRR; ?> <br>
+					</div>
+				<?php endif; ?>
+				<?php if(in_array(305,$userAllPrivileges) || in_array(205,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Specialized Trade Registration</strong></span><br>
+						Rejected: <?php echo $spRR; ?> <br>
+					</div>
+				<?php endif; ?>
+				<div class="clearfix"></div>
+				<?php if(in_array(406,$userAllPrivileges)  || in_array(306,$userAllPrivileges) || in_array(206,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Contractor Service</strong></span><br>
+						<?php foreach($contractorServices as $contractorServiceName => $contractorService): ?>
+							<strong> <?php echo $contractorServiceR[$contractorService]['Name']; ?></strong>-
+							Rejected: <?php echo $contractorServiceR[$contractorService]['Count']; ?> <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if(in_array(407,$userAllPrivileges) || in_array(307,$userAllPrivileges) || in_array(207,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Consultant Service</strong></span><br>
+						<?php foreach($consultantServices as $consultantServiceName => $consultantService): ?>
+							<strong> <?php echo $consultantServiceR[$consultantService]['Name']; ?></strong>-
+							Rejected: <?php echo $consultantServiceR[$consultantService]['Count']; ?> <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if(in_array(408,$userAllPrivileges) || in_array(308,$userAllPrivileges) || in_array(208,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Architect Service</strong></span><br>
+						<?php foreach($architectServices as $architectServiceName => $architectService): ?>
+							<strong><?php echo $architectServiceR[$architectService]['Name']; ?></strong>-
+							Rejected: <?php echo $architectServiceR[$architectService]['Count']; ?>  <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if(in_array(409,$userAllPrivileges) || in_array(309,$userAllPrivileges) || in_array(209,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Engineer Service</strong></span><br>
+						<?php foreach($engineerServices as $engineerServiceName => $engineerService): ?>
+							<strong><?php echo $engineerServiceR[$engineerService]['Name']; ?></strong>-
+							Rejected: <?php echo $engineerServiceR[$engineerService]['Count']; ?> <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+				<?php if(in_array(410,$userAllPrivileges) || in_array(310,$userAllPrivileges) || in_array(210,$userAllPrivileges)): ?>
+					<div class="col-md-4">
+						<br>
+						<span class="h4"><strong>Specialized Trade Service</strong></span><br>
+						<?php foreach($spServices as $specializedTradeServiceName => $specializedTradeService): ?>
+							<strong> <?php echo $specializedTradeServiceR[$specializedTradeService]['Name']; ?></strong>-
+							Rejected: <?php echo $specializedTradeServiceR[$specializedTradeService]['Count']; ?> <br>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			<?php endif; ?>
+
+			<hr>
+			<div class="clearfix"></div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

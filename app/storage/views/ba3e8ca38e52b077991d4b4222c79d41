@@ -1,0 +1,412 @@
+<?php $__env->startSection('pagescripts'); ?>
+	<?php echo HTML::script('assets/global/scripts/contractor.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+	<div id="suspend-modal" class="modal fade"  data-keyboard="false" data-backdrop="static" role="dialog" aria-labelledby="modalmessagebox" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+					<h3 class="modal-title font-red-intense">Suspend contractor</h3>
+				</div>
+				<?php echo Form::open(array('url'=>'monitoringreport/suspendcontractor')); ?>
+
+				<div class="modal-body">
+					<div class="col-md-12">
+						<p><strong>CDB No.:</strong> <span id="cdb-no"></span></p>
+						<p><strong>Firm: </strong> <span id="firm-name"></span></p>
+						<p><strong>Class: </strong> <span id="class"></span></p>
+					</div>
+					<input type="hidden" id="contractor-id" name="CrpContractorFinalId"/>
+					<input type="hidden" id="monitoring-id" name="CrpMonitoringOfficeId"/>
+					<div class="col-md-5">
+						<label class="control-label">Suspended From</label>
+						<div class="input-icon right">
+							<i class="fa fa-calendar"></i>
+							<input type="text" name="FromDate" class="form-control datepicker required" value="<?php echo Input::get('FromDate'); ?>" readonly="readonly" placeholder="">
+						</div>
+					</div>
+					<div class="col-md-5">
+						<label class="control-label">To</label>
+						<div class="input-icon right">
+							<i class="fa fa-calendar"></i>
+							<input type="text" name="ToDate" class="form-control datepicker required" value="<?php echo Input::get('ToDate'); ?>" readonly="readonly" placeholder="">
+						</div>
+					</div>
+					<div class="col-md-12">
+						<label class="control-label">Remarks</label>
+						<textarea class="form-control required input-sm" rows="4" name="Remarks"></textarea>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn red-intense">Update</button>
+					<button type="button" class="btn green" data-dismiss="modal" aria-hidden="true">Cancel</button>
+				</div>
+				<?php echo Form::close(); ?>
+
+			</div>
+		</div>
+	</div>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject"><?php echo $pageTitle; ?></span>
+		</div>
+	</div>
+	<div class="portlet-body flip-scroll">
+		<div class="form-body">
+			<?php echo Form::open(array('url' =>Request::URL(),'role'=>'form','method'=>'get')); ?>
+
+			<div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Contractor/Firm/CDB No.</label>
+                        <div class="ui-widget">
+                            <input type="hidden" class="contractor-id" name="ContractorId" value="<?php echo Input::get('ContractorId'); ?>"/>
+                            <input type="text" name="Contractor" value="<?php echo Input::get('Contractor'); ?>" class="form-control input-sm contractor-autocomplete"/>
+                        </div>
+                    </div>
+                </div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">Dzongkhag</label>
+						<select name="DzongkhagId" class="form-control select2me">
+							<option value="">All</option>
+							<?php foreach($dzongkhags as $dzongkhag): ?>
+								<option value="<?php echo $dzongkhag->Id; ?>" <?php if(Input::get("DzongkhagId") == $dzongkhag->Id): ?>selected="selected"<?php endif; ?>><?php echo $dzongkhag->Dzongkhag; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-1">
+					<div class="form-group">
+						<label class="control-label">Classification</label>
+						<select name="Priority" class="form-control input-sm">
+							<option value="">All</option>
+							<?php foreach($priorities as $priority): ?>
+								<option value="<?php echo $priority->Priority; ?>" <?php if(Input::get("Priority") == $priority->Priority): ?>selected="selected"<?php endif; ?>><?php echo $priority->Class; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">Status</label>
+						<?php echo Form::select('Status',array(''=>'All','2'=>'Not fulfilled','1'=>'Fulfilled'),Input::get('Status'),array('class'=>'form-control input-sm')); ?>
+
+					</div>
+				</div>
+				<div class="col-md-2">
+					<label class="control-label">&nbsp;</label>
+					<div class="btn-set">
+						<button type="submit" class="btn blue-hoki btn-sm">Search</button>
+						<a href="<?php echo Request::Url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+					</div>
+				</div>
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+		<?php if(isset($isList)): ?>
+				<div class="panel-group accordion" id="tender-accordion">
+				<?php $count = 1; ?>
+				<?php foreach($years as $year): ?>
+
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#tender-accordion" href="#collapse_<?php echo $year->Year; ?>">
+										<?php echo $year->Year; ?>
+
+									</a>
+								</h4>
+							</div>
+							<div id="collapse_<?php echo $year->Year; ?>" class="panel-collapse <?php if($count==1): ?><?php echo "in"; ?><?php else: ?><?php echo "collapse"; ?><?php endif; ?>" style="overflow-x:scroll;">
+								<div class="table-responsive">
+									<table class="table table-bordered table-striped table-condensed flip-content" id="contractorhumanresource">
+										<thead class="flip-content">
+										<tr>
+											<th>
+												CDB No.
+											</th>
+											<?php if(isset($isList)): ?>
+												<th>Year</th>
+												<th>Monitored On</th>
+											<?php endif; ?>
+											<th>
+												Ownership Type
+											</th>
+											<th>
+												Name of Firm
+											</th>
+											<th>
+												Class
+											</th>
+											<th>
+												Country
+											</th>
+											<th>
+												Dzongkhag
+											</th>
+											<th>
+												Mobile#
+											</th>
+											<th>
+												Tel#
+											</th>
+											<th>
+												Email
+											</th>
+											<?php if(isset($isList)): ?>
+												<th>Status</th>
+												<th>Remarks</th>
+											<?php endif; ?>
+											<th class="col-md-2">
+												Action
+											</th>
+										</tr>
+										</thead>
+										<tbody>
+										<?php $__empty_1 = true; foreach($contractorLists[$year->Year] as $contractorList): $__empty_1 = false; ?>
+											<tr>
+												<td>
+													<?php echo $contractorList->CDBNo; ?>
+
+												</td>
+												<?php if(isset($isList)): ?>
+													<td>
+														<?php echo $contractorList->Year; ?>
+
+													</td>
+													<td>
+														<?php echo convertDateToClientFormat($contractorList->MonitoringDate); ?>
+
+													</td>
+												<?php endif; ?>
+												<td>
+													<?php echo $contractorList->OwnershipType; ?>
+
+												</td>
+												<td>
+													<?php echo $contractorList->NameOfFirm; ?>
+
+												</td>
+												<td>
+													<?php echo $contractorList->ClassificationCode; ?>
+
+												</td>
+												<td>
+													<?php echo $contractorList->Country; ?>
+
+												</td>
+												<td>
+													<?php echo $contractorList->Dzongkhag; ?>
+
+												</td>
+												<td>
+													<?php echo str_replace(',','<br/>',$contractorList->MobileNo); ?>
+
+												</td>
+												<td>
+													<?php echo str_replace(',','<br/>',$contractorList->TelephoneNo); ?>
+
+												</td>
+												<td>
+													<?php echo $contractorList->Email; ?>
+
+												</td>
+												<?php if(isset($isList)): ?>
+													<td>
+														<?php echo ($contractorList->MonitoringStatus==1)?"Fulfilled":"Not fulfilled"; ?>
+
+													</td>
+													<td>
+														<?php echo $contractorList->Remarks; ?>
+
+													</td>
+													<?php if($isList == 1): ?>
+														<td class="text-center">
+															<a href="<?php echo URL::to('monitoringreport/officeedit/'.$contractorList->MonitoringOfficeId); ?>" class="btn btn-xs red"><i class="fa fa-edit"></i> Edit</a>
+															<a href="<?php echo URL::to('monitoringreport/officedelete/'.$contractorList->MonitoringOfficeId); ?>" class="btn btn-xs blue"><i class="fa fa-times"></i> Delete</a>
+															<a href="<?php echo URL::to('monitoringreport/officeview/'.$contractorList->MonitoringOfficeId); ?>" target="_blank" class="btn btn-xs purple"><i class="fa fa-print"></i> Print</a>
+														</td>
+													<?php else: ?>
+														<td>
+															<?php if((bool)$contractorList->ActionTaken): ?>
+																<?php if($contractorList->ActionTaken == 2): ?>
+																	<?php if($contractorList->CmnApplicationRegistrationStatusId == CONST_CMN_APPLICATIONREGISTRATIONSTATUS_SUSPENDED): ?>
+																		<ol style="margin-left: -25px;">
+																			<li><a href="<?php echo URL::to('contractor/reregistration'); ?>?ContractorId=<?php echo $contractorList->Id; ?>&Contractor=<?php echo $contractorList->NameOfFirm.' ('.$contractorList->CDBNo.')'; ?>">Reregister</a></li>
+																		</ol>
+																		(SUSPENDED)
+																	<?php endif; ?>
+																<?php else: ?>
+																	(DOWNGRADED)
+																<?php endif; ?>
+															<?php else: ?>
+																<ol style="margin-left: -25px;">
+																	<li><a href="<?php echo URL::to("contractor/editworkclassification/$contractorList->Id"); ?>?monitoringofficeid=<?php echo $contractorList->MonitoringOfficeId; ?>&redirectUrl=monitoringreport/officeaction&usercdb=edit&final=true">Downgrade</a></li>
+																	<li><a href="#" data-monitoringid="<?php echo $contractorList->MonitoringOfficeId; ?>" data-class="<?php echo $contractorList->ClassificationCode; ?>" data-cdbno="<?php echo $contractorList->CDBNo; ?>" data-firmname="<?php echo $contractorList->NameOfFirm; ?>" data-id="<?php echo $contractorList->Id; ?>" class="suspend-contractor-monitoring">Suspend</a></li>
+																</ol>
+																(ACTION NOT TAKEN)
+															<?php endif; ?>
+														</td>
+													<?php endif; ?>
+												<?php else: ?>
+													<td class="text-center">
+														<?php if((int)$contractorList->StatusReference == 12003): ?>
+															<a href="<?php echo URL::to('monitoringreport/officerecord/'.$contractorList->Id); ?>" class="btn btn-xs red"><i class="fa fa-edit"></i> Record Monitoring</a>
+														<?php endif; ?>
+													</td>
+												<?php endif; ?>
+											</tr>
+										<?php endforeach; if ($__empty_1): ?>
+											<tr>
+												<td class="font-red text-center" colspan="14">No data to display</td>
+											</tr>
+										<?php endif; ?>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+				<?php $count++; ?>
+				<?php endforeach; ?>
+		</div>
+		<?php else: ?>
+			<div class="table-responsive">
+				<table class="table table-bordered table-striped table-condensed flip-content">
+					<thead class="flip-content">
+					<tr>
+						<th>
+							CDB No.
+						</th>
+						<?php if(isset($isList)): ?>
+							<th>Year</th>
+							<th>Monitoring Date</th>
+						<?php endif; ?>
+						<th>
+							Ownership Type
+						</th>
+						<th>
+							Name of Firm
+						</th>
+						<th>
+							Class
+						</th>
+						<th>
+							Country
+						</th>
+						<th>
+							Dzongkhag
+						</th>
+						<th>
+							Mobile#
+						</th>
+						<th>
+							Tel#
+						</th>
+						<th>
+							Email
+						</th>
+						<?php if(isset($isList)): ?>
+							<th>Status</th>
+						<?php endif; ?>
+						<th class="col-md-2">
+							Action
+						</th>
+					</tr>
+					</thead>
+					<tbody>
+					<?php $__empty_1 = true; foreach($contractorLists as $contractorList): $__empty_1 = false; ?>
+						<tr>
+							<td>
+								<?php echo $contractorList->CDBNo; ?>
+
+							</td>
+							<?php if(isset($isList)): ?>
+								<td>
+									<?php echo $contractorList->Year; ?>
+
+								</td>
+								<td>
+									<?php echo convertDateToClientFormat($contractorList->MonitoringDate); ?>
+
+								</td>
+							<?php endif; ?>
+							<td>
+								<?php echo $contractorList->OwnershipType; ?>
+
+							</td>
+							<td>
+								<?php echo $contractorList->NameOfFirm; ?>
+
+							</td>
+							<td>
+								<?php echo $contractorList->ClassificationCode; ?>
+
+							</td>
+							<td>
+								<?php echo $contractorList->Country; ?>
+
+							</td>
+							<td>
+								<?php echo $contractorList->Dzongkhag; ?>
+
+							</td>
+							<td>
+								<?php echo $contractorList->MobileNo; ?>
+
+							</td>
+							<td>
+								<?php echo $contractorList->TelephoneNo; ?>
+
+							</td>
+							<td>
+								<?php echo $contractorList->Email; ?>
+
+							</td>
+							<?php if(isset($isList)): ?>
+								<td>
+									<?php echo ($contractorList->MonitoringStatus==1)?"Fulfilled":"Not fulfilled"; ?>
+
+								</td>
+								<?php if($isList == 1): ?>
+									<td class="text-center">
+										<a href="<?php echo URL::to('monitoringreport/officeedit/'.$contractorList->MonitoringOfficeId); ?>" class="btn btn-xs red"><i class="fa fa-edit"></i> Edit</a>
+										<a href="<?php echo URL::to('monitoringreport/officeview/'.$contractorList->MonitoringOfficeId); ?>" target="_blank" class="btn btn-xs purple"><i class="fa fa-print"></i> Print</a>
+									</td>
+								<?php else: ?>
+									<td>
+										<ol style="margin-left: -25px;">
+											<li><a href="<?php echo URL::to("contractor/editworkclassification/$contractorList->Id"); ?>?monitoringofficeid=<?php echo $contractorList->MonitoringOfficeId; ?>&redirectUrl=monitoringreport/officeaction&usercdb=edit&final=true">Downgrade</a></li>
+											<li><a href="#" data-monitoringid="<?php echo $contractorList->MonitoringOfficeId; ?>" data-class="<?php echo $contractorList->ClassificationCode; ?>" data-cdbno="<?php echo $contractorList->CDBNo; ?>" data-firmname="<?php echo $contractorList->NameOfFirm; ?>" data-id="<?php echo $contractorList->Id; ?>" class="suspend-contractor-monitoring">Suspend</a></li>
+										</ol>
+									</td>
+								<?php endif; ?>
+
+							<?php else: ?>
+								<td class="text-center">
+									<?php if((int)$contractorList->StatusReference == 12003): ?>
+										<a href="<?php echo URL::to('monitoringreport/officerecord/'.$contractorList->Id); ?>" class="btn btn-xs red"><i class="fa fa-edit"></i> Record Monitoring</a>
+									<?php endif; ?>
+								</td>
+							<?php endif; ?>
+
+						</tr>
+					<?php endforeach; if ($__empty_1): ?>
+						<tr>
+							<td class="font-red text-center" colspan="14">No data to display</td>
+						</tr>
+					<?php endif; ?>
+					</tbody>
+				</table>
+			</div>
+		<?php endif; ?>
+	<?php //pagination($noOfPages,Input::all(),Input::get('page'),$route); ?>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

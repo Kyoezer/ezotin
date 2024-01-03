@@ -1,0 +1,66 @@
+<?php $__env->startSection('main-content'); ?>
+<div class="row">
+<div class="col-md-12">
+<h3 class="font-grey-gallery bold text-center">CDB Secretariat</h3>
+	<?php $curDepartment = '---'; ?>
+<?php if(!empty($directorGeneral)): ?>
+
+	<center><h4><strong>HEAD OF AGENCY</strong></h4></center>
+<div class="col-md-4 col-md-offset-4">
+	<div class="thumbnail">
+		<img src="<?php echo asset($directorGeneral[0]->Image); ?>" alt="">
+		<div class="caption">
+			<p style="text-align: center;"><strong><?php echo $directorGeneral[0]->FullName; ?><br /><?php echo $directorGeneral[0]->DesignationName; ?></strong><br /><strong>Email:</strong> <?php echo $directorGeneral[0]->Email; ?><br /><strong>Contact No.:</strong> <?php echo $directorGeneral[0]->PhoneNo; ?><br /><strong>CDB Ext. No.:</strong> <?php echo $directorGeneral[0]->ExtensionNo; ?></p>
+		</div>
+	</div>
+</div>
+<?php endif; ?>
+
+	<div class="clearfix"></div>
+	<hr  class="style-eight">
+<?php foreach($departments as $department): ?>
+	<?php if($curDepartment != '---' && $curDepartment != $department->DepartmentName): ?>
+			<div class="clearfix"></div>
+		<hr class="style-eight"/>
+	<?php endif; ?>
+	<center><h4 style="text-transform: uppercase;"><strong><?php echo $department->DepartmentName; ?></strong></h4></center>
+	<?php if(count($cdbSecretariats[$department->Id])): ?>
+		<div class="container-section col-md-12">
+		<?php foreach($cdbSecretariats[$department->Id] as $secretariat): ?>
+			<div class="col-md-4 <?php if(count($cdbSecretariats[$department->Id]) == 1): ?><?php echo "col-md-offset-4"; ?><?php endif; ?>">
+				<div class="thumbnail">
+					<img src="<?php echo asset($secretariat->Image); ?>" alt="">
+					<div class="caption">
+						<p style="text-align: center;"><strong><?php echo $secretariat->FullName; ?><br /><?php echo $secretariat->DesignationName; ?></strong><br /><strong>Email: </strong><?php echo $secretariat->Email; ?><br /><strong>Contact No.:</strong> <?php echo $secretariat->PhoneNo; ?><br /><strong>CDB Ext. No.:</strong> <?php echo $secretariat->ExtensionNo; ?></p>
+					</div>
+				</div>
+			</div>
+		<?php endforeach; ?>
+		</div>
+	<?php endif; ?>
+	<?php if(count($divisions[$department->Id])>0): ?>
+		<?php foreach($divisions[$department->Id] as $division): ?>
+			<?php if(count($cdbSecretariats[$division->Id])>0): ?>
+				<div class="clearfix"></div>
+				<div class="container-section col-md-12">
+					<center><h5 style="text-decoration:underline;"><strong><?php echo $division->DivisionName; ?></strong></h5></center>
+					<?php foreach($cdbSecretariats[$division->Id] as $secretariat): ?>
+						<div class="col-md-4 <?php if(count($cdbSecretariats[$division->Id]) == 1): ?><?php echo "col-md-offset-4"; ?><?php endif; ?>">
+							<div class="thumbnail">
+								<img src="<?php echo asset($secretariat->Image); ?>" alt="">
+								<div class="caption">
+									<p style="text-align: center;"><strong><?php echo $secretariat->FullName; ?><br /><?php echo $secretariat->DesignationName; ?></strong><br /><strong>Email: </strong><?php echo $secretariat->Email; ?><br /><strong>Contact No.:</strong> <?php echo $secretariat->PhoneNo; ?><br /><strong>CDB Ext. No.:</strong> <?php echo $secretariat->ExtensionNo; ?></p>
+								</div>
+							</div>
+						</div>
+					<?php endforeach; ?>
+				</div>
+			<?php endif; ?>
+		<?php endforeach; ?>
+	<?php endif; ?>
+
+	<?php $curDepartment = $department->DepartmentName; ?>
+<?php endforeach; ?>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('websitemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

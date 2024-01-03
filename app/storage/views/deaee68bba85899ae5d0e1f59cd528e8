@@ -1,0 +1,184 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+            <?php $parameters = Input::all(); $parameters['export']='excel'; $route = Request::segment(1).'.'.Request::segment(2); ?>
+            <?php if(!Input::has('export')): ?>
+            <i class="fa fa-cogs"></i>Report of Employees <?php if(!Input::has('export')): ?> <a href="<?php echo route($route,$parameters); ?>" class="btn btn-sm green"><i class="fa fa-file-excel-o"></i> Export to Excel </a>   <?php $parameters['export'] = 'print'; ?><a href="<?php echo route($route,$parameters); ?>" class="btn btn-sm purple" target="_blank"><i class="fa fa-print"></i> Print</a><?php endif; ?>
+		    <?php endif; ?>
+        </div>
+	</div>
+	<div class="portlet-body flip-scroll">
+        <?php if(Input::get('export') != "print"): ?>
+        <?php echo Form::open(array('url'=>Request::segment(1).'/'.Request::segment(2),'method'=>'get')); ?>
+
+		<div class="form-body">
+			<div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Dzongkhag</label>
+                        <select class="form-control select2me" name="Dzongkhag">
+                            <option value="">---SELECT ONE---</option>
+                            <?php foreach($dzongkhags as $dzongkhag): ?>
+                                <option value="<?php echo $dzongkhag->NameEn; ?>" <?php if($dzongkhag->NameEn == Input::get('Dzongkhag')): ?>selected <?php endif; ?>><?php echo $dzongkhag->NameEn; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Country</label>
+                        <select class="form-control select2me" name="Country">
+                            <option value="">---SELECT ONE---</option>
+                            <?php foreach($countries as $country): ?>
+                                <option value="<?php echo $country->Name; ?>" <?php if($country->Name== Input::get('Country')): ?>selected <?php endif; ?>><?php echo $country->Name; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Gender</label>
+                        <?php echo Form::select('Gender',array(''=>'All','F'=>'Female','M'=>'Male'),Input::get('Gender'),array('class'=>'form-control')); ?>
+
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Contractor/Consultant</label>
+                        <?php echo Form::select('Type',array(''=>'All','2'=>'Contractor','3'=>'Consultant'),Input::get('Type'),array('class'=>'form-control')); ?>
+
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Joining Date Between</label>
+                        <div class="input-group input-large date-picker input-daterange">
+                            <input type="text" name="FromDate" class="form-control datepickerfrom" value="<?php echo Input::get('FromDate'); ?>" />
+						<span class="input-group-addon">
+						to </span>
+                            <input type="text" name="ToDate" class="form-control datepickerto" value="<?php echo Input::get('ToDate'); ?>" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <label class="control-label">No. of Rows</label>
+                        <?php echo Form::select('Limit',array(10=>10,20=>20,30=>30,'All'=>'All'),Input::has('Limit')?Input::get('Limit'):20,array('class'=>'form-control')); ?>
+
+                    </div>
+                </div>
+                <?php if(!Input::has('export')): ?>
+                    <div class="col-md-2">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="btn-set">
+                            <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                            <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                        </div>
+                    </div>
+                <?php endif; ?>
+			</div>
+		</div>
+        <?php echo Form::close(); ?>
+
+        <?php else: ?>
+            <?php if(Input::has('Dzongkhag')): ?>
+                <b>Dzongkhag: <?php echo Input::get('Dzongkhag'); ?></b> <br/>
+            <?php else: ?>
+                <b>Dzongkhag: All</b> <br/>
+            <?php endif; ?>
+            <?php if(Input::has('Country')): ?>
+                <b>Country: <?php echo Input::get('Country'); ?></b> <br/>
+            <?php else: ?>
+                <b>Country: All</b> <br/>
+            <?php endif; ?>
+            <?php if(Input::has('Gender')): ?>
+                <b>Gender: <?php echo Input::get('Gender'); ?></b> <br/>
+            <?php else: ?>
+                <b>Gender: All</b><br/>
+            <?php endif; ?>
+            <?php if(Input::has('Type')): ?>
+                <b>Type: <?php if(Input::get('Type') == 2): ?><?php echo "Contractor"; ?><?php else: ?><?php echo "Consultant"; ?><?php endif; ?></b> <br/>
+            <?php else: ?>
+                <b>Type: All</b><br/>
+            <?php endif; ?>
+            <?php if(Input::has('FromDate')): ?>
+                <b>Joining Date from: <?php echo Input::get('FromDate'); ?></b> <br/>
+            <?php endif; ?>
+            <?php if(Input::has('ToDate')): ?>
+                <b>Joining Date to: <?php echo Input::get('ToDate'); ?></b> <br/>
+            <?php endif; ?>
+            <?php if(Input::has('Limit')): ?>
+                <b><?php echo Input::get('Limit'); ?> records</b>
+            <?php else: ?>
+                <b>All records</b>
+            <?php endif; ?>
+        <?php endif; ?>
+		<table class="table table-bordered table-striped table-condensed flip-content" id="contractorhumanresource">
+			<thead class="flip-content">
+				<tr>
+                    <th>
+                        Sl.No.
+                    </th>
+					<th class="order">
+						 Firm Name
+					</th>
+					<th>
+						Name
+					</th>
+					<th class="">
+						 Dzongkhag
+					</th>
+					<th class="">
+						 CID No.
+					</th>
+					<th>
+						Sex
+					</th>
+                    <th>
+                        Joining Date
+                    </th>
+					<th>
+						Country
+					</th>
+					<th class="">
+						 Qualification
+					</th>
+					<th class="">
+						Designation
+					</th>
+                    <th class="">
+                        Trade
+                    </th>
+				</tr>
+			</thead>
+			<tbody>
+            <?php $count = 1; ?>
+            <?php $__empty_1 = true; foreach($reportData as $value): $__empty_1 = false; ?>
+				<tr>
+                    <td><?php echo $count; ?></td>
+                    <td><?php echo $value->FirmName; ?></td>
+                    <td><?php echo $value->Name; ?></td>
+                    <td><?php echo $value->Dzongkhag; ?></td>
+                    <td><?php echo $value->CIDNo; ?></td>
+                    <td><?php echo $value->Sex; ?></td>
+                    <td><?php echo convertDateToClientFormat($value->JoiningDate); ?></td>
+                    <td><?php echo $value->Country; ?></td>
+                    <td><?php echo $value->Qualification; ?></td>
+                    <td><?php echo $value->Designation; ?></td>
+                    <td><?php echo $value->Trade; ?></td>
+				</tr>
+                <?php $count++; ?>
+            <?php endforeach; if ($__empty_1): ?>
+                <tr>
+                    <td colspan="10" class="text-center font-red">No data to display!</td>
+                </tr>
+            <?php endif; ?>
+			</tbody>
+		</table>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

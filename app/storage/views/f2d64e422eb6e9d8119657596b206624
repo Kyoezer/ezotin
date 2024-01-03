@@ -1,0 +1,41 @@
+<?php if(count($reportData1)>0): ?>
+<div class="col-md-6">
+<table class="table table-condensed table-bordered">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Phone No</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach($reportData1 as $data1): ?>
+            <tr>
+                <td><?php echo $data1->Email; ?></td>
+                <td><?php echo $data1->PhoneNo; ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+</div>
+<?php endif; ?>
+<?php if(count($reportData2)>0): ?>
+<div class="col-md-6">
+    <table class="table table-condensed table-bordered">
+        <thead>
+        <tr>
+            <th>Email</th>
+            <th>Phone No</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach($reportData2 as $data2): ?>
+            <tr>
+                <td><?php echo $data2->Email; ?></td>
+                <td><?php echo $data2->PhoneNo; ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<?php endif; ?>
+<div class="clearfix"></div>

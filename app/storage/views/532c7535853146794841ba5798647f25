@@ -1,0 +1,383 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php echo HTML::script('assets/global/scripts/contractor.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption font-green-seagreen">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject">Monitoring Report</span>
+
+		</div>
+	</div>
+	<?php echo Form::open(array('url' => 'monitoringreport/savesite','role'=>'form','id'=>'roleregistration')); ?>
+
+	<div class="portlet-body flip-scroll">
+		<div class="form-body">
+			<div class="row">
+				<div class="col-md-12"><h4><strong>Sites</strong></h4></div>
+			</div>
+		</div>
+		<?php foreach($reportingSites as $site): ?>
+		<div class="panel-group select-less-padding" id="accordion">
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" data-parent="#accordion" href="#soe">General Information</a>
+					</h4>
+				</div>
+				<div id="soe" class="panel-collapse collapse in">
+					<div class="panel-body">
+						<div class="col-md-12">
+							<?php echo Form::hidden("Year",((bool)$site->Year)?$site->Year:date('Y')); ?>
+
+							<?php echo Form::hidden("CrpContractorFinalId",$contractorDetails[0]->Id); ?>
+
+							<?php echo Form::hidden("Id",$site->Id); ?>
+
+							<?php echo Form::hidden("WorkId",((bool)$site->WorkId)?$site->WorkId:$workDetails[0]->Id); ?>
+
+							<?php echo Form::hidden("Type",((bool)$site->Type)?$site->Type:$type); ?>
+
+							<h5><strong>Contractor:</strong></h5>
+							<?php echo $contractorDetails[0]->NameOfFirm." (".$contractorDetails[0]->CDBNo.')'; ?> <br>
+							<h5><strong>Name of Work:</strong></h5>
+							<?php echo strip_tags($workDetails[0]->NameOfWork); ?> <br/>
+							<h5><strong>Agency:</strong></h5>
+							<?php echo $workDetails[0]->Agency; ?>
+
+							<br><br>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title"><a href="#si" data-toggle="collapse" data-parent="#accordion">Inspection of
+							Site</a></h3>
+				</div>
+				<div id="si" class="panel-collapse collapse">
+					<div class="panel-body">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="ProjectEngineer" class="control-label">Name of Project Engineer</label>
+								<input type="text" value="<?php echo $site->ProjectEngineer; ?>" name="ProjectEngineer" id="ProjectEngineer" class="form-control required input-sm"/>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="ConstructionPhase" class="control-label">Construction Phase at time of Monitoring</label>
+								<input type="text" value="<?php echo $site->ConstructionPhase; ?>" name="ConstructionPhase" id="ConstructionPhase" class="form-control required input-sm"/>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="OfficeSetUp" class="control-label">Office Set Up?</label>
+								<?php echo Form::select('OfficeSetUp',array('1'=>'Yes','0'=>'No'),$site->OfficeSetUp,array('class'=>'form-control required input-sm','id'=>'OfficeSetUp')); ?>
+
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="SignBoard" class="control-label">Sign board erected?</label>
+								<?php echo Form::select('SignBoard',array('1'=>'Yes','0'=>'No'),$site->SignBoard,array('class'=>'form-control required input-sm','id'=>'SignBoard')); ?>
+
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="BillOfQuantities" class="control-label">Bill of quantities</label>
+								<?php echo Form::select('BillOfQuantities',array('1'=>'Yes','0'=>'No'),$site->BillOfQuantities,array('class'=>'form-control required input-sm','id'=>'BillOfQuantities')); ?>
+
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="SBDAndApprovedDrawing" class="control-label">SBD and Approved Drawing</label>
+								<?php echo Form::select('SBDAndApprovedDrawing',array('1'=>'Yes','0'=>'No'),$site->SBDAndApprovedDrawing,array('class'=>'form-control required input-sm','id'=>'SBDAndApprovedDrawing')); ?>
+
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="SiteOrderBook" class="control-label">Site Order Book</label>
+								<?php echo Form::select('SiteOrderBook',array('1'=>'Yes','0'=>'No'),$site->SiteOrderBook,array('class'=>'form-control required input-sm','id'=>'SiteOrderBook')); ?>
+
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="SiteHindranceBook" class="control-label">Site hindrance Book</label>
+								<?php echo Form::select('SiteHindranceBook',array('1'=>'Yes','0'=>'No'),$site->SiteHindranceBook,array('class'=>'form-control required input-sm','id'=>'SiteHindranceBook')); ?>
+
+							</div>
+						</div>
+						<div class="col-md-1">
+							<div class="form-group">
+								<label for="Store" class="control-label">Store</label>
+								<?php echo Form::select('Store',array('1'=>'Yes','0'=>'No'),$site->Store,array('class'=>'form-control required input-sm','id'=>'Store')); ?>
+
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="LabourCamp" class="control-label">Labour Camp</label>
+								<?php echo Form::select('LabourCamp',array('1'=>'Yes','0'=>'No'),$site->LabourCamp,array('class'=>'form-control required input-sm','id'=>'LabourCamp')); ?>
+
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="Sanitation" class="control-label">Sanitation</label>
+								<?php echo Form::select('Sanitation',array('Good'=>'Good','Fair'=>'Fair','Poor'=>'Poor'),$site->Sanitation,array('class'=>'form-control required input-sm','id'=>'Sanitation')); ?>
+
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="WorkPlan" class="control-label">Work Plan</label>
+								<?php echo Form::select('WorkPlan',array('1'=>'Yes','0'=>'No'),$site->WorkPlan,array('class'=>'form-control required input-sm','id'=>'WorkPlan')); ?>
+
+							</div>
+						</div>
+						<div class="col-md-1">
+							<div class="form-group">
+								<label for="MB" class="control-label">MB</label>
+								<?php echo Form::select('MB',array('1'=>'Yes','0'=>'No'),$site->MB,array('class'=>'form-control required input-sm','id'=>'MB')); ?>
+
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="ConstructionJournal" class="control-label">Construction Journal</label>
+								<?php echo Form::select('ConstructionJournal',array('1'=>'Yes','0'=>'No'),$site->ConstructionJournal,array('class'=>'form-control required input-sm','id'=>'ConstructionJournal')); ?>
+
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="QualityAssurance" class="control-label">Quality Assurance</label>
+								<?php echo Form::select('QualityAssurance',array('1'=>'Yes','0'=>'No'),$site->QualityAssurance,array('class'=>'form-control required input-sm','id'=>'QualityAssurance')); ?>
+
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="TestReport" class="control-label">Test Report</label>
+								<?php echo Form::select('TestReport',array('1'=>'Yes','0'=>'No'),$site->TestReport,array('class'=>'form-control required input-sm','id'=>'TestReport')); ?>
+
+							</div>
+						</div>
+						<div class="col-md-1">
+							<div class="form-group">
+								<label for="APS" class="control-label">APS</label>
+								<?php echo Form::select('APS',array('1'=>'Yes','0'=>'No'),$site->APS,array('class'=>'form-control required input-sm','id'=>'APS')); ?>
+
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="SiteInspectionRemarks" class="control-label">Remarks</label>
+								<textarea name="SiteInspectionRemarks" rows="2" class="form-control"><?php echo $site->SiteInspectionRemarks; ?></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" data-parent="#accordion" href="#lm">Use of Local Materials</a>
+					</h4>
+				</div>
+				<div id="lm" class="panel-collapse collapse">
+					<div class="panel-body">
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="UseOfLocalBricks" class="control-label">Local Bricks Used?</label>
+								<?php echo Form::select('UseOfLocalBricks',array('1'=>'Yes','0'=>'No'),$site->UseOfLocalBricks,array('class'=>'form-control required input-sm','id'=>'UseOfLocalBricks')); ?>
+
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="LocalBricksBoughtFrom" class="control-label">Local Bricks Bought From</label>
+								<input type="text" value="<?php echo $site->LocalBricksBoughtFrom; ?>" name="LocalBricksBoughtFrom" id="LocalBricksBoughtFrom" class="form-control required input-sm"/>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="LocalMaterialsRemarks" class="control-label">Remarks</label>
+								<textarea name="LocalMaterialsRemarks" rows="2" class="form-control"><?php echo $site->LocalMaterialsRemarks; ?></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" data-parent="#accordion" href="#ohs">OHS Facilities at Site</a>
+					</h4>
+				</div>
+				<div id="ohs" class="panel-collapse collapse">
+					<div class="panel-body">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label for="OHSFacilitiesPresent" class="control-label">OHS facilities Present?</label>
+								<?php echo Form::select('OHSFacilitiesPresent',array('1'=>'Yes','0'=>'No'),$site->OHSFacilitiesPresent,array('class'=>'form-control required input-sm','id'=>'OHSFacilitiesPresent')); ?>
+
+							</div>
+						</div>
+						<div class="col-md-9">
+							<div class="form-group">
+								<label for="OHSDetail" class="control-label">Types of OHS provided</label>
+								<textarea class="form-control input-sm" rows="2" id="OHSDetail" name="OHSDetail"><?php echo $site->OHSDetail; ?></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" data-parent="#accordion" href="#hr">Types of Labourers at Site</a>
+					</h4>
+				</div>
+				<div id="hr" class="panel-collapse collapse">
+					<div class="panel-body">
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="TotalBhutanese" class="control-label">Total (National)</label>
+								<input type="number" class="form-control input-sm" id="TotalBhutanese"  value="<?php echo $site->TotalBhutanese; ?>" name="TotalBhutanese"/>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="TotalNonBhutanese" class="control-label">Total (Non-National)</label>
+								<input type="number" class="form-control input-sm" id="TotalNonBhutanese" value="<?php echo $site->TotalNonBhutanese; ?>" name="TotalNonBhutanese"/>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<label for="NoOfInterns" class="control-label">No. of Interns</label>
+								<input type="number" class="form-control input-sm" id="NoOfInterns" value="<?php echo $site->NoOfInterns; ?>" name="NoOfInterns"/>
+							</div>
+						</div><div class="clearfix"></div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="EmploymentOfVTI" class="control-label">Percentage of VTI/ local skill labours committed during evaluation</label>
+								<select name="EmploymentOfVTI" id="" class="form-control input-sm required">
+									<option value="">---SELECT ONE---</option>
+									<?php foreach($vtiEmployment as $vtiEmp): ?>
+										<option value="<?php echo $vtiEmp->Name; ?>" <?php if($edit && ($vtiEmp->Name == $site->EmploymentOfVTI)): ?>selected="selected"<?php else: ?><?php if(!$edit && isset($commitmentDetails[0]) && $commitmentDetails[0]->EmploymentOfVTI == $vtiEmp->Points): ?>selected="selected"<?php endif; ?><?php endif; ?>><?php echo $vtiEmp->Name; ?></option>
+									<?php endforeach; ?>
+									<option value="0">None</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="CommitmentOfInternship" class="control-label">Number of interns committed during evaluation</label>
+								<select name="CommitmentOfInternship" id="" class="form-control input-sm required">
+									<option value="">---SELECT ONE---</option>
+									<?php foreach($vtiInternship as $vtiInt): ?>
+										<option value="<?php echo $vtiInt->Name; ?>" <?php if($edit && ($vtiInt->Name == $site->CommitmentOfInternship)): ?>selected="selected"<?php else: ?><?php if(!$edit && isset($commitmentDetails[0]) && $commitmentDetails[0]->CommitmentOfInternship == $vtiInt->Points): ?>selected="selected"<?php endif; ?><?php endif; ?>><?php echo $vtiInt->Name; ?></option>
+									<?php endforeach; ?>
+									<option value="0">None</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php if($type == 3 && count($committedHR)>0): ?>
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#committedhr">Committed HR</a>
+						</h4>
+					</div>
+					<div id="committedhr" class="panel-collapse collapse">
+						<div class="panel-body">
+							<h4>Please tick if present</h4> <br>
+							<div class='checkbox-list'>
+								<?php foreach($committedHR as $hrDetail): ?>
+									<?php $randomKey = randomString(); ?>
+									<input type="hidden" name="MonitoringSiteHR[<?php echo $randomKey; ?>][CIDNo]" value="<?php echo $hrDetail->CIDNo; ?>">
+									<input type="hidden" name="MonitoringSiteHR[<?php echo $randomKey; ?>][Name]" value="<?php echo $hrDetail->Name; ?>">
+									<input type="hidden" name="MonitoringSiteHR[<?php echo $randomKey; ?>][CmnDesignationId]" value="<?php echo $hrDetail->CmnDesignationId; ?>">
+									<input type="hidden" name="MonitoringSiteHR[<?php echo $randomKey; ?>][Qualification]" value="<?php echo $hrDetail->Qualification; ?>">
+									<label><input type='checkbox' name="MonitoringSiteHR[<?php echo $randomKey; ?>][Checked]" value="1" <?php if(isset($hrDetail->Checked)): ?><?php if($hrDetail->Checked == 1): ?>checked="checked"<?php endif; ?> <?php endif; ?>/><?php echo "<strong>".$hrDetail->Designation."</strong><br/>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CID/Work Permit: ".$hrDetail->CIDNo; ?><?php echo ((bool)$hrDetail->Name)?" <br/>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Name: ".$hrDetail->Name:''; ?>
+
+										<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Qualification: <?php echo $hrDetail->Qualification; ?></label>
+								<?php endforeach; ?>
+							</div>
+						</div>
+					</div>
+				</div>
+			<?php endif; ?>
+			<?php if($type == 3 && count($committedEq)>0): ?>
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#accordion" href="#committedeq">Committed Equipment</a>
+						</h4>
+					</div>
+					<div id="committedeq" class="panel-collapse collapse">
+						<div class="panel-body">
+							<h4>Please tick if present</h4> <br>
+							<div class='checkbox-list'>
+								<?php foreach($committedEq as $eqDetail): ?>
+									<?php $randomKey = randomString(); ?>
+									<input type="hidden" name="MonitoringSiteEQ[<?php echo $randomKey; ?>][RegistrationNo]" value="<?php echo $eqDetail->RegistrationNo; ?>">
+									<input type="hidden" name="MonitoringSiteEQ[<?php echo $randomKey; ?>][Quantity]" value="<?php echo ($eqDetail->Quantity==0)?1:$eqDetail->Quantity; ?>">
+									<input type="hidden" name="MonitoringSiteEQ[<?php echo $randomKey; ?>][CmnEquipmentId]" value="<?php echo $eqDetail->CmnEquipmentId; ?>">
+									<label><input type='checkbox' name="MonitoringSiteEQ[<?php echo $randomKey; ?>][Checked]" value="1" <?php if(isset($eqDetail->Checked)): ?><?php if($eqDetail->Checked == 1): ?>checked="checked"<?php endif; ?> <?php endif; ?>/><?php echo "<strong>".$eqDetail->Equipment."</strong>"; ?><?php echo ((bool)$eqDetail->RegistrationNo)?" <br/>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Registration No.: ".$eqDetail->RegistrationNo."":''; ?>
+
+										<br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Quantity: <?php echo ($eqDetail->Quantity==0)?1:$eqDetail->Quantity; ?></label>
+								<?php endforeach; ?>
+							</div>
+						</div>
+					</div>
+				</div>
+			<?php endif; ?>
+		</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="Remarks" class="control-label">Remarks</label>
+						<textarea class="form-control input-sm" rows="2" id="Remarks" name="Remarks"><?php echo $site->Remarks; ?></textarea>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label">Monitored On</label>
+						<input type="text" name="MonitoringDate" readonly="readonly" class="datepicker input-sm required form-control" value="<?php echo ((bool)$site->MonitoringDate)?$site->MonitoringDate:date('d-m-Y'); ?>"/>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label">Status</label>
+						<?php echo Form::select('MonitoringStatus',array('1'=>'Fulfilled','0'=>'Not fulfilled'),$site->MonitoringStatus,array('class'=>'form-control required input-sm')); ?>
+
+					</div>
+				</div>
+			</div>
+		<?php endforeach; ?>
+		<div class="clearfix"></div>
+		<br>
+		<div class="form-actions">
+			<div class="btn-set">
+				<button type="submit" class="btn green">Save</button>
+				<a href="<?php echo URL::to('monitoringreport/sitelist'); ?>" class="btn red">Cancel</a>
+			</div>
+		</div>
+	</div>
+	<?php echo Form::close(); ?>
+
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

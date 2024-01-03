@@ -1,0 +1,274 @@
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption font-green-seagreen">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject">Approve Certificate Cancellation Request - My Task</span>
+			<span class="caption-helper font-red-intense">All the applications listed below are pending request for cancellation of CDB certificate</span>
+		</div>
+		<div class="tools">
+			<a href="javascript:;" class="collapse"></a>
+		</div>
+	</div>
+	<div class="portlet-body">
+		<div class="form-body">
+			<?php echo Form::open(array('url' =>Request::URL(),'role'=>'form','method'=>'get')); ?>
+
+			<div class="row">
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label">SP No.</label>
+						<input type="text" class="form-control" value="<?php echo $SPNoMyTask; ?>" name="SPNoMyTask"/>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label">Name</label>
+						<select name="CrpSpecializedTradeIdMyTask" class="form-control select2me">
+							<option value="">---SELECT ONE---</option>
+							<?php foreach($specializedTradeMyTaskLists as $specializedTradeMyTaskList): ?>
+								<option value="<?php echo $specializedTradeMyTaskList->Id; ?>" <?php if($specializedTradeIdMyTask==$specializedTradeMyTaskList->Id): ?>selected="selected"<?php endif; ?>><?php echo $specializedTradeMyTaskList->SpecializedTradeName; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label class="control-label">Application date between</label>
+						<div class="input-group input-large date-picker input-daterange">
+							<input type="text" name="FromDateMyTask" class="form-control datepickerfrom" value="<?php echo $fromDateMyTask; ?>" />
+							<span class="input-group-addon">
+							to </span>
+							<input type="text" name="ToDateMyTask" class="form-control datepickerto" value="<?php echo $toDateMyTask; ?>" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<label class="control-label">|</label>
+					<div class="btn-set">
+						<button type="submit" class="btn blue-hoki btn-sm">Search</button>
+						<a href="<?php echo Request::URL(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+					</div>
+				</div>
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div><br />
+		<div class="table-responsive">
+			<table class="table table-bordered table-striped table-condensed">
+				<thead>
+					<tr>
+						<th>
+							 Ref#
+						</th>
+						<th>
+							 Application Dt.
+						</th>
+						<th>
+							SP No.
+						</th>
+						<th>
+							 Name
+						</th>
+						<th>
+							CID/Work Permit No.
+						</th>
+						<th>
+							 Dzongkhag
+						</th>
+						<th>
+							Mobile#
+						</th>
+						<th>
+							Email
+						</th>
+						<th>
+							Action
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php $__empty_1 = true; foreach($specializedTradeMyTaskLists as $specializedTradeMyTaskList): $__empty_1 = false; ?>
+					<tr>
+						<td>
+							 <?php echo $specializedTradeMyTaskList->ReferenceNo; ?>
+
+						</td>
+						<td>
+							 <?php echo convertDateToClientFormat($specializedTradeMyTaskList->ApplicationDate); ?>
+
+						</td>
+						<td>
+							<?php echo $specializedTradeMyTaskList->SPNo; ?>
+
+						</td>
+						<td>
+							<?php echo $specializedTradeMyTaskList->Salutation.' '.$specializedTradeMyTaskList->SpecializedTradeName; ?> 
+						</td>
+						<td>
+							<?php echo $specializedTradeMyTaskList->CIDNo; ?>
+
+						</td>
+						<td>
+							 <?php echo $specializedTradeMyTaskList->Dzongkhag; ?>
+
+						</td>
+						<td>
+							 <?php echo $specializedTradeMyTaskList->MobileNo; ?>
+
+						</td>
+						<td>
+							<?php echo $specializedTradeMyTaskList->Email; ?>
+
+						</td>
+						<td>
+							<a href="<?php echo URL::to('specializedtrade/approveserviceapplicationcancelcertificateprocess/'.$specializedTradeMyTaskList->Id.'/'.$specializedTradeMyTaskList->CancelRequestId); ?>" class="btn default btn-xs green-seagreen processaction"><i class="fa fa-edit"></i> Process</a>
+							<a href="<?php echo URL::to('dropapplication'); ?>?model=SpecializedTradeCancelCertificateModel&id=<?php echo $specializedTradeMyTaskList->CancelRequestId; ?>&redirectUrl=<?php echo Request::path(); ?>" class="btn default btn-xs purple dropaction"><i class="fa fa-times"></i> Drop</a>
+						</td>
+					</tr>
+					<?php endforeach; if ($__empty_1): ?>
+					<tr>
+						<td class="font-red text-center" colspan="9">No data to display</td>
+					</tr>
+					<?php endif; ?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption font-green-seagreen">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject">Pick the applications you wish to work on.</span>
+		</div>
+		<div class="tools">
+			<a href="javascript:;" class="expand"></a>
+		</div>
+	</div>
+	<div class="portlet-body display-hide">
+		<div class="form-body">
+			<?php echo Form::open(array('url' =>Request::URL(),'role'=>'form','method'=>'get')); ?>
+
+			<div class="row">
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label">SP No.</label>
+						<input type="text" class="form-control" value="<?php echo $SPNoAll; ?>" name="SPNoAll" />
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label">Name</label>
+						<select name="CrpSpecializedTradeIdAll" class="form-control select2me">
+							<option value="">---SELECT ONE---</option>
+							<?php foreach($specializedTradeLists as $specializedTradeList): ?>
+								<option value="<?php echo $specializedTradeList->Id; ?>" <?php if($specializedTradeIdAll==$specializedTradeList->Id): ?>selected="selected"<?php endif; ?>><?php echo $specializedTradeList->SpecializedTradeName; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label class="control-label">Application date between</label>
+						<div class="input-group input-large date-picker input-daterange">
+							<input type="text" name="FromDateAll" class="form-control datepickerfrom" value="<?php echo $fromDateAll; ?>" />
+							<span class="input-group-addon">
+							to </span>
+							<input type="text" name="ToDateAll" class="form-control datepickerto" value="<?php echo $toDateAll; ?>" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="btn-set">
+						<button type="submit" class="btn blue-hoki btn-sm">Search</button>
+						<a href="<?php echo Request::URL(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+					</div>
+				</div>
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div><br />
+		<div class="table-responsive">
+			<table class="table table-bordered table-striped table-condensed">
+				<thead>
+					<tr>
+						<th>
+							 Ref#
+						</th>
+						<th>
+							 Application Dt.
+						</th>
+						<th>
+							SP No.
+						</th>
+						<th>
+							 Name
+						</th>
+						<th>
+							CID/Work Permit No.
+						</th>
+						<th>
+							 Dzongkhag
+						</th>
+						<th>
+							Mobile#
+						</th>
+						<th>
+							Email
+						</th>
+						<th>
+							Action
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php $__empty_1 = true; foreach($specializedTradeLists as $specializedTradeList): $__empty_1 = false; ?>
+					<tr>
+						<td>
+							 <?php echo $specializedTradeList->ReferenceNo; ?>
+
+						</td>
+						<td>
+							 <?php echo convertDateToClientFormat($specializedTradeList->ApplicationDate); ?>
+
+						</td>
+						<td>
+							<?php echo $specializedTradeList->SPNo; ?>
+
+						</td>
+						<td>
+							<?php echo $specializedTradeList->Salutation.' '.$specializedTradeList->SpecializedTradeName; ?> 
+						</td>
+						<td>
+							<?php echo $specializedTradeList->CIDNo; ?>
+
+						</td>
+						<td>
+							 <?php echo $specializedTradeList->Dzongkhag; ?>
+
+						</td>
+						<td>
+							 <?php echo $specializedTradeList->MobileNo; ?>
+
+						</td>
+						<td>
+							<?php echo $specializedTradeList->Email; ?>
+
+						</td>
+						<td>
+							<a href="<?php echo URL::to('specializedtrade/cancelcertificatelockapplication/'.$specializedTradeList->CancelRequestId.'?redirectUrl=specializedtrade/approvecertificatecancellationrequestlist'); ?>" class="btn default btn-xs green-seagreen pickaction"><i class="fa fa-edit"></i> Pick</a>
+						</td>
+					</tr>
+					<?php endforeach; if ($__empty_1): ?>
+					<tr>
+						<td class="font-red text-center" colspan="9">No data to display</td>
+					</tr>
+					<?php endif; ?>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

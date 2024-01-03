@@ -1,0 +1,91 @@
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/global/scripts/contractor.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption font-green-seagreen">
+                        <i class="fa fa-cogs"></i>
+                        <span class="caption-subject">Edit Training Participant</span>
+                        <?php /*<a href="<?php echo URL::to('contractor/addtraining'); ?>" class="btn btn-xs green"><i class="fa fa-plus"></i> Add New</a>*/ ?>
+                        <?php /*<a href="<?php echo URL::to('contractor/deletetraining'); ?>" class="btn btn-xs purple"><i class="fa fa-times"></i> Delete</a>*/ ?>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <?php echo Form::open(array("url"=>URL::to("contractor/saveeditedparticipant"))); ?>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-condensed table-striped">
+                        <thead>
+                            <tr>
+                                <?php if((int)$trainingReference == 1602): ?>
+                                    <th style="width: 36%;">Contractor</th>
+                                <?php endif; ?>
+                                <th>Participant</th>
+                                <th>CID No.</th>
+                                <?php if((int)$trainingReference == 1602): ?>
+                                    <th>Designation</th>
+                                <?php endif; ?>
+                                <th>Qualification</th>
+                                <th>Contact No</th>
+                                <th>Gender</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $__empty_1 = true; foreach($details as $detail): $__empty_1 = false; ?>
+                                <tr>
+                                    <?php if((int)$trainingReference == 1602): ?>
+                                        <td>
+                                            <div class="ui-widget">
+                                                <input type="hidden" class="contractor-id" name="CrpContractorFinalId" value="<?php echo $detail->CrpContractorFinalId; ?>"/>
+                                                <input type="text" value="<?php echo $detail->Contractor; ?>" class="form-control input-sm contractor-autocomplete"/>
+                                            </div>
+                                        </td>
+                                    <?php endif; ?>
+                                    <td>
+                                        <input type="hidden" name="Id" value="<?php echo $detail->Id; ?>"/>
+                                        <input type="hidden" name="RedirectUrl" value="<?php echo "contractor/trainingdetails/$detail->CrpContractorTrainingId"; ?>"/>
+                                        <input type="text" class="form-control input-sm" name="Participant" value="<?php echo $detail->Participant; ?>"/>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control input-sm" name="CIDNo" value="<?php echo $detail->CIDNo; ?>"/>
+                                    </td>
+                                    <?php if((int)$trainingReference == 1602): ?>
+                                        <td>
+                                            <input type="text" class="form-control input-sm" name="Designation" value="<?php echo $detail->Designation; ?>"/>
+                                        </td>
+                                    <?php endif; ?>
+                                    <td>
+                                        <input type="text" class="form-control input-sm" name="Qualification" value="<?php echo $detail->Qualification; ?>"/>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control input-sm" name="ContactNo" value="<?php echo $detail->ContactNo; ?>"/>
+                                    </td>
+                                    <td>
+                                        <?php echo Form::select("Gender",array('F'=>"Female",'M'=>"Male"),$detail->Gender,array("class"=>"form-control input-sm")); ?>
+
+                                    </td>
+                                </tr>
+
+                            <?php endforeach; if ($__empty_1): ?>
+                                <tr>
+                                    <td colspan="<?php if((int)$trainingReference == 1602): ?><?php echo '5'; ?><?php else: ?><?php echo '5'; ?><?php endif; ?>" class="text-center font-red">No data to display!</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+
+                    <button type="submit" class="btn btn-sm green"><i class="fa fa-save"></i> Save</button>
+                    <a href="<?php echo URL::to("contractor/trainingdetails/$detail->CrpContractorTrainingId"); ?>" class="btn btn-sm purple"><i class="m-icon-swapleft m-icon-white"></i> Back</a>
+                    <?php echo Form::close(); ?>
+
+                </div>
+        </div>
+    </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

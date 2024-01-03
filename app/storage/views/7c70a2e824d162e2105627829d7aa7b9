@@ -1,0 +1,42 @@
+<html>
+    <body>
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="6">Contractor's Key Personnel</th></tr>
+                <tr>
+                    <th colspan="6">Contractor: <?php if(isset($contractor[0]->NameOfFirm)): ?><?php echo $contractor[0]->NameOfFirm." (CDB No.: ".$contractor[0]->CDBNo.")"; ?><?php endif; ?> </th>
+                </tr>
+                <tr>
+                    <th colspan="7"></th>
+                </tr>
+                <tr>
+                    <th>Sl.No.</th>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>CID No.</th>
+                    <th>Qualification</th>
+                    <th>Trade</th>
+                    <th>Nationality</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <?php $count = 1; ?>
+                    <?php foreach($reportData as $data): ?>
+                        <tr>
+                            <td><?php echo $count; ?></td>
+                            <td><?php echo $data->Name; ?></td>
+                            <td><?php echo $data->Designation; ?></td>
+                            <td><?php echo $data->CIDNo; ?></td>
+                            <td><?php echo $data->Qualification; ?></td>
+                            <td><?php echo $data->Trade; ?></td>
+                            <td><?php echo $data->Country; ?></td>
+                        </tr>
+                        <?php $count++; ?>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

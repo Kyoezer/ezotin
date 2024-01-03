@@ -1,0 +1,30 @@
+<html>
+    <body>
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="2">Engineers by Dzongkhag<?php echo ($dzongkhag != "")?" ($dzongkhag)":""; ?> </th>
+                </tr>
+                <tr>
+                    <th class="text-center">Dzongkhag</th>
+                    <th class="text-center">No. of Engineers</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <?php $sum1 = 0; ?>
+                    <?php foreach($reportData as $data): ?>
+                        <tr>
+                            <td><?php echo $data->Dzongkhag; ?></td>
+                            <td class="text-right"><?php echo $data->NoOfEngineers; ?><?php $sum1+=$data->NoOfEngineers; ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    <tr>
+                        <td><b>Total</b></td>
+                        <td><b><?php echo $sum1; ?></b></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

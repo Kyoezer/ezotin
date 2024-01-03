@@ -1,0 +1,139 @@
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/global/scripts/report.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <?php $parameters = Input::all(); $parameters['export']='excel'; if((int)$summary == 1): $route ="rpt.revenuecollectionreport"; else: $route="rpt.revenuecollectiondetailed"; endif; ?>
+                <i class="fa fa-cogs"></i>Revenue Collection Report <?php echo $reportAppend; ?>&nbsp;&nbsp;<?php if(!Input::has('export')): ?> <a href="<?php echo route($route,$parameters); ?>" class="btn btn-sm green"><i class="fa fa-file-excel-o"></i> Export to Excel</a>    <?php $parameters['export'] = 'print'; ?><a href="<?php echo route($route,$parameters); ?>" class="btn btn-sm purple" target="_blank"><i class="fa fa-print"></i> Print</a><?php endif; ?>
+            </div>
+        </div>
+        <div class="portlet-body flip-scroll">
+            <?php if(Input::get('export') != 'print'): ?>
+                <?php echo Form::open(array('url'=>Request::url(),'method'=>'get')); ?>
+
+                <div class="form-body">
+                    <div class="row">
+                        <?php if((int)$summary == 0): ?>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Receipt No.</label>
+                                    <input type="text" name="ReceiptNo" class="form-control input-sm" value="<?php echo Input::get('ReceiptNo'); ?>">
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Date Between</label>
+                                <div class="input-group input-large date-picker input-daterange">
+                                    <input type="text" name="FromDate" class="input-sm form-control datepicker" value="<?php echo Input::get("FromDate"); ?>" />
+                                        <span class="input-group-addon input-sm">
+                                        to </span>
+                                    <input type="text" name="ToDate" class="input-sm form-control datepicker" value="<?php echo Input::get("ToDate"); ?>" />
+                                </div>
+                            </div>
+                        </div>
+                        <?php if((int)$summary == 0): ?>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Applicant Type</label>
+                                    <?php echo Form::select("Type",array(''=>'All','1'=>'Contractor','2'=>'Consultant','3'=>'Architect','4'=>'Specialized Firm','5'=>'Surveyor','6'=>'Engineer','7'=>'Specialized Trade',),Input::get('Type'),array('class'=>'form-control input-sm')); ?>
+
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Service Type</label>
+                                    <select class="form-control input-sm" name="ServiceId">
+                                        <option value="">---SELECT ONE---</option>
+                                        <?php foreach($serviceTypes as $serviceType): ?>
+                                            <option value="<?php echo $serviceType->Id; ?>" <?php if($serviceType->Id == Input::get('ServiceId')): ?>selected="selected"<?php endif; ?>><?php echo $serviceType->Name; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                        <?php if(!Input::has('export')): ?>
+                            <div class="col-md-2">
+                                <label class="control-label">&nbsp;</label>
+                                <div class="btn-set">
+                                    <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                                    <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php echo Form::close(); ?>
+
+            <?php else: ?>
+                <?php foreach(Input::all() as $key=>$value): ?>
+                    <?php if($key != 'export'): ?>
+                        <b><?php echo $key; ?>: <?php echo $value; ?></b><br>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+                    <br/>
+            <?php endif; ?>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-condensed flip-content" id="">
+                        <thead class="flip-content">
+                            <tr>
+                                <th>Sl#</th>
+                                <th>Applicant Type</th>
+                                <?php if((int)$summary == 0): ?>
+                                    <th>Name/CDB No.</th>
+                                <?php endif; ?>
+                                <th>Service Type</th>
+                                <?php if((int)$summary == 0): ?>
+                                    <th>Date Collected</th>
+                                    <th>Receipt No.</th>
+                                <?php endif; ?>
+                                <th>Amount Collected (Nu.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php $count = 1; $lastApplicantType = '--'; $totalAmount = 0; ?>
+                        <?php $__empty_1 = true; foreach($reportData as $data): $__empty_1 = false; ?>
+                            <tr>
+                                <td><?php echo $count++; ?></td>
+                                <?php if((int)$summary == 1): ?>
+                                    <?php if($data->Type != $lastApplicantType): ?>
+                                        <td><?php if((int)$summary == 1): ?><a href="<?php echo URL::to('rpt/revenuecollectiondetailed'); ?>?Type=<?php echo $data->TypeCode; ?>"><?php endif; ?><?php echo $data->Type; ?><?php if((int)$summary == 1): ?></a><?php endif; ?></td>
+                                    <?php else: ?>
+                                        <td></td>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <td><?php if((int)$summary == 1): ?><a href="<?php echo URL::to('rpt/revenuecollectiondetailed'); ?>?Type=<?php echo $data->TypeCode; ?>"><?php endif; ?><?php echo $data->Type; ?><?php if((int)$summary == 1): ?></a><?php endif; ?></td>
+                                <?php endif; ?>
+                                    <?php if((int)$summary == 0): ?>
+                                        <td><?php echo $data->Name; ?></td>
+                                    <?php endif; ?>
+                                    
+                                <td><?php if((int)$summary == 1): ?><a href="<?php echo URL::to('rpt/revenuecollectiondetailed'); ?>?ServiceId=<?php echo $data->ServiceId; ?>"><?php endif; ?><?php echo $data->ServiceType; ?><?php if((int)$summary == 1): ?></a><?php endif; ?></td>
+                                <?php if((int)$summary == 0): ?>
+                                    <td class="text-center"><?php echo convertDateToClientFormat($data->PaymentDate); ?></td>
+                                    <td class="text-center"><?php echo $data->PaymentReceiptNo; ?></td>
+                                <?php endif; ?>
+                                <td class="text-right"><?php echo number_format($data->Amount,2); ?><?php $totalAmount+=(int)$data->Amount; ?></td>
+                                <?php $lastApplicantType = $data->Type; ?>
+                            </tr>
+                        <?php endforeach; if ($__empty_1): ?>
+
+                            <tr><td colspan="<?php if((int)$summary == 1): ?><?php echo '4'; ?><?php else: ?><?php echo '6'; ?><?php endif; ?>" class="font-red text-center">No data to display</td></tr>
+                        <?php endif; ?>
+                        <?php if(count($reportData)>0): ?>
+                            <tr>
+                                <td colspan="<?php if((int)$summary == 1): ?><?php echo '3'; ?><?php else: ?><?php echo '6'; ?><?php endif; ?>" class="text-right bold">Total:</td>
+                                <td class="text-right"><?php echo number_format($totalAmount,2); ?></td>
+                            </tr>
+                        <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

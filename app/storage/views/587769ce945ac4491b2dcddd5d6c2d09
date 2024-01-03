@@ -1,0 +1,140 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+            <?php $parameters = Input::all(); $parameters['export']='excel'; ?>
+            <?php if(!Input::has('export')): ?>
+            <i class="fa fa-cogs"></i>List of Hr Registered with Specialized Firm &nbsp;&nbsp;<?php if(!Input::has('export')): ?> <a href="<?php echo route("specializedfirmrpt.listofregisteredhrwithspecializedfirm",$parameters); ?>" class="btn btn-sm green"><i class="fa fa-file-excel-o"></i> Export to Excel </a>   <?php $parameters['export'] = 'print'; ?><a href="<?php echo route("specializedfirmrpt.listofregisteredhrwithspecializedfirm",$parameters); ?>" class="btn btn-sm purple" target="_blank"><i class="fa fa-print"></i> Print</a><?php endif; ?>
+		    <?php endif; ?>
+        </div>
+	</div>
+	<div class="portlet-body flip-scroll">
+        <?php if(Input::get('export') != "print"): ?>
+        <?php echo Form::open(array('url'=>'specializedfirmrpt/listofregisteredhrwithspecializedfirm','method'=>'get')); ?>
+
+		<div class="form-body">
+        <div class="row">
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">SP No</label>
+						<input type="text" name="SPNo" value="<?php echo Input::get('SPNo'); ?>" class="form-control" />
+					</div>
+				</div>
+              
+                <div class="col-md-2">
+                    <label class="control-label">Designation:</label>
+                    <select class="form-control select2me" name="CmnDesignationId">
+                        <option value="">---SELECT ONE---</option>
+                        <?php foreach($designationId as $designation): ?>
+                            <option value="<?php echo $designation->Name; ?>" <?php if($designation->Name == Input::get('CmnDesignationId')): ?>selected <?php endif; ?>><?php echo $designation->Name; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+               
+                <div class="col-md-2">
+                    <label class="control-label">Qualification:</label>
+                    <select class="form-control select2me" name="CmnQualificationId">
+                        <option value="">---SELECT ONE---</option>
+                        <?php foreach($qualificationId as $qualification): ?>
+                            <option value="<?php echo $qualification->Name; ?>" <?php if($qualification->Name == Input::get('CmnQualificationId')): ?>selected <?php endif; ?>><?php echo $qualification->Name; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                             <div class="col-md-2">
+                    <label class="control-label">From</label>
+                    <div class="input-icon right">
+                        <input type="text" name="FromDate" class="form-control datepicker" value="<?php echo Input::get('FromDate'); ?>" readonly="readonly" placeholder="SELECT DATE">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="control-label">To</label>
+                    <div class="input-icon right">
+                        <input type="text" name="ToDate" class="form-control datepicker" value="<?php echo Input::get('ToDate'); ?>" readonly="readonly" placeholder="SELECT DATE">
+                    </div>
+                </div>
+                <?php if(!Input::has('export')): ?>
+                    <div class="col-md-2">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="btn-set">
+                            <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                            <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                        </div>
+                    </div>
+                <?php endif; ?>
+			</div>
+		</div>
+        <?php echo Form::close(); ?>
+
+        <?php else: ?>
+            <?php foreach($parametersForPrint as $key=>$value): ?>
+                <b><?php echo $key; ?>: <?php echo $value; ?></b><br>
+            <?php endforeach; ?>
+            <br/>
+        <?php endif; ?>
+		<table class="table table-bordered table-striped table-condensed flip-content" id="contractorhumanresource">
+            <thead class="flip-content">
+            <tr>
+                <th>
+                    Sl.No.
+                </th>
+                <th class="order">
+                Name
+                </th>
+                <th>
+                    CIDNo
+                </th>
+                <th>
+                Individual Reg No
+                </th>
+                 <th>
+                    Gender
+                </th>
+<th>Country</th>
+                <th>
+                    Qualification
+                </th>
+                <th>
+                    Designation
+                </th>
+   <th>
+                    Joining Date
+                </th>
+                <th class="">
+                    SP No.
+                </th>
+                <th class="">
+                    Name of Firm
+                </th>
+                      
+            </tr>
+            </thead>
+            <tbody>
+            <?php $__empty_1 = true; foreach($specializedfirmLists as $specializedfirm): $__empty_1 = false; ?>
+                <tr>
+                    <td><?php echo $start++; ?></td>
+                    <td><?php echo $specializedfirm->Name; ?></td>
+<td><?php echo $specializedfirm->CIDNo; ?></td>
+<td><?php echo $specializedfirm->IndividualRegNo; ?></td>
+<td><?php echo $specializedfirm->Gender; ?></td>
+<td><?php echo $specializedfirm->Country; ?></td>
+                    <td><?php echo $specializedfirm->Qualification; ?></td>
+                    <td><?php echo $specializedfirm->Designation; ?></td>
+<td><?php echo $specializedfirm->JoiningDate; ?></td>
+                    <td><?php echo $specializedfirm->SPNo; ?></td>
+                    <td><?php echo $specializedfirm->Firm; ?></td>
+       
+                </tr>
+            <?php endforeach; if ($__empty_1): ?>
+                <tr>
+                    <td colspan="14" class="text-center font-red">No data to display!</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+		</table>
+            <?php pagination($noOfPages,Input::all(),Input::get('page'),"specializedfirmrpt.listofregisteredhrwithspecializedfirm"); ?>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

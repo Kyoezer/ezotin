@@ -1,0 +1,49 @@
+<?php $__env->startSection('content'); ?>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>
+					<span class="caption-subject font-green-seagreen">Edit/Delete Downloads</span>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="table-responsive">
+					<table class="table table-striped table-condensed table-hover table-bordered" data-table="webtrainingdetails">
+						<?php echo Form::hidden('Model','WebDownloadsModel',array('class'=>'delete-model')); ?>
+
+						<thead>
+							<tr class="success">
+								<th>File Name</th>
+								<th width="30%">Category</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<?php $slno = 1; ?>
+							<?php $__empty_1 = true; foreach($downloads as $download): $__empty_1 = false; ?>
+								<tr>
+									<input type="hidden" value="<?php echo $download->Id; ?>" class="rowreference"/>
+									<td><?php echo $download->FileName; ?></td>
+									<td><?php echo $download->CategoryName; ?></td>
+									<td>
+										<a href="<?php echo URL::to('web/adddownloads/'.$download->Id); ?>">Edit</a> |
+										<a href="#" class="deletedbrow">Delete</a>
+									</td>
+								</tr>
+							<?php endforeach; if ($__empty_1): ?>
+								<tr>
+									<td colspan="3" class="text-center" style="color:#FE0000">No data to display</td>
+								</tr>
+							<?php endif; ?>
+						</tbody>
+					</table>
+				</div>	
+			</div>
+		</div>
+	</div>
+</div> 	
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,75 @@
+<html>
+    <body>
+        <table>
+            <thead>
+            <tr>
+                <th colspan="13">List of Hr Registered with Specialized Firm</th>
+            </tr>
+            <?php foreach($parametersForPrint as $key=>$value): ?>
+                <tr>
+                    <th><?php echo $key; ?>:</th><th> <?php echo $value; ?></th>
+                </tr>
+            <?php endforeach; ?>
+            <tr><th colspan="13"></th></tr>
+            <tr>
+                <th>
+                    Sl.No.
+                </th>
+                <th class="order">
+                Name
+                </th>
+                 <th>
+                    CIDNo
+                </th>
+                <th>
+                   Individual Reg No
+                </th>
+   <th>
+                    Gender
+                </th>
+<th>Country</th>
+                <th>
+                    Qualification
+                </th>
+                <th>
+                    Designation
+                </th>
+   <th>
+                    Joining Date
+                </th>
+                <th class="">
+                    SP No.
+                </th>
+                <th class="">
+                    Name of Firm
+                </th>
+                      
+            </tr>
+            </thead>
+            <tbody>
+            <?php $count = 1; ?>
+            <?php $__empty_1 = true; foreach($specializedfirmLists as $specializedfirm): $__empty_1 = false; ?>
+            <tr>
+                    <td><?php echo $count; ?></td>
+                    <td><?php echo $specializedfirm->Name; ?></td>
+                    <td><?php echo $specializedfirm->CIDNo; ?></td>
+                    <td><?php echo $specializedfirm->IndividualRegNo; ?></td>
+ <td><?php echo $specializedfirm->Gender; ?></td>
+ <td><?php echo $specializedfirm->Country; ?></td>
+                    <td><?php echo $specializedfirm->Qualification; ?></td>
+                    <td><?php echo $specializedfirm->Designation; ?></td>
+ <td><?php echo $specializedfirm->JoiningDate; ?></td>
+                    <td><?php echo $specializedfirm ->SPNo; ?></td>
+                    <td><?php echo $specializedfirm->Firm; ?></td>
+       
+                </tr>
+                <?php $count++; ?>
+            <?php endforeach; if ($__empty_1): ?>
+                <tr>
+                    <td colspan="14" class="text-center font-red">No data to display!</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </body>
+</html>

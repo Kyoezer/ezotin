@@ -1,0 +1,376 @@
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/global/scripts/etool.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<input type="hidden" name="URL" value="<?php echo CONST_APACHESITELINK; ?>"/>
+<div class="row">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://momentjs.com/downloads/moment.js"></script>
+<script type="text/javascript">
+	function getEgpTenderDtls()
+    {
+        //$('#CmnDzongkhagId').children('option').hide();
+        //$('#CmnContractorClassificationId').children('option').hide();
+        //$('#CmnContractorCategoryId').children('option').hide();
+
+        $(".egpTenderIdErrorMessage").hide();
+        var tenderId = $("#TenderId").val();
+        if(tenderId!="")
+        {
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "http://119.2.120.14:8080/DNPDatahub/api/getTenderDetails?tenderId="+tenderId+"&token=a3a67e68-392b-3d6f-9b47-38dd55f450f8",
+                error: function(jqXHR, textStatus, errorThrown){
+                   $(".egpTenderIdErrorMessage").text("Something went wrong while trying to pull data from e-GP");
+                   $(".egpTenderIdErrorMessage").show();
+                },
+                success: function(data){ 
+                    if(data.length<1)
+                    {
+                        $(".egpTenderIdErrorMessage").text("Invalid e-GP tender Id or could not pull data from e-GP");
+                        $(".egpTenderIdErrorMessage").show();
+                    }
+                    else
+                    {
+                           // $('#CmnDzongkhagId option:contains('+data[0].dzongkhag+')').show();
+                            //$('#CmnContractorClassificationId option:contains('+data[0].classification+')').show();
+                            //$('#CmnContractorCategoryId option:contains('+data[0].category+')').show();
+                        
+                        $("#CmnDzongkhagId option:contains("+data[0].dzongkhag+")").attr('selected', true);
+                        $("#CmnContractorClassificationId option:contains("+data[0].classification+")").attr('selected', true);
+                        $("#CmnContractorCategoryId option:contains("+data[0].category+")").attr('selected', true);
+
+                        $("#ReferenceNo").val(data[0].referenceNo);
+                        $("#NameOfWork").val(data[0].nameofWork);
+                        $('iframe').contents().find('.wysihtml5-editor').html(data[0].descriptionofWork);
+
+                      // $("#DescriptionOfWork").html(data[0].descriptionofWork);
+                        $("#ContactPerson").val(data[0].contactPerson);
+                        $("#ContactNo").val(data[0].contactNo);
+                        $("#ContactEmail").val(data[0].contactEmail);
+                        var TentativeStartDate = moment(data[0].contractStartDate, "DD/MM/YYYY");
+                        var TentativeEndDate = moment(data[0].contractEndDate, "DD/MM/YYYY");
+                        $("#TentativeStartDate").val(TentativeStartDate.format("DD-MM-YYYY"));
+                        $("#TentativeEndDate").val(TentativeEndDate.format("DD-MM-YYYY"));
+                        $("#ProjectEstimateCost").val(data[0].projectEstimateCost);
+
+                        var dateofSaleofTenderDocument = moment(data[0].dateofSaleofTenderDocument);
+                        var closingDateofSaleofTender = moment(data[0].closingDateofSaleofTender);
+                        var lastDateTimeofSubmission = moment(data[0].lastDateTimeofSubmission);
+                        var openingDateTime = moment(data[0].openingDateTime);
+
+                        const diffInMonths = (end, start) => {
+                            var timeDiff = Math.abs(end.getTime() - start.getTime());
+                            return Math.round(timeDiff / (2e3 * 3600 * 365.25));
+                        }
+
+                        const ContractPeriod = diffInMonths(new Date(TentativeStartDate.format("YYYY"),TentativeStartDate.format("M"),TentativeStartDate.format("D")), new Date(TentativeEndDate.format("YYYY"),TentativeEndDate.format("M"),TentativeEndDate.format("D")));
+                       
+                        $("#ContractPeriod").val(ContractPeriod);
+                        $("#DateOfSaleOfTender").val(dateofSaleofTenderDocument.format("DD-MM-YYYY"));
+                        $("#DateOfClosingSaleOfTender").val(closingDateofSaleofTender.format("DD-MM-YYYY"));
+                        $("#LastDateAndTimeOfSubmission").val(lastDateTimeofSubmission.format("DD-MM-YYYY HH:mm"));
+                        $("#TenderOpeningDateAndTime").val(openingDateTime.format("DD-MM-YYYY HH:mm"));
+                        $("#CostOfTender").val(data[0].costofTenderDocument);
+                        $("#EMD").val(data[0].bidSecurity);
+
+
+                    }
+                        
+
+
+                }
+                });
+        }
+        else
+        {
+            $(".egpTenderIdErrorMessage").text("This field is required!");
+            $(".egpTenderIdErrorMessage").show();
+        }
+    }
+</script> 
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>Upload Tender
+				</div>
+			</div>
+			<div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <?php $routePrefix = Request::segment(1); ?>
+                <?php echo Form::open(array('url' => "$routePrefix/etooluploadtender",'role'=>'form','class'=>'form-horizontal','files'=>true)); ?>
+
+					<div class="form-body">
+                        <div class="note note-info">
+                            Date and Time Selection is based on 24 hour format
+                        </div>
+                        <?php foreach($savedTenders as $savedTender): ?>
+                        <?php echo Form::hidden('WorkId',$savedTender->WorkId); ?>
+
+						<div class="form-group">
+                            <label class="control-label col-md-3">e-GP Tender Id <span class="font-red">*</span></label>
+                            <div class="col-md-3">
+							    <input  type="text" name="EGPTenderId" id="TenderId" value="<?php echo $savedTender->EGPTenderId?$savedTender->EGPTenderId:Input::old('EGPTenderId'); ?>" class="form-control input-medium required" placeholder="e-GP Tender ID">
+                                <span class="help-block error-span required-message egpTenderIdErrorMessage" style="display:none"></span>
+                            </div>
+                            <div class="col-md-4">
+							    <a class="btn btn-primary" onclick="getEgpTenderDtls()"><span class="fa fa-search" style="margin-right: 1px;"></span>Search</a>
+                            </div>
+						</div>
+						<div class="form-group">
+                            <label class="control-label col-md-3">Reference No./Letter No. <span class="font-red">*</span></label>
+                            <div class="col-md-4">
+                            <input type="hidden" name="TenderSource" value="<?php echo $tenderSource; ?>" />
+                            <input type="hidden" name="Id" value="<?php echo $savedTender->Id?$savedTender->Id:Input::old('Id'); ?>" />
+							<input type="text"  id="ReferenceNo" name="ReferenceNo" value="<?php echo $savedTender->ReferenceNo?$savedTender->ReferenceNo:Input::old('ReferenceNo'); ?>" class="form-control input-medium required" placeholder="Reference No.">
+                            </div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3">Name of Work <span class="font-red">*</span></label>
+                            <div class="col-md-9">
+							    <input type="text"  name="NameOfWork" id="NameOfWork" value="<?php echo $savedTender->NameOfWork?$savedTender->NameOfWork:Input::old('NameOfWork'); ?>" class="form-control required" />
+                            </div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3">Description of Work <span class="font-red">*</span></label>
+                            <div class="col-md-9">
+							    <textarea  name="DescriptionOfWork" id="DescriptionOfWork" class="wysihtml5 form-control required" rows="4"><?php echo $savedTender->DescriptionOfWork?$savedTender->DescriptionOfWork:Input::old('DescriptionOfWork'); ?></textarea>
+                            </div>
+						</div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Contact Person</label>
+                                <div class="col-md-4">
+                                    <input  type="text" id="ContactPerson" value="<?php echo $savedTender->ContactPerson?$savedTender->ContactPerson:Input::old('ContactPerson'); ?>" name="ContactPerson" class="form-control">
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Contact No.</label>
+                                <div class="col-md-4">
+                                    <input  type="text" value="<?php echo $savedTender->ContactNo?$savedTender->ContactNo:Input::old('ContactNo'); ?>" class="form-control" id="ContactNo" name="ContactNo">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Contact Email</label>
+                                <div class="col-md-4">
+                                    <input  type="text" name="ContactEmail" id="ContactEmail" value="<?php echo $savedTender->ContactEmail?$savedTender->ContactEmail:Input::old('ContactEmail'); ?>" class="form-control email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Dzongkhag <span class="font-red">*</span></label>
+                                <div class="col-md-4">
+                                    <select  class="form-control required" name="CmnDzongkhagId" id="CmnDzongkhagId">
+                                        <option value="">---SELECT ONE---</option>
+                                        <?php foreach($dzongkhags as $dzongkhag): ?>
+                                            <option <?php if($dzongkhag->Id == $savedTender->CmnDzongkhagId || $dzongkhag->Id ==Input::old('CmnDzongkhagId')): ?>selected="selected"<?php endif; ?> value="<?php echo $dzongkhag->Id; ?>"><?php echo $dzongkhag->NameEn; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Classification <span class="font-red">*</span></label>
+                                <div class="col-md-4">
+                                    <select  class="form-control required classification" id="CmnContractorClassificationId" name="CmnContractorClassificationId">
+                                        <option value="">---SELECT ONE---</option>
+                                        <?php foreach($contractorClassifications as $contractorClassification): ?>
+                                            <option data-reference="<?php echo $contractorClassification->ReferenceNo; ?>" <?php if($contractorClassification->Id == $savedTender->CmnContractorClassificationId || $contractorClassification->Id == Input::old('CmnContractorClassificationId')): ?>selected="selected"<?php endif; ?> value="<?php echo $contractorClassification->Id; ?>"><?php echo $contractorClassification->Name.' ('.$contractorClassification->Code.')'; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Category <span class="font-red">*</span></label>
+                                <div class="col-md-4">
+                                    <select  class="form-control required category" id="CmnContractorCategoryId" name="CmnContractorCategoryId">
+                                        <option value="">---SELECT ONE---</option>
+                                        <?php foreach($contractorCategories as $contractorCategory): ?>
+                                            <option data-reference="<?php echo $contractorCategory->ReferenceNo; ?>" <?php if($contractorCategory->Id == $savedTender->CmnContractorCategoryId || $contractorCategory->Id == Input::old('CmnContractorCategoryId')): ?>selected="selected"<?php endif; ?> value="<?php echo $contractorCategory->Id; ?>"><?php echo $contractorCategory->Name.' ('.$contractorCategory->Code.')'; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Contract Period (Months) <span class="font-red">*</span></label>
+                                <div class="col-md-4">
+                                    <input  type="text" id="ContractPeriod" value="<?php echo $savedTender->ContractPeriod?$savedTender->ContractPeriod:Input::old('ContractPeriod'); ?>" name="ContractPeriod" class="form-control number required durationnumber" placeholder="Contract period in months">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Tentative Start Date <span class="font-red">*</span></label>
+                                <div class="col-md-4">
+                                    <div class="input-icon right">
+                                        <i class="fa fa-calendar"></i>
+                                        <input type="text" name="TentativeStartDate" id="TentativeStartDate" class="form-control datepicker required calculateenddate" value="<?php echo $savedTender->TentativeStartDate?convertDateToClientFormat($savedTender->TentativeStartDate):Input::old('TentativeStartDate'); ?>" placeholder="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Tentative End Date <span class="font-red">*</span></label>
+                                <div class="col-md-4">
+                                    <div class="input-icon right">
+                                        <i class="fa fa-calendar"></i>
+                                        <input  type="text" name="TentativeEndDate" id="TentativeEndDate" class="form-control datepicker required durationendresult" value="<?php echo $savedTender->TentativeEndDate?convertDateToClientFormat($savedTender->TentativeEndDate):Input::old('TentativeEndDate'); ?>"  placeholder="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Project Estimate Cost <span class="font-red">*</span></label>
+                                <div class="col-md-4">
+                                    <input  type="text" value="<?php echo $savedTender->ProjectEstimateCost?$savedTender->ProjectEstimateCost:Input::old('ProjectEstimateCost'); ?>" name="ProjectEstimateCost" id="ProjectEstimateCost" class="form-control number required" placeholder="Project Estimate Cost">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Show Project Estimate Cost in Website <span class="font-red">*</span></label>
+                                <div class="col-md-4">
+                                    <div class="radio-list">
+                                        <label class="radio-inline">
+                                            <input  type="radio" name="ShowCostInWebsite" id="optionsRadios4" value="1" <?php if($savedTender->ShowCostInWebsite == NULL || $savedTender->ShowCostInWebsite == 1): ?>checked <?php endif; ?>> Yes </label>
+                                        <label class="radio-inline">
+                                            <input  type="radio" name="ShowCostInWebsite" id="optionsRadios5" value="0" <?php if($savedTender->ShowCostInWebsite == '0'): ?>checked <?php endif; ?>> No </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Date of Sale of Tender Document <span class="font-red">*</span></label>
+                                <div class="col-md-4">
+                                    <div class="input-icon right">
+                                        <i class="fa fa-calendar"></i>
+                                        <input  type="text" name="DateOfSaleOfTender" id="DateOfSaleOfTender" class="form-control datepicker required"value="<?php echo $savedTender->DateOfSaleOfTender?convertDateToClientFormat($savedTender->DateOfSaleOfTender):Input::old('DateOfSaleOfTender'); ?>"  placeholder="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Closing Date of Sale of Tender <span class="font-red">*</span></label>
+                                <div class="col-md-4">
+                                    <div class="input-icon right">
+                                        <i class="fa fa-calendar"></i>
+                                        <input  type="text" name="DateOfClosingSaleOfTender" id="DateOfClosingSaleOfTender" class="form-control datepicker required" value="<?php echo $savedTender->DateOfClosingSaleOfTender?convertDateToClientFormat($savedTender->DateOfClosingSaleOfTender):Input::old('DateOfClosingSaleOfTender'); ?>"  placeholder="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Last Date & Time of Submission <span class="font-red">*</span></label>
+                                <div class="col-md-4">
+                                    <div class="input-icon right">
+                                        <i class="fa fa-calendar"></i>
+                                        <input  type="text" name="LastDateAndTimeOfSubmission" id="LastDateAndTimeOfSubmission" class="form-control form_datetime required" value="<?php echo $savedTender->LastDateAndTimeOfSubmission?convertDateTimeToClientFormat($savedTender->LastDateAndTimeOfSubmission):Input::old('LastDateAndTimeOfSubmission'); ?>"  placeholder="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Opening Date & Time <span class="font-red">*</span></label>
+                                <div class="col-md-4">
+                                    <div class="input-icon right">
+                                        <i class="fa fa-calendar"></i>
+                                        <input  type="text" name="TenderOpeningDateAndTime" id="TenderOpeningDateAndTime" class="form-control form_datetime required" value="<?php echo $savedTender->TenderOpeningDateAndTime?convertDateTimeToClientFormat($savedTender->TenderOpeningDateAndTime):Input::old('TenderOpeningDateAndTime'); ?>"  placeholder="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Cost of Tender Document <span class="font-red">*</span></label>
+                                <div class="col-md-4">
+                                    <input  type="text" value="<?php echo $savedTender->CostOfTender?$savedTender->CostOfTender:Input::old('CostOfTender'); ?>" name="CostOfTender" id="CostOfTender" class="form-control number required" placeholder="Cost of Tender Document">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">EMD/Bid Security <span class="font-red">*</span></label>
+                                <div class="col-md-4">
+                                    <input   type="text" value="<?php echo $savedTender->EMD?$savedTender->EMD:Input::old('EMD'); ?>" name="EMD" id="EMD" class="form-control required" placeholder="EMD">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Publish in Website <span class="font-red">*</span></label>
+                                <div class="col-md-4">
+                                    <div class="radio-list">
+                                        <label class="radio-inline">
+                                            <?php if($savedTender->PublishInWebsite == NULL): ?>
+                                                <?php $case = 1; ?>
+                                            <?php endif; ?>
+                                            <?php if($savedTender->PublishInWebsite == '0'): ?>
+                                                <?php $case = 2; ?>
+                                            <?php endif; ?>
+                                            <?php if($savedTender->PublishInWebsite == '1'): ?>
+                                                <?php $case = 3; ?>
+                                            <?php endif; ?>
+                                        <input  type="radio" name="PublishInWebsite" id="optionsRadios4" value="1" <?php if($case == 1 || $case == 3): ?> checked <?php endif; ?> > Yes </label>
+                                        <label class="radio-inline">
+                                        <input  type="radio" name="PublishInWebsite" id="optionsRadios5" value="0"  <?php if($case == 2): ?> checked <?php endif; ?>> No </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        <?php endforeach; ?>
+                        <?php $count = 1; ?>
+                        <?php if(isset($tenderAttachments[0]->Id)): ?>
+                            <div class="col-md-6 table-responsive">
+                                <h5 class="font-blue-madison bold">Uploaded Tender Related Documents</h5>
+                                <table class="table table-bordered table-striped table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl. No.</th>
+                                            <th>Document Name</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php $count = 1; ?>
+                                    <?php foreach($tenderAttachments as $tenderAttachment): ?>
+                                        <tr>
+                                            <td><?php echo $count; ?><input type="hidden" name="DocumentId" value="<?php echo $tenderAttachment->Id; ?>"/></td>
+                                            <td><a href="<?php echo asset($tenderAttachment->DocumentPath); ?>" target="_blank"><u><?php echo $tenderAttachment->DocumentName; ?></u></a></td>
+                                            <td><a href="#" class="deletefile btn-sm"><i class="fa fa-edit"></i>Delete</a></td>
+                                        </tr>
+                                        <?php $count++; ?>
+                                    <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
+                        <?php /*<div class="row">*/ ?>
+                            <div class="col-md-6 table-responsive">
+                                <h5 class="font-blue-madison bold">Upload Tender Related Documents</h5>
+                                <table id="contractorhumanresource" class="table table-bordered table-striped table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th>Document Name</th>
+                                        <th>Upload File</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <input type="hidden" name="DocumentId[]" class="form-control input-sm">
+                                            <input type="text" name="DocumentName[]" class="form-control input-sm">
+                                        </td>
+                                        <td>
+                                            <input type="file" name="attachments[]" value="" class="input-sm" multiple="multiple" />
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div><div class="clearfix"></div>
+                        <?php /*</div>*/ ?>
+					</div>
+					<div class="form-actions">
+						<div class="btn-set">
+							<button type="submit" class="btn green">Save</button>
+                            <?php if($tenderSource == 1): ?>
+                                <?php $cancelRoute = 'etl/uploadedtenderlistetool'; ?>
+                            <?php else: ?>
+                                <?php $cancelRoute = "cinet/uploadedtenderlistcinet"; ?>
+                            <?php endif; ?>
+							<a href="<?php echo URL::to($cancelRoute); ?>" class="btn red">Cancel</a>
+						</div>
+					</div>
+                <?php echo Form::close(); ?>
+
+				<!-- END FORM-->
+			</div>
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('horizontalmenumaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>Construction Development Board</title>
+        <link rel="shortcut icon" href="<?php echo asset('img/favicon.png'); ?>">
+        <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+        <style>
+			body {
+			  font-family: cambria;
+			  margin:0;
+			  padding:0;
+				/*background: url('../../public/uploads/certbg.png') no-repeat center center fixed;*/
+				/*-webkit-background-size: cover;*/
+				/*-moz-background-size: cover;*/
+				/*-o-background-size: cover;*/
+				/*background-size: cover;*/
+				/*background-size: 1000px 1000px;*/
+			}
+			/*-------Print CSS---------*/
+			div.certificatebanner{
+				width:100%;
+				margin:0 auto;
+				text-align: center;
+			}
+			p{
+				z-index: 9999;
+			}
+			div.centerdiv{
+				left:50%;
+			}
+			.hr{
+			    display: block;
+			    height: 0;
+			    overflow: hidden;
+			    font-size: 0;
+			    border-top: 1px solid #e3e3e3;
+			    margin: 12px 0;
+			  }
+			p.heading{
+			  margin:0;
+			  padding:10px 0 5px 0;
+			  font-weight: bold;
+			  font-size: 11pt;
+			}
+			.printtitle{
+			    margin:0;
+			    padding:0 0 5px 0;
+			    font-weight: bold;
+			    font-size: 12pt;
+			    text-decoration: underline;
+			}
+			.text-right {  
+			  text-align: right;
+			}
+			.text-left {  
+			  text-align: left;
+			}
+			.text-center{
+			  text-align: center;
+			}
+			.x-x-small{
+			  width:5%;
+			}
+			.x-small{
+			  width:10%;
+			}
+			.small-s{
+			  width:15%;
+			}
+			.small{
+			  width:20%;
+			}
+			.small-medium{
+			  width:30%; 
+			}
+			.x-small-medium{
+			  width:25%; 
+			}
+			.medium{
+			  width:50%; 
+			}
+			table.data{
+			  border-collapse:collapse;
+			  width: 100%;
+			  /*background: #fff;*/
+			  font-size: 10pt;
+				z-index: 9999;
+			}
+			table.data th{
+			  background:#d7e5f2;
+			  padding:3px 0;
+			}
+			table.data td{
+			    font-size: 10pt;
+			    padding:2px;
+			    /*background:#fff;*/
+			}
+			table.data td.number{
+			  text-align: right !important;
+			}
+			table.data tr {
+			  /*background: #fff;*/
+			}
+
+			table.data tr:nth-child(odd) {
+			  /*background: #ccc;*/
+			}
+			table.data-large{
+			  border-collapse:collapse;
+			  width: 100%;
+			  /*background: #fff;*/
+			  font-size: 10pt;
+				z-index: 9999;
+			}
+			table.data-large th{
+			  /*background:#d7e5f2;*/
+			  border:1px solid #000;
+			}
+			table.data-large td{
+			    font-size: 10pt;
+			    border:1px solid #000;
+			    padding:2px;
+			    /*background:#fff;*/
+			}
+			table.data-large tr {
+			  /*background: #fff;*/
+			}
+
+			table.data-large tr:nth-child(odd) {
+			  /*background: #ccc;*/
+			}
+			table.with-outer-border-only{
+				width:100%;
+				border: 1px solid #000;
+				z-index: 9999;
+			}
+			table.with-outer-border-only td{
+			    font-size: 10pt;
+			    padding:2px;
+			    /*background:#fff;*/
+			}
+			table.with-outer-border-only td.number{
+			  text-align: right !important;
+			}
+			table.with-outer-border-only tr {
+			  /*background: #fff;*/
+			}
+
+			table.with-outer-border-only tr:nth-child(odd) {
+			  /*background: #ccc;*/
+			}
+			table.data-small-with-border{
+                /*display: inline;*/
+			  border-collapse:collapse;
+			  width: 50%;
+			  /*background: #fff;*/
+			  font-size: 10pt;
+				z-index: 9999;
+			}
+			table.data-small-with-border th{
+			  background:#d7e5f2;
+			  border:1px solid #000;
+			}
+			table.data-small-with-border td{
+			    font-size: 10pt;
+			    border:1px solid #000;
+			    padding:2px;
+			    /*background:#fff;*/
+			}
+			table.data-small-with-border tr {
+			  /*background: #fff;*/
+			}
+			table.data-small-with-border tr:nth-child(odd) {
+			  /*background: #ccc;*/
+			}
+			p.description{
+			  font-size: 14px;
+			  line-height: 35px;
+				z-index: 99999;
+			}
+			.row{
+				width:100%;
+			}
+			.col-md-6{
+				width:50%;
+				float:left;
+			}
+			.table-smallfont td{
+				font-size: 8pt;
+			}
+			.table_lessspace td{
+				padding: 1px!important;
+			}
+			.certificate-detail{
+				color: #000080;
+				font-size: 11pt!important;
+			}
+        </style>
+	</head>
+	<body style="/*background: url(<?php echo asset('uploads/certbg.png'); ?>) repeat center center fixed; background-size: 1000px 1000px;*/">
+		<img src="<?php echo asset('uploads/certbg.png'); ?>" style="position: absolute; width: 117.1%; height: 1145px; margin-left: -60px; margin-top: -58px;"/>
+		<br />
+		<div class="certificatebanner">
+			<img src="<?php echo URL::to('assets/cdb/layout/img/certificate.png'); ?>" style="margin-top: -20px;"/>
+			<?php if(!isset($nonBhutanese)): ?>
+				<br/><br>
+			<?php else: ?>
+				<?php if(!$nonBhutanese): ?>
+					<br/><br>
+				<?php endif; ?>
+			<?php endif; ?>
+		</div>
+		<?php echo $__env->yieldContent('content'); ?>
+		<br /><br><br><br><br>
+		<div class="text-center">
+			<img src="<?php echo asset('uploads/dg.png'); ?>" width="160" style="margin-top: -34px;"/>
+			<p class="endcertificateheader" style="margin-top: -2px;">(Director)<br/>
+			Construction Development Board<br/><br />
+			<small>
+				Tel No.: +975-2-326035/333502. Fax No.:+975-2-321989. Post Box # 1349<br/>
+				E-mail : registration@cdb.gov.bt. Website : www.cdb.gov.bt
+			</small>
+			</p>
+		</div>
+		<p><i><strong>NOTE:</strong>This e-certificate is generated from E-Zotin Online System.</i>
+		<span style="float: right; margin-left:160px; margin-top:-15px; position:absolute;">
+			<img src="<?php echo asset('uploads/seal.jpg'); ?>"/>
+		</span></p>
+
+<br><br><br><br><br>
+		<br />
+<center>
+<h4>
+Terms & Conditions of CDB Certification</h4></center>
+
+<p>1.As provided in clause 2.1.1.2 and 2.3.1 of Procurement Rules and Regulations 2009, the holder of this Certificate is qualified to participate in public procurement procedure. 
+
+</p><p>2.The issuance of CDB Registration Certificate will be based largely on the fulfillment of the minimum criteria set against classification of Contractor/Consultant and Categorization of Works and upon certification by competent authority for construction professionals.
+</p><p>3.
+All the registered contractors should comply with 'Code of ethics for Contractors'. 
+</p><p>4.
+CDB will not be accountable for any false/fabricated submission that could have led to the fulfillment of the criteria and subsequent issue of CDB Registration Certificate.
+</p><p>5.
+CDB Registration Certificate once issued would not relieve the certificate holder of any relaxation on the minimum requirements for registration.
+</p><p>6.
+Notwithstanding the provisions of Companies Act of Bhutan, the certificate issued is non-transferable even if the promoters separate and establish similar companies.
+</p><p>7.
+CDB Certificate cannot be leased or subleased to any individual or another firm.
+</p><p>8.
+Certificate is valid during the period for which it was issued provided it has not been cancelled, suspended or revoked by CDB or any other competent authority.
+</p><p>9.
+Failing to renew within the expiry date will lead to penalty of Nu.100 per day.  
+</p><p>10.
+Failing to pay the fees for approved online application within 30 days will lead to cancellation of the application.
+</p><p>11.
+All registered construction firm must attend the mandatory refresher course in order to apply for renewal.
+</p><p>12.
+No Contractors can submit bid, participate in bidding  or be on the contention for award if the registration has expired.
+</p><p>13.
+No Contractors can undertake/implement works which is not within the scope of the registration.
+</p><p>14.
+CDB may verify the resources committed for the projects as and when desires.
+</p><p>15.
+The registration is subject to verification whenever the CDB so desires.  CDB will inspect the minimum mandatory requirement of manpower and equipment of Large and Medium contractors and the during the time of monitoring, every firm must extend necessary support and cooperation to CDB Officials.
+</p><p>16.
+Large and Medium Contractors must have Office established with Signboard (requirements of office and signboard as determined by CDB)
+</p><p>17.
+Registered firms are required to inform the CDB of any changes in their address, contact details or any pertinent particulars within one month.
+</p><p>18.
+The CDB Registration Certificate can be revoked, downgraded, suspended or cancelled at any given time if the:<p>
+<ul>
+<li>Holder undertakes unlawful participation in the procurement process;</li>
+<li>Entity does not possess the minimum requirements during the physical verification process (at the discretion of CDB);</li>
+<li>Entity has obtained the same due to false submissions;</li>
+<li>Entity becomes bankrupt or winds up; or</li>
+<li>Entity has been charged by the court for penal offence. </li>
+</ul>
+
+
+</p>
+
+
+	</body>
+</html>

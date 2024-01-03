@@ -1,0 +1,199 @@
+<?php $__env->startSection('pagescripts'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+
+<div class="portlet light bordered" id="form_wizard_1">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-gift"></i>
+			<span class="caption-subject">Registration Information</span>
+		</div>
+		<?php if((int)$userSurvey==1): ?>
+		<div class="actions">
+			<a href="<?php echo URL::to('surveyor/viewprintdetails/'.$surveyId); ?>" class="btn btn-small blue-madison" target="_blank"><i class="fa fa-print"></i> Print Information</a>
+			<a href="<?php echo URL::to('surveyor/certificate/'.$surveyId); ?>" class="btn btn-small green-seagreen" target="_blank"><i class="fa fa-print"></i> Print Certificate</a>
+		</div>
+		<?php endif; ?>
+	</div>
+	<div class="row form-froup">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                    <img src='https://www.citizenservices.gov.bt/BtImgWS/ImageServlet?type=PH&cidNo=${App_Details.cidNo}'  width='200px'  height='200px' class='pull-right'/>
+                </div>
+                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+                    <div class="table-responsive">
+					<?php foreach($surveyInformations as $surveyInformation): ?>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td colspan="2" class="font-blue-madison bold warning">Personal Information</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table class="table table-condensed">
+                                            <tr>
+                                                <td><strong>Full Name: </strong></td>
+                                                <td><?php echo $surveyInformation->Salutation.' '.$surveyInformation->Name; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>CID Number: </strong></td>
+                                                <td><?php echo $surveyInformation->CIDNo; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Contact Number: </strong></td>
+                                                <td><?php echo $surveyInformation->MobileNo; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Email Address: </strong></td>
+                                                <td><?php echo $surveyInformation->Email; ?></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table class="table table-condensed">
+                                            <tr>
+                                                <td><strong>Village: </strong></td>
+                                                <td><?php echo $surveyInformation->Village; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Gewog: </strong></td>
+                                                <td><?php echo $surveyInformation->Gewog; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Dzongkhag: </strong></td>
+                                                <td><?php echo $surveyInformation->Dzongkhag; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Country: </strong></td>
+                                                <td><?php echo $surveyInformation->Country; ?></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr />
+                        <div class="col-md-6 table-responsive">
+                            <table class="table">
+                                <tbody>
+                                <td colspan="1" class="font-blue-madison bold warning">Qualification Information</td>
+                                <tr>
+                                    <td>
+                                        <table class="table table-condensed">
+                                            <tr>
+                                                <td><strong>Qualification: </strong></td>
+                                                <td><?php echo $surveyInformation->Qualification; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Year of Graduation: </strong></td>
+                                                <td><?php echo $surveyInformation->GraduationYear; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Country of Study: </strong></td>
+                                                <td><?php echo $surveyInformation->UniversityCountry; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>University Name: </strong></td>
+                                                <td><?php echo $surveyInformation->NameOfUniversity; ?></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-6 table-responsive">
+                            <table class="table">
+                                <tbody>
+                                <td colspan="1" class="font-blue-madison bold warning">CDB Certificate Information</td>
+                                <tr>
+                                    <td colspan="1">
+                                        <table class="table table-condensed">
+                                            <tr>
+                                                <td><strong>AR Number: </strong></td>
+                                                <td><?php echo $surveyInformation->ARNo; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Type: </strong></td>
+                                                <td><?php echo $surveyInformation->SurveyType; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Trade: </strong></td>
+                                                <td><?php echo $surveyInformation->Trade; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Registration Expiry Date</strong></td>
+												<td>
+                                                <?php if($surveyInformation->RegistrationExpiryDate<=date('Y-m-d G:i:s')): ?>
+												<p class="font-red bold warning">	<?php echo convertDateToClientFormat($surveyInformation->RegistrationExpiryDate); ?> </p>
+												<?php else: ?>
+												<?php echo convertDateToClientFormat($surveyInformation->RegistrationExpiryDate); ?>
+
+												<?php endif; ?>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                </div>
+				<hr />
+                        <div class="col-md-6 table-responsive">
+                            <table class="table">
+                                <tbody>
+                                <td colspan="1" class="font-blue-madison bold warning">Status Information</td>
+                                <tr>
+                                    <td>
+                                        <table class="table table-condensed">
+										<?php if($surveyInformation->CmnApplicationRegistrationStatusId != CONST_CMN_APPLICATIONREGISTRATIONSTATUS_APPROVED): ?>
+											<tr>
+												<td><strong>Status</strong></td>
+												<td class="font-yellow bold warning"><?php echo $surveyInformation->Status; ?></td>
+											</tr>
+
+												<?php if($surveyInformation->CmnApplicationRegistrationStatusId == 'b1fa6607-b1dd-11e4-89f3-080027dcfac6'): ?>
+													<tr>
+														<td><strong>Deregistered Date</strong></td>
+														<td><?php echo convertDateToClientFormat($surveyInformation->DeRegisteredDate); ?></td>
+													</tr>
+													<tr>
+														<td><strong>Reason</strong></td>
+														<td><?php echo $surveyInformation->DeregisteredRemarks; ?></td>
+													</tr>
+												<?php endif; ?>
+										<?php elseif($surveyInformation->RegistrationExpiryDate<=date('Y-m-d G:i:s')): ?>
+											<tr>
+											<td><strong>Status</strong></td>
+												<td class="font-red bold warning">Expired</td>
+												
+											</tr>
+										<?php else: ?>
+										<tr>
+										<td><strong>Status</strong></td>
+												<td><?php echo $surveyInformation->Status; ?></td>
+											</tr>
+										
+										<?php endif; ?>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+				<?php endforeach; ?>
+				
+			</div>
+			
+			<div class="row">
+                <div class="col-md-12">
+                   <a href="<?php echo URL::to('surveyor/editregistrationinfo/'.$surveyId.'?redirectUrl=surveyor/editdetails&usercdb=edit'); ?>" class="btn blue-madison editaction"><i class="fa fa-edit"></i> Edit</a>
+                </div>
+            </div>
+            
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

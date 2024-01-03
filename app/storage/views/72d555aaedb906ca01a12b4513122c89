@@ -1,0 +1,25 @@
+<?php $__env->startSection('main-content'); ?>
+<div class="row">
+	<div class="col-md-12">
+		<h4 class="text-primary"><strong>Photo Gallery</strong></h4>
+		<div class="nanoGallery2">
+
+		<?php foreach($albums as $album): ?>
+			<a href="<?php echo $album->AlbumImage; ?>"
+			    data-ngkind="album"
+			    data-ngid="<?php echo $album->Id; ?>"
+			    data-ngthumb="<?php echo asset($album->AlbumImage); ?>"
+			    data-ngdesc="Description1"><?php echo $album->AlbumName; ?></a>
+		<?php endforeach; ?>
+		<?php foreach($images as $image): ?>
+			<a href="<?php echo asset($image->ImageSource); ?>" 
+				data-ngthumb="<?php echo asset($image->ImageThumbSource); ?>" 
+				<?php if((bool)$image->PhotoGalleryAlbumId): ?>
+					data-ngalbumid = "<?php echo $image->PhotoGalleryAlbumId; ?>"
+				<?php endif; ?>
+				data-ngdesc="<?php echo $image->ImageDescription; ?>"><?php echo $image->ImageName; ?></a>
+		<?php endforeach; ?>
+		</div>
+	</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('websitemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

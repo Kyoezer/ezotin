@@ -1,0 +1,141 @@
+<?php $__env->startSection('pagescripts'); ?>
+	<?php if(Session::has('extramessage')): ?>
+		<div id="extramessagemodal" class="modal fade" role="dialog" aria-labelledby="extramessagemodal" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+						<h3 class="modal-title font-red-intense">ERROR</h3>
+					</div>
+					<div class="modal-body">
+						<p><?php echo Session::get('extramessage'); ?></p>
+					</div>
+					<div class="modal-footer">
+						<button class="btn green-seagreen" data-dismiss="modal" aria-hidden="true">Ok</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+			$("#extramessagemodal").modal('show');
+		</script>
+		<?php Session::forget('extramessage'); ?>
+	<?php endif; ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-comments"></i>News/Notices
+				</div>
+			</div>
+			<div class="portlet-body" id="chats">
+				<ul class="chats">
+					<?php $__empty_1 = true; foreach($newsAndNotifications as $newsAndNotification): $__empty_1 = false; ?>
+					<li class="in">
+						<img class="avatar" alt="" src="<?php echo asset('assets/cdb/layout/img/avatar.png'); ?>"/>
+						<div class="message">
+							<span class="arrow">
+							</span>
+							<a href="#" class="name">
+							Administrator </a>
+							<span class="datetime">
+							on <?php echo convertDateToClientFormat($newsAndNotification->Date); ?> </span>
+							<span class="body">
+							<?php echo html_entity_decode($newsAndNotification->Message); ?>
+
+						</div>
+					</li>
+					<?php endforeach; if ($__empty_1): ?>
+						<li class="font-red">No News/Notices to display</li>
+					<?php endif; ?>
+					<?php $applicationCount = 1; $count = 1; ?>
+					<?php if(isset($applicationHistory)): ?>
+						<?php foreach($applicationHistory as $application): ?>
+							<?php if($application->Id != NULL): ?>
+								<?php if($applicationCount == 1): ?>
+									<h4>Application's Status</h4>
+								<?php endif; ?>
+							<li class="in">
+								<div class="message">
+									<span class="arrow">
+									</span>Applied for
+									<a href="#" class="name" style="text-decoration:none;">
+										<span style="background:#f43ff4; color:#fff; font-weight:bold;"> &nbsp;<?php echo $application->Service; ?> &nbsp;</span> </a>
+									<span class="datetime">
+									on <?php echo convertDateToClientFormat($application->ApplicationDate); ?> (Application #<?php echo isset($application->ReferenceNo)?$application->ReferenceNo:""; ?>) </span>
+									<span class="body">
+									Current Status of Application: <?php echo ($application->Status == "New")?"Pending":$application->Status; ?> on
+										<?php if($application->CmnApplicationRegistrationStatusId == CONST_CMN_APPLICATIONREGISTRATIONSTATUS_REJECTED): ?>
+											<?php echo convertDateToClientFormat($application->RejectedDate); ?>
+
+										<?php endif; ?>
+										<?php if($application->CmnApplicationRegistrationStatusId == CONST_CMN_APPLICATIONREGISTRATIONSTATUS_VERIFIED): ?>
+											<?php echo convertDateToClientFormat($application->RegistrationVerifiedDate); ?>
+
+										<?php endif; ?>
+										<?php if($application->CmnApplicationRegistrationStatusId == CONST_CMN_APPLICATIONREGISTRATIONSTATUS_APPROVEDFORPAYMENT): ?>
+											<?php echo convertDateToClientFormat($application->RegistrationApprovedDate); ?>
+
+										<?php endif; ?>
+										<?php if($application->CmnApplicationRegistrationStatusId == CONST_CMN_APPLICATIONREGISTRATIONSTATUS_APPROVED): ?>
+											<?php echo convertDateToClientFormat($application->PaymentApprovedDate); ?>
+
+										<?php endif; ?>
+										<?php if($application->CmnApplicationRegistrationStatusId == CONST_CMN_APPLICATIONREGISTRATIONSTATUS_REJECTED): ?>
+											<?php if(isset($application->RemarksByRejector) && !empty($application->RemarksByRejector)): ?>
+											<br>
+											<strong>Remarks: </strong><?php echo $application->RemarksByRejector; ?>
+
+											<?php endif; ?>
+												<br>
+
+											<?php if(isset($type)): ?>
+
+												<?php if($type == 1): ?>
+													<?php if($applicationCount == 1): ?>
+															Please Reapply
+														<br>
+														<?php if(strpos($application->Service,'Renewal')>-1): ?>
+															<strong><a href="<?php echo URL::to('contractor/applyservicegeneralinfo'); ?>/<?php echo $application->CrpContractorId; ?>?srenew=1&oldapplicationid=<?php echo $application->Id; ?>&confedit=1&edit=true">Reapply here</a></strong>
+														<?php else: ?>
+															<strong><a href="<?php echo URL::to('contractor/applyservicegeneralinfo'); ?>/<?php echo $application->CrpContractorId; ?>?oldapplicationid=<?php echo $application->Id; ?>&confedit=1&edit=true">Reapply here</a></strong>
+														<?php endif; ?>
+													<?php endif; ?>
+												<?php elseif($type==2): ?>
+													<?php if($applicationCount == 1): ?>
+															Please Reapply
+														<br>
+														<strong><a href="http://www.cdb.gov.bt/<?php echo $application->prefix.'/apprejected/'.$application->Id.'/'.$application->SysRejectionCode; ?>" >Click Here to Reapply</a> </p></strong>
+													<?php endif; ?>
+												<?php endif; ?>
+
+											<?php endif; ?>
+											<?php $count++; ?>
+										<?php endif; ?>
+										<br>
+										<?php /*<?php if(isset($rejectionDetails[$application->Id])): ?>*/ ?>
+											<?php /*<?php if(!empty($rejectionDetails[$application->Id])): ?>*/ ?>
+												<?php /*<a target="_blank" href="<?php echo URL::to($rejectionDetails[$application->Id]['prefix'].'/apprejected/'.$rejectionDetails[$application->Id]['referenceApplicant'].'/'.$rejectionDetails[$application->Id]['rejectionSysCode']); ?>" >Click Here to Reapply</a>*/ ?>
+											<?php /*<?php endif; ?>*/ ?>
+										<?php /*<?php endif; ?>*/ ?>
+
+									</span>
+									</div>
+
+								</li>
+							<?php $applicationCount++; ?>
+
+							<?php endif; ?>
+						<?php endforeach; ?>
+					<?php endif; ?>
+				</ul>
+			</div>
+		</div>
+		<!-- END PORTLET-->
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

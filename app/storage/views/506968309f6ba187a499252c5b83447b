@@ -1,0 +1,15 @@
+<html>
+<head><title>Ezotin - Human Resource Details</title></head>
+<body>
+<center><h4 class="bold"><?php echo $message; ?></h4></center>
+<?php if(!Input::has('print')): ?>
+    <br/><br/>
+    <center><a href="<?php echo Request::url(); ?>?cdbNo=<?php echo $cdbNo; ?>&print=true" target="_blank" class="btn blue">Print</a></center><br/>
+<?php else: ?>
+    <center>Printed on: <?php echo date('d m Y'); ?> By: <?php echo Auth::user()->FullName; ?></center>
+<?php endif; ?>
+<?php if(Input::get('print') == true): ?>
+    <script>window.print();</script>
+<?php endif; ?>
+</body>
+</html>

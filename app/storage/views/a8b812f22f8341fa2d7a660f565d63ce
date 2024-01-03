@@ -1,0 +1,146 @@
+<?php $__env->startSection('content'); ?>
+<input type="hidden" name="FullURL" value="<?php echo CONST_APACHESITELINK; ?>"/>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption font-green-seagreen">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject">List of Bids from CiNET</span>
+		</div>
+	</div>
+	<div class="portlet-body">
+		<?php echo Form::open(array('url' =>Request::URL(),'role'=>'form','method'=>'get')); ?>
+
+		<div class="row">
+			<div class="col-md-2">
+				<div class="form-group">
+					<label class="control-label">CDB No. </label>
+					<input type="text" name="CDBNo" value="<?php echo Input::get('CDBNo'); ?>" class="form-control">
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="form-group">
+					<label class="control-label">Work Order No.</label>
+					<input type="text" name="WorkOrderNo" value="<?php echo $workOrderNo; ?>" class="form-control">
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label class="control-label">Procuring Agency</label>
+					<select name="ProcuringAgency" class="form-control select2me">
+						<option value="">---SELECT ONE---</option>
+						<?php foreach($procuringAgencies as $procuringAgency): ?>
+						<option value="<?php echo $procuringAgency->Id; ?>" <?php if($procuringAgency->Id==$procuringAgencyId): ?>selected="selected"<?php endif; ?>><?php echo $procuringAgency->Name; ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group">
+					<label class="control-label">Work Start Date Between</label>
+					<div class="input-group input-large date-picker input-daterange">
+						<input type="text" name="WorkStartDateFrom" class="form-control datepickerfrom" value="<?php echo $workStartDateFrom; ?>" />
+						<span class="input-group-addon">
+						to </span>
+						<input type="text" name="WorkStartDateTo" class="form-control datepickerto" value="<?php echo $workStartDateTo; ?>" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="form-group">
+					<label class="control-label">Status</label>
+					<select name="WorkExecutionStatus" class="form-control">
+						<option value="">---SELECT ONE---</option>
+						<?php foreach($workExecutionStatus as $workExecutionStatus): ?>
+						<option value="<?php echo $workExecutionStatus->Id; ?>" <?php if($workExecutionStatus->Id==$workStatus): ?>selected="selected"<?php endif; ?>><?php echo $workExecutionStatus->Name; ?></option>
+						<?php endforeach; ?>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-2">
+				<label class="control-label">&nbsp;</label>
+				<div class="btn-set">
+					<button type="submit" class="btn blue-hoki btn-sm">Search</button>
+					<a href="<?php echo Request::URL(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+				</div>
+			</div>
+		</div>
+		<?php echo Form::close(); ?>
+
+		<br>
+		<table class="table table-bordered table-striped table-condensed flip-content">
+			<thead class="flip-content">
+				<tr>
+					<th>Sl#</th>
+					<th>
+						Procuring Agency
+					</th>
+					<th>
+						CDB No
+					</th>
+					<th class="">
+						Work Order No.
+					</th>
+					<th class="">
+						Name of Work
+					</th>
+					<th class="">
+						Work Category
+					</th>
+					<th class="">
+						Class
+					</th>
+					<th>
+						Contract Period (In Months)
+					</th>
+					<th>
+						Start Date
+					</th>
+					<th>
+						Completion Date
+					</th>
+					<?php if((int)$underProcess==0): ?>
+					<th>
+						Status
+					</th>
+					<?php endif; ?>
+				</tr>
+			</thead>
+			<tbody>
+				<?php $currentProcuringAgeny=""; ?>
+				<?php $__empty_1 = true; foreach($listOfWorks as $lsitOfWork): $__empty_1 = false; ?>
+				<tr>
+					<td><?php echo $start++; ?></td>
+					<td>
+						<?php /*<?php if($lsitOfWork->ProcuringAgency!=$currentProcuringAgeny): ?>*/ ?>
+						<?php echo $lsitOfWork->ProcuringAgency; ?>
+
+						<?php /*<?php endif; ?>*/ ?>
+					</td>
+					<td><?php echo $lsitOfWork->CDBNo; ?></td>
+					<td><?php echo $lsitOfWork->WorkOrderNo; ?></td>
+					<td><?php echo $lsitOfWork->NameOfWork; ?></td>
+					<td><?php echo $lsitOfWork->WorkCategory; ?></td>
+					<td><?php echo $lsitOfWork->ContractorClass; ?></td>
+					<td><?php echo $lsitOfWork->ContractPeriod; ?></td>
+					<td><?php echo convertDateToClientFormat($lsitOfWork->WorkStartDate); ?></td>
+					<td><?php echo convertDateToClientFormat($lsitOfWork->WorkCompletionDate); ?></td>
+					<?php if((int)$underProcess==0): ?>
+					<td>
+						<?php echo $lsitOfWork->WorkExecutionStatus; ?>
+
+					</td>
+					<?php endif; ?>
+					<?php $currentProcuringAgeny=$lsitOfWork->ProcuringAgency; ?>
+				</tr>
+				<?php endforeach; if ($__empty_1): ?>
+				<tr>
+					<td colspan="11" class="text-center font-red">No data to display</td>
+				</tr>
+				<?php endif; ?>
+			</tbody>
+		</table>
+		<?php pagination($noOfPages,Input::all(),Input::get('page'),"cinet.biddingformuploaded"); ?>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

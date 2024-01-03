@@ -1,0 +1,137 @@
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/global/scripts/report.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-cogs"></i>Architect's Information
+            </div>
+        </div>
+        <div class="portlet-body flip-scroll">
+            <?php echo Form::open(array('url'=>Request::url(),'method'=>'get')); ?>
+
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">AR No.</label>
+                            <input name="ARNo" class="form-control" type="text" value="<?php echo Input::get('ARNo'); ?>"/>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="btn-set">
+                            <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                            <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php echo Form::close(); ?>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-condensed flip-content">
+                    <thead class="flip-content">
+                    <tr>
+                        <th>
+                            AR No.
+                        </th>
+                        <th>
+                            Architect Type
+                        </th>
+                        <th>
+                            Name 
+                        </th>
+                        <th>
+                            CID No/Work Permit No 
+                        </th>
+                    
+                        <th>
+                            Country
+                        </th>
+                        <th>
+                            Dzongkhag
+                        </th>
+                        <th>
+                            Mobile#
+                        </th>
+                   
+                        <th>
+                            Email
+                        </th>
+                        <th>Status</th>
+                        <th>Certificate</th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php $__empty_1 = true; foreach($reportData as $architectList): $__empty_1 = false; ?>
+                        <tr>
+                            <td>
+                                <?php echo $architectList->ARNo; ?>
+
+                            </td>
+                            <td>
+                                <?php echo $architectList->ArchitectType; ?>
+
+                            </td>
+                            <td>
+                                <?php echo $architectList->ArchitectName; ?>
+
+                            </td>
+                            <td>
+                                <?php echo $architectList->CIDNo; ?>
+
+                            </td>
+                       
+                            <td>
+                                <?php echo $architectList->Country; ?>
+
+                            </td>
+                            <td>
+                                <?php echo $architectList->Dzongkhag; ?>
+
+                            </td>
+                            <td>
+                                <?php echo $architectList->MobileNo; ?>
+
+                            </td>
+                         
+                            <td>
+                                <?php echo $architectList->Email; ?>
+
+                            </td>
+                            <td >
+                            <?php echo $architectList->Status; ?>
+
+				        	</td>
+                            <td>
+                            <?php if((int)$architectList->StatusReference == '12003'): ?>
+                                <a href="<?php echo URL::to('architect/certificate/'.$architectList->Id); ?>" class="btn default btn-xs blue" target='_blank'><i class="fa fa-edit"></i> View/Print</a>
+                           
+                           
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                              
+                                    <a href="<?php echo URL::to('architect/viewprintdetails/'.$architectList->Id); ?>" class="btn default btn-xs green-seagreen" target='_blank'><i class="fa fa-edit"></i> View/Print</a>
+                               
+                                   
+                            </td>
+                        </tr>
+                    <?php endforeach; if ($__empty_1): ?>
+                        <tr>
+                            <td class="font-red text-center" colspan="11">No data to display</td>
+                        </tr>
+                    <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,187 @@
+<?php $__env->startSection('content'); ?>
+
+    <div class="row">
+        <div class="col-md-12">
+            <?php if(Session::get('messagesuccess')): ?>
+                        <div class="alert alert-success alert-block">
+                            <button type="button" class="close" data-dismiss="alert">x</button>
+                            <strong><?php echo Session::get('messagesuccess'); ?></strong>
+                        </div>
+                    <?php endif; ?>
+
+            <div class="portlet light bordered"> 
+                <div class="portlet-body form">  
+                    <!-- Striped table -->
+
+                    <?php echo Form::open(['url' => 'web/journalagainforwardtoeditorteam/']); ?>
+
+                    <div class="table-responsive card pmd-card">
+                        <!-- Table -->
+                        <table class="table pmd-table table-striped">
+                            
+                            <thead class="thead-dark">
+                                <h3><b>Journal Coordinator </b><b id="Editor">( Managing Editor )</b></h3>
+                                <tr>
+
+                                </tr>
+                            </thead>
+                            <tbody class="fond">
+
+                                <?php foreach($content as $item): ?>
+                                    <tr>
+                                        <th class="width">Application No:</th>
+                                        <td><?php echo $item->Application_No; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Name of the Author:</th>
+                                        <?php foreach($authorname as $items): ?>
+                                        <td><?php echo $items->Name; ?></td>
+                                        <?php endforeach; ?>
+                                    </tr>
+                                    <tr>
+                                <th>Email:</th>
+                                <?php foreach($authorname as $items): ?>
+                                <td><?php echo $items->Email; ?></td>
+                                <?php endforeach; ?>
+                            </tr>
+                            <tr>
+                                <th>Contact Number:</th>
+                                <?php foreach($authorname as $items): ?>
+                                <td><?php echo $items->Contact; ?></td>
+                                <?php endforeach; ?>
+                            </tr>
+                                    <tr>
+                                        <th>Title:</th>
+                                        <td><?php echo $item->Name_of_Title; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th>File:</th>
+                                        <td>
+                                            <a href="<?php echo asset($item->File); ?>" target="_blank">
+                                                <b>Download File</b>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Submitted Date:</th>
+                                        <td><?php echo date('d/m/Y', strtotime($item->CreatedOn)); ?></td>
+                                    </tr>
+                                            <tr>
+                                                <th>
+                                                    <h4 style="color:#107C10"><b>Reviewer 1 ( Academician )</b></h4>
+                                                </th>
+                                            </tr>
+                                        
+                                        <tr>
+                                        <th class="width">Peer Review Checklist:</th>
+                                        <td>
+                                            <a href="<?php echo asset($item->Reviewer1_Checklist_Edition); ?>" target="_blank">
+                                                <b>Download File</b>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    <th>Commented Manuscript:</th>
+                                        <td>
+                                            <a href="<?php echo asset($item->Reviewer1_Commented_Edition); ?>" target="_blank">
+                                                <b>Download File</b>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                   
+                                    
+                                            <tr>
+                                                <th>
+                                                    <h4 style="color:#107C10"><b>Reviewer 2 ( Field Expert )</b></h4>
+                                                </th>
+                                            </tr>
+                                        
+                                        <tr>
+                                        <th class="width">Peer Review Checklist:</th>
+                                        <td>
+                                            <a href="<?php echo asset($item->Reviewer2_Checklist_Edition); ?>" target="_blank">
+                                                <b>Download File</b>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Commented Manuscript:</th>
+                                        <td>
+                                            <a href="<?php echo asset($item->Reviewer2_Commented_Edition); ?>" target="_blank">
+                                                <b>Download File</b>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr><th> </th></tr>
+                                        <tr>
+                                        <th>Revised Journal Manuscript: <b style="color:#107C10">(Old)</b></th>
+                                        <td>
+                                        <a href="<?php echo asset($item->File_Forwarded_to_JC_by_Author); ?>" target="_blank">
+                                                <b>Download File</b>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Revised Journal Manuscript: <b style="color:#107C10">(New)</b></th>
+                                        <td>
+                                        <a href="<?php echo asset($item->File_Forwarded_again_to_JC_by_Author); ?>" target="_blank">
+                                                <b>Download File</b>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <th>Give your remarks:</th><br>
+                                        <td>
+                                            <textarea name="remarkByJctoEditorteam" id="remarksByJctoEditorteam"></textarea>
+                                            <input type="hidden" name="Application_No" value="<?php echo $item->Application_No; ?>">
+                                        </td>
+                                    </tr>
+                                    <br><br><br>
+                                    <tr>
+                                         <td>
+                                            <button type="submit" onclick="validateField()" class="btn btn-primary">Forward</button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <?php echo Form::close(); ?>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        .fond{
+            font-size: 14px;
+        }
+        .width{
+            width: 40%;
+        }
+        textarea{
+            width: 40%;
+        }
+        #Editor{
+            color: green;
+        }
+    </style>
+    <script>
+    function validateField(e) {
+        var status = true;
+        $("Form").submit(function(event) {
+            debugger;
+            if ($('#remarksByJctoEditorteam').val() != '') {
+
+            } else {
+                status = false;
+                alert('Please give your Remark.');
+                event.preventDefault();
+            }
+        });
+    }
+</script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

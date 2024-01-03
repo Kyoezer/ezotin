@@ -1,0 +1,74 @@
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption font-green-seagreen">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject">Manage Arbitrators</span>
+		</div>
+	</div>
+	<div class="portlet-body">
+		<div class="row">
+			<?php echo Form::open(array('url'=>'web/savearbitrators','files'=>true)); ?>
+
+			<div class="table-responsive col-md-12 col-sm-12 col-xs-12">
+				<table id="tablefilters_1" class="table table-condensed table-striped table-bordered table-hover table-responsive">
+					<thead>
+						<tr>
+							<th></th>
+							<th style="width: 90px;">Reg No.</th>
+							<th class="col-md-2">Name</th>
+							<th class="col-md-2">Designation</th>
+							<th style="width: 220px;">Email Address</th>
+							<th style="width: 100px;">Contact No.</th>
+							<th style="width: 110px;">Cases in Hand</th>
+							<th>Image</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach($arbitrators as $arbitrator): ?>
+							<?php $randomKey = randomString(); ?>
+						<tr>
+							<td>
+								<button type="button" class="deletearbitrator"><i class="fa fa-times fa-lg"></i></button>
+							</td>
+							<td><input type="hidden" name="webarbitrator[<?php echo $randomKey; ?>][Id]" class="resetKeyForNew form-control input-sm" value="<?php echo $arbitrator->Id; ?>"/>
+								<input type="text" name="webarbitrator[<?php echo $randomKey; ?>][RegNo]" class="resetKeyForNew form-control input-sm" value="<?php echo $arbitrator->RegNo; ?>"/></td>
+							<td><input type="text" name="webarbitrator[<?php echo $randomKey; ?>][Name]" class="resetKeyForNew form-control input-sm" value="<?php echo $arbitrator->Name; ?>"/></td>
+							<td><input type="text" name="webarbitrator[<?php echo $randomKey; ?>][Designation]" class="resetKeyForNew form-control input-sm" value="<?php echo $arbitrator->Designation; ?>"/></td>
+							<td><input type="text" name="webarbitrator[<?php echo $randomKey; ?>][Email]" class="resetKeyForNew form-control input-sm" value="<?php echo $arbitrator->Email; ?>"/></td>
+							<td><input type="text" name="webarbitrator[<?php echo $randomKey; ?>][ContactNo]" class="resetKeyForNew form-control input-sm" value="<?php echo $arbitrator->ContactNo; ?>"/></td>
+							<td><input type="text" name="webarbitrator[<?php echo $randomKey; ?>][CasesInHand]" class="resetKeyForNew form-control input-sm" value="<?php echo $arbitrator->CasesInHand; ?>"/></td>
+							<td>
+								<?php if((bool)$arbitrator->FilePath): ?>
+									<div class="arb-image">
+										<img src="<?php echo asset($arbitrator->FilePath); ?>" class="img-responsive"/>
+										<input type="hidden" name="webarbitrator[<?php echo $randomKey; ?>][OldImage]" value="<?php echo $arbitrator->FilePath; ?>"/>
+										<input type="hidden" name="webarbitrator[<?php echo $randomKey; ?>][OldImageType]" value="<?php echo $arbitrator->FileType; ?>"/>
+									</div>
+								<?php endif; ?>
+								<input type="file" name="webarbitrator[<?php echo $randomKey; ?>][Image]" class="resetKeyForNew form-control input-sm" />
+							</td>
+						</tr>
+						<?php endforeach; ?>
+						<tr class="notremovefornew">
+							<td>
+								<button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+							</td>
+							<td colspan="7"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="form-actions">
+				<div class="btn-set">
+					<button type="submit" class="btn green">Save</button>
+					<a href="<?php echo URL::to('web/arbitratorlist'); ?>" class="btn red">Cancel</a>
+				</div>
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>WEB-Construction Development Board</title>
+	<link rel="shortcut icon" href="<?php echo asset('assets/cdb/layout/img/favicon.png'); ?>">
+	<?php /*<link href="//vjs.zencdn.net/5.4.6/video-js.min.css" rel="stylesheet">*/ ?>
+	<?php /*<script src="//vjs.zencdn.net/5.4.6/video.min.js"></script>*/ ?>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<meta content="" name="description"/>
+	<meta content="" name="author"/>
+
+	<meta property="og:url" content="<?php echo URL::to(Request::url()); ?>" />
+	<?php if(Request::segment(2)=='viewtrainingdetails'): ?>
+		<meta property="og:type" content="Training" />
+		<meta property="og:title" content="<?php echo $details[0]->TrainingTitle; ?>" />
+		<meta property="og:description" content="Last date of Registration on <?php echo convertDateToClientFormat($trainingDetails->LastDateForRegistration); ?>" />		<meta property="og:image" content="http://www.cdb.gov.bt/uploads/webbanners/PM1.jpg" />
+	<?php elseif(Request::segment(2)=='circulardetails'): ?>
+		<meta property="og:type" content="Circular" />
+		<meta property="og:title" content="<?php echo $circularDetails[0]->Title; ?>" />
+		<meta property="og:description" content="Posted on <?php echo date_format(date_create($circularDetails[0]->CreatedOn),'jS F, Y'); ?>" />
+		<meta property="og:image" content="http://www.cdb.gov.bt/uploads/webbanners/PM1.jpg" />
+	<?php elseif(Request::segment(2)=='advertisementdetails'): ?>
+		<meta property="og:type" content="Advertisement" />
+		<meta property="og:title" content="<?php echo $advertisementDetails[0]->Title; ?>" />
+		<meta property="og:description" content="Posted on <?php echo date_format(date_create($advertisementDetails[0]->CreatedOn),'jS F, Y'); ?>" />
+		<meta property="og:image" content="http://www.cdb.gov.bt/uploads/webbanners/PM1.jpg" />
+	<?php endif; ?>
+	<!-- BEGIN GLOBAL MANDATORY STYLES -->
+	<?php echo HTML::style('http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all'); ?>
+
+	<?php echo HTML::style('assets/global/plugins/font-awesome/css/font-awesome.min.css'); ?>
+
+	<?php echo HTML::style('assets/cdb/layout/css/theme.min.css'); ?>
+
+	<!-- END GLOBAL MANDATORY STYLES -->
+	<?php echo HTML::style('assets/global/plugins/select2/select2.css'); ?>
+
+	<?php echo HTML::style('assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css'); ?>
+
+	<?php echo HTML::style('assets/global/plugins/bootstrap-datepicker/css/datepicker3.css'); ?>
+
+	<?php echo HTML::style('assets/global/plugins/bootstrap-datetimepicker/css/datetimepicker.css'); ?>
+
+	<!-- BEGIN THEME STYLES -->
+	<?php echo HTML::style('assets/global/css/plugins.css'); ?>
+
+	<?php echo HTML::style('assets/cdb/layout/css/layout.css'); ?>
+
+	<?php echo HTML::style('assets/cdb/layout/css/custom.css'); ?>
+
+	<?php echo HTML::style('assets/cdb/layout/css/nanogallery.css'); ?>
+
+	<?php echo HTML::style('assets/cdb/layout/css/nanogallery_clean.css'); ?>
+
+	<style type="text/css">
+		span.angrytext {
+			font-size:16px;
+			color:#4794D3;
+			width:300px;
+			margin:90px auto;
+
+			-webkit-animation: change-color 2s ease 0s infinite normal ;
+			animation: change-color 2s ease 0s infinite normal ;
+		}
+
+		@-webkit-keyframes change-color {
+			0%{
+				color:green;
+			}
+			100%{
+				color:#0063dc;
+			}
+		}
+
+		@keyframes  change-color {
+			0%{
+				color:green;
+			}
+			100%{
+				color:#0063dc;
+			}
+		}
+		p{
+			text-align: justify;
+		}
+		.hr{
+		  display: block;
+		  height: 0;
+		  overflow: hidden;
+		  font-size: 0;
+		  border-top: 2px solid #2f5376;
+		  margin: 12px 0;
+		}
+		.hrwhite{
+		  display: block;
+		  height: 0;
+		  overflow: hidden;
+		  font-size: 0;
+		  border-top: 2px solid #fff;
+		  margin: 12px 0;
+		}
+		.bg-footer{
+			background:#2f5376;
+			padding-top:10px;
+			color:#fff !important;
+			margin-top:10px;
+		}
+		.bg-footer a{
+			color:#fff;
+		}
+		.separate{
+			margin-top:5px;
+		}
+
+		@media (max-width: 992px) {
+			.slider-size {
+				height: 194px; /*important This is your slider height */
+			}
+		}
+		
+		@media (max-width: 991px) {
+			.slider-size {
+				height: 284px; /* This is your slider height */
+			}
+			.board-slider{
+				height:300px;
+			}
+			.carousel {
+				width:100%; 
+				margin:0 auto; /* center your carousel if other than 100% */ 
+			}
+		}
+		@media (min-width: 768px) {
+			.slider-size{
+				height:500px; /* This is your slider height */
+			}
+			.board-slider{
+				height:300px;
+			}
+			.carousel {
+				width:100%; 
+				margin:0 auto; /* center your carousel if other than 100% */ 
+			}
+			.sliderwrapper{
+				margin-top:40px;
+			}
+		}
+        .marquee{
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .marquee a{
+            color: #E4840C;
+        }
+		#main_front {
+                border: 1px solid lightgray;
+                border-radius: 2mm;
+                height: 15cm;
+                
+            }
+            #submission{
+                border: 1px solid lightgray;
+                border-radius: 2mm;
+                background-color: lightblue;
+            }
+            #inner{
+                border: 1px solid lightgray;
+                min-height: 2.5cm;
+                border-radius: 2mm;
+                margin-bottom: 4mm;
+            }
+			.home{
+				margin-top: 2%;
+				margin-bottom: 4%;
+				font-size: 12px;
+			}
+			#btn{
+            border-radius: 4mm; 
+            margin-top: 5%;
+            margin-left: 10%;
+            font-size: 15px; 
+            padding: .5mm;
+            width: 80%;
+        }
+		#search {
+            margin-left: 7.5cm;
+        }
+
+        form {
+            padding-top: 1.5mm;
+        }
+	</style>
+</head>
+<body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) return;
+		js = d.createElement(s); js.id = id;
+		js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+
+</script>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<center><img src="<?php echo asset('assets/cdb/layout/img/dzongkhaorg.png'); ?>" alt="logo"
+					class="img-responsive visible-xs visible-sm" /></center>
+			<img src="<?php echo asset('assets/cdb/layout/img/journal.png'); ?>" alt="logo" class="img-responsive hidden-xs hidden-sm" />
+			<h3 class="companynamecolor visible-xs visible-sm bold" style="color:#2F5376">Construction Development
+				Board</h3>
+		</div>
+	</div>
+</div>
+<div class="separate"></div>
+<div class="container">
+	<nav class="navbar navbar-default navbar-static-top">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+				data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse col-md-9" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+
+				<?php $menuId = 0;
+				$submenuCount = 0; ?>
+				<?php foreach($data as $item): ?>
+					<?php if($item->menuId != $menuId){?>
+					<?php /* <?php echo $item->menuTitle; ?> */ ?>
+					<?php if($menuId != 0){
+					if($submenuCount > 0){ ?>
+			</ul>
+			<?php }?>
+			</li>
+			<?php }?>
+			<li class="dropdown">
+				<?php if($item->MenuRoute != null): ?>
+					<a href="<?php echo URL::to($item->MenuRoute); ?>"><?php echo $item->menuTitle; ?></a>
+				<?php else: ?>
+					<a href="#"><?php echo $item->menuTitle; ?></a>
+				<?php endif; ?>
+				<?php if($item->Has_Submenu == 1){?>
+				<ul class="dropdown-menu">
+					<li><a href="<?php echo URL::to($item->submenuroute); ?>">
+							<?php echo $item->submenu; ?>
+
+						</a></li>
+					<?php }?>
+					<?php $menuId=$item->menuId;
+				  $submenuCount = 0; } 
+				  else{?>
+
+					<li><a href="<?php echo URL::to($item->submenuroute); ?>">
+							<?php echo $item->submenu; ?>
+
+						</a></li>
+
+					<?php $submenuCount++; }?>
+					<?php endforeach; ?>
+				</ul>
+		</div><!-- /.navbar-collapse -->
+
+		<?php if($marqueeEnabled == 1 && Request::segment(1) == 'web' && Request::segment(2) == 'index'): ?>
+			<div class="col-md-7">
+				<h4 class="text-primary"><?php echo $marqueeHeading; ?></h4>
+				<div class="marquee hide col-md-7">
+					<?php foreach($recentTrainings as $recentTraining): ?>
+						<?php if($recentTraining->Type == 'Advertisement'): ?>
+							<?php $append = '?type=adv';
+							$url = 'web/advertisementdetails/'; ?>
+							<?php $desc = substr($recentTraining->TrainingDescription, 0, 60); ?>
+						<?php else: ?>
+							<?php $append = '?type=training';
+							$url = 'web/viewtrainingdetails/'; ?>
+							<?php $desc = $recentTraining->TrainingDescription; ?>
+						<?php endif; ?>
+						<a href="<?php echo URL::to($url . $recentTraining->Id . $append); ?>">
+							<?php if($recentTraining->Title == 'xx'): ?>
+								<?php echo substr(strip_tags(html_entity_decode($recentTraining->TrainingDescription)), 0, 120); ?>...
+								<?php else: ?><?php echo $recentTraining->Title .' - ' .substr(strip_tags(html_entity_decode($recentTraining->TrainingDescription)), 0, 50); ?>...
+							<?php endif; ?>
+						</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<?php endforeach; ?>
+				</div>
+			</div>
+		<?php endif; ?>
+		<div class="col-md-5 <?php if(!($marqueeEnabled == 1 && Request::segment(1) == 'web' && Request::segment(2) == 'index')): ?>  <?php endif; ?>" id="search">
+			<form action="<?php echo URL::to('web/search'); ?>" method="GET" class="form-inline">
+				<div class="col-md-10" style="padding-right:0; padding-left:0;">
+					<input type="text" name="Term" value="<?php echo Input::get('Term'); ?>" class="form-control input-md"
+						placeholder="Search this website" style="width:100%;">
+				</div>
+				<div class="col-md-2" style="padding-left:0; padding-right:0;">
+					<button type="submit" class="btn btn-md btn-success" style="width:100%;background:#26425e;"><i
+							class="fa fa-search"></i>Search</button>
+				</div>
+				<?php /* <div class="clearfix"></div> */ ?>
+			</form>
+			<br>
+		</div>
+	</nav>
+<?php /* </div><!-- /.container-fluid --> */ ?>
+
+<div>
+	<?php if($errors->has()): ?>
+		<div class="alert alert-danger">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+			<h4 class="font-red">You have the following ERRORS!</h4>
+			<?php echo HTML::ul($errors->all()); ?>
+
+		</div>
+	<?php endif; ?>
+	<?php if(Session::has('savedsuccessmessage')): ?>
+		<div class="alert alert-success savedsuccessmessage">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+			<?php echo Session::get('savedsuccessmessage'); ?>
+
+		</div>
+	<?php endif; ?>
+	<?php if(Session::has('customerrormessage')): ?>
+		<div class="alert alert-danger">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+			<?php echo Session::get('customerrormessage'); ?>
+
+		</div>
+	<?php endif; ?>
+</div>
+<div>
+	<div class="row">
+		<div class="col-md-9" id="main_front">
+			<p class="home"><a href="gnhjournal">Current </a>/ Peer Review Process</p>
+			<h4 class="text-primary"><strong>Peer Review Process</strong></h4>
+			<?php echo HTML::decode($content); ?>
+
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3" id="submission">
+					<h4><strong>Open Access</strong></h4> 
+				</div>
+				<div class="col-md-3" id="inner">
+					<?php echo HTML::decode($openaccess); ?>
+
+				</div>
+				<div class="col-md-3" id="submission">
+					<h4><strong>Make Submission</strong></h4> 
+				</div>
+				<div class="col-md-3" id="inner">
+					<p>Click below to make your submission.</p>
+					<a href="journal"><button class="btn btn-primary" id="btn">Make A Submission</button></a>
+				</div>
+				<div class="col-md-3" id="submission">
+					<h4><strong>Information</strong></h4> 
+				</div>
+				<div class="col-md-3" id="inner">
+					<?php echo HTML::decode($information); ?>
+
+				</div>	
+			</div>	
+		</div>
+	</div> 
+	<?php echo $__env->yieldContent('main-content'); ?>
+</div>
+<input name="URL" type="hidden" value="<?php echo URL::to('/'); ?>"/>
+<div class="bg-footer footer">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12 text-center">
+				<h4 class=""><i class="fa fa-link text-danger"></i><i class="fa fa-link text-danger"></i><i class="fa fa-link text-danger"></i> Quick Links <i class="fa fa-link text-danger"></i><i class="fa fa-link text-danger"></i><i class="fa fa-link text-danger"></i></h4>
+				<div class="hrwhite"></div>
+			</div>
+			<div class="col-md-3 col-sm-6 col-xs-6">
+				<ul class="list-unstyled">
+					<li><i class="fa fa-key"></i>&nbsp;<a href="<?php echo URL::to('web/eventcalendar'); ?>">Events</a></li>
+				</ul>
+			</div>
+			<div class="col-md-3 col-sm-6 col-xs-6">
+				<ul class="list-unstyled">
+					<li><i class="fa fa-key"></i>&nbsp;<a href="<?php echo URL::to('web/viewforum'); ?>">Forum</a></li>
+					<li><i class="fa fa-key"></i>&nbsp;<a href="<?php echo URL::to('web/arbitrationforum'); ?>">Arbitration Forum</a></li>
+				</ul>
+			</div>
+			<div class="col-md-3 col-sm-6 col-xs-6">
+				<ul class="list-unstyled">
+					<li><i class="fa fa-key"></i>&nbsp;<a href="<?php echo URL::to('web/allvideos'); ?>">TV Spot</a></li>
+					<li><i class="fa fa-key"></i>&nbsp;<a href="<?php echo URL::to('web/sitemap'); ?>">Site Map</a></li>
+				</ul>
+			</div>
+			<div class="col-md-3 col-sm-6 col-xs-6">
+				<ul class="list-unstyled">
+					<li><i class="fa fa-key"></i>&nbsp;<a href="<?php echo URL::to('web/alladvertisements'); ?>">Advertisements</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="hrwhite"></div>
+		<div class="row">
+			 
+			<div class="col-md-4 col-sm-4 col-xs-4 text-center">
+				<a href="https://www.facebook.com/CDBBHUTAN"><span class="fa fa-facebook-square fa-2x"></span></a>
+				<a href="https://plus.google.com/u/1/communities/108711630567342289499"><span class="fa fa-google-plus-square fa-2x text-danger"></span></a>
+				<!--<a href="#"><span class="fa fa-twitter-square fa-2x text-primary"></span></a>-->
+
+	
+			</div>
+			<div class="col-md-3 col-sm-4 col-xs-4">
+
+				<p class="pull-right"><!--<a href="https://docs.google.com/forms/d/1QWKZipKocfU3FSkMxvR7_KIgUg0U3FooU31X0dnMx1w/edit?ts=59ef1645" target="_blank">CDB Help Desk</a>--> |<a href="mailto:webmaster@cdb.gov.bt">Webmaster</a>| <a href="#disclaimer" role="button" data-toggle="modal">Disclaimer</a> |</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<p class="text-center">&copy;&nbsp;Construction Development Board</p>
+				<p class="text-center"><i><?php echo date('Y'); ?> All Rights Reserved</i></p>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="disclaimer" class="modal fade">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Disclaimer</h4>
+			</div>
+
+			<div class="modal-body">
+				<p>The Construction Development Board shall not be liable for any loss or damage caused by the usage of any information obtained from the website.</p>
+		
+</div>
+		</div>
+	</div>
+</div>
+<?php echo HTML::script('assets/global/plugins/jquery-1.11.0.min.js'); ?>
+
+<?php echo HTML::script('assets/global/plugins/jquery-migrate-1.2.1.min.js'); ?>
+
+<?php echo HTML::script('assets/global/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js'); ?>
+
+<?php echo HTML::script('assets/global/plugins/bootstrap/js/bootstrap.min.js'); ?>
+
+<!-- END CORE PLUGINS -->
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<?php echo HTML::script('assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js'); ?>
+
+<?php echo HTML::script('assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js'); ?>
+
+
+<?php echo HTML::script('assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js'); ?>
+
+<?php echo HTML::script('assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js'); ?>
+
+<?php echo HTML::script('assets/global/plugins/jquery.pause.js'); ?>
+
+<?php echo HTML::script('assets/global/plugins/jquery.easing.min.js'); ?>
+
+<?php echo HTML::script('assets/global/plugins/jquery.marquee.min.js'); ?>
+
+<!-- END PAGE LEVEL PLUGINS -->
+<?php echo HTML::script('assets/global/plugins/select2/select2.min.js'); ?>
+
+<?php echo HTML::script('assets/global/scripts/cdb.js'); ?>
+
+<?php echo HTML::script('assets/global/scripts/common.js?ver='.randomString()); ?>
+
+<?php echo HTML::script('assets/cdb/layout/scripts/layout.js'); ?>
+
+<?php echo HTML::script('assets/cdb/layout/scripts/jquery.nanogallery.js'); ?>
+
+<?php echo HTML::script('assets/cdb/pages/scripts/components-pickers.js'); ?>
+
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+//	var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+//	(function(){
+//		var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+//		s1.async=true;
+//		s1.src='https://embed.tawk.to/56b1d21b6cf3877e0c76cda0/default';
+//		s1.charset='UTF-8';
+//		s1.setAttribute('crossorigin','*');
+//		s0.parentNode.insertBefore(s1,s0);
+//	})();
+</script>
+<!--End of Tawk.to Script-->
+<script>
+    jQuery(document).ready(function() {    
+       	Metronic.init(); // init cdb core components
+		Layout.init(); // init current layout
+//		Demo.init(); // init demo features
+        ComponentsPickers.init();
+    });
+    $('.dropdown').hover(function() {
+        $('.navbar-default .navbar-nav > li.dropdown').hover(function () {
+	        $('ul.dropdown-menu', this).stop(true, true).delay(200).fadeIn(200);
+	        $(this).addClass('open');
+	    }, function () {
+	        $('ul.dropdown-menu', this).stop(true, true).delay(200).fadeOut(200);
+	        $(this).removeClass('open');
+	    });
+    });
+    jQuery(".nanoGallery2").nanoGallery({thumbnailWidth:140,thumbnailHeight:140,
+		thumbnailHoverEffect:[{'name':'scaleLabelOverImage','duration':300},{'name':'borderLighter'}],				
+		colorScheme:'clean',
+		locationHash: false,
+		thumbnailLabel:{display:true,position:'overImageOnTop', align:'center'},
+		viewerDisplayLogo:true
+	});
+
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-83968552-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-83968552-1');
+</script>
+<!--<a title="Web Statistics" href="http://clicky.com/101116779"><img alt="Web Statistics" src="//static.getclicky.com/media/links/badge.gif" border="0" /></a>
+<script src="//static.getclicky.com/js" type="text/javascript"></script>
+<script type="text/javascript">try{ clicky.init(101116779); }catch(e){}</script>
+<noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/101116779ns.gif" /></p></noscript>-->
+<!--
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-7956024561680209",
+    enable_page_level_ads: true
+  });
+</script>-->
+
+</body>
+</html>
+

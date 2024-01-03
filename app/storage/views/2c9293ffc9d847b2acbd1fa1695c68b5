@@ -1,0 +1,214 @@
+<?php $__env->startSection('content'); ?>
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-cogs"></i>Contractors Scoring
+            </div>
+        </div>
+        <div class="portlet-body flip-scroll" style="overflow-x: scroll;">
+            <div class="col-md-10">
+            <table class="table table-bordered table-condensed">
+                <tbody>
+                    <?php foreach($tenderDetails as $tenderDetail): ?>
+                    <tr>
+                        <td class="bold">Work ID:</td>
+                        <td><?php echo $tenderDetail->WorkId; ?></td>
+                        <td class="bold">Class & Category</td>
+                        <td><?php echo $tenderDetail->Classification.", ".$tenderDetail->Category; ?></td>
+                        <td class="bold">Estimated Project Cost</td>
+                        <td><?php echo $tenderDetail->ProjectEstimateCost; ?></td>
+                        <td class="bold">Name of work</td>
+                        <td><?php echo $tenderDetail->NameOfWork; ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+            <?php $rankCount = 1; $grandTotalArray = array(); ?>
+            <?php foreach($contractorScores as $contractorScore): ?>
+                    <?php
+                        $technicalScore = $contractorScore->Score1+$contractorScore->Score2+$contractorScore->Score3+$contractorScore->Score4+$contractorScore->Score5+$contractorScore->Score6;
+                        $preferenceScore = ($contractorScore->Score7+$contractorScore->Score8+$contractorScore->Score9+$contractorScore->Score11)/10;
+                        $financialScore = ($technicalScore>=$qualifyingScore)?(90 * ($lowestBid/$contractorScore->FinancialBidQuoted)):0;
+                        $grandTotal = ($technicalScore>=$qualifyingScore)?($financialScore + $preferenceScore):0;
+                        array_push($grandTotalArray,$grandTotal);
+                        $IsBhutaneseEmp = $contractorScore->IsBhutaneseEmp;
+
+                    ?>
+                <?php endforeach; ?>
+            <table class="table table-bordered table-condensed table-small-font" id="table-print-small">
+                <thead>
+                    <tr>
+                        <th style=""></th>
+                        <th colspan="7" style="background: #22cfc6;" class="text-center">Stage 1 (Technical)</th>
+                        <th colspan="<?php if($IsBhutaneseEmp=='Y')echo '7';else echo '8';?>" style="background: #B1A9EE;" class="text-center">Stage 2 (Financial)</th>
+                        <th colspan="2" style="background: #DCE8AB;" class="text-center"></th>
+                    </tr>
+                    <tr>
+                        <th style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;"></th>
+                        <th colspan="4" class="text-center" style="background: #22cfc6; border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">CAPABILITY</th>
+                        <th colspan="2" class="text-center" style="background: #22cfc6; border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">CAPACITY</th>
+                        <th class="text-center" style="background: #22cfc6;border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">Technical Score</th>
+
+
+                        <th class="text-center" colspan="<?php if($IsBhutaneseEmp=='Y')echo '3';else echo '4';?>" style="background: #B1A9EE; border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">PREFERENCE SCORE</th>
+                        <th colspan="3" style="background: #B1A9EE; border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;"></th>
+                        <th class="text-center" style="background: #B1A9EE; border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">Financial Score</th>
+
+
+                        <th style="background: #DCE8AB; border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;"></th>
+                        <th style="background: #DCE8AB; border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;"></th>
+                    </tr>
+                    <tr>
+                        <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">CDB No</th>
+                        <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">Similar Work</th>
+                        <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">Equipment Score</th>
+                        <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">HR Score</th>
+                        <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">APS</th>
+                        <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">Bid Capacity</th>
+                        <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">Credit Line</th>
+                        <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">100%</th>
+                        <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">Ownership Type</th>
+                        <?php if($IsBhutaneseEmp=='Y'): ?>
+                            <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">Bhutanese Employment</th>
+                        <?php else: ?>
+                            <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">Employment of VTI</th>
+                            <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">Committment for Internships to VTI graduates</th>
+                        <?php endif; ?>
+                        <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">10%</th>
+                        <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">Quoted Amount</th>
+                        <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">Negotiated Amount</th>
+                        <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">(+)(-) Estimation %</th>
+                        <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">90%</th>
+                        <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">Grand Total</th>
+                        <th class="text-center" style="border-top: 1px solid #DDDDDD; border-right: 1px solid #DDDDDD;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+               
+                <?php rsort($grandTotalArray);  ?>
+                <?php foreach($contractorScores as $contractorScore): ?>
+                    <?php
+                        $technicalScore = $contractorScore->Score1+$contractorScore->Score2+$contractorScore->Score3+$contractorScore->Score4+$contractorScore->Score5+$contractorScore->Score6;
+                        $preferenceScore = ($contractorScore->Score7+$contractorScore->Score8+$contractorScore->Score9+$contractorScore->Score11)/10;
+                            $financialScore = ($technicalScore>=$qualifyingScore)?(90 * ($lowestBid/$contractorScore->FinancialBidQuoted)):0;
+                        $grandTotal = ($technicalScore>=$qualifyingScore)?($financialScore + $preferenceScore):0;
+                    ?>
+                    <tr>
+                        <td><?php echo $contractorScore->CDBNo; ?></td>
+                        <td><?php echo number_format($contractorScore->Score1,2); ?></td>
+                        <td><?php echo number_format($contractorScore->Score2,2); ?></td>
+                        <td><?php echo number_format($contractorScore->Score3,2); ?></td>
+                        <td><?php echo number_format($contractorScore->Score4,2); ?></td>
+                        <td><?php echo number_format($contractorScore->Score5,2); ?></td>
+                        <td><?php echo number_format($contractorScore->Score6,2); ?></td>
+                        <td><?php echo number_format($technicalScore,2); ?></td>
+                        <td><?php echo $contractorScore->Score7?number_format($contractorScore->Score7,2):0; ?></td>
+                        
+                        
+                        <?php if($IsBhutaneseEmp=='Y'): ?>
+                            <td><?php echo $contractorScore->Score11?number_format($contractorScore->Score11,2):0; ?></td>
+                        <?php else: ?>
+                            <td><?php echo $contractorScore->Score8?number_format($contractorScore->Score8,2):0; ?></td>
+                            <td><?php echo $contractorScore->Score9?number_format($contractorScore->Score9,2):0; ?></td>
+                        <?php endif; ?>
+
+
+                        <td><?php echo number_format($preferenceScore,2); ?></td>
+                        <td><?php echo number_format($contractorScore->FinancialBidQuoted,2); ?></td>
+                        <td></td>
+                        <td><?php echo round((($contractorScore->FinancialBidQuoted-$tenderDetails[0]->ProjectEstimateCost)/$tenderDetails[0]->ProjectEstimateCost * 100),2); ?></td>
+                        <td><?php echo number_format($financialScore,4); ?></td>
+                        <td><?php echo number_format($grandTotal,4); ?></td>
+                        <td>
+                            <?php if(isset($contractorScore->Score10) && doubleval($technicalScore)>=doubleval($qualifyingScore)): ?>
+                                <?php if($contractorScore->Score10 != NULL  && $contractorScore->Score10 != 0): ?>
+                                    H<?php echo array_search($grandTotal,$grandTotalArray) + 1; ?>
+
+                                    <?php if($tenderDetails[0]->Status != NULL && $contractorScore->ActualStartDate != NULL): ?>
+                                        (<?php echo $tenderDetails[0]->Status; ?>)
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <?php unset($grandTotalArray[array_search($grandTotal,$grandTotalArray)]); ?>
+                                    Not Qualified
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <?php unset($grandTotalArray[array_search($grandTotal,$grandTotalArray)]); ?>
+                                <?php if(!empty($contractorScore->ScoreId)): ?>
+                                    Not Qualified
+                                <?php else: ?>
+                                    Process
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+            <div class="clearfix"></div>
+
+            <h5>Evaluation Committee:</h5>
+            <table class="table table-bordered table-condensed">
+                <thead>
+                <tr>
+                    <th>Sl.No</th>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>Signature</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php $count = 1; ?>
+                <?php $__empty_1 = true; foreach($evaluationCommittee as $member): $__empty_1 = false; ?>
+                <tr>
+                    <td><?php echo $count; ?></td>
+                    <td><?php echo $member->Name; ?></td>
+                    <td><?php echo $member->Designation; ?></td>
+                    <td></td>
+                </tr>
+                    <?php $count++; ?>
+                <?php endforeach; if ($__empty_1): ?>
+                    <tr>
+                        <td colspan="4" class="font-red text-center">No data to display</td>
+                    </tr>
+                <?php endif; ?>
+                <tr><td>Remarks:</td>
+                    <td colspan="3"></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h5>Tender Committee:</h5>
+            <table class="table table-bordered table-condensed">
+                <thead>
+                <tr>
+                    <th>Sl.No</th>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>Signature</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php $count = 1; ?>
+                <?php $__empty_1 = true; foreach($tenderCommittee as $member2): $__empty_1 = false; ?>
+                    <tr>
+                        <td><?php echo $count; ?></td>
+                        <td><?php echo $member2->Name; ?></td>
+                        <td><?php echo $member2->Designation; ?></td>
+                        <td></td>
+                    </tr>
+                    <?php $count++; ?>
+                <?php endforeach; if ($__empty_1): ?>
+                    <tr>
+                        <td colspan="4" class="font-red text-center">No data to display</td>
+                    </tr>
+                <?php endif; ?>
+                <tr><td>Remarks:</td>
+                    <td colspan="3"></td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('horizontalmenumaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

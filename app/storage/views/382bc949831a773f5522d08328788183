@@ -1,0 +1,130 @@
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/global/scripts/etool.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+    <input type="hidden" name="URL" value="<?php echo CONST_APACHESITELINK; ?>"/>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-cogs"></i>List of Works
+		</div>
+	</div>
+	<div class="portlet-body">
+        <?php echo Form::open(array('url'=>'newEtl/listofworksetool','method'=>'get')); ?>
+
+		<div class="form-body">
+			<div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label" for="cdbno">CDB No.:</label>
+                        <input class="form-control" id="cdbno" type="text" class="cdbno" name="cdbno"/>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Contractor/Firm</label>
+                        <div class="ui-widget">
+                            <input type="hidden" class="contractor-id" name="CrpContractorFinalId" value="<?php echo Input::get('ContractorId'); ?>"/>
+                            <input type="text" name="Contractor" value="<?php echo Input::get('Contractor'); ?>" class="form-control contractor-autocomplete"/>
+                        </div>
+                    </div>
+                </div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">Work Id</label>
+						<input type="text" name="WorkId" value="<?php echo Input::get('WorkId'); ?>" class="form-control" class="text-right">
+					</div>
+				</div>
+				<div class="col-md-2">
+					<label class="control-label">&nbsp;</label>
+					<div class="btn-set">
+						<button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                        <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+					</div>
+				</div>
+			</div>
+		</div>
+        <?php echo Form::close(); ?>
+
+        <div class="panel-group accordion" id="tender-accordion">
+        <?php $count = 1; ?>
+        <?php foreach($distinctYears as $distinctYear): ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#tender-accordion" href="#collapse_<?php echo $distinctYear->Year; ?>">
+                        <?php echo $distinctYear->Year; ?>
+
+                    </a>
+                </h4>
+            </div>
+            <div id="collapse_<?php echo $distinctYear->Year; ?>" class="panel-collapse <?php if($count==1): ?><?php echo "in"; ?><?php else: ?><?php echo "collapse"; ?><?php endif; ?>">
+		<table class="table table-bordered table-striped table-condensed flip-content">
+			<thead class="flip-content">
+				<tr>
+                    <th>Work Id</th>
+					<th>
+						 Procuring Agency
+					</th>
+					<th class="">
+						 Contractor
+					</th>
+					<th class="">
+						 Contract Work
+					</th>
+					<th class="">
+						 Category of Work
+					</th>
+					<th>
+						Status
+					</th>
+					<th>
+						Action
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+                <?php $__empty_1 = true; foreach($tenders[$distinctYear->Year] as $tender): $__empty_1 = false; ?>
+				<tr>
+                    <td><?php echo $tender->WorkId; ?></td>
+					<td>
+						 <?php echo $tender->ProcuringAgency; ?>
+
+					</td>
+					<td class="">
+						 <?php echo $tender->Contractor; ?>
+
+					</td>
+					<td class="">
+						 <?php echo $tender->NameOfWork; ?>
+
+					</td>
+					<td class="">
+						 <?php echo $tender->Category; ?>
+
+					</td>
+					<td>
+						<?php echo $tender->Status; ?>
+
+					</td>
+					<td>
+						<a href="<?php echo URL::to('newEtl/workcompletionformetool/'.$tender->Id); ?>" class="btn default btn-xs green-seagreen editaction"><i class="fa fa-edit"></i> Edit</a>
+					</td>
+				</tr>
+				<?php endforeach; if ($__empty_1): ?>
+					<tr>
+						<td colspan="6" class="font-red text-center">No data to display</td>
+					</tr>
+                <?php endif; ?>
+			</tbody>
+		</table>
+		</div>
+        </div>
+        <?php $count++; ?>
+        <?php endforeach; ?>
+        </div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('horizontalmenumaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

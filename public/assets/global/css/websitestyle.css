@@ -1,0 +1,175 @@
+body {
+	margin: 0;
+	padding: 0;
+	font: 1em Georgia, "Times New Roman", Times, serif;
+}
+
+h1, h2, h3 {
+	margin: 0;
+	text-decoration: none;
+	color: #006680;
+}
+
+/*Banner Start*/
+.banner {
+	margin: 0 auto;
+	margin-top:0;
+}
+.banner img {
+	width:100%;
+	height:140px;
+	margin-bottom: 10px;
+}
+.logo2 {
+	text-align:center;
+	font-family:Bell MT;
+	font-size: 2em;
+	color: #000;
+}
+/*Banner End*/
+
+/*Top Menu Start*/
+.top-menu {
+	background: #f5f5f5;
+}
+/*Top Menu End*/
+
+/*Footer Start*/
+.footer {
+	clear: both;
+	width: 100%;
+	background: #f5f5f5;
+}
+.footer ul {
+	list-style: none;
+	margin-top: 4%;
+}
+.footer ul li a {
+	font-size: 1em;
+}
+.footer p {
+	color: #000;
+	line-height: normal;
+	font-size: 1.1em;
+	margin-top: 1%;
+}
+.footer a {
+	color: #000;
+}
+.footer a:hover {
+	color: #000;
+}
+
+.centered-text {
+	text-align: center;
+}
+/*Footer End*/
+
+/*Image Slider Start*/
+.carousel {
+	width:100%;
+}
+.carousel-caption {
+	background: rgba(0,0,0,0.8);
+	border-radius: 5px;
+}
+.carousel-caption p {
+	text-align: center;
+	word-wrap: break-word;
+}
+/*Image Slider End*/
+
+/*Main Content Start*/
+.head-title {
+	font-size: 1.3em;
+	margin-top: -1%;
+}
+
+.main-content {
+	min-height: 42.5%;
+	margin-left: 1%;
+	margin-right: 1%;
+	font-size: 1.2em;
+}
+.main-content h1, h2, h3, h4, h5, h6 {
+	word-wrap: break-word;
+}
+.main-content p {
+	margin-right: 1%;
+	margin-top: 1%;
+	font-size: 1em;
+	text-align: justify;
+	word-wrap: break-word;
+}
+.main-content a:hover {
+	text-decoration: none;
+}
+
+.clear {
+	margin-top: 3%;
+}
+.clear2 {
+	margin-top: 1%;
+}
+
+.box-list {
+	list-style: none;
+}
+.box-list li {
+	margin-left: -4%;
+	border-bottom: 1px #33C943 solid;
+	font-size: 0.8em;
+}
+
+.TextWrap {
+	float: left;
+	margin-right: 1%;
+	margin-bottom: 0.5%;
+	border: 2px #54BB5F solid;
+	border-radius: 0px 3px 3px 0px;
+}
+.TextWrap1 {
+	float: left;
+	margin-right: 1%;
+	margin-bottom: 0.5%;
+	border: 2px #54BB5F solid;
+	border-radius: 0px 3px 3px 0px;
+	width: 450px;
+	height: auto;
+}
+
+.thumbnail2 {
+	width: 135px;
+	height: 135px;
+	float: left;
+	margin-right: 1%;
+	border: 4px #3385FF solid;
+	border-radius: 5px;
+	margin-bottom: 3%;
+}
+.thumbnail3 {
+	height: 100px;
+	width: 100px;
+}
+.thumbnail4 {
+	height: 90px;
+	width: 70px;
+	border: 1px #3385FF solid;
+}
+
+.media-box {
+	min-height: 420px;
+}
+
+#toTop a{
+	padding: 5px 3px;
+	color: #000;
+	position: fixed;
+	bottom: 0;
+	left: 5px;
+	display: none;
+	border: 2px #000 solid;
+	border-radius: 10px;
+}
+
+/*Main Content End*/

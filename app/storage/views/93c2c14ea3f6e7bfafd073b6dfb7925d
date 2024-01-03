@@ -1,0 +1,155 @@
+<?php $__env->startSection('content'); ?>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-gift"></i>
+					<span class="caption-subject font-green-seagreen">Registered Traniees</span>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<div class="form-body table-responsive">
+					<table class="table table-bordered table-condensed dont-flip">
+						<tbody>
+							<?php foreach($tranings as $training): ?>
+							<?php $traningId=$training->Id; ?>
+							<tr>
+								<td class="bold" width="20%">Training Title</td>
+								<td><?php echo $training->TrainingTitle; ?></td>
+							</tr>
+							<tr>
+								<td class="bold" width="20%">Training Description</td>
+								<td><?php echo html_entity_decode($training->TrainingDescription); ?></td>
+							</tr>
+							<tr>
+								<td class="bold">Venue</td>
+								<td><div id="tdVenue"></div></td>
+							</tr>
+							<tr>
+								<td class="bold">Start Date</td>
+								<td><?php echo $training->StartDate; ?></td>
+							</tr>
+							<tr>
+								<td class="bold">End Date</td>
+								<td><?php echo $training->EndDate; ?></td>
+							</tr>
+							<?php endforeach; ?>
+						</tbody>
+						<script>
+							var venue = '<?=$training->TrainingVenue?>';
+							var venuList = venue.split("~");
+							for(var i =1;i<venuList.length;i++)
+							{
+								if(i==1)
+								{
+									venue = venuList[i];
+								}
+								else
+								{
+									venue = venue+", "+venuList[i];
+								}
+							}
+							document.getElementById("tdVenue").innerHTML =venue;
+						</script>
+					</table>
+					<?php if((int)Input::get('ref')==1 || (int)Input::get('ref') == 8): ?>
+					<table class="table table-condensed table-striped table-bordered dont-flip">
+						<thead>
+							<tr class="success">
+								<th>Sl#</th>
+								<th>CDB No.</th>
+								<th>Name of Firm</th>
+								<th>Class</th>
+								<th>Name of Participant</th>
+								<th>CID/Work Permit No. of Participant</th>
+								<th>Designation</th>
+								<th>Qualification</th>
+								<th>Email</th>
+								<th>Contact No.</th>
+								<th>Registered On</th>
+							</tr>	
+						</thead>
+						<tbody>
+							<?php $sl=1; ?>
+							<?php $__empty_1 = true; foreach($listOfRegisteredTraniees as $listOfRegisteredTraniee): $__empty_1 = false; ?>
+							<tr>
+								<td><?php echo $sl; ?></td>
+								<td><?php echo $listOfRegisteredTraniee->CDBNo; ?></td>
+								<td><?php echo $listOfRegisteredTraniee->NameOfFirm; ?></td>
+								<td><?php echo $listOfRegisteredTraniee->ClassCode; ?></td>
+								<td><?php echo $listOfRegisteredTraniee->FullName; ?></td>
+								<td><?php echo $listOfRegisteredTraniee->CIDNoOfParticipant; ?></td>
+								<td><?php echo $listOfRegisteredTraniee->Designation; ?></td>
+								<td><?php echo $listOfRegisteredTraniee->Qualification; ?></td>
+								<td><?php echo $listOfRegisteredTraniee->Email; ?></td>
+								<td><?php echo $listOfRegisteredTraniee->ContactNo; ?></td>
+								<td><?php echo convertDateTimeToClientFormat($listOfRegisteredTraniee->CreatedOn); ?></td>
+							</tr>
+							<?php $sl++; ?>
+							<?php endforeach; if ($__empty_1): ?>
+							<tr>
+								<td colspan="11" class="text-center font-red">No registered traniees</td>
+							</tr>
+							<?php endif; ?>
+						</tbody>
+					</table>
+					<?php else: ?>
+					<table class="table table-condensed table-striped table-bordered dont-flip">
+						<thead>
+							<tr class="success">
+								<th>Sl#</th>
+								<th>Name of Participant</th>
+								<th>CID/Work Permit No. of Participant</th>
+								<th>Agency</th>
+								<th>Designation</th>
+								<th>Email</th>
+								<th>Contact No.</th>
+								<th>Registered On</th>
+								<th>Venue</th>
+								<th>Attachments</th>
+							</tr>	
+						</thead>
+						<tbody>
+							<?php $sl=1; ?>
+							<?php $__empty_1 = true; foreach($listOfRegisteredTraniees as $listOfRegisteredTraniee): $__empty_1 = false; ?>
+							<tr>
+								<td><?php echo $sl; ?></td>
+								<td><?php echo $listOfRegisteredTraniee->FullName; ?></td>
+								<td><?php echo $listOfRegisteredTraniee->CIDNoOfParticipant; ?></td>
+								<td><?php echo $listOfRegisteredTraniee->Agency; ?></td>
+								<td><?php echo $listOfRegisteredTraniee->Designation; ?></td>
+								<td><?php echo $listOfRegisteredTraniee->Email; ?></td>
+								<td><?php echo $listOfRegisteredTraniee->ContactNo; ?></td>
+								<td><?php echo convertDateTimeToClientFormat($listOfRegisteredTraniee->CreatedOn); ?></td>
+								<td><?php echo $listOfRegisteredTraniee->venue; ?></td>
+								<td>
+									<?php if((bool)$listOfRegisteredTraniee->FilePath): ?>
+										<a target="_blank" href="<?php echo asset($listOfRegisteredTraniee->FilePath); ?>">Attachment</a>
+									<?php else: ?>
+										--
+									<?php endif; ?>
+								</td>
+							</tr>
+							<?php $sl++; ?>
+							<?php endforeach; if ($__empty_1): ?>
+							<tr>
+								<td colspan="11" class="text-center font-red">No registered traniees</td>
+							</tr>
+							<?php endif; ?>
+						</tbody>
+					</table>
+					<?php endif; ?>
+				</div>
+				<div class="form-controls">
+					<div class="btn-set">
+						<a href="<?php echo URL::to('web/registeredfortraining/'.$traningId.'?ref='.Input::get('ref').'&export=print'); ?>" class="btn blue btn-sm" target="_blank"><i class="fa fa-print"></i> Print Registered Traniees</a>
+					</div>
+				</div>	
+			</div>
+		</div>	
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

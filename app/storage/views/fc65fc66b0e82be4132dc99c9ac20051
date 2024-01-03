@@ -1,0 +1,51 @@
+<html>
+    <body>
+        <table>
+            <thead>
+            <tr>
+                <th colspan="12">List of Equipment Registered with Contractor</Ri:a></th>
+            </tr>
+         
+            <tr><th colspan="12"></th></tr>
+            <tr>
+                <th>
+                    Sl.No.
+                </th>
+               
+                <th>
+                    Name Of Firm
+                </th>
+                <th>
+                    Equipment Name
+                </th>
+                <th class="">
+                    Registration No.
+                </th>
+                <th class="">
+                    CDBNo
+                </th>
+                      
+            </tr>
+            </thead>
+            <tbody>
+            <?php $start = 1; ?>
+            <?php $__empty_1 = true; foreach($contractorLists as $contractor): $__empty_1 = false; ?>
+                <tr>
+                    <td><?php echo $start++; ?></td>
+                    <td><?php echo $contractor->Firm; ?></td>
+                    <td><?php echo $contractor->EquimentName; ?></td>
+                    <td><?php echo $contractor->RegistrationNo; ?></td>
+                    <td><?php echo $contractor->CDBNo; ?></td>
+                
+       
+                </tr>
+                <?php $start++; ?>
+            <?php endforeach; if ($__empty_1): ?>
+                <tr>
+                    <td colspan="12" class="text-center font-red">No data to display!</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </body>
+</html>

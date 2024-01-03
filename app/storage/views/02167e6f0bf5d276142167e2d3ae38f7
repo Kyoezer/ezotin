@@ -1,0 +1,126 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+            <?php $parameters = Input::all(); $parameters['export']='excel'; $route = 'etoolrpt.hindrancereport';?>
+            <?php if(!Input::has('export')): ?>
+            <i class="fa fa-cogs"></i>Hindrance Report&nbsp;&nbsp;<?php if(!Input::has('export')): ?>  <a href="<?php echo route($route,$parameters); ?>" class="btn btn-sm green"><i class="fa fa-file-excel-o"></i> Export to Excel </a> <?php $parameters['export'] = 'print'; ?><a href="<?php echo route($route,$parameters); ?>" class="btn btn-sm purple" target="_blank"><i class="fa fa-print"></i> Print</a><?php endif; ?>
+		    <?php endif; ?>
+        </div>
+	</div>
+	<div class="portlet-body flip-scroll">
+        <?php if(Input::get('export') != "print"): ?>
+        <?php echo Form::open(array('url'=>Request::url(),'method'=>'get')); ?>
+
+		<div class="form-body">
+			<div class="row">
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">CDB No</label>
+						<input type="text" name="CDBNo" value="<?php echo Input::get('CDBNo'); ?>" class="form-control" />
+					</div>
+				</div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Work Id</label>
+                        <input type="text" name="WorkId" value="<?php echo Input::get('WorkId'); ?>" class="form-control" />
+                    </div>
+                </div>
+                <?php if(!Input::has('export')): ?>
+                    <div class="col-md-2">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="btn-set">
+                            <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                            <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                        </div>
+                    </div>
+                <?php endif; ?>
+			</div>
+		</div>
+        <?php echo Form::close(); ?>
+
+        <?php else: ?>
+            <?php foreach($parametersForPrint as $key=>$value): ?>
+                <b><?php echo $key; ?>: <?php echo $value; ?></b><br>
+            <?php endforeach; ?>
+            <br/>
+        <?php endif; ?>
+		<table class="table table-bordered table-striped table-condensed flip-content" id="contractorhumanresource">
+			<thead class="flip-content">
+				<tr>
+                    <th>
+                        Sl.No.
+                    </th>
+					<th>
+						Firm
+					</th>
+                    <th>Name of Work</th>
+                    <th>WorkId</th>
+                    <th>Amount</th>
+					<th class="">
+						 Start Date
+					</th>
+                    <th class="">
+                        End Date
+                    </th>
+                    <th class="">
+                        No. of Days
+                    </th>
+                    <th class="">
+                        Remarks
+                    </th>
+				</tr>
+			</thead>
+			<tbody>
+            <?php $count = 1; ?>
+            <?php $__empty_1 = true; foreach($hindranceWorks as $data): $__empty_1 = false; ?>
+				<tr>
+                    <td><?php echo $count++; ?></td>
+                    <td><?php echo $data->Contractors; ?></td>
+                    <td><?php echo $data->NameOfWork; ?></td>
+                    <td><?php echo $data->WorkId; ?></td>
+                    <?php if($data->CmnWorkExecutionStatusId == CONST_CMN_WORKEXECUTIONSTATUS_AWARDED): ?>
+                        <td>
+                            <?php echo $data->AwardedAmount; ?>
+
+                        </td>
+                        <td>
+                            <?php echo convertDateToClientFormat($data->ActualStartDate); ?>
+
+                        </td>
+                        <td>
+                            <?php echo convertDateToClientFormat($data->ActualEndDate); ?>
+
+                        </td>
+                    <?php else: ?>
+                        <td>
+                            <?php echo $data->ContractPriceFinal; ?>
+
+                        </td>
+                        <td>
+                            <?php echo convertDateToClientFormat($data->CommencementDateFinal); ?>
+
+                        </td>
+                        <td>
+                            <?php echo convertDateToClientFormat($data->CompletionDateFinal); ?>
+
+                        </td>
+                    <?php endif; ?>
+                    <td><?php echo $data->HindranceNoOfDays; ?></td>
+                    <td><?php echo $data->Remarks; ?></td>
+				</tr>
+            <?php endforeach; if ($__empty_1): ?>
+                <tr>
+                    <td colspan="9" class="text-center font-red">No data to display!</td>
+                </tr>
+            <?php endif; ?>
+			</tbody>
+		</table>
+	</div>
+    <?php echo $hindranceWorks->links(); ?>
+
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

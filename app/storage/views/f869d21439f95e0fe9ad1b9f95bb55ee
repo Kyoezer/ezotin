@@ -1,0 +1,261 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php echo HTML::script('assets/global/scripts/consultant.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<?php if((int)$reRegistration==0): ?>
+<div id="deregister" class="modal fade" role="dialog" aria-labelledby="deregister" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h4 class="modal-title font-green-seagreen">Are you sure you want to deregister this contractor?</h4>
+			</div>
+			<?php echo Form::open(array('url' => 'consultant/blacklistandderegister','role'=>'form')); ?>
+
+			<input type="hidden" name="ConsultantReference" value="" class="deregisterid"/>
+			<input type="hidden" name="CmnApplicationRegistrationStatusId" value="<?php echo CONST_CMN_APPLICATIONREGISTRATIONSTATUS_DEREGISTERED; ?>">
+			<div class="modal-body">
+				<h4 class="displaycontractorname"></h4>
+				<h4 class="displaycontractorcdbno"></h4>
+				<div class="form-group">
+					<label class="control-label">Date</label>
+					<div class="input-icon right input-medium">
+						<i class="fa fa-calendar"></i>
+						<input type="text" name="DeRegisteredDate" value="<?php echo date('d-m-Y'); ?>" class="form-control datepicker input-sm required input-medium" readonly="readonly">
+					</div>
+				</div>
+				<div class="form-group">
+					<label>Remarks</label>
+					<textarea name="DeregisteredRemarks" class="form-control required" rows="3"></textarea>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn green">Deregister</button>
+				<button class="btn red" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+</div>
+<div id="blacklist" class="modal fade" role="dialog" aria-labelledby="blacklist" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h4 class="modal-title font-green-seagreen">Are you sure you want to Revoke/Suspend/Debarred this contractor?</h4>
+			</div>
+			<?php echo Form::open(array('url' => 'consultant/blacklistandderegister','role'=>'form')); ?>
+
+			<input type="hidden" name="ConsultantReference" value="" class="blacklistId"/>
+			<input type="hidden" name="CmnApplicationRegistrationStatusId" value="<?php echo CONST_CMN_APPLICATIONREGISTRATIONSTATUS_BLACKLISTED; ?>">
+			<div class="modal-body">
+				<h4 class="displaycontractorname"></h4>
+				<h4 class="displaycontractorcdbno"></h4>
+				<div class="form-group">
+					<label class="control-label">Date</label>
+					<div class="input-icon right input-medium">
+						<i class="fa fa-calendar"></i>
+						<input type="text" name="BlacklistedDate" class="form-control datepicker input-sm required input-medium" value="<?php echo date('d-m-Y'); ?>" readonly="readonly">
+					</div>
+				</div>
+				<div class="form-group">
+					<label>Remarks</label>
+					<textarea name="BlacklistedRemarks" class="form-control required" rows="3"></textarea>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn green">Blacklist</button>
+				<button class="btn red" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+</div>
+<?php else: ?>
+<div id="reregister" class="modal fade" role="dialog" aria-labelledby="reregister" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h4 class="modal-title font-green-seagreen">Are you sure you want to re-register this consultant?</h4>
+			</div>
+			<?php echo Form::open(array('url' => 'consultant/blacklistandderegister','role'=>'form')); ?>
+
+			<input type="hidden" name="ConsultantReference" value="" class="reregisterId"/>
+			<input type="hidden" name="CmnApplicationRegistrationStatusId" value="<?php echo CONST_CMN_APPLICATIONREGISTRATIONSTATUS_APPROVED; ?>">
+			<div class="modal-body">
+				<h4 class="displaycontractorname"></h4>
+				<h4 class="displaycontractorcdbno"></h4>
+				<div class="form-group">
+					<label class="control-label">Date</label>
+					<div class="input-icon right input-medium">
+						<i class="fa fa-calendar"></i>
+						<input type="text" name="ReRegistrationDate" class="form-control datepicker input-sm required input-medium" readonly="readonly" value="<?php echo date('d-m-Y'); ?>">
+					</div>
+				</div>
+				<div class="form-group">
+					<label>Remarks</label>
+					<textarea name="ReRegistrationRemarks" class="form-control required" rows="3"></textarea>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn green">Re-Register</button>
+				<button class="btn red" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+</div>
+<?php endif; ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject"><?php echo $captionSubject; ?></span>
+			<span class="caption-helper">The consultants listed below are all <span class="font-red-thunderbird bold"><?php echo $captionHelper; ?></span> consultants.</span>
+		</div>
+	</div>
+	<div class="portlet-body flip-scroll">
+		<div class="form-body">
+			<?php echo Form::open(array('url' =>Request::URL(),'role'=>'form','method'=>'get')); ?>
+
+			<div class="row">
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">CDB No.</label>
+						<input type="text" name="CDBNo" class="form-control" value="<?php echo $CDBNo; ?>"/>
+					</div>
+				</div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Consultant/Firm</label>
+                        <div class="ui-widget">
+                            <input type="hidden" class="consultant-id" name="CrpConsultantId" value="<?php echo Input::get('CrpConsultantId'); ?>"/>
+                            <input type="text" name="Consultant" value="<?php echo Input::get('Consultant'); ?>" class="form-control consultant-autocomplete"/>
+                        </div>
+                    </div>
+                </div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">Trade License No.</label>
+						<input type="text" name="TradeLicenseNo" class="form-control" value="<?php echo Input::get('TradeLicenseNo'); ?>">
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label class="control-label">Approved Between</label>
+						<div class="input-group input-large date-picker input-daterange">
+							<input type="text" name="FromDate" class="form-control date-picker" value="<?php echo Input::get('FromDate'); ?>" />
+						<span class="input-group-addon">
+						to </span>
+							<input type="text" name="ToDate" class="form-control date-picker" value="<?php echo Input::get('ToDate'); ?>" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">No. of Rows</label>
+                        <?php echo Form::select('Limit',array(10=>10,20=>20,30=>30,'All'=>'All'),Input::has('Limit')?Input::get('Limit'):20,array('class'=>'form-control')); ?>
+
+                    </div>
+                </div>
+				<div class="col-md-2">
+					<label class="control-label">&nbsp;</label>
+					<div class="btn-set">
+						<button type="submit" class="btn blue-hoki btn-sm">Search</button>
+						<a href="<?php echo Request::URL(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+					</div>
+				</div>
+			</div>
+			<?php echo FOrm::close(); ?>
+
+		</div>
+		<table class="table table-bordered table-striped table-condensed flip-content">
+			<thead class="flip-content">
+				<tr>
+					<th>
+						CDB No.
+					</th>
+					<th class="">
+						 Name of Firm
+					</th>
+					<th class="">
+						 Country
+					</th>
+					<th class="">
+						 Dzongkhag
+					</th>
+					<th>
+						Mobile#
+					</th>
+					<th>
+						Tel#
+					</th>
+					<th>
+						Email
+					</th>
+					<th>
+						Action
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php $__empty_1 = true; foreach($consultantLists as $consultantList): $__empty_1 = false; ?>
+				<tr>
+					<td>
+						<input type="hidden" value="<?php echo $consultantList->Id; ?>" class="consultantid" />
+						<input type="hidden" value="<?php echo $consultantList->NameOfFirm; ?>" class="consultantname" />
+						<input type="hidden" value="<?php echo $consultantList->CDBNo; ?>" class="consultantcdbno" />
+						 <?php echo $consultantList->CDBNo; ?>
+
+					</td>
+					<td>
+						<?php echo $consultantList->NameOfFirm; ?> 
+					</td>
+					<td class="">
+						 <?php echo $consultantList->Country; ?>
+
+					</td>
+					<td class="">
+						 <?php echo $consultantList->Dzongkhag; ?>
+
+					</td>
+					<td class="">
+						 <?php echo $consultantList->MobileNo; ?>
+
+					</td>
+					<td>
+						<?php echo $consultantList->TelephoneNo; ?>
+
+					</td>
+					<td>
+						<?php echo $consultantList->Email; ?>
+
+					</td>
+					<td>
+						<?php if((int)$reRegistration==0): ?>
+							<?php if((int)$type==1): ?>
+							<a href="#deregister" data-toggle="modal" class="deregisterconsultant">Deregister</a>
+							<?php else: ?>
+							<a href="#blacklist" data-toggle="modal" class="blacklistconsultant">Blacklist</a>
+							<?php endif; ?>
+						<?php else: ?>
+							<a href="#reregister" data-toggle="modal" class="reregistrationconsultant">Re-Registration</a>
+						<?php endif; ?>
+					</td>
+				</tr>
+				<?php endforeach; if ($__empty_1): ?>
+				<tr>
+					<td class="font-red text-center" colspan="8">No data to display</td>
+				</tr>
+				<?php endif; ?>
+			</tbody>
+		</table>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

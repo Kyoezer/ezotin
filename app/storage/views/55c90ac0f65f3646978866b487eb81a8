@@ -1,0 +1,35 @@
+<?php $__env->startSection('main-content'); ?>
+<div class="row">
+	<div class="col-md-12">
+<?php foreach($circularDetails as $circularDetail): ?>
+
+
+	<div class="col-md-10">
+		<h4 style="margin-left:-16px;" class="text-primary"><strong><?php echo e($circularDetail->Title); ?></strong></h4>
+		<iframe src="https://www.facebook.com/plugins/share_button.php?href=<?php echo Request::url(); ?>&layout=button_count&size=small&mobile_iframe=true&width=88&height=20&appId" width="88" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+		<br>
+	</div>
+	<div class="col-md-2">
+		<?php for($i=1; $i<=12;$i++): ?>
+			&nbsp;
+		<?php endfor; ?>
+		<a href="<?php echo URL::to(Input::get('backRoute')); ?>" class="btn btn-primary">Back</a>
+	</div><div class="clearfix"></div>
+
+	<span style="font-size: 9pt;"><strong>Posted on <?php echo date_format(date_create($circularDetail->CreatedOn),'jS F, Y'); ?></strong></span><br><br>
+
+	<p><?php echo html_entity_decode($circularDetail->Content); ?></p>
+
+	<?php if($circularDetail->Attachment!=NULL){ ?><a href="<?php echo asset($circularDetail->Attachment); ?>" class="btn btn-large btn-primary">Download Attachment <span class="fa fa-download"></span></a><?php } ?>
+
+	<?php if($circularDetail->ImageUpload != NULL) { ?>
+	<?php echo HTML::image($circularDetail->ImageUpload,'',array('class'=>'Textwrap1 img-responsive')); ?>
+
+	<?php } ?>
+	<div class="clear2"></div>
+
+<?php endforeach; ?>
+	</div>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('websitemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

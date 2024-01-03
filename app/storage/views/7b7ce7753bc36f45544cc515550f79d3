@@ -1,0 +1,192 @@
+<?php $__env->startSection('lastcdbno'); ?>
+<div class="page-toolbar">
+	<div id="dashboard-report-range" class="pull-right tooltips btn btn-fit-height grey-cascade" data-placement="top" data-original-title="Last used Engineer CDB No.">
+		<span class="thin visible-lg-inline-block">Last used SP No.: <span class="bold"><?php echo lastUsedSpecializedTradeNo();; ?></span></span>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div id="changeexpirydatemodal" class="modal fade"  data-keyboard="false" data-backdrop="static" role="dialog" aria-labelledby="modalmessagebox" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h4 class="modal-title font-red-intense">Change expiry Date</h4>
+			</div>
+			<?php echo Form::open(array('url'=>'all/changeexpirydate','role'=>'form')); ?>
+
+			<div class="modal-body">
+				<div class="col-md-8">
+					<h5><strong>Current Registration Expiry Date: </strong><span id="current-expdate"></span></h5>
+				</div>
+				<br><br><div class="clearfix"></div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<input type="hidden" name="Model" value="SpecializedTradeFinalModel"/>
+						<input type="hidden" name="RedirectUrl" value="specializedtrade/editlist"/>
+						<input type="hidden" name="Id" id="Id"/>
+						<label for="expiry-date" class="control-label">New Expiry Date</label>
+						<input type="text" id="expiry-date" class="datepicker form-control required" name="RegistrationExpiryDate"/>
+					</div>
+				</div>
+			</div><div class="clearfix"></div>
+			<div class="modal-footer">
+				<button class="btn blue" type="submit">Save</button>
+				<button class="btn green-seagreen" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+</div>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject"><?php echo $pageTitle; ?></span>
+		</div>
+	</div>
+	<div class="portlet-body flip-scroll">
+		<div class="form-body">
+			<?php echo Form::open(array('url' =>Request::URL(),'role'=>'form','method'=>'get')); ?>
+
+			<div class="row">
+				<div class="col-md-2">
+					<div class="form-group">
+						<label class="control-label">SP No.</label>
+						<input type="text" name="SPNo" class="form-control" value="<?php echo $SPNo; ?>">
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label class="control-label">Specialized Trade</label>
+						<select name="CrpSpecializedTradeId" class="form-control select2me">
+							<option value="">---SELECT ONE---</option>
+							<?php foreach($specializedTradesListsAll as $specializedTradesListAll): ?>
+							<option value="<?php echo $specializedTradesListAll->Id; ?>" <?php if($specializedTradesListAll->Id==$specializedTradeId): ?>selected="selected"<?php endif; ?>><?php echo $specializedTradesListAll->Name; ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">No. of Rows</label>
+                        <?php echo Form::select('Limit',array(10=>10,20=>20,30=>30,'All'=>'All'),Input::has('Limit')?Input::get('Limit'):20,array('class'=>'form-control')); ?>
+
+                    </div>
+                </div>
+				<div class="col-md-2">
+					<label class="control-label">|</label>
+					<div class="btn-set">
+						<button type="submit" class="btn blue-hoki btn-sm">Search</button>
+						<a href="<?php echo Request::Url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+					</div>
+				</div>
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+		<table class="table table-bordered table-striped table-condensed flip-content">
+			<thead class="flip-content">
+				<tr>
+					<th>
+						SP No.
+					</th>
+					<th>
+						 Application Dt.
+					</th>
+					<th>
+						 Name
+					</th>
+					<th>
+						CID No.
+					</th>
+					<th>
+						 Dzongkhag
+					</th>
+					<th>
+						Mobile#
+					</th>
+					<th>
+						Telephone#
+					</th>
+					<th>
+						Email
+					</th>
+<th>Status</th>
+					<th>
+						Certificate
+					</th>
+					<th>
+						Info
+					</th>
+					<th>
+						Expiry Date
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php $__empty_1 = true; foreach($specializedTradeLists as $specializedTradeList): $__empty_1 = false; ?>
+				<tr>
+					<td>
+						 <?php echo $specializedTradeList->SPNo; ?>
+
+					</td>
+					<td>
+						 <?php echo convertDateToClientFormat($specializedTradeList->ApplicationDate); ?>
+
+					</td>
+					<td>
+						<?php echo $specializedTradeList->SpecializedTradeName; ?> 
+					</td>
+					<td>
+						<?php echo $specializedTradeList->CIDNo; ?>
+
+					</td>
+					<td>
+						 <?php echo $specializedTradeList->Dzongkhag; ?>
+
+					</td>
+					<td>
+						 <?php echo $specializedTradeList->MobileNo; ?>
+
+					</td>
+					<td>
+						 <?php echo $specializedTradeList->TelephoneNo; ?>
+
+					</td>
+					<td>
+						<?php echo $specializedTradeList->Email; ?>
+
+					</td>
+			<td>
+						<?php if((int)$specializedTradeList->StatusReference == 12003): ?>
+							<?php if($specializedTradeList->RegistrationExpiryDate<=date('Y-m-d G:i:s')): ?>
+									<p class="font-red bold warning">Expired </p>
+							<?php else: ?>
+								Valid/Approved
+							<?php endif; ?>
+						<?php else: ?>
+							<p class="font-red bold warning"><?php echo $specializedTradeList->Status; ?></p>
+						<?php endif; ?>
+					</td>					<td>
+						<a href="<?php echo URL::to('specializedtrade/certificate/'.$specializedTradeList->Id); ?>" class="btn default btn-xs blue" target='_blank'><i class="fa fa-edit"></i> View/Print</a>
+					</td>
+					<td>
+						<a href="<?php echo URL::to($link.$specializedTradeList->Id); ?>" class="btn default btn-xs green-seagreen <?php if($linkText=="Edit"): ?><?php echo "editaction"; ?><?php endif; ?>" <?php if($linkText=="View/Print"): ?><?php echo "target='_blank'"; ?><?php endif; ?>><i class="fa fa-edit"></i> <?php echo $linkText; ?></a>
+					</td>
+					<td>
+						<a href="#changeexpirydatemodal" data-expirydate="<?php echo convertDateToClientFormat($specializedTradeList->RegistrationExpiryDate); ?>" data-id="<?php echo $specializedTradeList->Id; ?>" data-toggle="modal" class="change-expirydate btn default btn-xs green"><i class="fa fa-edit"></i> Change</a>
+					</td>
+				</tr>
+				<?php endforeach; if ($__empty_1): ?>
+				<tr>
+					<td class="font-red text-center" colspan="9">No data to display</td>
+				</tr>
+				<?php endif; ?>
+			</tbody>
+		</table>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

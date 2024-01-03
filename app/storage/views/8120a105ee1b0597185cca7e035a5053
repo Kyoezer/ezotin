@@ -1,0 +1,120 @@
+<?php $__env->startSection('main-content'); ?>
+<div class="row">
+	<div class="col-md-12">
+		<span class="angrytext" >Please read the following carefully:
+				To download tender click on view.
+				If the tender is available for download
+				a blue button download tender document
+				will be seen. Click to download.
+				Before the download starts you will need
+				to provide your email or contact number.
+				Once you have provided the above detail,
+				the download will automatically start.
+				If the tender is not available for
+				download the blue button will not be
+				visible. In such cases kindly get in
+				touch with relevant procuring agency and
+				contact person provided in the tender
+				notice.</span> <br><br>
+<?php echo Form::open(array('url'=>'web/tenderlist','method'=>'get', 'class'=>'form-group')); ?>
+
+	<h4 class="text-primary"><strong><i class="fa fa-list"></i> List of Tenders</strong></h4>
+	<div class="alert alert-info">
+		<p>Search tenders by selecting any parameters below. If you select two parameters then the result will be combination of both the parameters.</p>
+	</div>
+	<div class="row">
+        <div class="col-md-3">
+            <label class="control-label">Classification:</label>
+            <select class="form-control" name="CmnContractorClassificationId">
+				<option value="">---SELECT ONE---</option>
+				<?php foreach($contractorClassificationId as $contractorClassification): ?>
+					<option value="<?php echo $contractorClassification->Id; ?>" <?php if($contractorClassification->Id == Input::get('CmnContractorClassificationId')): ?>selected="selected"<?php endif; ?>><?php echo $contractorClassification->Name.' ('.$contractorClassification->Code.')'; ?></option>
+				<?php endforeach; ?>
+			</select>
+        </div>
+        <div class="col-md-3">
+            <label class="control-label">Category:</label>
+            <select class="form-control" name="CmnContractorCategoryId">
+				<option value="">---SELECT ONE---</option>
+				<?php foreach($contractorCategoryId as $contractorCategory): ?>
+					<option value="<?php echo $contractorCategory->Id; ?>" <?php if($contractorCategory->Id == Input::get('CmnContractorCategoryId')): ?>selected="selected"<?php endif; ?>><?php echo $contractorCategory->Name.' ('.$contractorCategory->Code.')'; ?></option>
+				<?php endforeach; ?>
+			</select>
+        </div>
+		<div class="col-md-2">
+			<label class="control-label">From</label>
+			<div class="input-icon right">
+				<input type="text" name="FromDate" class="form-control datepicker" value="<?php echo Input::get('FromDate'); ?>" readonly="readonly" placeholder="SELECT DATE">
+			</div>
+		</div>
+		<div class="col-md-2">
+			<label class="control-label">To</label>
+			<div class="input-icon right">
+				<input type="text" name="ToDate" class="form-control datepicker" value="<?php echo Input::get('ToDate'); ?>" readonly="readonly" placeholder="SELECT DATE">
+			</div>
+		</div>
+		<div class="col-md-3">
+			<label class="control-label">Agency:</label>
+			<select class="form-control" name="CmnProcuringAgencyId">
+				<option value="">---SELECT ONE---</option>
+				<?php foreach($agencies as $agency): ?>
+					<option value="<?php echo $agency->Id; ?>" <?php if($agency->Id == Input::get('CmnProcuringAgencyId')): ?>selected="selected"<?php endif; ?>><?php echo $agency->Name; ?></option>
+				<?php endforeach; ?>
+			</select>
+		</div>
+        <div class="col-md-4">
+        	<label>&nbsp;</label>
+			<div class="btn-set">
+				<button type="submit" class="btn btn-primary">Search</button>
+				<a href="<?php echo Request::url(); ?>" class="btn btn-danger">Clear</a>
+			</div>
+		</div>
+	</div>
+<?php echo Form::close(); ?>
+
+
+<div class="row">
+	<div class="col-md-12 col-xs-12 col-sm-12 table-responsive">
+		<table class="table table-bordered table-condensed table-striped" id="tenderlist">
+			<thead>
+				<tr class="success">
+					<th>Sl#</th>
+					<?php /*<th>Work Id</th>*/ ?>
+					<th>Procuring Agency</th>
+					<th>Name of Work</th>
+					<th>Description of Work</th>
+					<th>Dzongkhag</th>
+					<th>Category</th>
+					<th>Classification</th>
+					<th>Contract Period</th>
+					<th width="10%">Dt. of Closing Sale of Tender</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php $__empty_1 = true; foreach($listoftenders as $listoftender): $__empty_1 = false; ?>
+					<tr>
+						<td><?php echo $slno++; ?></td>
+						<?php /*<td><?php echo $listoftender -> WorkId; ?></td>*/ ?>
+						<td><?php echo $listoftender -> ProcuringAgencyName; ?></td>
+						<td><?php echo strip_tags($listoftender -> NameOfWork); ?></td>
+						<td><?php echo HTML::decode(strip_tags($listoftender -> DescriptionOfWork)); ?></td>
+						<td><?php echo $listoftender -> Dzongkhag; ?></td>
+						<td><?php echo $listoftender -> WorkCategory; ?></td>
+						<td><?php echo $listoftender -> WorkClassification; ?></td>
+						<td><?php echo $listoftender -> ContractPeriod; ?></td>
+						<td><?php echo convertDateToClientFormat($listoftender -> DateOfClosingSaleOfTender); ?></td>
+						<td><a href="<?php echo URL::to('web/webtenderdetails/'.$listoftender -> Id); ?>" class="btn btn-info btn-sm">View</a></td>
+					</tr>
+				<?php endforeach; if ($__empty_1): ?>
+					<tr>
+						<td class="font-red text-center" colspan="10" style="color:#FE0000;">No data to display</td>
+					</tr>
+				<?php endif; ?>
+			</tbody>
+		</table>
+	</div>
+</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('websitemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

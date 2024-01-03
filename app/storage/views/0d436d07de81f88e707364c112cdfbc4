@@ -1,0 +1,113 @@
+<?php $__env->startSection('content'); ?>
+<?php /*<div id="deletecommitee" class="modal fade" role="dialog" aria-labelledby="deletecommitee" aria-hidden="true">*/ ?>
+	<?php /*<div class="modal-dialog">*/ ?>
+		<?php /*<div class="modal-content">*/ ?>
+			<?php /*<div class="modal-header bg-warning">*/ ?>
+				<?php /*<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>*/ ?>
+				<?php /*<h4 class="modal-title bold font-green-seagreen">Delete Evaluation Committee</h4>*/ ?>
+			<?php /*</div>*/ ?>
+			<?php /*<div class="modal-body">*/ ?>
+				<?php /*<h4 class="bold">Are you sure you want to delete this committee member?</h4>*/ ?>
+				<?php /*<form action="#" class="" role="form">*/ ?>
+					<?php /*<div class="form-group">*/ ?>
+						<?php /*<label>Remarks</label>*/ ?>
+						<?php /*<textarea class="form-control" rows="3"></textarea>*/ ?>
+					<?php /*</div>*/ ?>
+				<?php /*</form>*/ ?>
+			<?php /*</div>*/ ?>
+			<?php /*<div class="modal-footer">*/ ?>
+				<?php /*<button class="btn green" data-dismiss="modal">Delete</button>*/ ?>
+				<?php /*<button class="btn red" data-dismiss="modal" aria-hidden="true">Cancel</button>*/ ?>
+			<?php /*</div>*/ ?>
+		<?php /*</div>*/ ?>
+	<?php /*</div>*/ ?>
+<?php /*</div>*/ ?>
+<div class="page-bar">
+	<ul class="page-breadcrumb">
+		<li>
+			<a href="#">E-TOOL</a>
+			<i class="fa fa-angle-right"></i>
+		</li>
+		<li>
+			<a href="#">Evaluation Committee</a>
+		</li>
+	</ul>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-cogs"></i>Evaluation Committee
+				</div>
+			</div>
+			<div class="portlet-body">
+				<?php echo Form::open(array('url'=>'newEtl/etlsavecommittee')); ?>
+
+				<div class="form-body">
+
+                    <?php echo Form::hidden('EtlTenderId',$tenderId); ?>
+
+                    <?php echo Form::hidden('Type',1); ?>
+
+                    <?php foreach($tenders as $tender): ?>
+                    	<input type="hidden" name="HiddenWorkId" value="<?php echo $tender->WorkId; ?>">
+                        <h4 class="bold">Work Id : <span class="font-green-seagreen "><?php echo $tender->WorkId; ?></span></h4>
+                        <p><span class="bold">Name : </span><?php echo $tender->NameOfWork; ?></p>
+                        <p><span class="bold">Description : </span> <?php echo $tender->DescriptionOfWork; ?></p>
+					<?php endforeach; ?>
+                    <div class="table-responsive">
+						<table class="table table-striped table-hover table-bordered" id="addevaluationcommittee">
+						<thead>
+						<tr>
+							<th width="2%"></th>
+							<th>
+								 Name
+							</th>
+							<th>
+								 Designation
+							</th>
+						</tr>
+						</thead>
+						<tbody>
+                        <?php foreach($committee as $evalCommittee): ?>
+                            <?php $randomKey = randomString(); ?>
+						<tr>
+                            <td>
+                                <button type="button" class="deletetablerow"><i class="fa fa-times fa-lg"></i></button>
+                            </td>
+							<td>
+								 <input type="hidden" class="form-control input-sm resetKeyForNew" name="EtlTenderCommitteeModel[<?php echo $randomKey; ?>][Id]" value="<?php echo $evalCommittee->Id; ?>" />
+								 <input type="hidden" class="form-control input-sm resetKeyForNew notclearfornew" name="EtlTenderCommitteeModel[<?php echo $randomKey; ?>][Type]" value="1" />
+								 <input type="hidden" class="form-control input-sm resetKeyForNew notclearfornew" name="EtlTenderCommitteeModel[<?php echo $randomKey; ?>][EtlTenderId]" value="<?php echo $tenderId; ?>" />
+								 <input type="text" class="form-control input-sm resetKeyForNew" name="EtlTenderCommitteeModel[<?php echo $randomKey; ?>][Name]" value="<?php echo $evalCommittee->Name; ?>" />
+							</td>
+							<td>
+                                <input type="text" class="form-control input-sm resetKeyForNew" name="EtlTenderCommitteeModel[<?php echo $randomKey; ?>][Designation]" value="<?php echo $evalCommittee->Designation; ?>" />
+							</td>
+						</tr>
+                        <?php endforeach; ?>
+                        <tr class="notremovefornew">
+                            <td>
+                                <button type="button" class="addtablerow"><i class="fa fa-plus fa-lg"></i></button>
+                            </td>
+                            <td colspan="2"></td>
+                        </tr>
+						</table>
+					</div>
+				</div>
+				<div class="form-actions">
+					<div class="btn-set">
+                        <a href="<?php echo URL::to('newEtl/evaluationetool'); ?>" class="btn blue"><i class="m-icon-swapleft m-icon-white"></i>&nbsp;Back</a>
+						<button type="submit" class="btn green">Save</button>
+                        <a href="<?php echo URL::to('newEtl/evaluationetool'); ?>" class="btn red">Cancel</a>
+					</div>
+				</div>
+                <?php echo Form::close(); ?>
+
+			</div>
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('horizontalmenumaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

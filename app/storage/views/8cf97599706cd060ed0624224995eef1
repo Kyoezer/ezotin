@@ -1,0 +1,1333 @@
+
+<?php $__env->startSection('pagescripts'); ?>
+<?php echo HTML::script('assets/global/scripts/contractor.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div id="hrcheckmodal" class="modal fade in" role="dialog" aria-labelledby="modalmessagebox" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3 id="modalmessageheader" class="modal-title font-red-intense">HR Check</h3>
+			</div>
+			<div class="modal-body">
+			</div>
+		</div>
+	</div>
+</div>
+<div id="eqcheckmodal" class="modal fade in" role="dialog" aria-labelledby="modalmessagebox" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3 id="modalmessageheader" class="modal-title font-red-intense">Equipment Check</h3>
+			</div>
+			<div class="modal-body">
+			</div>
+		</div>
+	</div>
+</div>
+<div id="approve" class="modal fade" role="dialog" aria-labelledby="approve" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3 class="modal-title font-green-seagreen">Approve Registration</h3>
+			</div>
+			<div class="modal-body">
+				<p class="bold">Are you sure you want to approve this application?</p>
+			</div>
+			<div class="modal-footer">
+				<button id="approvecontractorregistration" type="button" class="btn green">Approve</button>
+				<button class="btn red" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="reject" class="modal fade" role="dialog" aria-labelledby="reject" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<?php echo Form::open(array('url' => 'contractor/mrejectregistration','role'=>'form')); ?>
+
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3 class="modal-title font-green-seagreen">Reject Registration</h3>
+			</div>
+			<div class="modal-body">
+				<input type="hidden" name="RedirectRoute" value="approveregistration">
+				<p class="bold">Are you sure you want to reject this application?</p>
+				<input type="hidden" name="ContractorReference" value="<?php echo $generalInformation[0]->Id; ?>" />
+				<input type="hidden" name="RejectedDate" value="<?php echo date('Y-m-d G:i:s'); ?>" />
+				<div class="form-group">
+					<label>Remarks</label>
+					<textarea name="RemarksByRejector" class="form-control" rows="3"></textarea>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn green">Reject</button>
+				<button class="btn red" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+</div>
+<div id="sendback" class="modal fade" role="dialog" aria-labelledby="sendback" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<?php echo Form::open(array('url'=>'sendapplicationback','role'=>'form')); ?>
+
+			<input type="hidden" name="Id" value="<?php echo $generalInformation[0]->Id; ?>" />
+			<input type="hidden" name="Model" value="ContractorModel"/>
+			<input type="hidden" name="Status" value="<?php echo CONST_CMN_APPLICATIONREGISTRATIONSTATUS_NEW; ?>"/>
+			<input type="hidden" name="RedirectUrl" value="contractor/approveserviceapplicationlist"/>
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3 class="modal-title font-green-seagreen">Send Application back</h3>
+			</div>
+			<div class="modal-body">
+				<p class="bold">Are you sure you want to send this application back?</p>
+				<?php /*<div class="form-group">*/ ?>
+					<?php /*<label for="Remarks" class="control-label">Remarks</label>*/ ?>
+					<?php /*<textarea class="form-control" rows="4" name="Remarks" id="Remarks"></textarea>*/ ?>
+				<?php /*</div>*/ ?>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn green">Send Back</button>
+				<button class="btn red" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+</div>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption font-green-seagreen">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject">Service Application Details</span>
+		</div>
+		<div class="actions">
+			<a href="<?php echo URL::to('contractor/approveserviceapplicationlist'); ?>" class="btn btn-default btn-sm">Back to List</a>
+		</div>
+	</div>
+	<div class="portlet-body form">
+		<?php echo Form::open(array('url' => $modelPost,'role'=>'form','id'=>'approveregistrationcontractor')); ?>
+
+		<input type="hidden" name="SysLockedByUserId" value="" />
+		<input type="hidden" name="RedirectRoute" value="approveserviceapplicationlist">
+		<input type="hidden" name="ContractorReference" value="<?php echo $generalInformation[0]->Id; ?>" />
+		<?php if($hasFee): ?>
+			<input type="hidden" name="CmnApplicationRegistrationStatusId" value="<?php echo CONST_CMN_APPLICATIONREGISTRATIONSTATUS_APPROVEDFORPAYMENT; ?>">
+		<?php else: ?>
+			<input type="hidden" name="CmnApplicationRegistrationStatusId" value="<?php echo CONST_CMN_APPLICATIONREGISTRATIONSTATUS_APPROVED; ?>">
+		<?php endif; ?>
+		<div class="note note-danger">
+          	<p>If any detail(s) submitted by the applicant is different from the CDB record then the field will be marked in red. To view the current record with CDB, please hover over <i class="font-blue">[old]</i> next to the field.</p>
+        </div>
+		<div class="row">
+			<div class="col-md-12">
+				<h5 class="font-blue-madison bold">Fee Details for Applied Services</h5>
+				<table class="table table-bordered table-striped table-condensed flip-content">
+					<thead>
+						<tr>
+							<th>Service(s) Applied</th>
+							<th>Details</th>
+							<th width="10%" class="text-right">Amount (Nu.)</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php $hasChangeOfOwner = false; $totalFeeApplicable=0; $categoryClassificationFeeTotal=0;$lateFeeAmount=0; $appliedServiceName = "";?>
+						<?php foreach($appliedServices as $appliedService): ?>
+							<?php if($appliedService->Id == CONST_SERVICETYPE_CHANGEOWNER): ?>
+								<?php $hasChangeOfOwner=true; ?>
+							<?php endif; ?>
+							<?php if($appliedService->Id==CONST_SERVICETYPE_RENEWAL || $appliedService->Id==CONST_SERVICETYPE_LATEFEE || $appliedService->Id==CONST_SERVICETYPE_CHANGEOFCATEGORYCLASSIFICATION): ?>
+								<?php $appliedServiceName = $appliedService->ServiceName; ?>
+							<?php endif; ?>
+						<tr>
+							<td <?php if($appliedService->Id!=CONST_SERVICETYPE_RENEWAL && $appliedService->Id!=CONST_SERVICETYPE_LATEFEE && $appliedService->Id!=CONST_SERVICETYPE_CHANGEOFCATEGORYCLASSIFICATION): ?>colspan="2"<?php endif; ?>>
+								<?php echo e($appliedService->ServiceName); ?>
+
+							</td>
+							<?php if($appliedService->Id==CONST_SERVICETYPE_RENEWAL || $appliedService->Id==CONST_SERVICETYPE_CHANGEOFCATEGORYCLASSIFICATION): ?>
+							<td>
+								<?php if($hasRenewal && $hasChangeInCategoryClassification): ?>
+									<?php if($appliedService->Id==CONST_SERVICETYPE_RENEWAL): ?>
+										<table class="table table-hover table-condensed">
+											<thead>
+												<tr class="success">
+													<th>Category</th>
+													<th>Existing</th>
+													<th>Applied</th>
+													<th>Verified</th>
+													<th>Amount</th>
+												</tr>
+											</thead>
+											<tbody>
+												<?php foreach($hasCategoryClassificationsFee as $hasCategoryClassificationFee): ?>
+												<tr>
+													<td><?php echo e($hasCategoryClassificationFee->MasterCategoryCode); ?></td>
+													<td>
+														<?php if((bool)$hasCategoryClassificationFee->FinalApprovedClassification!=NULL): ?>
+															<?php echo e($hasCategoryClassificationFee->FinalApprovedClassification); ?>
+
+														<?php else: ?> 
+															-
+														<?php endif; ?>
+													</td>
+													<td>
+														<?php if((bool)$hasCategoryClassificationFee->AppliedClassification!=NULL): ?>
+															<?php echo e($hasCategoryClassificationFee->AppliedClassification); ?>
+
+															<?php if($hasCategoryClassificationFee->AppliedClassificationPriority<$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+															<i class="font-red"><small> (Downgraded)</small></i>
+															<?php elseif(!empty($hasCategoryClassificationFee->FinalClassificationPriority) && $hasCategoryClassificationFee->AppliedClassificationPriority>$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+															<i class="font-red"><small> (Upgraded)</small></i>
+															<?php elseif(empty($hasCategoryClassificationFee->FinalClassificationPriority)): ?>
+															<i class="font-red"><small>(New)</small></i>
+															<?php endif; ?>
+														<?php else: ?> 
+															-
+														<?php endif; ?>		
+													</td>
+													<td>
+														<?php if((bool)$hasCategoryClassificationFee->VerifiedClassification!=NULL): ?>
+															<?php echo e($hasCategoryClassificationFee->VerifiedClassification); ?>
+
+															<?php if($hasCategoryClassificationFee->VerifiedClassificationPriority<$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+															<i class="font-red"><small> (Downgraded)</small></i>
+															<?php elseif(!empty($hasCategoryClassificationFee->FinalClassificationPriority) && $hasCategoryClassificationFee->VerifiedClassificationPriority>$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+															<i class="font-red"><small> (Upgraded)</small></i>
+															<?php elseif(empty($hasCategoryClassificationFee->FinalClassificationPriority)): ?>
+															<i class="font-red"><small>(New)</small></i>
+															<?php endif; ?>
+														<?php else: ?> 
+															-
+														<?php endif; ?>		
+													</td>
+													<td>
+														<?php if((bool)$hasCategoryClassificationFee->VerifiedClassification!=NULL): ?>
+															<?php if($hasCategoryClassificationFee->VerifiedClassificationId==$hasCategoryClassificationFee->FinalApprovedClassificationId): ?>
+																<?php $categoryClassificationFeeTotal+=$hasCategoryClassificationFee->VerifiedRenewalFee; ?>
+																<?php echo number_format($hasCategoryClassificationFee->VerifiedRenewalFee,2); ?>
+
+															<?php else: ?>
+																<?php $categoryClassificationFeeTotal+=$hasCategoryClassificationFee->VerifiedRegistrationFee; ?>
+																<?php echo number_format($hasCategoryClassificationFee->VerifiedRegistrationFee,2); ?> 
+															<?php endif; ?>
+														<?php else: ?> 
+															-
+														<?php endif; ?>		
+													</td>
+												</tr>
+												<?php endforeach; ?>
+												<tr class="bold">
+													<td colspan="4">Total</td>
+													<td>
+														<?php $appliedService->ContractorAmount=$categoryClassificationFeeTotal; ?>
+														<?php echo number_format($categoryClassificationFeeTotal,2); ?>
+
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									<?php else: ?> 
+									 <span class="font-red">*Fee details has been already displayed against Renewal of CDB Certificate.</span>
+									<?php endif; ?>
+								<?php else: ?> 
+									<table class="table table-hover table-condensed">
+										<thead>
+											<tr class="success">
+												<th>Category</th>
+												<th>Existing</th>
+												<th>Applied</th>
+												<th>Verified</th>
+												<th>Amount</th>
+											</tr>
+										</thead>
+										<tbody>
+											<?php foreach($hasCategoryClassificationsFee as $hasCategoryClassificationFee): ?>
+											<tr>
+												<td><?php echo e($hasCategoryClassificationFee->MasterCategoryCode); ?></td>
+												<td>
+													<?php if((bool)$hasCategoryClassificationFee->FinalApprovedClassification!=NULL): ?>
+														<?php echo e($hasCategoryClassificationFee->FinalApprovedClassification); ?>
+
+													<?php else: ?> 
+														-
+													<?php endif; ?>
+												</td>
+												<td>
+													<?php if((bool)$hasCategoryClassificationFee->AppliedClassification!=NULL): ?>
+														<?php echo e($hasCategoryClassificationFee->AppliedClassification); ?>
+
+														<?php if($hasCategoryClassificationFee->AppliedClassificationPriority<$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+														<i class="font-red"><small> (Downgraded)</small></i>
+														<?php elseif(!empty($hasCategoryClassificationFee->FinalClassificationPriority) && $hasCategoryClassificationFee->AppliedClassificationPriority>$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+														<i class="font-red"><small> (Upgraded)</small></i>
+														<?php elseif(empty($hasCategoryClassificationFee->FinalClassificationPriority)): ?>
+														<i class="font-red"><small>(New)</small></i>
+														<?php endif; ?>
+													<?php else: ?> 
+														-
+													<?php endif; ?>		
+												</td>
+												<td>
+													<?php if((bool)$hasCategoryClassificationFee->VerifiedClassification!=NULL): ?>
+														<?php echo e($hasCategoryClassificationFee->VerifiedClassification); ?>
+
+														<?php if($hasCategoryClassificationFee->VerifiedClassificationPriority<$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+														<i class="font-red"><small> (Downgraded)</small></i>
+														<?php elseif(!empty($hasCategoryClassificationFee->FinalClassificationPriority) && $hasCategoryClassificationFee->VerifiedClassificationPriority>$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+														<i class="font-red"><small> (Upgraded)</small></i>
+														<?php elseif(empty($hasCategoryClassificationFee->FinalClassificationPriority)): ?>
+														<i class="font-red"><small>(New)</small></i>
+														<?php endif; ?>
+													<?php else: ?> 
+														-
+													<?php endif; ?>		
+												</td>
+												<td>
+													<?php if((bool)$hasCategoryClassificationFee->VerifiedClassification!=NULL): ?>
+														<?php if($hasCategoryClassificationFee->VerifiedClassificationId==$hasCategoryClassificationFee->FinalApprovedClassificationId): ?>
+															<?php if($hasRenewal): ?>
+																<?php $categoryClassificationFeeTotal+=$hasCategoryClassificationFee->VerifiedRenewalFee; ?>
+																<?php echo number_format($hasCategoryClassificationFee->VerifiedRenewalFee,2); ?>
+
+															<?php else: ?>
+																-
+															<?php endif; ?>
+														<?php else: ?>
+															<?php $categoryClassificationFeeTotal+=$hasCategoryClassificationFee->VerifiedRegistrationFee; ?>
+															<?php echo number_format($hasCategoryClassificationFee->VerifiedRegistrationFee,2); ?>
+
+														<?php endif; ?>
+													<?php else: ?> 
+														-
+													<?php endif; ?>		
+												</td>
+											</tr>
+											<?php endforeach; ?>
+											<tr class="bold">
+												<td colspan="4">Total</td>
+												<td>
+													<?php $appliedService->ContractorAmount=$categoryClassificationFeeTotal; ?>
+													<?php echo number_format($categoryClassificationFeeTotal,2); ?>
+
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								<?php endif; ?>	
+							</td>
+							<?php elseif($appliedService->Id==CONST_SERVICETYPE_LATEFEE): ?>
+							<td>
+								<table class="table table-hover table-condensed">
+									<thead>
+										<tr class="danger">
+											<th>No. of Days Late (Actual)</th>
+											<th>No. of Days Late After Grace Period</th>
+											<th>Penalty per Day (Nu.)</th>
+											<th>Total Amount (Nu.)</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>
+												<?php echo $hasLateFeeAmount[0]->PenaltyNoOfDays-1; ?><br />
+												<small><i class="font-red">* 30 days is grace period.</i></small><br />
+												<small><i class="font-red">* Registration Expired on <?php echo convertDateToClientFormat($hasLateFeeAmount[0]->RegistrationExpiryDate); ?></i></small><br />
+												<small><i class="font-red">* Application for Renewal on <?php echo convertDateToClientFormat($hasLateFeeAmount[0]->ApplicationDate); ?></i></small>
+											</td>
+											<td>
+												<?php $lateFeeAfterGracePeriod=$hasLateFeeAmount[0]->PenaltyNoOfDays-30-1; ?>
+												<?php if(($hasLateFeeAmount[0]->PenaltyNoOfDays-1)>30): ?>
+													<?php $lateFeeAfterGracePeriod=$hasLateFeeAmount[0]->PenaltyNoOfDays-30-1; ?>
+												<?php else: ?>
+													<?php $lateFeeAfterGracePeriod = 0; ?>
+												<?php endif; ?>
+												<?php if($lateFeeAfterGracePeriod>0): ?>
+												<?php echo $lateFeeAfterGracePeriod; ?>
+
+												<?php endif; ?>
+											</td>
+											<td>
+												<?php echo number_format($hasLateFeeAmount[0]->PenaltyLateFeeAmount,2); ?>
+
+											</td>
+											<td>
+												<?php $lateFeeAmount=(int)$lateFeeAfterGracePeriod*(int)$hasLateFeeAmount[0]->PenaltyLateFeeAmount; ?>
+												<?php if((int)$maxClassification == 998 || (int)$maxClassification == 997): ?>
+													<?php if($lateFeeAmount > 3000): ?>
+														<?php $lateFeeAmount = 3000; ?>
+													<?php endif; ?>
+												<?php endif; ?>
+												<?php echo number_format($lateFeeAmount,2); ?>
+
+											</td>
+										</tr>
+										<tr class="bold">
+											<td colspan="3">Total</td>
+											<td>
+												<?php $appliedService->ContractorAmount=$lateFeeAmount;?>
+													<?php /*<?php if($generalInformation[0]->WaiveOffLateFee == 1): ?>*/ ?>
+														<?php /*<span style="text-decoration: line-through;">*/ ?>
+													<?php /*<?php endif; ?>*/ ?>
+												<?php echo number_format($lateFeeAmount,2); ?>
+
+													<?php /*<?php if($generalInformation[0]->WaiveOffLateFee == 1): ?>*/ ?>
+														<?php /*</span>*/ ?>
+														<?php /*&nbsp;*/ ?>
+														<?php /*<?php echo e($generalInformation[0]->NewLateFeeAmount); ?>*/ ?>
+													<?php /*<?php endif; ?>*/ ?>
+											</td>
+										</tr>
+										<tr>
+											<td colspan="1">
+												<div class="form-group pull-right">
+													<label for="">
+														Waiver Late Fee
+														<input type="checkbox" name="WaiveOffLateFee" value="1" id="waiver">
+													</label>
+												</div>
+											</td>
+											<td colspan="3">
+												<div class="form-group">
+													<input type="text" disabled class="form-control number input-sm input-medium" value="<?php if($generalInformation[0]->WaiveOffLateFee == 1): ?><?php echo e($generalInformation[0]->NewLateFeeAmount); ?><?php endif; ?>" name="NewLateFeeAmount" placeholder="New Late Fees Amount">
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+							<?php endif; ?>
+							<td class="text-right">
+								<?php if((bool)$appliedService->ContractorAmount!=NULL): ?>
+									<?php //$totalFeeApplicable+=$appliedService->ContractorAmount; ?>
+<?php /*									<?php echo e(number_format($appliedService->ContractorAmount,2)); ?>*/ ?>
+
+									<?php if($appliedService->Id == CONST_SERVICETYPE_INCORPORATION): ?>
+										<?php if($generalInformation[0]->OwnershipType!=$generalInformationFinal[0]->OwnershipType): ?>
+											<?php $totalFeeApplicable+=$appliedService->ContractorAmount; ?>
+											<?php echo e(number_format($appliedService->ContractorAmount,2)); ?>
+
+										<?php else: ?>
+											0.00 <br>(This firm was already incorporated)
+										<?php endif; ?>
+									<?php else: ?>
+										<?php $totalFeeApplicable+=$appliedService->ContractorAmount; ?>
+										<?php echo e(number_format($appliedService->ContractorAmount,2)); ?>
+
+									<?php endif; ?>
+								<?php else: ?>
+								-
+								<?php endif; ?>
+							</td>
+						</tr>
+						<?php endforeach; ?>
+						<tr class="text-right bold">
+							<td colspan="2">Total Amount Payable</td>
+							<td>
+								<?php /*<?php if($generalInformation[0]->WaiveOffLateFee == 1): ?>*/ ?>
+									<?php /*<span style="text-decoration: line-through;">*/ ?>
+								<?php /*<?php endif; ?>*/ ?>
+								<?php echo e(number_format($totalFeeApplicable,2)); ?>
+
+								<?php /*<?php if($generalInformation[0]->WaiveOffLateFee == 1): ?>*/ ?>
+									<?php /*</span>*/ ?>
+									<?php /*<br>*/ ?>
+									<?php /*<?php echo e(number_format((int)$totalFeeApplicable-((int)$lateFeeAmount-(int)$generalInformation[0]->NewLateFeeAmount),2)); ?>*/ ?>
+								<?php /*<?php endif; ?>*/ ?>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-md-6 table-responsive">
+				<table class="table table-condensed">
+					<tbody>
+						<tr>
+							<td colspan="2" class="font-blue-madison bold warning">General Info</td>
+						</tr>
+						<tr>
+							<td><strong>Ownership Type</strong></td>
+							<td>
+								<?php if($generalInformation[0]->OwnershipType==$generalInformationFinal[0]->OwnershipType): ?>
+									<?php echo $generalInformation[0]->OwnershipType; ?>
+
+								<?php else: ?>
+									<span class="font-red"><?php echo $generalInformation[0]->OwnershipType; ?></span>
+									<a href="#" class="tooltips" data-placement="top" data-original-title="<?php echo $generalInformationFinal[0]->OwnershipType; ?>"><i class="font-blue">[old]</i></a>
+								<?php endif; ?>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>CDB No.</strong></td>
+							<td>
+								<?php echo $generalInformationFinal[0]->CDBNo; ?>
+
+							</td>
+						</tr>
+						<tr>
+							<td><strong>Name/Firm</strong></td>
+							<td>
+								<?php if($generalInformation[0]->NameOfFirm==$generalInformationFinal[0]->NameOfFirm): ?>
+									<?php echo $generalInformation[0]->NameOfFirm; ?>
+
+								<?php else: ?>
+									<span class="font-red"><?php echo $generalInformation[0]->NameOfFirm; ?></span>
+									<a href="#" class="tooltips" data-placement="top" data-original-title="<?php echo $generalInformationFinal[0]->NameOfFirm; ?>"><i class="font-blue">[old]</i></a>
+								<?php endif; ?>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>Country</strong></td>
+							<td>
+								<?php if($generalInformation[0]->Country==$generalInformationFinal[0]->Country): ?>
+									<?php echo $generalInformation[0]->Country; ?>
+
+								<?php else: ?>
+									<span class="font-red"><?php echo $generalInformation[0]->Country; ?></span>
+									<a href="#" class="tooltips" data-placement="top" data-original-title="<?php echo $generalInformationFinal[0]->Country; ?>"><i class="font-blue">[old]</i></a>
+								<?php endif; ?>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>Previous Validity</strong></td>
+							<td>
+								<?php echo convertDateToClientFormat($generalInformationFinal[0]->RegistrationApprovedDate); ?> to <?php echo convertDateToClientFormat($generalInformationFinal[0]->RegistrationExpiryDate); ?>
+
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2" class="font-blue-madison bold warning">Registered Address</td>
+						</tr>
+						<tr>
+							<td><strong>Dzongkhag</strong></td>
+							<td>
+								<?php if($generalInformation[0]->RegisteredDzongkhag==$generalInformationFinal[0]->RegisteredDzongkhag): ?>
+									<?php echo $generalInformation[0]->RegisteredDzongkhag; ?>
+
+								<?php else: ?>
+									<span class="font-red"><?php echo $generalInformation[0]->Dzongkhag; ?></span>
+									<a href="#" class="tooltips" data-placement="top" data-original-title="<?php echo $generalInformationFinal[0]->RegisteredDzongkhag; ?>"><i class="font-blue">[old]</i></a>
+								<?php endif; ?>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>Village</strong></td>
+							<td>
+								<?php if($generalInformation[0]->Village==$generalInformationFinal[0]->Village): ?>
+									<?php echo $generalInformation[0]->Village; ?>
+
+								<?php else: ?>
+									<span class="font-red"><?php echo $generalInformation[0]->Village; ?></span>
+									<a href="#" class="tooltips" data-placement="top" data-original-title="<?php echo $generalInformationFinal[0]->Village; ?>"><i class="font-blue">[old]</i></a>
+								<?php endif; ?>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>Gewog</strong></td>
+							<td>
+								<?php if($generalInformation[0]->Dzongkhag==$generalInformationFinal[0]->Gewog): ?>
+									<?php echo $generalInformation[0]->Gewog; ?>
+
+								<?php else: ?>
+									<span class="font-red"><?php echo $generalInformation[0]->Gewog; ?></span>
+									<a href="#" class="tooltips" data-placement="top" data-original-title="<?php echo $generalInformationFinal[0]->Gewog; ?>"><i class="font-blue">[old]</i></a>
+								<?php endif; ?>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>Address</strong></td>
+							<td>
+								<?php if($generalInformation[0]->RegisteredAddress==$generalInformationFinal[0]->RegisteredAddress): ?>
+									<?php echo $generalInformation[0]->RegisteredAddress; ?>
+
+								<?php else: ?>
+									<span class="font-red"><?php echo $generalInformation[0]->RegisteredAddress; ?></span>
+									<a href="#" class="tooltips" data-placement="top" data-original-title="<?php echo $generalInformationFinal[0]->RegisteredAddress; ?>"><i class="font-blue">[old]</i></a>
+								<?php endif; ?>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-md-6 table-responsive">
+				<table class="table table-condensed">
+					<tbody>
+						<tr>
+							<td colspan="2" class="font-blue-madison bold warning">Correspondence Address</td>
+						</tr>
+						<tr>
+							<td><strong>Dzongkhag</strong></td>
+							<td>
+								<?php if($generalInformation[0]->Dzongkhag==$generalInformationFinal[0]->Dzongkhag): ?>
+									<?php echo $generalInformation[0]->Dzongkhag; ?>
+
+								<?php else: ?>
+									<span class="font-red"><?php echo $generalInformation[0]->Dzongkhag; ?></span>
+									<a href="#" class="tooltips" data-placement="top" data-original-title="<?php echo $generalInformationFinal[0]->Dzongkhag; ?>"><i class="font-blue">[old]</i></a>
+								<?php endif; ?>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>Address</strong></td>
+							<td>
+								<?php if($generalInformation[0]->Address==$generalInformationFinal[0]->Address): ?>
+									<?php echo $generalInformation[0]->Address; ?>
+
+								<?php else: ?>
+									<span class="font-red"><?php echo $generalInformation[0]->Address; ?></span>
+									<a href="#" class="tooltips" data-placement="top" data-original-title="<?php echo $generalInformationFinal[0]->Address; ?>"><i class="font-blue">[old]</i></a>
+								<?php endif; ?>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>Email</strong></td>
+							<td>
+								<?php if($generalInformation[0]->Email==$generalInformationFinal[0]->Email): ?>
+									<?php echo $generalInformation[0]->Email; ?>
+
+								<?php else: ?>
+									<span class="font-red"><?php echo $generalInformation[0]->Email; ?></span>
+									<a href="#" class="tooltips" data-placement="top" data-original-title="<?php echo $generalInformationFinal[0]->Email; ?>"><i class="font-blue">[old]</i></a>
+								<?php endif; ?>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>Telephone No.</strong></td>
+							<td>
+								<?php if($generalInformation[0]->Telephone==$generalInformationFinal[0]->Telephone): ?>
+									<?php echo $generalInformation[0]->TelephoneNo; ?>
+
+								<?php else: ?>
+									<span class="font-red"><?php echo $generalInformation[0]->Telephone; ?></span>
+									<a href="#" class="tooltips" data-placement="top" data-original-title="<?php echo $generalInformationFinal[0]->Telephone; ?>"><i class="font-blue">[old]</i></a>
+								<?php endif; ?>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>Mobile No.</strong></td>
+							<td>
+								<?php if($generalInformation[0]->MobileNo==$generalInformationFinal[0]->MobileNo): ?>
+									<?php echo $generalInformation[0]->MobileNo; ?>
+
+								<?php else: ?>
+									<span class="font-red"><?php echo $generalInformation[0]->MobileNo; ?></span>
+									<a href="#" class="tooltips" data-placement="top" data-original-title="<?php echo $generalInformationFinal[0]->MobileNo; ?>"><i class="font-blue">[old]</i></a>
+								<?php endif; ?>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>Fax No.</strong></td>
+							<td>
+								<?php if($generalInformation[0]->FaxNo==$generalInformationFinal[0]->FaxNo): ?>
+									<?php echo $generalInformation[0]->FaxNo; ?>
+
+								<?php else: ?>
+									<span class="font-red"><?php echo $generalInformation[0]->FaxNo; ?></span>
+									<a href="#" class="tooltips" data-placement="top" data-original-title="<?php echo $generalInformationFinal[0]->FaxNo; ?>"><i class="font-blue">[old]</i></a>
+								<?php endif; ?>
+							</td>
+						</tr>
+						<?php if(!empty($serviceApplicationsAttachments)): ?>
+							<tr>
+								<td colspan="2" class="font-blue-madison bold warning">Attachments</td>
+							</tr>
+							<?php foreach($serviceApplicationsAttachments as $serviceApplicationsAttachment): ?>
+							<tr>
+								<td colspan="2">
+									<i class="fa fa-check"></i> <a href="<?php echo URL::to($serviceApplicationsAttachment->DocumentPath); ?>" target="_blank"><?php echo $serviceApplicationsAttachment->DocumentName; ?></a>
+								</td>
+							</tr>
+							<?php endforeach; ?>
+						<?php endif; ?>
+						<?php if($hasChangeOfOwner): ?>
+							<tr>
+								<td><strong>Reason for change of owner</strong></td>
+								<td>
+									<?php echo $generalInformation[0]->ChangeOfOwnershipRemarks; ?>
+
+								</td>
+							</tr>
+						<?php endif; ?>
+					</tbody>	
+				</table>
+			</div>
+		</div>
+		<?php if(isset($trainingsAttended)): ?>
+			<?php if(count($trainingsAttended)>0): ?>
+				<div class="row">
+					<div class="col-md-12">
+						<h4>Trainings Attended</h4>
+						<div class="table-responsive">
+							<table class="table table-condensed table-striped table-bordered">
+								<thead>
+								<tr>
+									<th>Sl #</th>
+									<th>Training Type</th>
+									<th>Training Dates</th>
+									<th>Modules</th>
+									<th>Participant</th>
+									<th>CID No</th>
+								</tr>
+								</thead>
+								<tbody>
+								<?php $count = 1; ?>
+								<?php foreach($trainingsAttended as $training): ?>
+									<tr>
+										<td><?php echo $count++; ?></td>
+										<td><?php echo $training->TrainingType; ?></td>
+										<td><?php echo convertDateToClientFormat($training->TrainingFromDate); ?> to <?php echo convertDateToClientFormat($training->TrainingToDate); ?></td>
+										<td><?php echo ((int)$training->TrainingReference == 1602)?$training->Module:"----"; ?></td>
+										<td><?php echo $training->Participant; ?></td>
+										<td><?php echo $training->CIDNo; ?></td>
+									</tr>
+								<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			<?php endif; ?>
+		<?php endif; ?>
+		<div class="tabbable-custom nav-justified">
+			<ul class="nav nav-tabs nav-justified">
+				<li class="active">
+					<a href="#partnerdetails" data-toggle="tab">
+					Owner/Partner Details</a>
+				</li>
+				<li>
+					<a href="#humanresource" data-toggle="tab">
+					Human Resource </a>
+				</li>
+				<li>
+					<a href="#equipment" data-toggle="tab">
+					Equipment</a>
+				</li>
+				<li>
+					<a href="#workclassification" data-toggle="tab">
+					Work Classification</a>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active row" id="partnerdetails">
+					<div class="col-md-12">
+						<h5 class="font-blue-madison bold">Old Owners/Partners</h5>
+						<table class="table table-bordered table-striped table-condensed flip-content">
+							<thead>
+							<tr>
+								<th>
+									Name
+								</th>
+								<th class="">
+									CID No.
+								</th>
+								<th>
+									Sex
+								</th>
+								<th>
+									Country
+								</th>
+								<th>
+									Designation
+								</th>
+
+								<th width="15%">
+									Show in Certificate
+								</th>
+								<th>
+									Action
+								</th>
+							</tr>
+							</thead>
+							<tbody>
+							<?php $__empty_1 = true; foreach($ownerPartnerDetailsFinal as $oldOwnerPartner): $__empty_1 = false; ?>
+								<?php $randomKey = randomString(); ?>
+								<tr>
+									<td>
+										<?php echo $oldOwnerPartner->Name; ?>
+
+									</td>
+									<td>
+										<?php echo $oldOwnerPartner->CIDNo; ?>
+
+									</td>
+									<td>
+										<?php echo $oldOwnerPartner->Sex; ?>
+
+									</td>
+									<td>
+										<?php echo $oldOwnerPartner->Country; ?>
+
+									</td>
+									<td>
+										<?php echo $oldOwnerPartner->Designation; ?>
+
+									</td>
+									<td>
+										<?php if((int)$oldOwnerPartner->ShowInCertificate==1): ?>
+											<i class="fa fa-check"></i>
+										<?php endif; ?>
+									</td>
+									<td>
+										<button type="button" data-cid="<?php echo trim($oldOwnerPartner->CIDNo); ?>" class="btn blue btn-sm checkhrdbandwebservice">Check</button>
+									</td>
+								</tr>
+							<?php endforeach; if ($__empty_1): ?>
+								<tr>
+									<td colspan="8" class="text-center font-red">No new partners/owners</td>
+								</tr>
+							<?php endif; ?>
+							</tbody>
+						</table>
+						<h5 class="font-blue-madison bold">Name of Owner, Partners and/or others with Controlling Interest</h5>
+						<table class="table table-bordered table-striped table-condensed flip-content">
+							<thead>
+								<tr>
+									<th>
+										Name
+									</th>
+									<th class="">
+										CID No.
+									</th>
+									<th>
+										Sex
+									</th>
+									<th>
+										Country
+									</th>
+									<th>
+										Designation
+									</th>
+									<th>Other Remarks</th>
+									<th width="15%">
+										Show in Certificate
+									</th>
+									<th>
+										Action
+									</th>
+									<th>
+										Accepted
+									</th>
+									<th>
+										Approved
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php $__empty_1 = true; foreach($ownerPartnerDetails as $ownerPartnerDetail): $__empty_1 = false; ?>
+								<?php $randomKey = randomString();  ?>
+								<tr>
+									<td>
+										<?php echo $ownerPartnerDetail->Name; ?>
+
+									</td>
+									<td>
+										<?php echo $ownerPartnerDetail->CIDNo; ?>
+
+									</td>
+									<td>
+										<?php echo $ownerPartnerDetail->Sex; ?>
+
+									</td>
+									<td>
+										<?php echo $ownerPartnerDetail->Country; ?>
+
+									</td>
+									<td>
+										<?php echo $ownerPartnerDetail->Designation; ?>
+
+									</td>
+									<td>
+										<?php echo $ownerPartnerDetail->OtherRemarks; ?>
+
+									</td>
+									<td>
+										<?php if((int)$ownerPartnerDetail->ShowInCertificate==1): ?>
+										<i class="fa fa-check"></i>
+										<?php endif; ?>
+									</td>
+									<td>
+										<button type="button" data-cid="<?php echo trim($ownerPartnerDetail->CIDNo); ?>" class="btn blue btn-sm checkhrdbandwebservice">Check</button>
+									</td>
+									<td class="text-center">
+										<?php if((int)$ownerPartnerDetail->Verified==1): ?>
+											<i class="fa fa-check font-green-seagreen"></i>
+										<?php endif; ?>
+									</td>
+									<td>
+										<input type="hidden" name="ContractorHumanResourceModel[<?php echo $randomKey; ?>][Id]" value="<?php echo $ownerPartnerDetail->Id; ?>">
+										<input type="checkbox" name="ContractorHumanResourceModel[<?php echo $randomKey; ?>][Approved]" class="checkboxes" checked="checked" value="1"/>
+									</td>
+								</tr>
+								<?php endforeach; if ($__empty_1): ?>
+									<tr>
+										<td colspan="10" class="text-center font-red">No new partners/owners</td>
+									</tr>
+								<?php endif; ?>
+							</tbody>
+						</table>	
+						<a href="<?php echo URL::to('contractor/editgeneralinfo/'.$generalInformation[0]->Id.'?redirectUrl=contractor/approveserviceapplicationprocess'); ?>" class="btn blue-madison">Edit General Information/Partner Details</a>								
+					</div>
+				</div>
+				<div class="tab-pane" id="workclassification">
+					<input type="hidden" name="ContractorId" value="<?php echo $generalInformation[0]->Id; ?>" />
+					<h5 class="font-blue-madison bold">Existing Category/Classification</h5>
+					<table id="workclasssficationverification" class="table table-bordered table-striped table-condensed flip-content">
+						<thead>
+							<tr>
+								<th>
+									Category
+								</th>
+								<th>
+									Classification
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach($contractorWorkClassificationsFinal as $contractorWorkClassificationFinal): ?>
+							<tr>
+								<td>
+									<?php echo $contractorWorkClassificationFinal->Code.'('.$contractorWorkClassificationFinal->Category.')'; ?>
+
+								</td>
+								<td><?php echo $contractorWorkClassificationFinal->ApprovedClassification; ?></td>
+							</tr>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+					<h5 class="font-blue-madison bold">Change in Category/Classification</h5>
+					<table id="workclasssficationverification" class="table table-bordered table-striped table-condensed flip-content">
+						<thead>
+							<tr>
+								<th>
+									Category
+								</th>
+								<th>
+									Applied
+								</th>
+								<th class="">
+									Assessed
+								</th>
+								<th>
+									Approved
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php $__empty_1 = true; foreach($contractorWorkClassifications as $contractorWorkClassification): $__empty_1 = false; ?>
+							<?php $randomKey=randomString(); ?>
+							<tr>
+								<td>
+									<?php if($appliedServiceName != ''): ?>
+										<input type="hidden" name="ContractorWorkClassificationModel[<?php echo $randomKey; ?>][ServiceType]" value="<?php echo $appliedServiceName; ?>"/>
+									<?php else: ?>
+										<?php echo $appliedServiceName; ?>
+
+									<?php endif; ?>
+									<input type="hidden" name="ContractorWorkClassificationModel[<?php echo $randomKey; ?>][Id]" value="<?php echo $contractorWorkClassification->Id; ?>">
+									<?php echo $contractorWorkClassification->Code.'('.$contractorWorkClassification->Category.')'; ?>
+
+								</td>
+								<td><?php echo $contractorWorkClassification->AppliedClassification; ?></td>
+								<td>
+									<?php echo $contractorWorkClassification->VerifiedClassification; ?>
+
+								</td>
+								<td>
+									<select name="ContractorWorkClassificationModel[<?php echo $randomKey; ?>][CmnApprovedClassificationId]" class="form-control input-sm">
+										<option value="">---SELECT ONE---</option>
+										<?php if((int)$contractorWorkClassification->CategoryReferenceNo!=6002): ?>
+											<?php foreach($classes as $class): ?>
+												<?php if((int)$class->ReferenceNo!=4): ?>
+												<option value="<?php echo $class->Id; ?>" <?php if($contractorWorkClassification->CmnVerifiedClassificationId==$class->Id): ?>selected="selected"<?php endif; ?>><?php echo $class->Name; ?></option>
+												<?php endif; ?>
+											<?php endforeach; ?>
+										<?php else: ?>
+											<?php foreach($classes as $class): ?>
+												<?php if((int)$class->ReferenceNo==4): ?>
+												<option value="<?php echo $class->Id; ?>" <?php if($contractorWorkClassification->CmnVerifiedClassificationId==$class->Id): ?>selected="selected"<?php endif; ?>><?php echo $class->Name; ?></option>
+												<?php endif; ?>
+											<?php endforeach; ?>
+										<?php endif; ?>
+									</select>
+								</td>
+							</tr>
+							<?php endforeach; if ($__empty_1): ?>
+							<tr>
+								<td colspan="3">No Change in Category/Classification</td>
+							</tr>
+							<?php endif; ?>
+						</tbody>
+					</table>
+					<?php /*-<a href="<?php echo URL::to('contractor/editworkclassification/'.$generalInformation[0]->Id.'?redirectUrl=contractor/approveserviceapplicationprocess'); ?>" class="btn blue-madison">Edit Work Classification</a>-*/ ?>
+				</div>
+				<div class="tab-pane" id="humanresource">
+					<div class="table-responsive">
+						<h5 class="font-blue-madison bold">Existing Human Resource</h5>
+						<table class="table table-bordered table-striped table-condensed flip-content">
+							<?php echo Form::hidden('Model','ContractorHumanResourceFinalModel',array('class'=>'delete-model')); ?>
+
+							<thead>
+								<th>
+									 Name
+								</th>
+								<th width="6%">
+									 CID/Work Permit No.
+								</th>
+								<th width="5%">
+									 Sex
+								</th>
+								<th class="">
+									 Country
+								</th>
+								<th width="6%">
+									 Qualification
+								</th>
+								<th>
+									 Designation
+								</th>
+								<th>
+									Trade/Fields
+								</th>
+								<th>
+									Attachments(CV/UT/AT)
+								</th>
+								<th>Action</th>
+								<th>
+									Delete Requested
+								</th>
+							</thead>
+							<tbody>
+								<?php $hasDeleteRequest = false; ?>
+								<?php foreach($contractorHumanResourcesFinal as $contractorHumanResourceFinal): ?>
+								<tr>
+									<td>
+										<?php echo Form::hidden('Id',$contractorHumanResourceFinal->Id,array('class'=>'rowreference')); ?>
+
+										<?php echo $contractorHumanResourceFinal->Salutation.' '.$contractorHumanResourceFinal->Name; ?>
+
+									</td>
+									<td><?php echo $contractorHumanResourceFinal->CIDNo; ?></td>
+									<td><?php echo $contractorHumanResourceFinal->Sex; ?></td>
+									<td><?php echo $contractorHumanResourceFinal->Country; ?></td>
+									<td><?php echo $contractorHumanResourceFinal->Qualification; ?></td>
+									<td><?php echo $contractorHumanResourceFinal->Designation; ?></td>
+									<td><?php echo $contractorHumanResourceFinal->Trade; ?></td>
+									<td>
+										<?php foreach($contractorHumanResourceAttachmentsFinal as $contractorHumanResourceAttachmentFinal): ?>
+											<?php if($contractorHumanResourceAttachmentFinal->CrpContractorHumanResourceFinalId==$contractorHumanResourceFinal->Id): ?>
+											<i class="fa fa-check"></i> <a href="<?php echo URL::to($contractorHumanResourceAttachmentFinal->DocumentPath); ?>" target="_blank"><?php echo $contractorHumanResourceAttachmentFinal->DocumentName; ?></a><br />
+											<?php endif; ?>
+										<?php endforeach; ?>
+									</td>
+									<td>
+										<button type="button" data-cid="<?php echo trim($contractorHumanResourceFinal->CIDNo); ?>" class="btn blue btn-sm checkhrdbandwebservice">Check</button>
+									</td>
+									<td>
+										<?php if($contractorHumanResourceFinal->DeleteRequest == 1): ?>
+											<?php $hasDeleteRequest = true; ?>
+											<i class="fa fa-check font-red"></i> &nbsp;
+										<?php endif; ?>
+										<a href="#" class="deletedbrow deleterequest">
+											Delete
+										</a>
+									</td>
+								</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+						<h5 class="font-blue-madison bold">Newly added Human Resource</h5>
+						<table id="HumanResource" class="table table-bordered table-striped table-condensed flip-content">
+							<thead>
+								<th>
+									 Name
+								</th>
+								<th width="6%">
+									 CID/Work Permit No.
+								</th>
+								<th width="5%">
+									 Sex
+								</th>
+								<th class="">
+									 Country
+								</th>
+								<th width="6%">
+									 Qualification
+								</th>
+								<th>
+									 Designation
+								</th>
+								<th>
+									Trade/Fields
+								</th>
+								<th>
+									Attachments(CV/UT/AT)
+								</th>
+								<th>Other Remarks</th>
+								<th>Action</th>
+								<th>
+									Accepted
+								</th>
+								<th>
+									Approved
+								</th>
+							</thead>
+							<tbody>
+								<?php $__empty_1 = true; foreach($contractorHumanResources as $contractorHumanResource): $__empty_1 = false; ?>
+								<?php $randomKey=randomString(); ?>
+								<tr>
+									<td><?php echo $contractorHumanResource->Salutation.' '.$contractorHumanResource->Name; ?></td>
+									<td><?php echo $contractorHumanResource->CIDNo; ?></td>
+									<td><?php echo $contractorHumanResource->Sex; ?></td>
+									<td><?php echo $contractorHumanResource->Country; ?></td>
+									<td><?php echo $contractorHumanResource->Qualification; ?></td>
+									<td><?php echo $contractorHumanResource->Designation; ?></td>
+									<td><?php echo $contractorHumanResource->Trade; ?></td>
+									<td>
+										<?php foreach($contractorHumanResourceAttachments as $contractorHumanResourceAttachment): ?>
+											<?php if($contractorHumanResourceAttachment->CrpContractorHumanResourceId==$contractorHumanResource->Id): ?>
+											<i class="fa fa-check"></i> <a href="<?php echo URL::to($contractorHumanResourceAttachment->DocumentPath); ?>" target="_blank"><?php echo $contractorHumanResourceAttachment->DocumentName; ?></a><br />
+											<?php endif; ?>
+										<?php endforeach; ?>
+									</td>
+									<td><?php echo $contractorHumanResource->OtherRemarks; ?></td>
+									<td>
+										<button type="button" data-cid="<?php echo trim($contractorHumanResource->CIDNo); ?>" class="btn blue btn-sm checkhrdbandwebservice">Check</button>
+									</td>
+									<td class="text-center">
+										<?php if((int)$contractorHumanResource->Verified==1): ?>
+											<i class="fa fa-check font-green-seagreen"></i>
+										<?php endif; ?>
+									</td>
+									<td>
+										<input type="hidden" name="ContractorHumanResourceModel[<?php echo $randomKey; ?>][Id]" value="<?php echo $contractorHumanResource->Id; ?>">
+										<input type="checkbox" name="ContractorHumanResourceModel[<?php echo $randomKey; ?>][Approved]" class="checkboxes" value="1"/>
+									</td>
+								</tr>
+								<?php endforeach; if ($__empty_1): ?>
+								<tr>
+									<td colspan="10" class="font-red text-center">
+										No Change in Human Resource
+									</td>
+								</tr>
+								<?php endif; ?>
+							</tbody>
+						</table>
+					</div>
+					<a href="<?php echo URL::to('contractor/edithumanresource/'.$generalInformation[0]->Id.'?redirectUrl=contractor/approveserviceapplicationprocess'); ?>" class="btn blue-madison">Edit Human Resource</a>
+				</div>
+				<div class="tab-pane" id="equipment">
+					<div class="table-responsive">
+					<h5 class="font-blue-madison bold">Existing Equipment</h5>
+						<table id="Equipment" class="table table-bordered table-striped table-condensed flip-content">
+							<?php echo Form::hidden('Model','ContractorEquipmentFinalModel',array('class'=>'delete-model')); ?>
+
+							<input type="hidden" id="application-id" value="<?php echo $generalInformation[0]->Id; ?>"/>
+							<thead>
+								<tr>
+									<th>
+										Equipment Name
+									</th>
+									<th scope="col" class="">
+										 Registration No
+									</th>
+									<th scope="col" class="">
+										Equipment Model
+									</th>
+									<th>
+										Quantity
+									</th>
+									<th>
+										Attachment
+									</th>
+									<th>Action</th>
+									<th>
+										Delete Requested
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach($contractorEquipmentsFinal as $contractorEquipmentFinal): ?>
+								<?php $randomKey=randomString(); ?>
+								<tr>
+									<?php echo Form::hidden('Id',$contractorEquipmentFinal->Id,array('class'=>'rowreference')); ?>
+
+									<td><?php echo $contractorEquipmentFinal->Name; ?></td>
+									<td><?php echo $contractorEquipmentFinal->RegistrationNo; ?></td>
+									<td><?php echo $contractorEquipmentFinal->ModelNo; ?></td>
+									<td><?php echo $contractorEquipmentFinal->Quantity; ?></td>
+									<td>
+										<?php foreach($contractorEquipmentAttachmentsFinal as $contractorEquipmentAttachmentFinal): ?>
+											<?php if($contractorEquipmentAttachmentFinal->CrpContractorEquipmentFinalId==$contractorEquipmentFinal->Id): ?>
+											<i class="fa fa-check"></i> <a href="<?php echo URL::to($contractorEquipmentAttachmentFinal->DocumentPath); ?>" target="_blank"><?php echo $contractorEquipmentAttachmentFinal->DocumentName; ?></a><br />
+											<?php endif; ?>
+										<?php endforeach; ?>
+									</td>
+									<td>
+										<button type="button" data-regno="<?php echo trim($contractorEquipmentFinal->RegistrationNo); ?>" data-vehicletype="<?php echo $contractorEquipmentFinal->VehicleType; ?>" class="btn blue btn-sm checkeqdbandwebservice">Check
+										</button>
+									</td>
+									<td>
+										<?php if($contractorEquipmentFinal->DeleteRequest == 1): ?>
+											<i class="fa fa-check font-red"></i>&nbsp;
+											<a href="#" class="deletedbrow">
+												Delete
+											</a>
+										<?php endif; ?>
+									</td>
+								</tr>
+								<?php endforeach; ?>
+							</tbody>
+						</table>
+						<h5 class="font-blue-madison bold">Newly added Equipment</h5>
+						<table id="Equipment" class="table table-bordered table-striped table-condensed flip-content">
+							<thead>
+								<tr>
+									<th>
+										Equipment Name
+									</th>
+									<th scope="col" class="">
+										 Registration No
+									</th>
+									<th scope="col" class="">
+										Equipment Model
+									</th>
+									<th>
+										Quantity
+									</th>
+									<th>
+										Attachment
+									</th>
+									<th>Action</th>
+									<th>Accepted</th>
+									<th class="table-checkbox">
+										Approved
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php $__empty_1 = true; foreach($contractorEquipments as $contractorEquipment): $__empty_1 = false; ?>
+								<?php $randomKey=randomString(); ?>
+								<tr>
+									<td><?php echo $contractorEquipment->Name; ?></td>
+									<td><?php echo $contractorEquipment->RegistrationNo; ?></td>
+									<td><?php echo $contractorEquipment->ModelNo; ?></td>
+									<td><?php echo $contractorEquipment->Quantity; ?></td>
+									<td>
+										<?php foreach($contractorEquipmentAttachments as $contractorEquipmentAttachment): ?>
+											<?php if($contractorEquipmentAttachment->CrpContractorEquipmentId==$contractorEquipment->Id): ?>
+											<i class="fa fa-check"></i> <a href="<?php echo URL::to($contractorEquipmentAttachment->DocumentPath); ?>" target="_blank"><?php echo $contractorEquipmentAttachment->DocumentName; ?></a><br />
+											<?php endif; ?>
+										<?php endforeach; ?>
+									</td>
+									<td>
+										<button type="button" data-regno="<?php echo trim($contractorEquipment->RegistrationNo); ?>" data-vehicletype="<?php echo $contractorEquipment->VehicleType; ?>" class="btn blue btn-sm checkeqdbandwebservice">Check
+										</button>
+									</td>
+									<td>
+										<?php if((int)$contractorEquipment->Verified==1): ?>
+											<i class="fa fa-check font-green-seagreen"></i>
+										<?php endif; ?>
+									</td>
+									<td>
+										<input type="hidden" name="ContractorEquipmentModel[<?php echo $randomKey; ?>][Id]" value="<?php echo $contractorEquipment->Id; ?>">
+										<input type="checkbox" name="ContractorEquipmentModel[<?php echo $randomKey; ?>][Approved]" class="checkboxes" value="1"/>
+									</td>
+								</tr>
+								<?php endforeach; if ($__empty_1): ?>
+								<tr>
+									<td  colspan="7" class="text-center font red">
+										No Change in Equipment
+									</td>
+								</tr>
+								<?php endif; ?>
+							</tbody>
+						</table>
+					</div>
+					<a href="<?php echo URL::to('contractor/editequipment/'.$generalInformation[0]->Id.'?redirectUrl=contractor/approveserviceapplicationprocess'); ?>" class="btn blue-madison">Edit Equipment</a>
+				</div>
+			</div>
+		</div>
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-cogs"></i>
+					<span class="caption-subject">Application</span>
+				</div>
+			</div>
+			<div class="portlet-body form">
+				<?php if(isset($generalInformation[0]->RemarksByRejector)): ?>
+					<?php if((bool)$generalInformation[0]->RemarksByRejector): ?>
+						<div class="note note-danger">
+							<strong>Remarks by Rejector: </strong><?php echo $generalInformation[0]->RemarksByRejector; ?>
+
+						</div>
+					<?php endif; ?>
+				<?php endif; ?>
+				<div class="form-body">
+					<div class="row">
+						<?php if($hasDeleteRequest): ?>
+							<div class="col-md-12">
+								<div class="form-group">
+									<label class="control-label"><input type="checkbox" class="form-control" name="SendNotification"/> Send notification to replace HR after 30 days </label>
+								</div>
+							</div>
+						<?php endif; ?>
+						<div class="col-md-12">
+							<h5 class="font-red bold">*Validity of CDB Certificate for contractors is <?php echo $registrationValidityYears; ?> years.</h5>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label class="control-label">Application Approved Date</label>
+								<div class="input-icon right">
+									<i class="fa fa-calendar"></i>
+									<input type="text" name="RegistrationApprovedDate" class="form-control required" placeholder="" value="<?php echo date('d-m-Y G:i:s'); ?>" readonly="readonly"/>
+								</div>
+							</div>
+						</div>
+						<?php if($hasRenewal): ?>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label class="control-label">Last Registration Expiry Date</label>
+									<div class="input-icon right">
+										<i class="fa fa-calendar"></i>
+										<input type="text" class="form-control required" placeholder="" value="<?php echo convertDateToClientFormat($generalInformationFinal[0]->RegistrationExpiryDate); ?>" readonly="readonly" />
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label class="control-label">New Expiry Date</label>
+									<div class="input-icon right">
+										<i class="fa fa-calendar"></i>
+										<input type="text" name="RegistrationExpiryDate" class="form-control datepicker required" placeholder="" value="<?php echo registrationExpiryDateCalculatorRenewal(date('Y-m-d G:i:s'),$registrationValidityYears); ?>" readonly="readonly" />
+									</div>
+								</div>
+							</div>
+						<?php endif; ?>
+					</div>
+					<?php echo $__env->make('crps.applicationhistory', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+					<div class="form-group">
+						<input type="hidden" name="SysApproverUserId" value="<?php echo Auth::user()->Id; ?>" />
+						<label>Remarks</label>
+						<textarea name="RemarksByApprover" class="form-control" rows="3"></textarea>
+					</div>
+				</div>
+				<div class="form-actions">
+					<div class="btn-set">
+						<a href="#approve" data-toggle="modal" class="btn green"><?php if($hasFee): ?><?php echo 'Approve for Payment'; ?><?php else: ?><?php echo 'Approve & Generate Certificate'; ?><?php endif; ?></a>
+						<a href="#sendback" data-toggle="modal" class="btn purple">Send back to Verifier</a>
+						<a href="#reject" data-toggle="modal" class="btn red">Reject</a>
+					</div>
+					<button type="button" class="btn blue-ebonyclay pull-right">Next</button>
+				</div>
+			</div>
+		<?php echo Form::close(); ?>	
+	</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

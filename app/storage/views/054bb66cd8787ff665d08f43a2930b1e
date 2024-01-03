@@ -1,0 +1,70 @@
+<html>
+    <body>
+        <table>
+            <thead>
+            <tr>
+                <th colspan="12">List of Surveyor</th>
+            </tr>
+            <tr>
+					<th class="order">
+						 CDB No.
+					</th>
+					<th>
+						Name
+					</th>
+					<th class="">
+						 CID No.
+					</th>
+					<th class="">
+						 Sector
+					</th>
+					<th>
+						Country
+					</th>
+					<th class="">
+						 Dzongkhag
+					</th>
+					<th class="">
+						Gewog
+					</th>
+                    <th class="">
+                        Village
+                    </th>
+                    <th class="">
+                        Email
+                    </th>
+                    <th class="">
+                        Mobile No.
+                    </th>
+                    <th>
+                        Expiry Date
+                    </th>
+                    <th>Status</th>
+                    </tr>
+            </thead>
+            <tbody>
+            <?php $count=1; ?>
+            <?php $__empty_1 = true; foreach($surveyorList as $surveyor): $__empty_1 = false; ?>
+				<tr>
+                    <td><?php echo $surveyor->ARNo; ?></td>
+                    <td><?php echo $surveyor->ArchitectName; ?></td>
+                    <td><?php echo $surveyor->CIDNo; ?></td>
+                    <td><?php echo $surveyor->Sector; ?></td>
+                    <td><?php echo $surveyor->Country; ?></td>
+                    <td><?php echo $surveyor->Dzongkhag; ?></td>
+                    <td><?php echo $surveyor->Gewog; ?></td>
+                    <td><?php echo $surveyor->Village; ?></td>
+                    <td><?php echo $surveyor->Email; ?></td>
+                    <td><?php echo $surveyor->MobileNo; ?></td>
+                    <td><?php echo $surveyor->ExpiryDate; ?></td>
+                    <td><?php echo $surveyor->Status; ?></td>
+				</tr>
+                <?php endforeach; if ($__empty_1): ?>
+                <tr>
+                    <td colspan="14" class="font-red text-center">No data to display!</td>
+                </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </body>
+</html>

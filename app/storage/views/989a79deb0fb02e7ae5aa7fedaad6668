@@ -1,0 +1,188 @@
+<?php $__env->startSection('pagescripts'); ?>
+    <?php echo HTML::script('assets/cdb/morris/raphael-min.js'); ?>
+
+    <?php echo HTML::script('assets/cdb/morris/modernizr-2.5.3-respond-1.1.0.min.js'); ?>
+
+    <?php echo HTML::script('assets/cdb/morris/morris.min.js'); ?>
+
+    <?php echo HTML::script('assets/global/scripts/report.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('pagestyles'); ?>
+    <?php echo HTML::style('assets/cdb/morris/morris.css'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption">
+            <?php $parameters = Input::all(); $parameters['export']='excel'; ?>
+			<i class="fa fa-cogs"></i>Number of Consultants by Dzongkhag, Class & Category &nbsp;&nbsp;<?php if(!Input::has('export')): ?> <a href="<?php echo route('consultantrpt.consultantsbydzongkhag',$parameters); ?>" class="btn btn-sm green"><i class="fa fa-file-excel-o"></i> Export to Excel</a>    <?php $parameters['export'] = 'print'; ?><a href="<?php echo route('consultantrpt.consultantsbydzongkhag',$parameters); ?>" class="btn btn-sm purple" target="_blank"><i class="fa fa-print"></i> Print</a><?php endif; ?>
+		</div>
+	</div>
+	<div class="portlet-body flip-scroll">
+        <?php if(Input::get('export') != 'print'): ?>
+        <?php echo Form::open(array('url'=>Request::url(),'method'=>'get')); ?>
+
+		<div class="form-body">
+			<div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Dzongkhag</label>
+                        <select class="form-control select2me" name="Dzongkhag">
+                            <option value="">---SELECT ONE---</option>
+                            <?php foreach($dzongkhags as $dzongkhag): ?>
+                                <option value="<?php echo $dzongkhag->NameEn; ?>" <?php if($dzongkhag->NameEn == Input::get('Dzongkhag')): ?>selected <?php endif; ?>><?php echo $dzongkhag->NameEn; ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <?php if(!Input::has('export')): ?>
+                    <div class="col-md-2">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="btn-set">
+                            <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                            <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                        </div>
+                    </div>
+                <?php endif; ?>
+			</div>
+		</div>
+        <?php echo Form::close(); ?>
+
+        <?php else: ?>
+            <?php foreach(Input::all() as $key=>$value): ?>
+                <?php if($key != 'export'): ?>
+                    <b><?php echo $key; ?>: <?php echo $value; ?></b><br>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            <br/>
+        <?php endif; ?>
+        <div class="table-responsive">
+		    <table class="table table-bordered table-striped table-condensed flip-content" id="contractorsdzongkhag-table">
+			<thead class="flip-content">
+                <tr>
+                    <th rowspan="4" style="border-right: 1px solid #DDDDDD; vertical-align: middle;">Dzongkhag</th>
+                </tr>
+                <tr style="border-top: 1px solid #DDDDDD; border-bottom: 1px solid #DDDDDD;">
+                    <th colspan="4"><center>A</center></th>
+                    <th colspan="8"><center>C</center></th>
+                    <th colspan="8"><center>E</center></th>
+                    <th colspan="8"><center>S</center></th>
+                    <th>Total</th>
+                </tr>
+                <tr style="border-bottom: 1px solid #DDDDDD;">
+                    <th>A1</th>
+                    <th>A2</th>
+                    <th>A3</th>
+                    <th>Total</th>
+                    <th>C1</th>
+                    <th>C2</th>
+                    <th>C3</th>
+                    <th>C4</th>
+                    <th>C5</th>
+                    <th>C6</th>
+                    <th>C7</th>
+                    <th>Total</th>
+                    <th>E1</th>
+                    <th>E2</th>
+                    <th>E3</th>
+                    <th>E4</th>
+                    <th>E5</th>
+                    <th>E6</th>
+                    <th>E7</th>
+                    <th>Total</th>
+                    <th>S1</th>
+                    <th>S2</th>
+                    <th>S3</th>
+                    <th>S4</th>
+                    <th>S5</th>
+                    <th>S6</th>
+                    <th>S7</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+			</thead>
+			<tbody>
+            <?php $sum1 = $sum2 = $sum3 = $sum4 = $sum5 = $sum6 = $sum7 = $sum8 = $sum9 = $sum10 = $sum11 = 0; ?>
+            <?php $sum12 = $sum13 = $sum14 = $sum15 = $sum16 = $sum17 = $sum18 = $sum19 = $sum20 = $sum21 = 0; ?>
+            <?php $sum22 = $sum23 = $sum24 = $sum25 = $sum26 = $sum27 = $sum28 = $sum29 = 0; ?>
+            <?php foreach($reportData as $data): ?>
+                <tr>
+                    <td><?php echo $data->Dzongkhag; ?></td>
+                    <td class="text-right"><?php echo $data->CountA1; ?><?php $sum1 += $data->CountA1; ?></td>
+                    <td class="text-right"><?php echo $data->CountA2; ?><?php $sum2 += $data->CountA2; ?></td>
+                    <td class="text-right"><?php echo $data->CountA3; ?><?php $sum3 += $data->CountA3; ?></td>
+                    <td class="text-right"><?php echo $data->CountA1+$data->CountA2+$data->CountA3; ?><?php $sum4 += ($data->CountA1+$data->CountA2+$data->CountA3); ?></td>
+                    <td class="text-right"><?php echo $data->CountC1; ?><?php $sum5 += $data->CountC1; ?></td>
+                    <td class="text-right"><?php echo $data->CountC2; ?><?php $sum6 += $data->CountC2; ?></td>
+                    <td class="text-right"><?php echo $data->CountC3; ?><?php $sum7 += $data->CountC3; ?></td>
+                    <td class="text-right"><?php echo $data->CountC4; ?><?php $sum8 += $data->CountC4; ?></td>
+                    <td class="text-right"><?php echo $data->CountC5; ?><?php $sum9 += $data->CountC5; ?></td>
+                    <td class="text-right"><?php echo $data->CountC6; ?><?php $sum10 += $data->CountC6; ?></td>
+                    <td class="text-right"><?php echo $data->CountC7; ?><?php $sum11 += $data->CountC7; ?></td>
+                    <td class="text-right"><?php echo $data->CountC1+$data->CountC2+$data->CountC3+$data->CountC4+$data->CountC5+$data->CountC6+$data->CountC7; ?><?php $sum12 += ($data->CountC1+$data->CountC2+$data->CountC3+$data->CountC4+$data->CountC5+$data->CountC6+$data->CountC7); ?></td>
+                    <td class="text-right"><?php echo $data->CountE1; ?><?php $sum13 += $data->CountE1; ?></td>
+                    <td class="text-right"><?php echo $data->CountE2; ?><?php $sum14 += $data->CountE2; ?></td>
+                    <td class="text-right"><?php echo $data->CountE3; ?><?php $sum15 += $data->CountE3; ?></td>
+                    <td class="text-right"><?php echo $data->CountE4; ?><?php $sum16 += $data->CountE4; ?></td>
+                    <td class="text-right"><?php echo $data->CountE5; ?><?php $sum17 += $data->CountE5; ?></td>
+                    <td class="text-right"><?php echo $data->CountE6; ?><?php $sum18 += $data->CountE6; ?></td>
+                    <td class="text-right"><?php echo $data->CountE7; ?><?php $sum19 += $data->CountE7; ?></td>
+                    <td class="text-right"><?php echo $data->CountE1+$data->CountE2+$data->CountE3+$data->CountE4+$data->CountE5+$data->CountE6+$data->CountE7; ?><?php $sum20 += ($data->CountE1+$data->CountE2+$data->CountE3+$data->CountE4+$data->CountE5+$data->CountE6+$data->CountE7); ?></td>
+                    <td class="text-right"><?php echo $data->CountS1; ?><?php $sum21 += $data->CountS1; ?></td>
+                    <td class="text-right"><?php echo $data->CountS2; ?><?php $sum22 += $data->CountS2; ?></td>
+                    <td class="text-right"><?php echo $data->CountS3; ?><?php $sum23 += $data->CountS3; ?></td>
+                    <td class="text-right"><?php echo $data->CountS4; ?><?php $sum24 += $data->CountS4; ?></td>
+                    <td class="text-right"><?php echo $data->CountS5; ?><?php $sum25 += $data->CountS5; ?></td>
+                    <td class="text-right"><?php echo $data->CountS6; ?><?php $sum26 += $data->CountS6; ?></td>
+                    <td class="text-right"><?php echo $data->CountS7; ?><?php $sum27 += $data->CountS7; ?></td>
+                    <td class="text-right"><?php echo $data->CountS1+$data->CountS2+$data->CountS3+$data->CountS4+$data->CountS5+$data->CountS6+$data->CountS7; ?><?php $sum28 += ($data->CountS1+$data->CountS2+$data->CountS3+$data->CountS4+$data->CountS5+$data->CountS6+$data->CountS7); ?></td>
+                    <td class="text-right"><?php echo $data->CountA1+$data->CountA2+$data->CountA3+$data->CountC1+$data->CountC2+$data->CountC3+$data->CountC4+$data->CountC5+$data->CountC6+$data->CountC7+$data->CountE1+$data->CountE2+$data->CountE3+$data->CountE4+$data->CountE5+$data->CountE6+$data->CountE7+$data->CountS1+$data->CountS2+$data->CountS3+$data->CountS4+$data->CountS5+$data->CountS6+$data->CountS7; ?><?php $sum29 += ($data->CountA1+$data->CountA2+$data->CountA3+$data->CountC1+$data->CountC2+$data->CountC3+$data->CountC4+$data->CountC5+$data->CountC6+$data->CountC7+$data->CountE1+$data->CountE2+$data->CountE3+$data->CountE4+$data->CountE5+$data->CountE6+$data->CountE7+$data->CountS1+$data->CountS2+$data->CountS3+$data->CountS4+$data->CountS5+$data->CountS6+$data->CountS7); ?></td>
+                </tr>
+            <?php endforeach; ?>
+            <tr>
+                <td class="bold">Total</td>
+                <td class="text-right bold"><?php echo $sum1; ?></td>
+                <td class="text-right bold"><?php echo $sum2; ?></td>
+                <td class="text-right bold"><?php echo $sum3; ?></td>
+                <td class="text-right bold"><?php echo $sum4; ?></td>
+                <td class="text-right bold"><?php echo $sum5; ?></td>
+                <td class="text-right bold"><?php echo $sum6; ?></td>
+                <td class="text-right bold"><?php echo $sum7; ?></td>
+                <td class="text-right bold"><?php echo $sum8; ?></td>
+                <td class="text-right bold"><?php echo $sum9; ?></td>
+                <td class="text-right bold"><?php echo $sum10; ?></td>
+                <td class="text-right bold"><?php echo $sum11; ?></td>
+                <td class="text-right bold"><?php echo $sum12; ?></td>
+                <td class="text-right bold"><?php echo $sum13; ?></td>
+                <td class="text-right bold"><?php echo $sum14; ?></td>
+                <td class="text-right bold"><?php echo $sum15; ?></td>
+                <td class="text-right bold"><?php echo $sum16; ?></td>
+                <td class="text-right bold"><?php echo $sum17; ?></td>
+                <td class="text-right bold"><?php echo $sum18; ?></td>
+                <td class="text-right bold"><?php echo $sum19; ?></td>
+                <td class="text-right bold"><?php echo $sum20; ?></td>
+                <td class="text-right bold"><?php echo $sum21; ?></td>
+                <td class="text-right bold"><?php echo $sum22; ?></td>
+                <td class="text-right bold"><?php echo $sum23; ?></td>
+                <td class="text-right bold"><?php echo $sum24; ?></td>
+                <td class="text-right bold"><?php echo $sum25; ?></td>
+                <td class="text-right bold"><?php echo $sum26; ?></td>
+                <td class="text-right bold"><?php echo $sum27; ?></td>
+                <td class="text-right bold"><?php echo $sum28; ?></td>
+                <td class="text-right bold"><?php echo $sum29; ?></td>
+            </tr>
+			</tbody>
+		</table>
+        </div>
+        <hr/>
+        <h4>Distribution of Consultants by Dzongkhag (%)</h4>
+        <div id="contractorsbydzongkhag" style="width: 100%;"></div>
+        <hr/>
+            <?php /*<h4>Contractors by Class</h4>*/ ?>
+            <?php /*<div id="contractorsbyclass" style="width: 60%;"></div>*/ ?>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

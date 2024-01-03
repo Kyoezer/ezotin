@@ -1,0 +1,244 @@
+<?php $__env->startSection('content'); ?>
+<table class="data">
+	<tbody>
+		<tr>
+			<td><b>Application No.</b></td>
+			<td><?php echo $generalInformation[0]->ReferenceNo; ?>, Dt. <?php echo $generalInformation[0]->ApplicationDate; ?></td>
+			<td><b>Email</b></td>
+			<td><?php echo $generalInformation[0]->Email; ?></td>
+
+		</tr>
+		<tr>
+			<td><b>Proposed Name</b></td>
+			<td><?php echo $generalInformation[0]->NameOfFirm; ?></td>
+			<td><b>Contact No.</b></td>
+			<td><?php echo $generalInformation[0]->MobileNo; ?>/<?php echo $generalInformation[0]->TelephoneNo; ?></td>
+		</tr>
+		<tr>
+			<td><b>Ownership Type</b></td>
+			<td><?php echo $generalInformation[0]->OwnershipType; ?></td>
+			<td><b>Country</b></td>
+			<td><?php echo $generalInformation[0]->Country; ?></td>
+		</tr>
+		<tr>
+			<td><b>Dzongkhag</b></td>
+			<td><?php echo $generalInformation[0]->Dzongkhag; ?></td>
+			<td><b>Address</b></td>
+			<td><?php echo $generalInformation[0]->Address; ?></td>
+		</tr>
+	</tbody>
+</table>
+<?php /*<?php if((int)$generalInformation[0]->OwnershipTypeReferenceNo!=14001): ?>*/ ?>
+<?php /*<p class="heading">Documents Attached with this Application</p>*/ ?>
+<?php /*<table class="data-large">*/ ?>
+	<?php /*<thead>*/ ?>
+		<?php /*<tr>*/ ?>
+			<?php /*<th class="text-left">Document Name</th>*/ ?>
+		<?php /*</tr>*/ ?>
+	<?php /*</thead>*/ ?>
+	<?php /*<tbody>*/ ?>
+		<?php /*<?php foreach($attachments as $attachment): ?>*/ ?>
+		<?php /*<tr>*/ ?>
+			<?php /*<td><?php echo $attachment->DocumentName; ?></td>*/ ?>
+		<?php /*</tr>*/ ?>
+		<?php /*<?php endforeach; ?>*/ ?>
+	<?php /*</tbody>*/ ?>
+<?php /*</table>*/ ?>
+<?php /*<?php endif; ?>*/ ?>
+<p class="heading">Fee Structure as per Applied Categories</p>
+<table class="data-large">
+	<thead>
+		<tr>
+			<th>Category</th>
+			<th>Class</th>
+			<th class="text-right">Fee (Nu.)</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php $totalFee=0; ?>
+		<?php foreach($feeStructures as $feeStructure): ?>
+			<tr>
+				<td>
+					<?php echo $feeStructure->CategoryCode.' ('.$feeStructure->Category.')'; ?>
+
+				</td>
+				<td>
+					<?php echo $feeStructure->AppliedClassificationCode.' ('.$feeStructure->AppliedClassification.')'; ?>
+
+				</td>
+				<td class="text-right">
+					<?php $feeAmount=$feeStructure->AppliedRegistrationFee; ?>
+					<?php echo number_format($feeStructure->AppliedRegistrationFee,2); ?>
+
+				</td>
+			<?php $totalFee+=$feeAmount;?>	
+			</tr>
+		<?php endforeach; ?>
+		<tr class="text-right">
+			<td colspan="2"><strong>Total</strong></td>
+			<td><strong><?php echo number_format($totalFee,2); ?></strong></td>
+		</tr>
+	</tbody>
+</table>
+<strong>NOTE: </strong>These fees are subject to change by the final approver. Please do not make payment based on this.
+<br>
+<p class="heading">Name of Owner, Partners and/or others with Controlling Interest</p>
+<table class="data-large">
+	<thead>
+		<tr>
+			<th class="x-x-small">
+			 	Sl#
+			</th>
+			<th>
+				Name
+			</th>
+			<th>
+				CID No.
+			</th>
+			<th>
+				Sex
+			</th>
+			<th>
+				Country
+			</th>
+			<th>
+				Designation
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php $sl=1;?>
+		<?php foreach($ownerPartnerDetails as $ownerPartnerDetail): ?>
+		<tr>
+			<td>
+				<?php echo $sl; ?>
+
+			</td>
+			<td>
+				<?php echo $ownerPartnerDetail->Name; ?>
+
+			</td>
+			<td>
+				<?php echo $ownerPartnerDetail->CIDNo; ?>
+
+			</td>
+			<td>
+				<?php echo $ownerPartnerDetail->Sex; ?>
+
+			</td>
+			<td>
+				<?php echo $ownerPartnerDetail->Country; ?>
+
+			</td>
+			<td>
+				<?php echo $ownerPartnerDetail->Designation; ?>
+
+			</td>
+		</tr>
+		<?php $sl+=1;?>
+		<?php endforeach; ?>
+	</tbody>
+</table>
+<p class="heading">Work Classification</p>
+<table class="data-large">
+	<thead>
+		<tr class="success">
+			<th>
+				Category
+			</th>
+			<th>
+				Applied Class
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php foreach($contractorWorkClassifications as $contractorWorkClassification): ?>
+		<tr>
+			<td><?php echo $contractorWorkClassification->Code.'('.$contractorWorkClassification->Category.')'; ?></td>
+			<td><?php echo $contractorWorkClassification->AppliedClassification; ?></td>
+		</tr>
+		<?php endforeach; ?>
+	</tbody>
+</table>
+<p class="heading">Human Resource</p>
+<table class="data-large">
+	<thead>
+		<tr>
+			<th class="x-x-small">
+			 	Sl#
+			</th>
+			<th>
+				 Name
+			</th>
+			<th>
+				 CID/Work Permit No.
+			</th>
+			<th>
+				 Sex
+			</th>
+			<th>
+				 Country
+			</th>
+			<th>
+				 Qualification
+			</th>
+			<th>
+				 Designation
+			</th>
+			<th>
+				Trade/Fields
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php $sl=1;?>
+		<?php foreach($contractorHumanResources as $contractorHumanResource): ?>
+		<tr>
+			<td><?php echo $sl; ?></td>
+			<td><?php echo $contractorHumanResource->Name; ?></td>
+			<td><?php echo $contractorHumanResource->CIDNo; ?></td>
+			<td><?php echo $contractorHumanResource->Sex; ?></td>
+			<td><?php echo $contractorHumanResource->Country; ?></td>
+			<td><?php echo $contractorHumanResource->Qualification; ?></td>
+			<td><?php echo $contractorHumanResource->Designation; ?></td>
+			<td><?php echo $contractorHumanResource->Trade; ?></td>
+		</tr>
+		<?php $sl+=1;?>
+		<?php endforeach; ?>
+	</tbody>
+</table>
+<p class="heading">Equipments</p>
+<table class="data-large">
+	<thead>
+		<tr>
+			<th class="x-x-small">Sl#</th>
+			<th>
+				Equipment Name
+			</th>
+			<th>
+				 Registration No
+			</th>
+			<th>
+				Equipment Model
+			</th>
+			<th>
+				Quantity
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php $sl=1;?>
+		<?php foreach($contractorEquipments as $contractorEquipment): ?>
+		<tr>
+			<td><?php echo $sl; ?></td>
+			<td><?php echo $contractorEquipment->Name; ?></td>
+			<td><?php echo $contractorEquipment->RegistrationNo; ?></td>
+			<td><?php echo $contractorEquipment->ModelNo; ?></td>
+			<td><?php echo $contractorEquipment->Quantity; ?></td>
+		</tr>
+		<?php $sl+=1;?>
+		<?php endforeach; ?>
+	</tbody>
+</table>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('printmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

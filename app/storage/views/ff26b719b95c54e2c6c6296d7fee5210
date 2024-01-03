@@ -1,0 +1,1285 @@
+
+<?php $__env->startSection('main-content'); ?>
+<div class="row">
+	<?php if(!empty($applicationDetails)): ?>
+    <div class="col-md-12">
+        <div class="alert alert-info">
+            <?php if($applicationDetails[0]->StatusId == CONST_CMN_APPLICATIONREGISTRATIONSTATUS_NEW): ?>
+                Your application is under process, you have to wait till it gets verified or approved
+            <?php endif; ?>
+            <?php if($applicationDetails[0]->StatusId == CONST_CMN_APPLICATIONREGISTRATIONSTATUS_APPROVEDFORPAYMENT): ?>
+                Your application is approved for payment
+            <?php endif; ?>
+            <?php if($applicationDetails[0]->StatusId == CONST_CMN_APPLICATIONREGISTRATIONSTATUS_APPROVED): ?>
+                Your application has been approved
+            <?php endif; ?>
+        </div>
+    </div>
+	<div class="col-md-6 table-responsive">
+		<h4 class="text-primary">Application Details</h4>
+		<table class="table table-condensed table-striped table-bordered">
+			<tbody>
+				<tr>
+					<td><strong>Application For</strong></td>
+					<td><?php echo $applicationDetails[0]->ApplicationType; ?></td>
+				</tr>
+				<tr>
+					<td><strong>Application No.</strong></td>
+					<td><?php echo $applicationDetails[0]->ReferenceNo; ?></td>
+				</tr>
+				<tr>
+					<td><strong>Application Date</strong></td>
+					<td><?php echo convertDateToClientFormat($applicationDetails[0]->ApplicationDate); ?></td>
+				</tr>
+				<tr>
+					<td><strong>Application Status</strong></td>
+					<td><?php echo $applicationDetails[0]->ApplicationStatus; ?></td>
+				</tr>
+				<tr>
+					<td><strong>Name of Firm</strong></td>
+					<td><?php echo $applicationDetails[0]->NameOfFirm; ?></td>
+				</tr>
+				<tr>
+					<td><strong>Registration Approved Date</strong></td>
+					<td>
+						<?php if(!empty($applicationDetails[0]->PaymentApprovedDate)): ?>
+							<?php echo convertDateToClientFormat($applicationDetails[0]->PaymentApprovedDate); ?>
+
+						<?php else: ?>
+						-
+						<?php endif; ?>
+					</td>
+				</tr>
+				<tr>
+					<td><strong>Registration Expiry Date</strong></td>
+					<td>
+						<?php if(!empty($applicationDetails[0]->RegistrationExpiryDate)): ?>
+						<?php echo convertDateToClientFormat($applicationDetails[0]->RegistrationExpiryDate); ?>
+
+						<?php else: ?>
+						-
+						<?php endif; ?>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<?php if(isset($feeStructures) && !empty($feeStructures) || ($hasLateFee || $hasLateFeeAmount || $hasRenewal || $hasChangeInCategoryClassification || !empty($appliedServices))): ?>
+		<div class="col-md-10">
+		<h4 class="text-primary">Fee Structure</h4>
+		<?php if($applicantType == 1): ?>
+			<?php if((bool)$applicationType): ?>
+				<?php if($applicationType == 1): ?>
+
+					<div class="table-responsive">
+					<table class="table table-condensed table-bordered" style="border-collapse: collapse; width: 70%; background-color: #fff; font-size: 10pt;" bgcolor="#fff">
+						<thead>
+						<tr>
+							<th style="text-align: center;background-color: #d7e5f2; border: 1px solid #000;" align="center" bgcolor="#d7e5f2"></th>
+							<th colspan="2" style="text-align: center;background-color: #d7e5f2; border: 1px solid #000;" align="center" bgcolor="#d7e5f2">Applied</th>
+							<th colspan="2" style="text-align: center;background-color: #d7e5f2; border: 1px solid #000;" align="center" bgcolor="#d7e5f2">Verified</th>
+							<th colspan="2" style="text-align: center;background-color: #d7e5f2; border: 1px solid #000;" align="center" bgcolor="#d7e5f2">Approved</th>
+						</tr>
+						<tr>
+							<th style="background-color: #d7e5f2; padding: 0 8px 0 8px; border: 1px solid #000;" bgcolor="#d7e5f2">Catgeory</th>
+							<th style="background-color: #d7e5f2; padding: 0 8px 0 8px; border: 1px solid #000;" bgcolor="#d7e5f2">Class</th>
+							<th style="background-color: #d7e5f2; padding: 0 8px 0 8px; border: 1px solid #000;" bgcolor="#d7e5f2">Amount (Nu.)</th>
+							<th style="background-color: #d7e5f2; padding: 0 8px 0 8px; border: 1px solid #000;" bgcolor="#d7e5f2">Class</th>
+							<th style="background-color: #d7e5f2; padding: 0 8px 0 8px; border: 1px solid #000;" bgcolor="#d7e5f2">Amount (Nu.)</th>
+							<th style="background-color: #d7e5f2; padding: 0 8px 0 8px; border: 1px solid #000;" bgcolor="#d7e5f2">Class</th>
+							<th style="background-color: #d7e5f2; padding: 0 8px 0 8px; border: 1px solid #000;" bgcolor="#d7e5f2">Amount (Nu.)</th>
+						</tr>
+						</thead>
+						<tbody>
+						<?php $totalFeeApplied=0;$totalFeeVerified=0;$totalFeeApproved=0; ?>
+						<?php foreach($feeStructures as $feeStructure): ?>
+							<tr style="background-color: #ccc;" bgcolor="#ccc">
+								<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+									<?php echo e($feeStructure->CategoryCode.' ('.$feeStructure->Category.')'); ?>
+
+								</td>
+								<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+									<?php echo e($feeStructure->AppliedClassification); ?>
+
+								</td>
+								<td style="text-align: right;font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff" align="right">
+									<?php echo e(number_format($feeStructure->AppliedRegistrationFee,2)); ?>
+
+								</td>
+								<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+									<?php echo e($feeStructure->VerifiedClassificationCode.' ('.$feeStructure->VerifiedClassification.')'); ?>
+
+								</td>
+								<td style="text-align: right;font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff" align="right">
+									<?php echo e(number_format($feeStructure->VerifiedRegistrationFee,2)); ?>
+
+								</td>
+								<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+									<?php echo e($feeStructure->ApprovedClassificationCode.' ('.$feeStructure->ApprovedClassification.')'); ?>
+
+								</td>
+								<td style="text-align: right;font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff" align="right">
+									<?php echo e(number_format($feeStructure->ApprovedRegistrationFee,2)); ?>
+
+								</td>
+							</tr>
+							<?php
+							$totalFeeApplied+=$feeStructure->AppliedRegistrationFee;
+							$totalFeeVerified+=$feeStructure->VerifiedRegistrationFee;
+							$totalFeeApproved+=$feeStructure->ApprovedRegistrationFee;
+							?>
+						<?php endforeach; ?>
+						<tr style="font-weight: bold;background-color: #ccc; text-align: right;" bgcolor="#ccc" align="right">
+							<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">Total</td>
+							<td colspan="2" style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff"><?php echo number_format($totalFeeApplied,2); ?></td>
+							<td colspan="2" style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff"><?php echo number_format($totalFeeVerified,2); ?></td>
+							<td colspan="2" style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff"><?php echo number_format($totalFeeApproved,2); ?></td>
+						</tr>
+						</tbody>
+					</table>
+					</div>
+					<b>Total Amount Payable: Nu. <?php echo number_format($totalFeeApproved,2); ?></b>
+
+				<?php else: ?>
+						<h5>Fee Details for Applied Services</h5>
+						<table class="data-large" style="border-collapse: collapse; width: 70%; background-color: #fff; font-size: 10pt;" bgcolor="#fff">
+							<thead>
+							<tr>
+								<th style="background-color: #d7e5f2; padding: 0 8px 0 8px; border: 1px solid #000;" bgcolor="#d7e5f2">Service(s) Applied</th>
+								<th style="background-color: #d7e5f2; padding: 0 8px 0 8px; border: 1px solid #000;" bgcolor="#d7e5f2">Details</th>
+								<th style="background-color: #d7e5f2; padding: 0 8px 0 8px; border: 1px solid #000;" bgcolor="#d7e5f2" width="10%" class="text-right">Amount (Nu.)</th>
+							</tr>
+							</thead>
+							<tbody>
+							<?php $totalFeeApplicable=0; $categoryClassificationFeeTotal=0;?>
+							<?php foreach($appliedServices as $appliedService): ?>
+								<tr>
+									<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff" <?php if($appliedService->Id!=CONST_SERVICETYPE_RENEWAL && $appliedService->Id!=CONST_SERVICETYPE_LATEFEE && $appliedService->Id!=CONST_SERVICETYPE_CHANGEOFCATEGORYCLASSIFICATION): ?>colspan="2"<?php endif; ?>>
+										<?php echo e($appliedService->ServiceName); ?>
+
+									</td>
+									<?php if($appliedService->Id==CONST_SERVICETYPE_RENEWAL || $appliedService->Id==CONST_SERVICETYPE_CHANGEOFCATEGORYCLASSIFICATION): ?>
+										<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+											<?php if($hasRenewal && $hasChangeInCategoryClassification): ?>
+												<?php if($appliedService->Id==CONST_SERVICETYPE_RENEWAL): ?>
+													<table class="table table-hover table-condensed">
+														<thead>
+														<tr class="success">
+															<th style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">Category</th>
+															<th style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">Existing</th>
+															<th style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">Applied</th>
+															<th style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">Verified</th>
+															<th style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">Approved</th>
+															<th style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">Amount</th>
+														</tr>
+														</thead>
+														<tbody>
+														<?php foreach($hasCategoryClassificationsFee as $hasCategoryClassificationFee): ?>
+															<tr>
+																<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff"><?php echo e($hasCategoryClassificationFee->MasterCategoryCode); ?></td>
+																<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+																	<?php if((bool)$hasCategoryClassificationFee->FinalApprovedClassification!=NULL): ?>
+																		<?php echo e($hasCategoryClassificationFee->FinalApprovedClassification); ?>
+
+																	<?php else: ?>
+																		-
+																	<?php endif; ?>
+																</td>
+																<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+																	<?php if((bool)$hasCategoryClassificationFee->AppliedClassification!=NULL): ?>
+																		<?php echo e($hasCategoryClassificationFee->AppliedClassification); ?>
+
+																		<?php if($hasCategoryClassificationFee->AppliedClassificationPriority<$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+																			<i class="font-red"><small> (Downgraded)</small></i>
+																		<?php elseif(!empty($hasCategoryClassificationFee->FinalClassificationPriority) && $hasCategoryClassificationFee->AppliedClassificationPriority>$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+																			<i class="font-red"><small> (Upgraded)</small></i>
+																		<?php elseif(empty($hasCategoryClassificationFee->FinalClassificationPriority)): ?>
+																			<i class="font-red"><small>(New)</small></i>
+																		<?php endif; ?>
+																	<?php else: ?>
+																		-
+																	<?php endif; ?>
+																</td>
+																<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+																	<?php if((bool)$hasCategoryClassificationFee->VerifiedClassification!=NULL): ?>
+																		<?php echo e($hasCategoryClassificationFee->VerifiedClassification); ?>
+
+																		<?php if($hasCategoryClassificationFee->VerifiedClassificationPriority<$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+																			<i class="font-red"><small> (Downgraded)</small></i>
+																		<?php elseif(!empty($hasCategoryClassificationFee->FinalClassificationPriority) && $hasCategoryClassificationFee->VerifiedClassificationPriority>$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+																			<i class="font-red"><small> (Upgraded)</small></i>
+																		<?php elseif(empty($hasCategoryClassificationFee->FinalClassificationPriority)): ?>
+																			<i class="font-red"><small>(New)</small></i>
+																		<?php endif; ?>
+																	<?php else: ?>
+																		-
+																	<?php endif; ?>
+																</td>
+																<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+																	<?php if((bool)$hasCategoryClassificationFee->ApprovedClassification!=NULL): ?>
+																		<?php echo e($hasCategoryClassificationFee->ApprovedClassification); ?>
+
+																		<?php if($hasCategoryClassificationFee->ApprovedClassificationPriority<$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+																			<i class="font-red"><small> (Downgraded)</small></i>
+																		<?php elseif(!empty($hasCategoryClassificationFee->FinalClassificationPriority) && $hasCategoryClassificationFee->ApprovedClassificationPriority>$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+																			<i class="font-red"><small> (Upgraded)</small></i>
+																		<?php elseif(empty($hasCategoryClassificationFee->FinalClassificationPriority)): ?>
+																			<i class="font-red"><small>(New)</small></i>
+																		<?php endif; ?>
+																	<?php else: ?>
+																		-
+																	<?php endif; ?>
+																</td>
+																<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+																	<?php if((bool)$hasCategoryClassificationFee->ApprovedClassification!=NULL): ?>
+																		<?php if($hasCategoryClassificationFee->ApprovedClassificationId==$hasCategoryClassificationFee->FinalApprovedClassificationId): ?>
+																			<?php $categoryClassificationFeeTotal+=$hasCategoryClassificationFee->ApprovedRenewalFee; ?>
+																			<?php echo number_format($hasCategoryClassificationFee->ApprovedRenewalFee,2); ?>
+
+																		<?php else: ?>
+																			<?php $categoryClassificationFeeTotal+=$hasCategoryClassificationFee->ApprovedRegistrationFee; ?>
+																			<?php echo number_format($hasCategoryClassificationFee->ApprovedRegistrationFee,2); ?>
+
+																		<?php endif; ?>
+																	<?php else: ?>
+																		-
+																	<?php endif; ?>
+																</td>
+															</tr>
+														<?php endforeach; ?>
+														<tr class="bold">
+															<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff" colspan="5">Total</td>
+															<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+																<?php $appliedService->ContractorAmount=$categoryClassificationFeeTotal; ?>
+																<?php echo number_format($categoryClassificationFeeTotal,2); ?>
+
+															</td>
+														</tr>
+														</tbody>
+													</table>
+												<?php else: ?>
+													<span class="font-red">*Fee details has been already displayed aganist Renewal of CDB Certificate.</span>
+												<?php endif; ?>
+											<?php else: ?>
+												<table class="data-large" style="border-collapse: collapse; width: 70%; background-color: #fff; font-size: 10pt;" bgcolor="#fff">
+													<thead>
+													<tr class="success">
+														<th style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">Category</th>
+														<th style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">Existing</th>
+														<th style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">Applied</th>
+														<th style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">Verified</th>
+														<th style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">Approved</th>
+														<th style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">Amount</th>
+													</tr>
+													</thead>
+													<tbody>
+													<?php foreach($hasCategoryClassificationsFee as $hasCategoryClassificationFee): ?>
+														<tr>
+															<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff"><?php echo e($hasCategoryClassificationFee->MasterCategoryCode); ?></td>
+															<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+																<?php if((bool)$hasCategoryClassificationFee->FinalApprovedClassification!=NULL): ?>
+																	<?php echo e($hasCategoryClassificationFee->FinalApprovedClassification); ?>
+
+																<?php else: ?>
+																	-
+																<?php endif; ?>
+															</td>
+															<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+																<?php if((bool)$hasCategoryClassificationFee->AppliedClassification!=NULL): ?>
+																	<?php echo e($hasCategoryClassificationFee->AppliedClassification); ?>
+
+																	<?php if($hasCategoryClassificationFee->AppliedClassificationPriority<$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+																		<i class="font-red"><small> (Downgraded)</small></i>
+																	<?php elseif(!empty($hasCategoryClassificationFee->FinalClassificationPriority) && $hasCategoryClassificationFee->AppliedClassificationPriority>$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+																		<i class="font-red"><small> (Upgraded)</small></i>
+																	<?php elseif(empty($hasCategoryClassificationFee->FinalClassificationPriority)): ?>
+																		<i class="font-red"><small>(New)</small></i>
+																	<?php endif; ?>
+																<?php else: ?>
+																	-
+																<?php endif; ?>
+															</td>
+															<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+																<?php if((bool)$hasCategoryClassificationFee->VerifiedClassification!=NULL): ?>
+																	<?php echo e($hasCategoryClassificationFee->VerifiedClassification); ?>
+
+																	<?php if($hasCategoryClassificationFee->VerifiedClassificationPriority<$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+																		<i class="font-red"><small> (Downgraded)</small></i>
+																	<?php elseif(!empty($hasCategoryClassificationFee->FinalClassificationPriority) && $hasCategoryClassificationFee->VerifiedClassificationPriority>$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+																		<i class="font-red"><small> (Upgraded)</small></i>
+																	<?php elseif(empty($hasCategoryClassificationFee->FinalClassificationPriority)): ?>
+																		<i class="font-red"><small>(New)</small></i>
+																	<?php endif; ?>
+																<?php else: ?>
+																	-
+																<?php endif; ?>
+															</td>
+															<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+																<?php if((bool)$hasCategoryClassificationFee->ApprovedClassification!=NULL): ?>
+																	<?php echo e($hasCategoryClassificationFee->ApprovedClassification); ?>
+
+																	<?php if($hasCategoryClassificationFee->ApprovedClassificationPriority<$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+																		<i class="font-red"><small> (Downgraded)</small></i>
+																	<?php elseif(!empty($hasCategoryClassificationFee->FinalClassificationPriority) && $hasCategoryClassificationFee->ApprovedClassificationPriority>$hasCategoryClassificationFee->FinalClassificationPriority): ?>
+																		<i class="font-red"><small> (Upgraded)</small></i>
+																	<?php elseif(empty($hasCategoryClassificationFee->FinalClassificationPriority)): ?>
+																		<i class="font-red"><small>(New)</small></i>
+																	<?php endif; ?>
+																<?php else: ?>
+																	-
+																<?php endif; ?>
+															</td>
+															<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+																<?php if((bool)$hasCategoryClassificationFee->ApprovedClassification!=NULL): ?>
+																	<?php if($hasCategoryClassificationFee->ApprovedClassificationId==$hasCategoryClassificationFee->FinalApprovedClassificationId): ?>
+																		<?php if($hasRenewal): ?>
+																			<?php $categoryClassificationFeeTotal+=$hasCategoryClassificationFee->ApprovedRenewalFee; ?>
+																			<?php echo number_format($hasCategoryClassificationFee->ApprovedRenewalFee,2); ?>
+
+																		<?php else: ?>
+																			-
+																		<?php endif; ?>
+																	<?php else: ?>
+																		<?php $categoryClassificationFeeTotal+=$hasCategoryClassificationFee->ApprovedRegistrationFee; ?>
+																		<?php echo number_format($hasCategoryClassificationFee->ApprovedRegistrationFee,2); ?>
+
+																	<?php endif; ?>
+																<?php else: ?>
+																	-
+																<?php endif; ?>
+															</td>
+														</tr>
+													<?php endforeach; ?>
+													<tr class="bold">
+														<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff" colspan="5">Total</td>
+														<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+															<?php $appliedService->ContractorAmount=$categoryClassificationFeeTotal; ?>
+															<?php echo number_format($categoryClassificationFeeTotal,2); ?>
+
+														</td>
+													</tr>
+													</tbody>
+												</table>
+											<?php endif; ?>
+										</td>
+									<?php elseif($appliedService->Id==CONST_SERVICETYPE_LATEFEE): ?>
+										<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+											<table class="data-large" style="border-collapse: collapse; width: 70%; background-color: #fff; font-size: 10pt;" bgcolor="#fff">
+												<thead>
+												<tr class="danger">
+													<th style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">No. of Days Late (Actual)</th>
+													<th style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">No. of Days Late After Grace Period</th>
+													<th style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">Penalty per Day (Nu.)</th>
+													<th style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">Total Amount (Nu.)</th>
+												</tr>
+												</thead>
+												<tbody>
+												<tr>
+													<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+														<?php echo $hasLateFeeAmount[0]->PenaltyNoOfDays-1; ?><br />
+														<small><i class="font-red">* 30 days is grace period.</i></small><br />
+														<small><i class="font-red">* Registration Expired on <?php echo convertDateToClientFormat($hasLateFeeAmount[0]->RegistrationExpiryDate); ?></i></small><br />
+														<small><i class="font-red">* Application for Renewal on <?php echo convertDateToClientFormat($hasLateFeeAmount[0]->ApplicationDate); ?></i></small>
+													</td>
+													<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+														<?php $lateFeeAfterGracePeriod=$hasLateFeeAmount[0]->PenaltyNoOfDays-30-1; ?>
+														<?php if(($hasLateFeeAmount[0]->PenaltyNoOfDays-1)>30): ?>
+															<?php $lateFeeAfterGracePeriod=$hasLateFeeAmount[0]->PenaltyNoOfDays-30-1; ?>
+														<?php else: ?>
+															<?php $lateFeeAfterGracePeriod = 0; ?>
+														<?php endif; ?>
+														<?php if($lateFeeAfterGracePeriod>0): ?>
+															<?php echo $lateFeeAfterGracePeriod; ?>
+
+														<?php endif; ?>
+													</td>
+													<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+														<?php echo number_format($hasLateFeeAmount[0]->PenaltyLateFeeAmount,2); ?>
+
+													</td>
+													<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+														<?php $lateFeeAmount=(int)$lateFeeAfterGracePeriod*(int)$hasLateFeeAmount[0]->PenaltyLateFeeAmount; ?>
+															<?php if((int)$maxClassification == 998 || (int)$maxClassification == 997): ?>
+															<?php if($lateFeeAmount > 3000): ?>
+																<?php $lateFeeAmount = 3000; ?>
+															<?php endif; ?>
+														<?php endif; ?>
+														<?php echo number_format($lateFeeAmount,2); ?>
+
+													</td>
+												</tr>
+												<tr class="bold">
+													<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff" colspan="3">Total</td>
+													<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+														<?php $appliedService->ContractorAmount=$lateFeeAmount;?>
+															<?php if((int)$hasWaiver == 1): ?>
+																<span style="text-decoration: line-through;">
+															<?php endif; ?>
+															<?php echo number_format($lateFeeAmount,2); ?>
+
+															<?php if((int)$hasWaiver == 1): ?>
+																</span>
+																&nbsp;
+																<?php echo e($newLateFeeAmount); ?>
+
+															<?php endif; ?>
+													</td>
+												</tr>
+												</tbody>
+											</table>
+										</td>
+									<?php endif; ?>
+									<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff" class="text-right">
+										<?php if((bool)$appliedService->ContractorAmount!=NULL): ?>
+										<?php $totalFeeApplicable+=$appliedService->ContractorAmount; ?>
+										<?php if($appliedService->Id==CONST_SERVICETYPE_LATEFEE): ?>
+											<?php if((int)$hasWaiver == 1): ?>
+												<span style="text-decoration: line-through;">
+											<?php endif; ?>
+										<?php endif; ?>
+										<?php echo e(number_format($appliedService->ContractorAmount,2)); ?>
+
+										<?php if($appliedService->Id==CONST_SERVICETYPE_LATEFEE): ?>
+											<?php if((int)$hasWaiver == 1): ?>
+												</span>
+												&nbsp;
+												<?php echo e($newLateFeeAmount); ?>
+
+											<?php endif; ?>
+										<?php endif; ?>
+										<?php else: ?>
+											-
+										<?php endif; ?>
+									</td>
+								</tr>
+							<?php endforeach; ?>
+							<tr class="text-right bold">
+								<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff" colspan="2">Total Amount Payable</td>
+								<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+									<?php /*<?php echo e(number_format($totalFeeApplicable,2)); ?>*/ ?>
+									<?php if((int)$hasWaiver == 1): ?>
+										<span style="text-decoration: line-through;">
+									<?php endif; ?>
+									<?php echo e(number_format($totalFeeApplicable,2)); ?>
+
+									<?php if((int)$hasWaiver == 1): ?>
+										</span>
+										<br>
+										<?php echo e(number_format((int)$totalFeeApplicable-((int)$lateFeeAmount-(int)$newLateFeeAmount),2)); ?>
+
+									<?php endif; ?>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+						<b>Total Amount Payable: Nu.
+							<?php if((int)$hasWaiver == 1): ?>
+								<?php echo e(number_format((int)$totalFeeApplicable-((int)$lateFeeAmount-(int)$newLateFeeAmount),2)); ?>
+
+							<?php else: ?>
+								<?php echo e(number_format($totalFeeApplicable,2)); ?>
+
+							<?php endif; ?></b>
+				<?php endif; ?>
+			<?php endif; ?>
+		<?php elseif($applicantType == 2): ?>
+
+				<?php /*Consultant*/ ?>
+				<?php if((bool)$applicationType): ?>
+					<?php if($applicationType == 1): ?>
+							<table class="data-large" style="border-collapse: collapse; width: 70%; background-color: #fff; font-size: 10pt;" bgcolor="#fff">
+								<thead>
+								<tr style="background-color: #ccc;" bgcolor="#ccc">
+									<th style="background-color: #d7e5f2; padding: 0 8px 0 8px; border: 1px solid #000;" bgcolor="#d7e5f2">Category</th>
+									<th style="background-color: #d7e5f2; padding: 0 8px 0 8px; border: 1px solid #000;" bgcolor="#d7e5f2">Applied</th>
+									<th style="background-color: #d7e5f2; padding: 0 8px 0 8px; border: 1px solid #000;" bgcolor="#d7e5f2">Verified</th>
+									<th style="background-color: #d7e5f2; padding: 0 8px 0 8px; border: 1px solid #000;" bgcolor="#d7e5f2">Approved</th>
+									<th style="text-align: center;background-color: #d7e5f2; border: 1px solid #000;" bgcolor="#d7e5f2" align="center">No. of Service (Approved) X Fee.</th>
+									<th style="text-align: right;background-color: #d7e5f2; border: 1px solid #000;" bgcolor="#d7e5f2" align="right">Total</th>
+								</tr>
+								</thead>
+								<tbody>
+								<?php $noOfServicePerCategory=0;$overAllTotalAmount=0; ?>
+								<?php foreach($serviceCategories as $serviceCategory): ?>
+									<tr style="background-color: #ccc;" bgcolor="#ccc">
+										<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff"><?php echo $serviceCategory->Name; ?></td>
+										<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+											<?php foreach($appliedCategoryServices as $appliedServiceFee): ?>
+												<?php if($appliedServiceFee->CmnConsultantServiceCategoryId==$serviceCategory->Id): ?>
+													<span class="font-green-seagreen tooltips" data-placement="top" data-original-title="<?php echo $appliedServiceFee->ServiceName; ?>"><i class="fa fa-question-circle"></i></span>
+													<?php echo $appliedServiceFee->ServiceCode; ?>
+
+												<?php endif; ?>
+											<?php endforeach; ?>
+										</td>
+										<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+											<?php foreach($verifiedCategoryServices as $verifiedServiceFee): ?>
+												<?php if($verifiedServiceFee->CmnConsultantServiceCategoryId==$serviceCategory->Id): ?>
+													<span class="font-green-seagreen tooltips" data-placement="top" data-original-title="<?php echo $verifiedServiceFee->ServiceName; ?>"><i class="fa fa-question-circle"></i></span>
+													<?php echo $verifiedServiceFee->ServiceCode; ?>
+
+												<?php endif; ?>
+											<?php endforeach; ?>
+										</td>
+										<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff">
+											<?php foreach($approvedCategoryServices as $approvedServiceFee): ?>
+												<?php if($approvedServiceFee->CmnConsultantServiceCategoryId==$serviceCategory->Id): ?>
+													<?php $noOfServicePerCategory+=1; ?>
+													<span class="font-green-seagreen tooltips" data-placement="top" data-original-title="<?php echo $approvedServiceFee->ServiceName; ?>"><i class="fa fa-question-circle"></i></span>
+													<?php echo $approvedServiceFee->ServiceCode; ?>
+
+												<?php endif; ?>
+											<?php endforeach; ?>
+										</td>
+										<td style="text-align: center;font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff" align="center">
+											<?php echo $noOfServicePerCategory.' X '.number_format($feeStructures[0]->ConsultantAmount,2); ?>
+
+										</td>
+										<td style="text-align: right;font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff" align="right">
+											<?php $curTotalAmount=$noOfServicePerCategory*$feeStructures[0]->ConsultantAmount;$overAllTotalAmount+=$curTotalAmount; ?>
+											<?php echo number_format($noOfServicePerCategory*$feeStructures[0]->ConsultantAmount,2); ?>
+
+										</td>
+									</tr>
+									<?php $noOfServicePerCategory=0; ?>
+								<?php endforeach; ?>
+								<tr style="font-weight: bold;background-color: #ccc; text-align: right;" bgcolor="#ccc" align="right">
+									<td colspan="5" style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff"><span style="font-weight: bold;color:#db4437;text-align: left;" align="left">*Nu <?php echo number_format($feeStructures[0]->ConsultantAmount,2); ?> is applicable for each service under the category</span> Total</td>
+									<td style="font-size: 10pt; background-color: #fff; padding: 2px; border: 1px solid #000;" bgcolor="#fff"><?php echo number_format($overAllTotalAmount,2); ?></td>
+								</tr>
+								</tbody>
+							</table>
+							<b>Total Amount Payable: Nu. <?php echo number_format($overAllTotalAmount,2); ?></b>
+					<?php else: ?>
+						<?php /*For Service application*/ ?>
+						<table class="table table-bordered table-striped table-condensed ">
+							<thead>
+							<tr>
+								<th>Service(s) Applied</th>
+								<th>Details</th>
+								<th width="10%" class="text-right">Fee (Nu.)</th>
+							</tr>
+							</thead>
+							<tbody>
+							<?php $totalFeeApplicable=0; $categoryClassificationFeeTotal=0;$lateFeeAmount=0;?>
+							<?php foreach($appliedServices as $appliedService): ?>
+								<tr>
+									<td <?php if($appliedService->Id!=CONST_SERVICETYPE_RENEWAL && $appliedService->Id!=CONST_SERVICETYPE_LATEFEE && $appliedService->Id!=CONST_SERVICETYPE_CHANGEOFCATEGORYCLASSIFICATION): ?>colspan="2"<?php endif; ?>>
+										<?php echo e($appliedService->ServiceName); ?>
+
+									</td>
+									<?php if($appliedService->Id==CONST_SERVICETYPE_RENEWAL || $appliedService->Id==CONST_SERVICETYPE_CHANGEOFCATEGORYCLASSIFICATION): ?>
+										<td>
+											<?php if($hasRenewal && $hasChangeInCategoryClassification): ?>
+												<?php if($appliedService->Id==CONST_SERVICETYPE_RENEWAL): ?>
+													<table class="table table-bordered table-hover table-condensed">
+														<thead>
+														<tr class="success">
+															<th>Category</th>
+															<th>Applied</th>
+															<th>Verified</th>
+															<th>Approved</th>
+															<th>No. of Service (Approved) X Fee</th>
+															<th class="text-right">Total</th>
+														</tr>
+														</thead>
+														<tbody>
+														<?php foreach($hasCategoryClassificationsFee as $hasCategoryClassificationFee): ?>
+															<?php $approvedServiceCount = 0; ?>
+															<tr>
+																<td><?php echo e($hasCategoryClassificationFee->ServiceCategoryName); ?></td>
+																<td>
+																	<?php if((bool)$hasCategoryClassificationFee->AppliedService!=NULL): ?>
+																		<?php echo e($hasCategoryClassificationFee->AppliedService); ?>
+
+																	<?php else: ?>
+																		-
+																	<?php endif; ?>
+																</td>
+																<td>
+																	<?php if((bool)$hasCategoryClassificationFee->VerifiedService!=NULL): ?>
+																		<?php echo e($hasCategoryClassificationFee->VerifiedService); ?>
+
+																	<?php else: ?>
+																		-
+																	<?php endif; ?>
+																</td>
+																<td>
+																	<?php if((bool)$hasCategoryClassificationFee->ApprovedService!=NULL): ?>
+																		<?php echo e($hasCategoryClassificationFee->ApprovedService); ?>
+
+																	<?php else: ?>
+																		-
+																	<?php endif; ?>
+																	<?php foreach($approvedCategoryServicesArray[$hasCategoryClassificationFee->ServiceCategoryId] as $approvedServiceIndividual): ?>
+																		<?php /*<?php if(!in_array($approvedServiceIndividual,$existingCategoryServicesArray[$hasCategoryClassificationFee->ServiceCategoryId])): ?>*/ ?>
+																			<?php $approvedServiceCount++; ?>
+																		<?php /*<?php endif; ?>*/ ?>
+																	<?php endforeach; ?>
+																</td>
+																<td class="text-center">
+																	<?php echo $approvedServiceCount .' X '.number_format($feeAmount[0]->ConsultantAmount); ?>
+
+																</td>
+																<td class="text-right">
+																	<?php $categoryClassificationFeeTotal+=$approvedServiceCount * $feeAmount[0]->ConsultantAmount;?>
+																	<?php echo number_format($approvedServiceCount * $feeAmount[0]->ConsultantAmount); ?>
+
+																</td>
+															</tr>
+														<?php endforeach; ?>
+														<tr class="bold">
+															<td colspan="5">Total</td>
+															<td class="text-right">
+																<?php $appliedService->ConsultantAmount=$categoryClassificationFeeTotal; ?>
+																<?php echo number_format($categoryClassificationFeeTotal,2); ?>
+
+															</td>
+														</tr>
+														</tbody>
+													</table>
+												<?php else: ?>
+													<span class="font-red">*Fee details has been already displayed aganist Renewal of CDB Certificate.</span>
+												<?php endif; ?>
+											<?php else: ?>
+												<table class="table table-bordered table-hover table-condensed">
+													<thead>
+													<tr class="success">
+														<th>Category</th>
+														<th>Applied</th>
+														<th>Verified</th>
+														<th>Approved</th>
+														<th>No. of Service (Approved) X Fee</th>
+														<th class="text-right">Total</th>
+													</tr>
+													</thead>
+													<tbody>
+													<?php foreach($hasCategoryClassificationsFee as $hasCategoryClassificationFee): ?>
+													<?php $approvedServiceCount = 0; ?>
+														<tr>
+															<td><?php echo e($hasCategoryClassificationFee->ServiceCategoryName); ?></td>
+															<td>
+																<?php if((bool)$hasCategoryClassificationFee->AppliedService!=NULL): ?>
+																	<?php echo e($hasCategoryClassificationFee->AppliedService); ?>
+
+																<?php else: ?>
+																	-
+																<?php endif; ?>
+															</td>
+															<td>
+																<?php if((bool)$hasCategoryClassificationFee->VerifiedService!=NULL): ?>
+																	<?php echo e($hasCategoryClassificationFee->VerifiedService); ?>
+
+																<?php else: ?>
+																	-
+																<?php endif; ?>
+															</td>
+															<td>
+																<?php if((bool)$hasCategoryClassificationFee->ApprovedService!=NULL): ?>
+																	<?php echo e($hasCategoryClassificationFee->ApprovedService); ?>
+
+																<?php else: ?>
+																	-
+																<?php endif; ?>
+																<?php if($appliedService->Id==CONST_SERVICETYPE_RENEWAL): ?>
+																	<?php foreach($approvedCategoryServicesArray[$hasCategoryClassificationFee->ServiceCategoryId] as $approvedServiceIndividual): ?>
+<?php /*																		<?php if(!in_array($approvedServiceIndividual,$existingCategoryServicesArray[$hasCategoryClassificationFee->ServiceCategoryId])): ?>*/ ?>
+																			<?php $approvedServiceCount++; ?>
+																		<?php /*<?php endif; ?>*/ ?>
+																	<?php endforeach; ?>
+																<?php else: ?>
+																	<?php foreach($approvedCategoryServicesArray[$hasCategoryClassificationFee->ServiceCategoryId] as $approvedServiceIndividual): ?>
+																		<?php if(!in_array($approvedServiceIndividual,$existingCategoryServicesArray[$hasCategoryClassificationFee->ServiceCategoryId])): ?>
+																			<?php $approvedServiceCount++; ?>
+																		<?php endif; ?>
+																	<?php endforeach; ?>
+																<?php endif; ?>
+															</td>
+															<td class="text-center">
+																<?php echo $approvedServiceCount.' X '.number_format($feeAmount[0]->ConsultantAmount); ?>
+
+															</td>
+															<td class="text-right">
+																<?php $categoryClassificationFeeTotal+=$approvedServiceCount* $feeAmount[0]->ConsultantAmount;?>
+																<?php echo number_format($approvedServiceCount* $feeAmount[0]->ConsultantAmount); ?>
+
+															</td>
+														</tr>
+													<?php endforeach; ?>
+													<tr class="bold">
+														<td colspan="5">Total</td>
+														<td class="text-right">
+															<?php $appliedService->ConsultantAmount=$categoryClassificationFeeTotal; ?>
+															<?php echo number_format($categoryClassificationFeeTotal,2); ?>
+
+														</td>
+													</tr>
+													</tbody>
+												</table>
+											<?php endif; ?>
+										</td>
+									<?php elseif($appliedService->Id==CONST_SERVICETYPE_LATEFEE): ?>
+										<td>
+											<table class="table table-hover table-condensed">
+												<thead>
+												<tr class="danger">
+													<th>No. of Days Late (Actual)</th>
+													<th>No. of Days Late After Grace Period</th>
+													<th>Penalty per Day (Nu.)</th>
+													<th>Total Amount (Nu.)</th>
+												</tr>
+												</thead>
+												<tbody>
+												<tr>
+													<td>
+														<?php echo $hasLateFeeAmount[0]->PenaltyNoOfDays; ?><br />
+														<small><i class="font-red">* 30 days is grace period.</i></small><br />
+														<small><i class="font-red">Registration Expired on <?php echo convertDateToClientFormat($hasLateFeeAmount[0]->RegistrationExpiryDate); ?></i></small><br />
+														<small><i class="font-red">* Application for Renewal on <?php echo convertDateToClientFormat($hasLateFeeAmount[0]->ApplicationDate); ?></i></small>
+													</td>
+													<td>
+														<?php $lateFeeAfterGracePeriod=$hasLateFeeAmount[0]->PenaltyNoOfDays-30-1; ?>
+														<?php if($lateFeeAfterGracePeriod>0): ?>
+															<?php echo $lateFeeAfterGracePeriod; ?>
+
+														<?php endif; ?>
+													</td>
+													<td>
+														<?php echo number_format($hasLateFeeAmount[0]->PenaltyLateFeeAmount,2); ?>
+
+													</td>
+													<td>
+														<?php $lateFeeAmount=(int)$lateFeeAfterGracePeriod*(int)$hasLateFeeAmount[0]->PenaltyLateFeeAmount; ?>
+														<?php echo number_format((int)$lateFeeAfterGracePeriod*(int)$hasLateFeeAmount[0]->PenaltyLateFeeAmount,2); ?>
+
+													</td>
+												</tr>
+												<tr class="bold">
+													<td colspan="2">Total</td>
+													<td>
+														<?php $appliedService->ConsultantAmount=$lateFeeAmount;?>
+														<?php if((int)$hasWaiver == 1): ?>
+															<span style="text-decoration: line-through;">
+														<?php endif; ?>
+														<?php echo number_format($lateFeeAmount,2); ?>
+
+														<?php if((int)$hasWaiver == 1): ?>
+															</span>
+															&nbsp;
+															<?php echo e(number_format($newLateFeeAmount,2)); ?>
+
+														<?php endif; ?>
+													</td>
+												</tr>
+												</tbody>
+											</table>
+										</td>
+									<?php endif; ?>
+									<td class="text-right">
+										<?php if((bool)$appliedService->ConsultantAmount!=NULL): ?>
+											<?php $totalFeeApplicable+=$appliedService->ConsultantAmount; ?>
+											<?php if($appliedService->Id==CONST_SERVICETYPE_LATEFEE): ?>
+												<?php if((int)$hasWaiver == 1): ?>
+													<span style="text-decoration: line-through;">
+												<?php endif; ?>
+											<?php endif; ?>
+												<?php echo e(number_format($appliedService->ConsultantAmount,2)); ?>
+
+											<?php if($appliedService->Id==CONST_SERVICETYPE_LATEFEE): ?>
+												<?php if((int)$hasWaiver == 1): ?>
+													</span>
+													&nbsp;
+													<?php echo e(number_format($newLateFeeAmount,2)); ?>
+
+												<?php endif; ?>
+											<?php endif; ?>
+										<?php else: ?>
+											-
+										<?php endif; ?>
+									</td>
+								</tr>
+							<?php endforeach; ?>
+							<tr class="text-right bold">
+								<td colspan="2">Total Amount Payable</td>
+								<td>
+									<?php if((int)$hasWaiver == 1): ?>
+										<span style="text-decoration: line-through;">
+									<?php endif; ?>
+										<?php echo e(number_format($totalFeeApplicable,2)); ?>
+
+									<?php if((int)$hasWaiver == 1): ?>
+										</span>
+										<br>
+									<?php echo e(number_format((int)$totalFeeApplicable-((int)$lateFeeAmount-(int)$newLateFeeAmount),2)); ?>
+
+									<?php endif; ?>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+						<b>Total Amount Payable: Nu. <?php if((int)$hasWaiver == 1): ?><?php echo e(number_format((int)$totalFeeApplicable-((int)$lateFeeAmount-(int)$newLateFeeAmount),2)); ?>
+
+							<?php else: ?>
+								<?php echo e(number_format($totalFeeApplicable,2)); ?>
+
+							<?php endif; ?>
+						</b>
+						<?php /*End Service Application*/ ?>
+					<?php endif; ?>
+				<?php endif; ?>
+
+				<?php /*END Consultant*/ ?>
+			<?php /*<?php endif; ?>*/ ?>
+		<?php elseif($applicantType == 3): ?>
+			<?php /*Architect*/ ?>
+			<?php if((bool)$applicationType): ?>
+				<?php if($applicationType == 1): ?>
+					<?php /*Registration*/ ?>
+						<table class="table table-bordered table-striped table-condensed">
+							<thead>
+							<tr>
+								<th>Architect Type</th>
+								<th>Application Type</th>
+								<th width="20%" class="text-center">Validity (yrs)</th>
+								<th class="text-right">Amount</th>
+							</tr>
+							</thead>
+							<tbody>
+							<?php $totalFeesApplicable=0; ?>
+							<?php foreach($feeStructures as $feeDetail): ?>
+								<tr>
+									<?php if($architectServiceSectorType==CONST_CMN_SERVICESECTOR_GOVT): ?>
+										<td>Goverment</td>
+									<?php else: ?>
+										<td>Private</td>
+									<?php endif; ?>
+									<td>New Registration</td>
+									<td class="text-center">
+										<?php if(empty($feeDetail->RegistrationValidity)): ?>
+											-
+										<?php else: ?>
+											<?php echo $feeDetail->RegistrationValidity; ?>
+
+										<?php endif; ?>
+									</td>
+									<td class="text-right">
+										<?php if(empty($feeDetail->NewRegistrationFee)): ?>
+											-
+										<?php else: ?>
+											<?php echo number_format($feeDetail->NewRegistrationFee,2); ?>
+
+										<?php endif; ?>
+									</td>
+									<?php $totalFeesApplicable+=$feeDetail->NewRegistrationFee; ?>
+								</tr>
+							<?php endforeach; ?>
+							<tr>
+								<td colspan="3" class="bold text-right">
+									Total
+								</td>
+								<td class="text-right">
+									<?php echo number_format($totalFeesApplicable,2); ?>
+
+								</td>
+							</tr>
+							</tbody>
+						</table>
+						<b>Total Amount Payable: Nu. <?php echo number_format($totalFeesApplicable,2); ?></b>
+				<?php else: ?>
+					<?php /*Services*/ ?>
+						<table class="table table-bordered table-striped table-condensed">
+							<thead>
+							<tr>
+								<th>Service Applied</th>
+								<th>Remarks</th>
+								<th class="text-right">Amount</th>
+							</tr>
+							</thead>
+							<tbody>
+							<?php $totalFeesApplicable=0;$lateFeeAmount=0; ?>
+							<?php foreach($appliedServices as $appliedService): ?>
+								<tr>
+									<?php if($architectServiceSectorType==CONST_CMN_SERVICESECTOR_GOVT): ?>
+										<td>
+											<?php echo e($appliedService->ServiceName); ?>
+
+										</td>
+										<td class="text-right">
+											<?php $totalFeesApplicable+=$appliedService->ArchitectGovtAmount; ?>
+											<?php echo e(number_format($appliedService->ArchitectGovtAmount,2)); ?>
+
+										</td>
+									<?php else: ?>
+										<td>
+											<?php echo $appliedService->ServiceName; ?>
+
+										</td>
+										<td>
+											<?php if($appliedService->Id==CONST_SERVICETYPE_LATEFEE): ?>
+												<table class="table table-hover table-condensed">
+													<thead>
+													<tr class="danger">
+														<th>No. of Days Late (Actual)</th>
+														<th>No. of Days Late After Grace Period</th>
+														<th>Penalty per Day (Nu.)</th>
+														<th>Total Amount (Nu.)</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr>
+														<td>
+															<?php echo $hasLateFeeAmount[0]->PenaltyNoOfDays; ?><br />
+															<small><i class="font-red">* 30 days is grace period.</i></small><br />
+															<small><i class="font-red">Registration Expired on <?php echo convertDateToClientFormat($hasLateFeeAmount[0]->RegistrationExpiryDate); ?></i></small><br />
+															<small><i class="font-red">* Application for Renewal on <?php echo convertDateToClientFormat($hasLateFeeAmount[0]->ApplicationDate); ?></i></small>
+														</td>
+														<td>
+															<?php $lateFeeAfterGracePeriod=$hasLateFeeAmount[0]->PenaltyNoOfDays-30-1; ?>
+															<?php if(($hasLateFeeAmount[0]->PenaltyNoOfDays-1)>30): ?>
+																<?php $lateFeeAfterGracePeriod=$hasLateFeeAmount[0]->PenaltyNoOfDays-30-1; ?>
+															<?php else: ?>
+																<?php $lateFeeAfterGracePeriod = 0; ?>
+															<?php endif; ?>
+															<?php if($lateFeeAfterGracePeriod>0): ?>
+																<?php echo $lateFeeAfterGracePeriod; ?>
+
+															<?php endif; ?>
+														</td>
+														<td>
+															<?php echo number_format($hasLateFeeAmount[0]->PenaltyLateFeeAmount,2); ?>
+
+														</td>
+														<td>
+															<?php $lateFeeAmount=(int)$lateFeeAfterGracePeriod*(int)$hasLateFeeAmount[0]->PenaltyLateFeeAmount; ?>
+															<?php echo number_format((int)$lateFeeAfterGracePeriod*(int)$hasLateFeeAmount[0]->PenaltyLateFeeAmount,2); ?>
+
+															<?php $appliedService->ArchitectPvtAmount=$lateFeeAmount;?>
+															<?php if((int)$hasWaiver == 1): ?>
+																<span style="text-decoration: line-through;">
+															<?php endif; ?>
+																<?php echo number_format($lateFeeAmount,2); ?>
+
+															<?php if((int)$hasWaiver == 1): ?>
+																</span>
+																&nbsp;
+																<?php echo e(number_format($newLateFeeAmount,2)); ?>
+
+															<?php endif; ?>
+
+														</td>
+													</tr>
+													<tr class="bold">
+														<td colspan="3">Total</td>
+														<td>
+															<?php $appliedService->ArchitectPvtAmount=$lateFeeAmount;?>
+															<?php echo number_format($lateFeeAmount,2); ?>
+
+														</td>
+													</tr>
+													</tbody>
+												</table>
+											<?php endif; ?>
+										</td>
+										<td class="text-right">
+											<?php $totalFeesApplicable+=$appliedService->ArchitectPvtAmount; ?>
+											<?php if($appliedService->Id==CONST_SERVICETYPE_LATEFEE): ?>
+												<?php if((int)$hasWaiver == 1): ?>
+													<span style="text-decoration: line-through;">
+												<?php endif; ?>
+											<?php endif; ?>
+											<?php echo e(number_format($appliedService->ArchitectPvtAmount,2)); ?>
+
+											<?php if($appliedService->Id==CONST_SERVICETYPE_LATEFEE): ?>
+												<?php if((int)$hasWaiver == 1): ?>
+												</span>
+													&nbsp;
+													<?php echo e(number_format($newLateFeeAmount,2)); ?>
+
+												<?php endif; ?>
+											<?php endif; ?>
+										</td>
+									<?php endif; ?>
+								</tr>
+							<?php endforeach; ?>
+							<tr>
+								<td colspan="2" class="bold text-right">
+									Total
+								</td>
+								<td class="text-right bold">
+									<?php if((int)$hasWaiver == 1): ?>
+										<span style="text-decoration: line-through;">
+									<?php endif; ?>
+									<?php echo e(number_format($totalFeesApplicable,2)); ?>
+
+									<?php if((int)$hasWaiver == 1): ?>
+										</span>
+										<br>
+										<?php echo e(number_format((int)$totalFeesApplicable-((int)$lateFeeAmount-(int)$newLateFeeAmount),2)); ?>
+
+									<?php endif; ?>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+						<b>Total Amount Payable: Nu. <?php if((int)$hasWaiver == 1): ?>
+							<?php echo e(number_format((int)$totalFeesApplicable-((int)$lateFeeAmount-(int)$newLateFeeAmount),2)); ?>
+
+							<?php else: ?>
+							<?php echo e(number_format($totalFeesApplicable,2)); ?>
+
+							<?php endif; ?> </b>
+					<?php /*End Services*/ ?>
+
+				<?php endif; ?>
+			<?php endif; ?>
+		<?php elseif($applicantType == 4): ?>
+			<?php if((bool)$applicationType): ?>
+				<?php if($applicationType == 1): ?>
+						<table class="table table-bordered table-striped table-condensed">
+							<thead>
+							<tr>
+								<th>Engineer Type</th>
+								<th>Application Type</th>
+								<th width="20%" class="text-center">Validity (yrs)</th>
+								<th class="text-right">Amount</th>
+							</tr>
+							</thead>
+							<tbody>
+							<?php $totalFeesApplicable=0; ?>
+							<?php foreach($feeStructures as $feeDetail): ?>
+								<tr>
+									<?php if($engineerServiceSectorType==CONST_CMN_SERVICESECTOR_GOVT): ?>
+										<td>Goverment</td>
+									<?php else: ?>
+										<td>Private</td>
+									<?php endif; ?>
+									<td><?php echo $feeDetail->ServiceName; ?></td>
+									<td class="text-center">
+										<?php if(empty($feeDetail->RegistrationValidity)): ?>
+											-
+										<?php else: ?>
+											<?php echo $feeDetail->RegistrationValidity; ?>
+
+										<?php endif; ?>
+									</td>
+									<td class="text-right">
+										<?php if(empty($feeDetail->NewRegistrationFee)): ?>
+											-
+										<?php else: ?>
+											<?php echo number_format($feeDetail->NewRegistrationFee,2); ?>
+
+										<?php endif; ?>
+									</td>
+									<?php $totalFeesApplicable+=$feeDetail->NewRegistrationFee; ?>
+								</tr>
+							<?php endforeach; ?>
+							<tr>
+								<td colspan="3" class="bold text-right">
+									Total
+								</td>
+								<td class="text-right">
+									<?php echo number_format($totalFeesApplicable,2); ?>
+
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					<b>Total Amount Payable: Nu. <?php echo number_format($totalFeesApplicable,2); ?></b>
+				<?php else: ?>
+						<table class="table table-bordered table-striped table-condensed">
+							<thead>
+							<tr>
+								<th>Service Applied</th>
+								<th>Remarks</th>
+								<th class="text-right">Amount</th>
+							</tr>
+							</thead>
+							<tbody>
+							<?php $totalFeesApplicable=0;$lateFeeAmount=0; ?>
+							<?php foreach($appliedServices as $appliedService): ?>
+								<tr>
+									<?php if($engineerServiceSectorType==CONST_CMN_SERVICESECTOR_GOVT): ?>
+										<td>
+											<?php echo $appliedService->ServiceName; ?>
+
+										</td>
+										<td>
+											-
+										</td>
+										<td class="text-right">
+											<?php if(!empty($appliedService->EngineeerGovtAmount)): ?>
+												<?php $totalFeesApplicable+=$appliedService->EngineerGovtAmount; ?>
+												<?php echo number_format($appliedService->EngineeerGovtAmount,2); ?>
+
+											<?php else: ?>
+												-
+											<?php endif; ?>
+										</td>
+									<?php else: ?>
+										<td>
+											<?php echo $appliedService->ServiceName; ?>
+
+										</td>
+										<td>
+											<?php if($appliedService->Id==CONST_SERVICETYPE_LATEFEE): ?>
+												<table class="table table-hover table-condensed">
+													<thead>
+													<tr class="danger">
+														<th>No. of Days Late (Actual)</th>
+														<th>No. of Days Late After Grace Period</th>
+														<th>Penalty per Day (Nu.)</th>
+														<th>Total Amount (Nu.)</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr>
+														<td>
+															<?php echo $hasLateFeeAmount[0]->PenaltyNoOfDays; ?><br />
+															<small><i class="font-red">* 30 days is grace period.</i></small><br />
+															<small><i class="font-red">Registration Expired on <?php echo convertDateToClientFormat($hasLateFeeAmount[0]->RegistrationExpiryDate); ?></i></small><br />
+															<small><i class="font-red">* Application for Renewal on <?php echo convertDateToClientFormat($hasLateFeeAmount[0]->ApplicationDate); ?></i></small>
+														</td>
+														<td>
+															<?php $lateFeeAfterGracePeriod=$hasLateFeeAmount[0]->PenaltyNoOfDays-30; ?>
+															<?php if($lateFeeAfterGracePeriod>0): ?>
+																<?php echo $lateFeeAfterGracePeriod; ?>
+
+															<?php endif; ?>
+														</td>
+														<td>
+															<?php echo $hasLateFeeAmount[0]->PenaltyLateFeeAmount; ?>
+
+														</td>
+														<td>
+															<?php $lateFeeAmount=(int)$lateFeeAfterGracePeriod*(int)$hasLateFeeAmount[0]->PenaltyLateFeeAmount; ?>
+															<?php echo number_format((int)$lateFeeAfterGracePeriod*(int)$hasLateFeeAmount[0]->PenaltyLateFeeAmount,2); ?>
+
+														</td>
+													</tr>
+													<tr class="bold">
+														<td colspan="3">Total</td>
+														<td>
+															<?php $appliedService->EngineerPvtAmount=$lateFeeAmount;?>
+															<?php if((int)$hasWaiver == 1): ?>
+																<span style="text-decoration: line-through;">
+															<?php endif; ?>
+															<?php echo number_format($lateFeeAmount,2); ?>
+
+															<?php if((int)$hasWaiver == 1): ?>
+																</span>
+																&nbsp;
+																<?php echo e(number_format($newLateFeeAmount,2)); ?>
+
+															<?php endif; ?>
+														</td>
+													</tr>
+													</tbody>
+												</table>
+											<?php endif; ?>
+										</td>
+										<td class="text-right">
+											<?php $totalFeesApplicable+=$appliedService->EngineerPvtAmount; ?>
+											<?php if($appliedService->Id==CONST_SERVICETYPE_LATEFEE): ?>
+												<?php if((int)$hasWaiver == 1): ?>
+													<span style="text-decoration: line-through;">
+												<?php endif; ?>
+											<?php endif; ?>
+											<?php echo e(number_format($appliedService->EngineerPvtAmount,2)); ?>
+
+											<?php if($appliedService->Id==CONST_SERVICETYPE_LATEFEE): ?>
+												<?php if((int)$hasWaiver == 1): ?>
+													</span>
+													&nbsp;
+													<?php echo e(number_format($newLateFeeAmount,2)); ?>
+
+												<?php endif; ?>
+											<?php endif; ?>
+										</td>
+									<?php endif; ?>
+								</tr>
+							<?php endforeach; ?>
+							<tr>
+								<td colspan="2" class="bold text-right">
+									Total
+								</td>
+								<td class="text-right bold">
+									<?php if((int)$hasWaiver == 1): ?>
+										<span style="text-decoration: line-through;">
+									<?php endif; ?>
+									<?php echo e(number_format($totalFeesApplicable,2)); ?>
+
+									<?php if((int)$hasWaiver == 1): ?>
+									</span>
+										<br>
+										<?php echo e(number_format((int)$totalFeesApplicable-((int)$lateFeeAmount-(int)$newLateFeeAmount),2)); ?>
+
+									<?php endif; ?>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					<b>Total Amount Payable: Nu. <?php if((int)$hasWaiver == 1): ?>
+							<?php echo e(number_format((int)$totalFeesApplicable-((int)$lateFeeAmount-(int)$newLateFeeAmount),2)); ?>
+
+						<?php else: ?>
+							<?php echo e(number_format($totalFeesApplicable,2)); ?>
+
+						<?php endif; ?></b>
+				<?php endif; ?>
+			<?php endif; ?>
+		<?php endif; ?>
+		</div>
+	<?php endif; ?>
+<?php if(isset($applicationHistories) && !empty($applicationHistories)): ?>
+	<div class="col-md-6">
+		<h4 class="text-primary">Application History</h4>
+		<?php foreach($applicationHistories as $applicationHistory): ?>
+			<table class="table table-condensed table-striped table-bordered">
+				<tbody>
+					<tr>
+						<td><strong>Application For</strong></td>
+						<td><?php echo $applicationHistory->ApplicationType; ?></td>
+					</tr>
+					<tr>
+						<td><strong>Application No.</strong></td>
+						<td><?php echo $applicationHistory->ReferenceNo; ?></td>
+					</tr>
+					<tr>
+						<td><strong>Application Date</strong></td>
+						<td><?php echo convertDateToClientFormat($applicationHistory->ApplicationDate); ?></td>
+					</tr>
+					<tr>
+						<td><strong>Application Status</strong></td>
+						<td><?php echo $applicationHistory->ApplicationStatus; ?></td>
+					</tr>
+					<tr>
+						<td><strong>Name of Firm</strong></td>
+						<td><?php echo $applicationHistory->NameOfFirm; ?></td>
+					</tr>
+					<tr>
+						<td><strong>Registration Approved Date</strong></td>
+						<td>
+								<?php echo convertDateToClientFormat($applicationHistory->PaymentApprovedDate); ?>						
+						</td>
+					</tr>
+					<tr>
+						<td><strong>Registration Expiry Date</strong></td>
+						<td>
+							<?php echo convertDateToClientFormat($applicationHistory->RegistrationExpiryDate); ?>
+
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		<?php endforeach; ?>
+	</div>
+
+	<?php endif; ?>
+</div>
+<?php else: ?>
+	<div class="col-md-12">
+		<p><strong>No applicant with this Application No/CID No found!</strong></p>
+	</div>
+<?php endif; ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('websitemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

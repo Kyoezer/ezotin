@@ -1,0 +1,351 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div class="portlet light bordered">
+<div class="portlet-title">
+		<div class="caption">
+            <?php $parameters = Input::all(); $parameters['export']='excel'; ?>
+			<i class="fa fa-cogs"></i>List of Applications with Pending Payment   &nbsp;&nbsp;<?php if(!Input::has('export')): ?> <a href="<?php echo route('ezotinrpt.listofapplicantsdueforpayment',$parameters); ?>" class="btn btn-sm green"><i class="fa fa-file-excel-o"></i> Export to Excel</a>    <?php $parameters['export'] = 'print'; ?><a href="<?php echo route('ezotinrpt.listofapplicantsdueforpayment',$parameters); ?>" class="btn btn-sm purple" target="_blank"><i class="fa fa-print"></i> Print</a><?php endif; ?>
+		</div>
+	</div>
+	<div class="portlet-body dont-flip">
+        <?php echo Form::open(array('url'=>Request::url(),'method'=>'get')); ?>
+
+        <div class="form-body">
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="control-label">As on Date</label>
+                    <div class="input-icon right">
+                        <i class="fa fa-calendar"></i>
+                        <input type="text" name="Date" value="<?php echo convertDateToClientFormat($date); ?>" class="form-control datepicker" value="<?php echo Input::get('Date'); ?>" readonly="readonly" placeholder="">
+                    </div>
+                </div>
+                <?php if(!Input::has('export')): ?>
+                    <div class="col-md-2">
+                        <label class="control-label">&nbsp;</label>
+                        <div class="btn-set">
+                            <button type="submit" class="btn blue-hoki btn-sm">Search</button>
+                            <a href="<?php echo Request::url(); ?>" class="btn grey-cascade btn-sm">Clear</a>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php echo Form::close(); ?>
+
+        <div class="table-responsive dont-flip">
+            <table class="table table-bordered table-striped table-condensed" id="">
+                <thead>
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <th colspan="6">CONTRACTORS</th>
+                </tr>
+                    <tr>
+                        <th>Sl #</th>
+                     
+                        <th>Name of Firm</th>
+                        <th>CDBNo</th>
+                        <th>ApplicationNo</th>
+                        <th>Type</th>
+                        <th>Mobile #</th>
+                        <th>Amount</th>
+          
+                    </tr>
+                </thead>
+                <tbody>
+                <?php $count = 1; ?>
+             
+                    <?php foreach($contractorService as $contractorServ): ?>
+                        <tr>
+                            <td><?php echo $count++; ?></td>
+                            <td><?php echo $contractorServ->NameOfFirm; ?></td>
+                            <td><?php echo $contractorServ->CDBNo; ?></td>
+                            <td><?php echo $contractorServ->ReferenceNo; ?> dt. <?php echo convertDateToClientFormat($contractorServ->ApplicationDate); ?></td>
+                            <td><?php echo $contractorServ->ServiceType; ?></td>
+                            <td><?php echo $contractorServ->MobileNo; ?></td>
+                            <td><?php echo $contractorServ->ApprovedAmount; ?><?php echo $contractorServ->TotalAmount; ?></td>
+              
+                        </tr>
+                    <?php endforeach; ?>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-responsive dont-flip">
+            <table class="table table-bordered table-striped table-condensed" id="">
+                <thead>
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <th colspan="6">CONSULTANTS</th>
+                </tr>
+                <tr>
+                        <th>Sl #</th>
+                     
+                        <th>Name of Firm</th>
+                        <th>CDBNo</th>
+                        <th>ApplicationNo</th>
+                        <th>Type</th>
+                        <th>Mobile #</th>
+<th>Amount</th>
+          
+                    </tr>
+                </thead>
+                <tbody>
+                <?php $count = 1; ?>
+           
+                <?php foreach($consultantService as $consultantServ): ?>
+                <tr>
+                            <td><?php echo $count++; ?></td>
+                            <td><?php echo $consultantServ->NameOfFirm; ?></td>
+                            <td><?php echo $consultantServ->CDBNo; ?></td>
+                            <td><?php echo $consultantServ->ReferenceNo; ?> dt. <?php echo convertDateToClientFormat($consultantServ->ApplicationDate); ?></td>
+                            <td><?php echo $consultantServ->ServiceType; ?></td>
+                            <td><?php echo $consultantServ->MobileNo; ?></td>
+<td><?php echo $consultantServ->ApprovedAmount; ?><?php echo $consultantServ->TotalAmount; ?></td>
+              
+                        </tr>
+                <?php endforeach; ?>
+
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="table-responsive dont-flip">
+            <table class="table table-bordered table-striped table-condensed" id="">
+                <thead>
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <th colspan="6">SPECIALIZED FIRM</th>
+                </tr>
+                <tr>
+                        <th>Sl #</th>
+                     
+                        <th>Name of Firm</th>
+                        <th>SPNo</th>
+                        <th>ApplicationNo</th>
+                        <th>Type</th>
+                        <th>Mobile #</th>
+<th>Amount</th>
+          
+                    </tr>
+                </thead>
+                <tbody>
+                <?php $count = 1; ?>
+           
+                <?php foreach($specializedfirmService as $specializedfirmServ): ?>
+                <tr>
+                            <td><?php echo $count++; ?></td>
+                            <td><?php echo $specializedfirmServ->NameOfFirm; ?></td>
+                            <td><?php echo $specializedfirmServ->SPNo; ?></td>
+                            <td><?php echo $specializedfirmServ->ReferenceNo; ?> dt. <?php echo convertDateToClientFormat($specializedfirmServ->ApplicationDate); ?></td>
+                            <td><?php echo $specializedfirmServ->ServiceType; ?></td>
+                            <td><?php echo $specializedfirmServ->MobileNo; ?></td>
+<td><?php echo $specializedfirmServ->ApprovedAmount; ?><?php echo $specializedfirmServ->TotalAmount; ?></td>
+              
+                        </tr>
+                <?php endforeach; ?>
+
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="table-responsive dont-flip">
+            <table class="table table-bordered table-striped table-condensed" id="">
+                <thead>
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <th colspan="6">SPECIALIZED TRADE</th>
+                </tr>
+                <tr>
+                        <th>Sl #</th>
+                     
+                        <th>Name</th>
+                        <th>SPNo</th>
+                        <th>ApplicationNo</th>
+                        <th>Type</th>
+                        <th>Mobile #</th>
+<th>Amount</th>
+          
+                    </tr>
+                </thead>
+                <tbody>
+                <?php $count = 1; ?>
+           
+                <?php foreach($specializedtradeService as $specializedtradeServ): ?>
+                <tr>
+                            <td><?php echo $count++; ?></td>
+                            <td><?php echo $specializedtradeServ->Name; ?></td>
+                            <td><?php echo $specializedtradeServ->SPNo; ?></td>
+                            <td><?php echo $specializedtradeServ->ReferenceNo; ?> dt. <?php echo convertDateToClientFormat($specializedtradeServ->ApplicationDate); ?></td>
+                            <td><?php echo $specializedtradeServ->ServiceType; ?></td>
+                            <td><?php echo $specializedtradeServ->MobileNo; ?></td>
+<td><?php echo $specializedtradeServ->ApprovedAmount; ?><?php echo $specializedtradeServ->TotalAmount; ?></td>
+              
+                        </tr>
+                <?php endforeach; ?>
+
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+
+        <div class="table-responsive dont-flip">
+            <table class="table table-bordered table-striped table-condensed" id="">
+                <thead>
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <th colspan="6">ARCHITECTS</th>
+                </tr>
+                <tr>
+                        <th>Sl #</th>
+                     
+                        <th>Name </th>
+                        <th>ARNo</th>
+                        <th>ApplicationNo</th>
+                        <th>Type</th>
+                        <th>Mobile #</th>
+<th>Amount</th>
+          
+                    </tr>
+                </thead>
+                <tbody>
+                <?php $count = 1; ?>
+           
+                <?php foreach($architectService as $architectServ): ?>
+                <tr>
+                            <td><?php echo $count++; ?></td>
+                            <td><?php echo $architectServ->Name; ?></td>
+                            <td><?php echo $architectServ->ARNo; ?></td>
+                            <td><?php echo $architectServ->ReferenceNo; ?> dt. <?php echo convertDateToClientFormat($architectServ->ApplicationDate); ?></td>
+                            <td><?php echo $architectServ->ServiceType; ?></td>
+                            <td><?php echo $architectServ->MobileNo; ?></td>
+<td><?php echo $architectServ->Amount; ?><?php echo $architectServ->TotalAmount; ?></td>
+              
+                        </tr>
+                <?php endforeach; ?>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-responsive dont-flip">
+            <table class="table table-bordered table-striped table-condensed" id="">
+                <thead>
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <th colspan="6">ENGINEERS</th>
+                </tr>
+                <tr>
+                        <th>Sl #</th>
+                     
+                        <th>Name </th>
+                        <th>CDBNo</th>
+                        <th>ApplicationNo</th>
+                        <th>Type</th>
+                        <th>Mobile #</th>
+<th>Amount</th>
+          
+                    </tr>
+                </thead>
+                <tbody>
+                <?php $count = 1; ?>
+           
+                <?php foreach($engineerService as $engineerServ): ?>
+                <tr>
+                            <td><?php echo $count++; ?></td>
+                            <td><?php echo $engineerServ->Name; ?></td>
+                            <td><?php echo $engineerServ->CDBNo; ?></td>
+                            <td><?php echo $engineerServ->ReferenceNo; ?> dt. <?php echo convertDateToClientFormat($engineerServ->ApplicationDate); ?></td>
+                            <td><?php echo $engineerServ->ServiceType; ?></td>
+                            <td><?php echo $engineerServ->MobileNo; ?></td>
+<td><?php echo $engineerServ->Amount; ?><?php echo $engineerServ->TotalAmount; ?></td>
+              
+                        </tr>
+                <?php endforeach; ?>
+
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="table-responsive dont-flip">
+            <table class="table table-bordered table-striped table-condensed" id="">
+                <thead>
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <th colspan="6">SURVEYORS</th>
+                </tr>
+                <tr>
+                        <th>Sl #</th>
+                     
+                        <th>Name </th>
+                        <th>ARNo</th>
+                        <th>ApplicationNo</th>
+                        <th>Type</th>
+                        <th>Mobile #</th>
+<th>Amount</th>
+          
+                    </tr>
+                </thead>
+                <tbody>
+                <?php $count = 1; ?>
+           
+                <?php foreach($surveyService as $surveyServ): ?>
+                <tr>
+                            <td><?php echo $count++; ?></td>
+                            <td><?php echo $surveyServ->Name; ?></td>
+                            <td><?php echo $surveyServ->ARNo; ?></td>
+                            <td><?php echo $surveyServ->ReferenceNo; ?> dt. <?php echo convertDateToClientFormat($surveyServ->ApplicationDate); ?></td>
+                            <td><?php echo $surveyServ->ServiceType; ?></td>
+                            <td><?php echo $surveyServ->MobileNo; ?></td>
+<td><?php echo $surveyServ->Amount; ?><?php echo $surveyServ->TotalAmount; ?></td>
+              
+                        </tr>
+                <?php endforeach; ?>
+
+                </tbody>
+            </table>
+        </div>
+
+	<div class="table-responsive dont-flip">
+            <table class="table table-bordered table-striped table-condensed" id="">
+                <thead>
+                    <tr style="border-bottom: 1px solid #ddd;">
+                        <th colspan="6">CERTIFIED BUILDER</th>
+                    </tr>
+                    <tr>
+                        <th>Sl #</th>
+
+                        <th>Name of Firm</th>
+                        <th>CDBNo</th>
+                        <th>ApplicationNo</th>
+                        <th>Type</th>
+                        <th>Mobile #</th>
+                        <th>Amount</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $count = 1; ?>
+
+                    <?php foreach($certifiedbuilderService as $certifiedbuilderServ): ?>
+                    <tr>
+                        <td><?php echo $count++; ?></td>
+                        <td><?php echo $certifiedbuilderServ->NameOfFirm; ?></td>
+                        <td><?php echo $certifiedbuilderServ->CDBNo; ?></td>
+                        <td><?php echo $certifiedbuilderServ->ReferenceNo; ?> dt. <?php echo convertDateToClientFormat($certifiedbuilderServ->ApplicationDate); ?></td>
+                        <td><?php echo $certifiedbuilderServ->ServiceType; ?></td>
+                        <td><?php echo $certifiedbuilderServ->MobileNo; ?></td>
+                        <td><?php echo $certifiedbuilderServ->ApprovedAmount; ?><?php echo $certifiedbuilderServ->TotalAmount; ?></td>
+
+                    </tr>
+                    <?php endforeach; ?>
+
+                </tbody>
+            </table>
+        </div>
+
+
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('reportsmaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

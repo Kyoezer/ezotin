@@ -1,0 +1,54 @@
+<html>
+    <body>
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="2">Dzongkhag Wise Work Awarded and Completed </th>
+                </tr>
+                <?php if($fromDate != ''): ?>
+                    <tr>
+                        <th><i>From Date:</i>&nbsp;<?php echo $fromDate; ?></th>
+                    </tr>
+                <?php endif; ?>
+                <?php if($toDate != ''): ?>
+                    <tr>
+                        <th><i>To Date:</i>&nbsp;<?php echo $toDate; ?></th>
+                    </tr>
+                <?php endif; ?>
+                <tr>
+                    <th colspan="4"></th>
+                </tr>
+                <tr>
+                    <th>Dzongkhag (Site)</th>
+                    <th>No. of Awarded Works</th>
+                    <th>No. of Completed Works</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php $noAwarded = $noCompleted = $total = 0; ?>
+                <?php $__empty_1 = true; foreach($reportData as $data): $__empty_1 = false; ?>
+                    <tr>
+                        <td><?php echo $data->Dzongkhag; ?></td>
+                        <td class="text-right"><?php echo $data->NoAwarded; ?><?php $noAwarded += $data->NoAwarded;?></td>
+                        <td class="text-right"><?php echo $data->NoCompleted; ?><?php $noCompleted += $data->NoCompleted;?></td>
+                        <td class="text-right"><?php echo $data->NoAwarded+$data->NoCompleted; ?><?php $total += $data->NoAwarded+$data->NoCompleted;?></td>
+                    </tr>
+                <?php endforeach; if ($__empty_1): ?>
+
+                    <tr><td colspan="4" class="font-red text-center">No data to display</td></tr>
+                <?php endif; ?>
+                <?php if(!empty($reportData)): ?>
+                    <tr>
+                        <td class="bold text-right"><b>Total</b></td>
+                        <td class="text-right"><?php echo $noAwarded; ?></td>
+                        <td class="text-right"><?php echo $noCompleted; ?></td>
+                        <td class="text-right"><?php echo $total; ?></td>
+                    </tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

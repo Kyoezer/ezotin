@@ -1,0 +1,56 @@
+<p class="bold font-green-seagreen">Please tick the checkbox to select the services.</p>
+<div class="note note-info">
+	<p>Hover over the <i class="font-green-seagreen fa fa-question-circle"></i> icon to view what the abbreviation means.</p>
+</div>
+<div class="table-responsive">
+	<input type="hidden" name="CrpConsultantId" value="<?php echo $consultantId; ?>" />
+	<table class="table table-bordered table-striped table-condensed">
+		<thead class="">
+			<tr>
+				<th width="40%">
+					Category
+				</th>
+				<th>
+					Apply for Service
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach($serviceCategories as $serviceCategory): ?>
+			<tr>
+				<td>
+					<?php echo e($serviceCategory->Name); ?>
+
+				</td>
+				<td>
+					<?php foreach($services as $service): ?>
+						<?php $randomKey=randomString(); ?>
+						<?php if($service->CmnConsultantServiceCategoryId==$serviceCategory->Id): ?>
+						<input type="hidden" name="ConsultantWorkClassificationModel[<?php echo $randomKey; ?>][CrpConsultantId]" value="<?php echo $consultantId; ?>" class="setselectservicecontrol" <?php if($service->CmnAppliedServiceId!=$service->Id): ?>disabled="disabled"<?php endif; ?>/>
+						<input type="hidden" name="ConsultantWorkClassificationModel[<?php echo $randomKey; ?>][CmnServiceCategoryId]" value="<?php echo $serviceCategory->Id; ?>" class="setselectservicecontrol" <?php if($service->CmnAppliedServiceId!=$service->Id): ?>disabled="disabled"<?php endif; ?>/>
+						<input type="checkbox" name="ConsultantWorkClassificationModel[<?php echo $randomKey; ?>][CmnAppliedServiceId]" value="<?php echo $service->Id; ?>" class="selectconsultantservice" <?php if($service->CmnAppliedServiceId==$service->Id): ?>checked="checked"<?php endif; ?>/>
+						<span class="font-green-seagreen tooltips" data-placement="top" data-original-title="<?php echo $service->Name; ?>"><i class="fa fa-question-circle"></i></span>
+						<?php echo $service->Code; ?>
+
+						<?php endif; ?>
+					<?php endforeach; ?>
+				</td>
+			</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+</div>
+<div class="form-actions">
+	<div class="btn-set">
+		<?php if((bool)$isEdit==null): ?>
+			<button type="submit" class="btn blue">Continue <i class="fa fa-arrow-circle-o-right"></i></button>
+		<?php else: ?>
+			<button type="submit" class="btn blue">Update <i class="fa fa-arrow-circle-o-right"></i></button>
+			<?php if(!empty($redirectUrl)): ?>
+				<a href="<?php echo URL::to($redirectUrl.'/'.$isEdit); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+			<?php else: ?>
+				<a href="<?php echo URL::to('consultant/confirmregistration'); ?>" class="btn red">Cancel <i class="fa fa-times"></i></a>
+			<?php endif; ?>
+		<?php endif; ?>
+	</div>
+</div>

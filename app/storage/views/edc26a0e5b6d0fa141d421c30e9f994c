@@ -1,0 +1,122 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php echo HTML::script('assets/global/scripts/consultant.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
+<div id="consultantcommentadverserecordedit" class="modal fade" role="dialog" aria-labelledby="consultantcommentadverserecordedit" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<?php echo Form::open(array('url' => 'consultant/meditcommentadverserecords','role'=>'form')); ?>
+
+			<input type="hidden" name="Id" class="consultantcommentadverserecordid" />
+			<input type="hidden" name="CrpConsultantFinalId" value="<?php echo $consultant[0]->Id; ?>" />
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3 class="modal-title font-green-seagreen">Edit</h3>
+			</div>
+			<div class="modal-body">
+				<div class="form-body">
+					<div class="form-group">
+						<label for="Date">Date</label>
+						<div class="input-icon right input-medium">
+							<i class="fa fa-calendar"></i>
+							<input type="text" name="Date" class="form-control required datepicker commentadverserecorddate" placeholder="">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="labeladversecomment">Remarks</label>
+						<textarea name="Remarks" class="form-control required commentadverserecord" rows="3"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn green">Update</button>
+				<button class="btn red" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+</div>
+<a href="<?php echo URL::to('consultant/editcommentsadverserecordslist'); ?>" class="btn grey-cascade">Back to List</a>
+<h3 class="font-blue-madison"><?php echo $consultant[0]->NameOfFirm.' (CDB No.'.$consultant[0]->CDBNo.')'; ?></h3>
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption font-green-seagreen">
+					<i class="fa fa-cogs"></i>
+					<span class="caption-subject">Comments</span>
+					<span class="caption-helper">Inorder to edit comments click on the dropdown icon at right hand corner to expand</span>
+				</div>
+				<div class="tools">
+					<a href="javascript:;" class="expand"></a>
+				</div>
+			</div>
+			<div class="portlet-body display-hide">
+				<div class="form-body">
+					<?php $__empty_1 = true; foreach($commentsAdverseRecords as $commentsAdverseRecord): $__empty_1 = false; ?>
+						<?php if((int)$commentsAdverseRecord->Type==1): ?>
+							<div class="note note-info">
+								<input type="hidden" class="commentid" value="<?php echo $commentsAdverseRecord->Id; ?>">
+								<input type="hidden" class="consultantcommentdate" value="<?php echo convertDateToClientFormat($commentsAdverseRecord->Date); ?>" />
+								<input type="hidden" class="consultantcomment" value="<?php echo $commentsAdverseRecord->Remarks; ?>" />
+								<h5 class="bold"><?php echo convertDateToClientFormat($commentsAdverseRecord->Date); ?></h5>
+								<p>
+									<?php echo $commentsAdverseRecord->Remarks; ?>
+
+								</p>
+								<button type="button" class="btn green-haze btn-sm editconsultantcomment">Edit</button>
+								<button type="button" class="btn bg-red-sunglo btn-sm deleteconsultantcomment">Delete</button>
+							</div>
+						<?php endif; ?>
+					<?php endforeach; if ($__empty_1): ?>
+						<div class="note note-danger">
+							<h5 class="bold font-red">No Comments.</h5>
+						</div>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption font-green-seagreen">
+					<i class="fa fa-cogs"></i>
+					<span class="caption-subject">Adverse Records</span>
+					<span class="caption-helper">Inorder to edit adverse records click on the dropdown icon at right hand corner to expand</span>
+				</div>
+				<div class="tools">
+					<a href="javascript:;" class="expand"></a>
+				</div>
+			</div>
+			<div class="portlet-body display-hide">
+				<div class="form-body">
+					<?php $__empty_1 = true; foreach($commentsAdverseRecords as $commentsAdverseRecord): $__empty_1 = false; ?>
+						<?php if((int)$commentsAdverseRecord->Type==2): ?>
+							<div class="note note-info">
+								<input type="hidden" class="adverserecordid" value="<?php echo $commentsAdverseRecord->Id; ?>">
+								<input type="hidden" class="consultantadverserecorddate" value="<?php echo convertDateToClientFormat($commentsAdverseRecord->Date); ?>" />
+								<input type="hidden" class="consultantadverserecord" value="<?php echo $commentsAdverseRecord->Remarks; ?>" />
+								<h5 class="bold"><?php echo convertDateToClientFormat($commentsAdverseRecord->Date); ?></h5>
+								<p>
+									<?php echo $commentsAdverseRecord->Remarks; ?>
+
+								</p>
+								<button type="button" class="btn green-haze btn-sm editconsultantadverserecord">Edit</button>
+								<button type="button" class="btn bg-red-sunglo btn-sm deleteconsultantadverserecord">Delete</button>
+							</div>
+						<?php endif; ?>
+					<?php endforeach; if ($__empty_1): ?>
+						<div class="note note-danger">
+							<h5 class="bold font-red">No Adverse Records.</h5>
+						</div>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

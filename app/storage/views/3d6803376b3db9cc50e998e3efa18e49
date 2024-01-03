@@ -1,0 +1,87 @@
+<html>
+    <body>
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="15">Contractor's Work in Hand</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach($singleContractor as $contractor): ?>
+                    <tr>
+                        <td>Name of Firm: <?php echo $contractor->NameOfFirm; ?></td>
+                        <td>CDB No.: <?php echo $contractor->CDBNo; ?></td>
+                    </tr>
+                    <tr>
+                        <td>W1: <?php echo $contractor->Classification1; ?></td>
+                        <td>W2: <?php echo $contractor->Classification2; ?></td>
+                    </tr>
+                    <tr>
+                        <td>W3: <?php echo $contractor->Classification3; ?></td>
+                        <td>W4: <?php echo $contractor->Classification4; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+            <table>
+                <thead class="flip-content">
+                <tr>
+                    <th>Sl.No.</th>
+                    <th>Year</th>
+                    <th>Agency</th>
+                    <th>Work Id</th>
+                    <th>Work Name</th>
+                    <th>Category</th>
+                    <th>Awarded Amount</th>
+                    <th>Final Amount</th>
+                    <th>Dzongkhag</th>
+                    <th>Status</th>
+                    <th>APS scoring</th>
+                    <th>APS (100)</th>
+                    <th>Remarks</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php $count = 1; $awardedAmount = 0;?>
+                <?php $__empty_1 = true; foreach($workDetails as $workDetail): $__empty_1 = false; ?>
+                    <tr>
+                        <td><?php echo $count; ?></td>
+                        <td><?php echo $workDetail->Year; ?></td>
+                        <td><?php echo $workDetail->Agency; ?></td>
+                        <td><?php echo $workDetail->WorkId; ?></td>
+                        <td><?php echo e($workDetail->NameOfWork); ?></td>
+                        <td><?php echo $workDetail->Category; ?></td>
+                        <td><?php echo $workDetail->AwardedAmount; ?></td>
+                        <td><?php echo $workDetail->FinalAmount; ?></td>
+                        <td><?php echo $workDetail->Dzongkhag; ?></td>
+                        <td><?php echo $workDetail->Status; ?><?php $awardedAmount+=($workDetail->ReferenceNo == 3001)?1:0;?></td>
+                        <td>
+                            <?php if((int)$workDetail->APS == 100) {
+                                $points = 10;
+                            }
+                            if(((int)$workDetail->APS < 100) && ((int)$workDetail->APS >= 50)) {
+                                $points = 10 - (ceil((100 - (int)$workDetail->APS) / 5));
+                            }
+                            if((int)$workDetail->APS < 50){
+                                $points = 0;
+                            }
+                            ?>
+                            <?php echo $points; ?>
+
+                        </td>
+                        <td><?php echo $workDetail->APS; ?></td>
+                        <td><?php echo $workDetail->Remarks; ?></td>
+                    </tr>
+                    <?php $count++ ?>
+                <?php endforeach; if ($__empty_1): ?>
+                    <tr><td colspan="12" class="font-red text-center">No data to display</td></tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+        <?php if(!empty($workDetails)): ?>
+            <h5><strong>No. of Works in Hand: </strong><?php echo $awardedAmount; ?></h5>
+        <?php endif; ?>
+    </body>
+</html>

@@ -1,0 +1,63 @@
+<?php $__env->startSection('content'); ?>
+<div class="row">
+	<div class="col-md-offset-2 col-md-8">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption font-green-seagreen">
+					<i class="fa fa-cogs"></i>
+					<span class="caption-subject">Welcome Engineers</span>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<h3>Coming Soon!</h3>
+				<?php /*<blockquote>*/ ?>
+					<?php /*<p class="text-justify">*/ ?>
+						<?php /*Welcome to Engineer Registration*/ ?>
+					<?php /*</p>*/ ?>
+				<?php /*</blockquote>*/ ?>
+				<?php /*<div class="col-md-12">*/ ?>
+					<?php /*<h4 class="font-green-seagreen">Fee Structure for New Registration</h4>*/ ?>
+					<?php /*<table class="table table-bordered table-striped table-condensed">*/ ?>
+						<?php /*<thead>*/ ?>
+							<?php /*<tr>*/ ?>
+								<?php /*<th>Engineer Type</th>*/ ?>
+								<?php /*<th class="text-center" width="20%">Validity (yrs)</th>*/ ?>
+								<?php /*<th class="text-right">Amount (Nu.)</th>*/ ?>
+							<?php /*</tr>*/ ?>
+						<?php /*</thead>*/ ?>
+						<?php /*<tbody>*/ ?>
+							<?php /*<tr>*/ ?>
+								<?php /*<td>Goverment</td>*/ ?>
+								<?php /*<td class="text-center">*/ ?>
+									<?php /*<?php echo $feeDetails[0]->EngineerGovtValidity; ?>*/ ?>
+								<?php /*</td>*/ ?>
+								<?php /*<td class="text-right">*/ ?>
+									<?php /*Free*/ ?>
+								<?php /*</td>*/ ?>
+							<?php /*</tr>*/ ?>
+							<?php /*<tr>*/ ?>
+								<?php /*<td>Private</td>*/ ?>
+								<?php /*<td class="text-center">*/ ?>
+									<?php /*<?php echo $feeDetails[0]->EngineerPvtValidity; ?>*/ ?>
+								<?php /*</td>*/ ?>
+								<?php /*<td class="text-right">*/ ?>
+									<?php /*<?php echo $feeDetails[0]->EngineerPvtAmount; ?>*/ ?>
+								<?php /*</td>*/ ?>
+							<?php /*</tr>*/ ?>
+						<?php /*</tbody>*/ ?>
+					<?php /*</table>*/ ?>
+				<?php /*</div>	*/ ?>
+				<?php /*<div class="form-actions">*/ ?>
+					<?php /*<div class="row">*/ ?>
+						<?php /*<div class="col-md-12">*/ ?>
+							<?php /*<a href="<?php echo URL::to('engineer/registration'); ?>" class="btn green-seagreen btn-lg"><i class="fa fa-plus"></i> Proceed to Registration</a>*/ ?>
+							<?php /*<a href="<?php echo URL::to('/'); ?>" class="btn grey-cascade btn-lg"><i class="fa fa-home"></i> Home</a>*/ ?>
+						<?php /*</div>*/ ?>
+					<?php /*</div>*/ ?>
+				<?php /*</div>*/ ?>
+			</div>
+		</div>
+	</div>
+</div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('homepagemaster', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

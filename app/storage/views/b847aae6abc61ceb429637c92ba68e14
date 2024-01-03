@@ -1,0 +1,55 @@
+<html>
+    <body>
+        <table>
+            <thead>
+            <tr>
+                <th colspan="13">List of Contractor with work</th>
+            </tr>
+            <?php foreach($parametersForPrint as $key=>$value): ?>
+                <tr>
+                    <th><?php echo $key; ?>:</th><th> <?php echo $value; ?></th>
+                </tr>
+            <?php endforeach; ?>
+            <tr><th colspan="13"></th></tr>
+            <tr>
+                <th>
+                    Sl.No.
+                </th>
+             
+                <th>
+                    CDBNo
+                </th>
+                <th>
+                    Dzongkhag
+                </th>
+                <th class="">
+                  Class
+                </th>
+                <th class="">
+                    No. Of Works
+                </th>
+                      
+            </tr>
+            </thead>
+            <tbody>
+            <?php $start = 1; ?>
+            <?php $__empty_1 = true; foreach($contractorLists as $contractor): $__empty_1 = false; ?>
+            <tr>
+                    <td><?php echo $start++; ?></td>
+                    <td><?php echo $contractor->CDBNo; ?></td>
+                    <td><?php echo $contractor->Dzongkhag; ?></td>
+                    <td><?php echo $contractor->classification; ?></td>
+                 
+                    <td><?php echo $contractor->Works; ?></td>
+       
+                </tr>
+                <?php $start++; ?>
+            <?php endforeach; if ($__empty_1): ?>
+                <tr>
+                    <td colspan="14" class="text-center font-red">No data to display!</td>
+                </tr>
+            <?php endif; ?>
+            </tbody>
+        </table>
+    </body>
+</html>

@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS `crpgovermentengineer` (
+  `Id` char(36) NOT NULL,
+  `Name` varchar(200) DEFAULT NULL,
+  `CIDNo` varchar(100) DEFAULT NULL,
+  `PositionTitle` varchar(200) DEFAULT NULL,
+  `Agency` varchar(200) DEFAULT NULL,
+  `Qualification` varchar(200) DEFAULT NULL,
+  `Trade` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+update crpcontractor set CmnApplicationRegistrationStatusId='f89a6f55-b1dd-11e4-89f3-080027dcfac6' where CDBNo in ('1176','1180','1397','1590','1721','1873','2248','2482','2637','2819','3009','3430','3464','3731','3857','3951','3972','4029','4435','4530','4581','4807','4947','5138','5238','5674','5711','5924','6104','6411','7521')

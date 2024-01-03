@@ -1,0 +1,63 @@
+<?php $__env->startSection('content'); ?>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-gift"></i>
+
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <?php if(Session::get('messagesuccess')): ?>
+                        <div class="alert alert-success alert-block">
+                            <button type="button" class="close" data-dismiss="alert">x</button>
+                            <strong><?php echo Session::get('messagesuccess'); ?></strong>
+                        </div>
+                    <?php endif; ?>
+                    <!-- Striped table -->
+                    <div class="table-responsive card pmd-card">
+                        <!-- Table -->
+                        <table class="table pmd-table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Sl.</th>
+                                    <th>Title</th>
+                                    <th>Application No.</th>
+                                    <th>Status</th>
+                                    <th>CreatedOn:</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php $i = 1; ?>
+                                <?php foreach($content as $item): ?>
+                                
+                                    <tr>
+                                        <td><?php echo $i++; ?></td>
+                                        <td><?php echo $item->Name_of_Title; ?></td>
+                                        <td><?php echo $item->Application_No; ?></td>
+                                        <td><?php echo $item->Task_Status; ?></td>
+                                        <td><?php echo $item->CreatedOn; ?></td>
+
+                                    </tr>
+                                    
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        thead{
+            background-color: #423A39;
+            color: #FFF;
+        }
+    </style>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,111 @@
+<html>
+    <body>
+        <div>
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="2">Time overrun Report</th>
+                </tr>
+                <?php foreach($parametersForPrint as $key=>$value): ?>
+                    <tr>
+                        <th><i><?php echo $key; ?>:</i>&nbsp;<?php echo $value; ?></th>
+                    </tr>
+                <?php endforeach; ?>
+                <tr>
+                    <th colspan="3"></th>
+                </tr>
+                <tr>
+                    <th>Sl.No.</th>
+                    <th>Year</th>
+                    <?php if(!$summary): ?>
+                        <th>Firm</th>
+                    <?php endif; ?>
+                    <th>Agency</th>
+                    <th>Work Id</th>
+                    <th>Work Name</th>
+                    <th>Category</th>
+                    <th>Class</th>
+                    <th>Awarded Amount (Nu.)</th>
+                    <th>Final Amount (Nu.)</th>
+                    <?php if(!$summary): ?>
+                        <th width="85">Awarded Date</th>
+                        <th width="85">Final Date</th>
+                    <?php endif; ?>
+                    <th>Time overrun (days)</th>
+                    <?php if(!$summary): ?>
+                        <th>LD</th>
+                        <th>Hindrance</th>
+                        <th>Remarks</th>
+                        <th>Dzongkhag</th>
+                        <th>Status</th>
+                    <?php endif; ?>
+                </tr>
+                </thead>
+                <tbody>
+                <?php $count = 1; $awardedAmount = 0; $totalTimeOverrun = 0; $totalAwardedAmount = 0; $totalFinalAmount = 0;?>
+                <?php $__empty_1 = true; foreach($workDetails as $workDetail): $__empty_1 = false; ?>
+                    <tr>
+                        <td><?php echo $count; ?></td>
+                        <td><?php echo $workDetail->Year; ?></td>
+                        <?php if(!$summary): ?>
+                            <td><?php echo $workDetail->Contractor; ?> (<?php echo $workDetail->CDBNo; ?>)</td>
+                        <?php endif; ?>
+                        <td><?php echo $workDetail->Agency; ?></td>
+                        <td><?php echo $workDetail->WorkId; ?></td>
+                        <td><?php echo strip_tags($workDetail->NameOfWork); ?></td>
+                        <td><?php echo $workDetail->Category; ?></td>
+                        <td><?php echo $workDetail->Classification; ?></td>
+                        <td class="text-right"><?php echo number_format($workDetail->AwardedAmount,2); ?><?php $totalAwardedAmount+=doubleval($workDetail->AwardedAmount); ?></td>
+                        <td class="text-right"><?php echo number_format($workDetail->FinalAmount,2); ?><?php $totalFinalAmount+=doubleval($workDetail->FinalAmount); ?></td>
+                        <?php if(!$summary): ?>
+                            <td class="text-right"><?php echo convertDateToClientFormat($workDetail->ActualEndDate); ?></td>
+                            <td class="text-right"><?php echo convertDateToClientFormat($workDetail->CompletionDateFinal); ?></td>
+                        <?php endif; ?>
+                        <?php $totalTimeOverrun+=(int)$workDetail->DateDiff; ?>
+                        <td class="text-right"><?php echo number_format($workDetail->DateDiff); ?></td>
+                        <?php if(!$summary): ?>
+                            <td>
+                                <?php if((int)$workDetail->LDImposed == 1): ?>
+                                    <?php echo $workDetail->LDNoOfDays; ?>, <?php echo $workDetail->LDAmount; ?>
+
+                                <?php else: ?>
+                                    ---
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <?php if((int)$workDetail->Hindrance == 1): ?>
+                                    <?php echo $workDetail->HindranceNoOfDays; ?>
+
+                                <?php else: ?>
+                                    ---
+                                <?php endif; ?>
+                            </td>
+                            <td><?php echo $workDetail->Remarks; ?></td>
+                            <td><?php echo $workDetail->Dzongkhag; ?></td>
+                            <td><?php echo $workDetail->Status; ?><?php $awardedAmount+=($workDetail->ReferenceNo == 3001)?1:0;?></td>
+                        <?php endif; ?>
+                    </tr>
+                    <?php $count++ ?>
+                <?php endforeach; if ($__empty_1): ?>
+                    <tr><td colspan="<?php if($summary): ?><?php echo "10"; ?><?php else: ?><?php echo "18"; ?><?php endif; ?>" class="font-red text-center">No data to display</td></tr>
+                <?php endif; ?>
+                <?php if(count($workDetails)>0): ?>
+                    <tr>
+                        <td colspan="<?php if($summary): ?><?php echo "7"; ?><?php else: ?><?php echo "8"; ?><?php endif; ?> class="text-right bold">Total:</td>
+                        <td class="text-right"><?php echo number_format($totalAwardedAmount,2); ?></td>
+                        <td class="text-right"><?php echo number_format($totalFinalAmount,2); ?></td>
+                        <?php if(!$summary): ?>
+                            <td></td>
+                            <td></td>
+                        <?php endif; ?>
+                        <td class="text-right"><?php echo number_format($totalTimeOverrun); ?></td>
+                        <?php if(!$summary): ?>
+                            <td colspan="5"></td>
+                        <?php endif; ?>
+                    </tr>
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

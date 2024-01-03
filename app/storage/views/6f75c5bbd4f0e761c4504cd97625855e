@@ -1,0 +1,699 @@
+<?php $__env->startSection('pagescripts'); ?>
+<?php echo HTML::script('assets/global/scripts/specializedtrade.js'); ?>
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+
+<div id="specializedtradecommentadverserecordedit" class="modal fade" role="dialog" aria-labelledby="specializedtradecommentadverserecordedit" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<?php echo Form::open(array('url' => 'specializedfirm/meditcommentadverserecords','role'=>'form')); ?>
+
+			<input type="hidden" name="Id" class="specializedtradecommentadverserecordid" />
+			<input type="hidden" name="CrpSpecializedtradeFinalId" value="<?php echo $generalInformation[0]->Id; ?>" />
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3 class="modal-title font-green-seagreen">Edit</h3>
+			</div>
+
+			
+			<div class="modal-body">
+				<div class="form-body">
+					<div class="form-group">
+						<label for="Date">Date</label>
+						<div class="input-icon right input-medium">
+							<i class="fa fa-calendar"></i>
+							<input type="text" name="Date" autocomplete="off" class="form-control datepicker required commentadverserecorddate" placeholder="">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="labeladversecomment">Remarks</label>
+						<textarea name="Remarks" class="form-control required commentadverserecord" rows="3"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn green">Update</button>
+				<button class="btn red" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+</div>
+<div id="addcommentadverserecord" class="modal fade" role="dialog" aria-labelledby="addcommentadverserecord" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<?php echo Form::open(array('url' => 'specializedfirm/mcommentadverserecord','role'=>'form')); ?>
+
+			<input type="hidden" name="Id" class="specializedtradecommentadverserecordid" />
+			<input type="hidden" name="CrpSpecializedtradeFinalId" value="<?php echo $generalInformation[0]->Id; ?>" />
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3 class="modal-title font-green-seagreen">Add Info</h3>
+			</div>
+			<div class="modal-body">
+				<div class="form-body">
+					<div class="form-body">
+						<div class="form-group">
+							<label>Type</label>
+							<select name="Type" class="form-control input-medium required">
+								<option value="">---SELECT ONE---</option>
+								<option value="1" <?php if((int)Input::old('Type')==1): ?>selected="selected"<?php endif; ?>>Comment</option>
+								<option value="2" <?php if((int)Input::old('Type')==2): ?>selected="selected"<?php endif; ?>>Adverse Record</option>
+							
+							</select>
+						</div>
+						<div class="form-group">
+							<input type="hidden" name="CrpSpecializedtradeFinalId" value="<?php echo $generalInformation[0]->Id; ?>" />
+							<label for="Date">Date</label>
+							<div class="input-icon right input-medium">
+								<i class="fa fa-calendar"></i>
+								<input type="text"  autocomplete="off" name="Date" class="form-control datepicker required" value="<?php echo Input::old('Date'); ?>" placeholder="" readonly>
+							</div>
+						</div>
+						<div class="form-group">
+							<label>Remarks</label>
+							<textarea name="Remarks" class="form-control required" rows="3"><?php echo Input::old('Remarks'); ?></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn green">Update</button>
+				<button class="btn red" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			</div>
+			<?php echo Form::close(); ?>
+
+		</div>
+	</div>
+</div>
+
+	<div class="portlet light bordered">
+	<div class="portlet-title">
+		<div class="caption font-green-seagreen">
+			<i class="fa fa-cogs"></i>
+			<span class="caption-subject">Registration Information</span> 
+		</div>
+		<?php if((int)$userSpecializedtrade==1): ?>
+		<div class="actions">
+			<a href="<?php echo URL::to('specializedfirm/viewprintdetails/'.$specializedtradeId); ?>" class="btn btn-sm blue-madison" target="_blank"><i class="fa fa-print"></i> Print Information</a>
+			<a href="<?php echo URL::to('specializedfirm/certificate/'.$specializedtradeId); ?>" class="btn btn-sm green-seagreen" target="_blank"><i class="fa fa-print"></i> Print Certificate</a>
+		</div>
+		<?php endif; ?>
+	</div>
+	<div class="portlet-body">
+		<div class="row">
+			<div class="col-md-6 table-responsive">
+				<table class="table table-condensed">
+					<tbody>
+						<tr>
+							<td colspan="2" class="font-blue-madison bold warning">General Info</td>
+						</tr>
+						<tr>
+							<td><strong>SP No.</strong></td>
+							<td><?php echo e($generalInformation[0]->SPNo); ?></td>
+						</tr>
+						<tr>
+							<td><strong>Ownership Type</strong></td>
+							<td><?php echo e($generalInformation[0]->OwnershipType); ?></td>
+						</tr>
+						<tr>
+							<td><strong>Company Name</strong></td>
+							<td><?php echo e($generalInformation[0]->NameOfFirm); ?></td>
+						</tr>
+						<tr>
+							<td><strong>Trade License No.</strong></td>
+							<td><?php echo e($generalInformation[0]->TradeLicenseNo); ?></td>
+						</tr>
+						<tr>
+							<td><strong>TPN</strong></td>
+							<td><?php echo e($generalInformation[0]->TPN); ?></td>
+						</tr>
+						<tr>
+							<td><strong>Country</strong></td>
+							<td><?php echo e($generalInformation[0]->Country); ?></td>
+						</tr>
+						<tr>
+							<td><strong>Application Date</strong></td>
+							<td><?php echo e($generalInformation[0]->ApplicationDate); ?></td>
+						</tr>
+						<tr>
+							<td><strong>Registration Expiry Date</strong></td>
+								<td >
+					
+							<?php if($generalInformation[0]->RegistrationExpiryDate<=date('Y-m-d G:i:s')): ?>
+							<p class="font-red bold warning">	<?php echo convertDateToClientFormat($generalInformation[0]->RegistrationExpiryDate); ?> </p>
+							<?php else: ?>
+							<?php echo convertDateToClientFormat($generalInformation[0]->RegistrationExpiryDate); ?>
+
+							<?php endif; ?>
+					
+					</td>						</tr>
+						<tr>
+							<td colspan="2" class="font-blue-madison bold warning">Registered Address</td>
+						</tr>
+						<tr>
+							<td><strong>Dzongkhag</strong></td>
+							<td><?php echo $generalInformation[0]->Dzongkhag; ?></td>
+						</tr>
+						<tr>
+							<td><strong>Village</strong></td>
+							<td><?php echo $generalInformation[0]->Village; ?></td>
+						</tr>
+						<tr>
+							<td><strong>Gewog</strong></td>
+							<td><?php echo $generalInformation[0]->Gewog; ?></td>
+						</tr>
+						<tr>
+							<td><strong>Address</strong></td>
+							<td><?php echo $generalInformation[0]->RegisteredAddress; ?></td>
+						</tr>
+						<?php if($generalInformation[0]->CmnApplicationRegistrationStatusId != CONST_CMN_APPLICATIONREGISTRATIONSTATUS_APPROVED): ?>
+							<tr>
+								<td><strong>Status</strong></td>
+								<td><?php echo $generalInformation[0]->Status; ?></td>
+							</tr>
+							<?php if($generalInformation[0]->CmnApplicationRegistrationStatusId == CONST_CMN_APPLICATIONREGISTRATIONSTATUS_DEREGISTERED): ?>
+								<tr>
+									<td><strong>Deregistered Date</strong></td>
+									<td><?php echo $generalInformation[0]->DeRegisteredDate; ?></td>
+								</tr>
+								<tr>
+									<td><strong>Reason</strong></td>
+									<td><?php echo $generalInformation[0]->DeregisteredRemarks; ?></td>
+								</tr>
+							<?php endif; ?>
+						
+						
+						<?php endif; ?>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-md-6 table-responsive">
+				<table class="table table-condensed">
+					<tbody>
+						<tr>
+							<td colspan="2" class="font-blue-madison bold warning">Establishment Address</td>
+						</tr>
+						<tr>
+							<td><strong>Dzongkhag (Displayed in certificate)</strong></td>
+							<td><?php echo e($generalInformation[0]->RegisteredDzongkhag); ?></td>
+						</tr>
+						<tr>
+							<td><strong>Address</strong></td>
+							<td><?php echo e($generalInformation[0]->Address); ?></td>
+						</tr>
+						<tr>
+							<td><strong>Email</strong></td>
+							<td><?php echo e($generalInformation[0]->Email); ?></td>
+						</tr>
+						<tr>
+							<td><strong>Telephone No.</strong></td>
+							<td><?php echo e($generalInformation[0]->TelephoneNo); ?></td>
+						</tr>
+						<tr>
+							<td><strong>Mobile No.</strong></td>
+							<td><?php echo e($generalInformation[0]->MobileNo); ?></td>
+						</tr>
+						<tr>
+							<td><strong>Fax No.</strong></td>
+							<td><?php echo e($generalInformation[0]->FaxNo); ?></td>
+						</tr>
+						<?php if(isset($incorporationOwnershipTypes) && (int)$generalInformation[0]->OwnershipTypeReferenceNo!=14001): ?>
+							<tr>
+								<td colspan="2" class="font-blue-madison bold warning">Attachments</td>
+							</tr>
+							<?php foreach($incorporationOwnershipTypes as $incorporationOwnershipType): ?>
+							<tr>
+								<td colspan="2">
+									<i class="fa fa-check"></i> <a href="<?php echo URL::to($incorporationOwnershipType->DocumentPath); ?>" target="_blank"><?php echo $incorporationOwnershipType->DocumentName; ?></a>
+								</td>
+							</tr>
+							<?php endforeach; ?>
+						<?php endif; ?>
+						<?php if(isset($specializedtradeAttachments)): ?>
+							<?php if(count($specializedtradeAttachments)>0): ?>
+								<?php foreach($specializedtradeAttachments as $specializedtradeAttachment): ?>
+								<tr>
+									<td colspan="2">
+										<i class="fa fa-check"></i> <a href="<?php echo URL::to($specializedtradeAttachment->DocumentPath); ?>" target="_blank"><?php echo ($specializedtradeAttachment->DocumentName!="")?$specializedtradeAttachment->DocumentName:"Attachment"; ?></a>
+									</td>
+								</tr>
+								<?php endforeach; ?>
+							<?php endif; ?>
+						<?php endif; ?>
+					</tbody>	
+				</table>
+			</div>
+		</div>
+		
+		<div class="tabbable-custom nav-justified">
+			<ul class="nav nav-tabs nav-justified">
+				<li class="active">
+					<a href="#partnerdetails" data-toggle="tab">
+					General Information</a>
+				</li>
+				<li>
+					<a href="#humanresource" data-toggle="tab">
+					Human Resource </a>
+				</li>
+				<li>
+					<a href="#equipment" data-toggle="tab">
+					Equipment</a>
+				</li>
+				<li>
+					<a href="#workclassification" data-toggle="tab">
+					Work Classification</a>
+				</li>
+				<?php if((int)$registrationApprovedForPayment!=1): ?>
+				<li>
+					<a href="#trackrecord" data-toggle="tab">
+					Track Record</a>
+				</li>
+				<?php endif; ?>
+				<li>
+					<a href="#commentsadverserecords" data-toggle="tab">
+						Comments/ Adverse Records
+					</a>
+				</li>
+			
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="partnerdetails">
+					<h5 class="font-blue-madison bold">Name of Owner, Partners and/or others with Controlling Interest</h5>
+					<table class="table table-bordered table-striped table-condensed flip-content">
+						<thead>
+							<tr>
+								<th>
+									Sl#
+								</th>
+								<th>
+									Name
+								</th>
+								<th class="">
+									CID No.
+								</th>
+								<th>
+									Sex
+								</th>
+								<th>
+									Nationality
+								</th>
+								<th>
+									Designation
+								</th>
+								<th width="15%">
+									Show in Certificate
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+						<?php $ownerPartnerCount = 1; ?>
+							<?php foreach($ownerPartnerDetails as $ownerPartnerDetail): ?>
+							<tr>
+								<td><?php echo $ownerPartnerCount; ?></td>
+								<td>
+									<?php echo e($ownerPartnerDetail->Name); ?>
+
+								</td>
+								<td>
+									<?php echo e($ownerPartnerDetail->CIDNo); ?>
+
+								</td>
+								<td>
+									<?php echo e($ownerPartnerDetail->Sex); ?>
+
+								</td>
+								<td>
+									<?php echo e($ownerPartnerDetail->Country); ?>
+
+								</td>
+								<td>
+									<?php echo e($ownerPartnerDetail->Designation); ?>
+
+								</td>
+								<td>
+									<?php if((int)$ownerPartnerDetail->ShowInCertificate==1): ?>
+									<i class="fa fa-check"></i>
+									<?php endif; ?>
+								</td>
+							</tr>
+							<?php $ownerPartnerCount++; ?>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+					<?php if((int)$userSpecializedtrade==0): ?>
+						
+							<a href="<?php echo URL::to('specializedfirm/editgeneralinfo/'.$generalInformation[0]->Id.'?redirectUrl=specializedfirm/editdetails&usercdb=edit&final=true'); ?>" class="btn blue-madison editaction">Edit General Information/Partner Details</a>
+						
+					<?php else: ?>
+						<a href="#editgeneralinfo" data-toggle="modal" class="btn blue-madison"><i class="fa fa-edit"></i> Edit General Info</a>
+					<?php endif; ?>
+				</div>
+				<div class="tab-pane" id="humanresource">
+					<div class="table-scrollable">
+						<table class="table table-bordered table-striped table-condensed flip-content">
+							<thead class="flip-content">
+								<th>
+									Sl#
+								</th>
+								<th>
+									 Name
+								</th>
+								<th width="6%">
+									 CID/Work Permit No.
+								</th>
+								<th width="6%">
+									 CDB No.
+								</th>
+								<th width="5%">
+									 Sex
+								</th>
+								<th class="">
+									 Nationality
+								</th>
+								<th width="6%">
+									 Qualification
+								</th>
+								<th>
+									 Designation
+								</th>
+								<th>
+									Joining Date
+								</th>
+								<th>
+									Trade/Fields
+								</th>
+								<th>
+									Attachments(CV/UT/AT)
+								</th>
+								<th>
+									Edited On
+								</th>
+							</thead>
+							<tbody>
+								<?php $humanResourceCount = 1; ?>
+								<?php $__empty_1 = true; foreach($specializedtradeHumanResources as $specializedtradeHumanResource): $__empty_1 = false; ?>
+								<tr>
+									<td><?php echo $humanResourceCount; ?></td>
+									<td><?php echo e($specializedtradeHumanResource->Name); ?></td>
+									<td><?php echo e($specializedtradeHumanResource->CIDNo); ?></td>
+									<td class="font-blue-madison bold warning"><?php echo e($specializedtradeHumanResource->CDBNo1); ?><?php echo e($specializedtradeHumanResource->CDBNo2); ?><?php echo e($specializedtradeHumanResource->CDBNo3); ?><?php echo e($specializedtradeHumanResource->CDBNo4); ?></td>
+									<td><?php echo e($specializedtradeHumanResource->Sex); ?></td>
+									<td><?php echo e($specializedtradeHumanResource->Country); ?></td>
+									<td><?php echo e($specializedtradeHumanResource->Qualification); ?></td>
+									<td><?php echo e($specializedtradeHumanResource->Designation); ?></td>
+									<td><?php echo e(convertDateToClientFormat($specializedtradeHumanResource->JoiningDate)); ?></td>
+									<td><?php echo e($specializedtradeHumanResource->Trade); ?></td>
+									<td>
+										<?php foreach($specializedtradeHumanResourceAttachments as $specializedtradeHumanResourceAttachment): ?>
+											<?php if($specializedtradeHumanResourceAttachment->CrpSpecializedtradeHumanResourceId==$specializedtradeHumanResource->Id): ?>
+											<i class="fa fa-check"></i> <a href="<?php echo URL::to($specializedtradeHumanResourceAttachment->DocumentPath); ?>" target="_blank"><?php echo $specializedtradeHumanResourceAttachment->DocumentName; ?></a><br />
+											<?php endif; ?>
+										<?php endforeach; ?>
+									</td>
+									<th>
+										<?php if(isset($specializedtradeHumanResource->EditedOn)): ?>
+										<?php echo convertDateTimeToClientFormat($specializedtradeHumanResource->EditedOn); ?>
+
+										<?php endif; ?>
+									</th>
+								</tr>
+								<?php $humanResourceCount++; ?>
+								<?php endforeach; if ($__empty_1): ?>
+								<tr>
+									<td colspan="10" class="font-red text-center">No data to display</td>
+								</tr>
+								<?php endif; ?>
+							</tbody>
+						</table>
+					</div>
+					<?php if((int)$userSpecializedtrade==0): ?>
+						
+							<a href="<?php echo URL::to('specializedfirm/edithumanresource/'.$generalInformation[0]->Id.'?redirectUrl=specializedfirm/editdetails&usercdb=edit'); ?>" class="btn blue-madison editaction">Edit Human Resource</a>
+						
+					<?php endif; ?>
+				</div>
+				<div class="tab-pane" id="equipment">
+					<div class="table-responsive">
+						<table class="table table-bordered table-striped table-condensed">
+							<thead>
+								<tr>
+									<th>
+										Sl#
+									</th>
+									<th>
+										Equipment Name
+									</th>
+									<th scope="col" class="">
+										 Registration No
+									</th>
+								
+									<th>
+										Quantity
+									</th>
+									<th>
+										Attachment
+									</th>
+									<th>
+										Edited On
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php $equipmentCount = 1; ?>
+								<?php $__empty_1 = true; foreach($specializedtradeEquipments as $specializedtradeEquipment): $__empty_1 = false; ?>
+								<tr>
+									<td><?php echo $equipmentCount; ?></td>
+									<td><?php echo e($specializedtradeEquipment->Name); ?></td>
+									<td><?php echo e($specializedtradeEquipment->RegistrationNo); ?></td>
+								
+									<td><?php echo e($specializedtradeEquipment->Quantity); ?></td>
+									<td>
+										<?php foreach($specializedtradeEquipmentAttachments as $specializedtradeEquipmentAttachment): ?>
+											<?php if($specializedtradeEquipmentAttachment->CrpSpecializedtradeEquipmentId==$specializedtradeEquipment->Id): ?>
+											<i class="fa fa-check"></i> <a href="<?php echo URL::to($specializedtradeEquipmentAttachment->DocumentPath); ?>" target="_blank"><?php echo $specializedtradeEquipmentAttachment->DocumentName; ?></a><br />
+											<?php endif; ?>
+										<?php endforeach; ?>
+									</td>
+								
+								
+									<td>
+										<?php if(isset($specializedtradeHumanResource->EditedOn)): ?>
+											<?php echo convertDateTimeToClientFormat($specializedtradeHumanResource->EditedOn); ?>
+
+										<?php endif; ?>
+									</td>
+								</tr>
+								<?php $equipmentCount++; ?>
+								<?php endforeach; if ($__empty_1): ?>
+								<tr>
+									<td colspan="7" class="font-red text-center">No data to display</td>
+								</tr>
+								<?php endif; ?>
+							</tbody>
+						</table>
+					</div>
+					<?php if((int)$userSpecializedtrade==0): ?>
+						
+							<a href="<?php echo URL::to('specializedfirm/editequipment/'.$generalInformation[0]->Id.'?redirectUrl=specializedfirm/editdetails&usercdb=edit'); ?>" class="btn blue-madison editaction">Edit Equipment</a>
+						
+					<?php endif; ?>
+				</div>
+
+                            <!-- Work Classification Begins from -->
+
+
+				<div class="tab-pane" id="workclassification">
+					
+				<h5 class="font-blue-madison bold">Category Information</h5>
+					<table class="table table-bordered table-striped table-condensed">
+						<thead>
+							<tr>
+								<th>Category</th>
+								<th width="5%" class="table-checkbox">Applied</th>
+								<th width="5%" class="table-checkbox">Verified</th>
+								<th width="5%" class="table-checkbox">Approved</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach($specializedtradeWorkClassifications as $specializedtradeWorkClassification): ?>
+								<tr>
+									<td>
+										<?php echo $specializedtradeWorkClassification->Code.' ('.$specializedtradeWorkClassification->Category.')'; ?>
+
+									</td>
+									<td class="text-center">
+										<?php if((bool)$specializedtradeWorkClassification->CmnAppliedCategoryId!=NULL): ?>
+										<i class="fa fa-check font-green-seagreen"></i>
+										<?php else: ?>
+										<i class="fa fa-times font-red"></i>
+										<?php endif; ?>
+									</td>
+									<td class="text-center">
+										<?php if((bool)$specializedtradeWorkClassification->CmnVerifiedCategoryId!=NULL): ?>
+										<i class="fa fa-check font-green-seagreen"></i>
+										<?php else: ?>
+										<i class="fa fa-times font-red"></i>
+										<?php endif; ?>
+									</td>
+									<td class="text-center">
+										<?php if((bool)$specializedtradeWorkClassification->CmnApprovedCategoryId!=NULL): ?>
+										<i class="fa fa-check font-green-seagreen"></i>
+										<?php else: ?>
+										<i class="fa fa-times font-red"></i>
+										<?php endif; ?>
+									</td>
+								</tr>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+
+					
+							<?php /*<a href="<?php echo URL::to('specializedfirm/editworkclassification/'.$generalInformation[0]->Id.'?redirectUrl=specializedfirm/editdetails&usercdb=edit'); ?>" class="btn blue-madison">Edit Work Classification</a>*/ ?>
+					
+				
+					<?php if((int)$userSpecializedtrade==0): ?>
+					
+							<a href="<?php echo URL::to('specializedfirm/editworkclassification/'.$generalInformation[0]->Id.'?redirectUrl=specializedfirm/editdetails&usercdb=edit&final=true&updatedFrom=SYSTEM'); ?>" class="btn blue-madison">Edit Work Classification</a>
+					
+					<?php endif; ?>
+					
+					</div>
+				<!-- track records of Specializedfirm -->
+
+				<div class="tab-pane" id="trackrecord">
+					<div class="table-responsive">
+						<table class="table table-bordered table-striped table-condensed">
+							<thead class="flip-content">
+							<tr>
+								<th>Sl.No.</th>
+								<th>Year</th>
+								<th>Agency</th>
+								<th>Work Id</th>
+								<th>Work Name</th>
+								<th>Category</th>
+								<th>Awarded Amount</th>
+								<th>Final Amount</th>
+								<th>Dzongkhag</th>
+								<th>Status</th>
+								<th>APS scoring</th>
+								<th>APS (100)</th>
+								<th>Remarks</th>
+							</tr>
+							</thead>
+							<tbody>
+							<?php $count = 1; $awardedAmount = 0;?>
+							<?php $__empty_1 = true; foreach($specializedtradeTrackrecords as $workDetail): $__empty_1 = false; ?>
+								<tr>
+									<td><?php echo $count; ?></td>
+									<td><?php echo ($workDetail->ReferenceNo == 3003)?date_format(date_create($workDetail->WorkCompletionDate),'Y'):date_format(date_create($workDetail->WorkStartDate),'Y'); ?></td>
+									<td><?php echo $workDetail->Agency; ?></td>
+									<td><?php echo $workDetail->WorkOrderNo; ?></td>
+									<td><?php echo strip_tags($workDetail->NameOfWork); ?></td>
+									<td><?php echo $workDetail->Category; ?></td>
+									<td><?php echo $workDetail->ApprovedAgencyEstimate; ?></td>
+									<td><?php echo $workDetail->ApprovedAgencyEstimate; ?></td>
+									<td><?php echo $workDetail->Dzongkhag; ?></td>
+									<td><?php echo $workDetail->WorkExecutionStatus; ?><?php $awardedAmount+=($workDetail->ReferenceNo == 3001)?1:0;?></td>
+									<td><?php echo $workDetail->OntimeCompletionScore; ?></td>
+									<td><?php echo $workDetail->QualityOfExecutionScore; ?></td>
+								
+									<td><?php echo $workDetail->Remarks; ?></td>
+								</tr>
+								<?php $count++ ?>
+							<?php endforeach; if ($__empty_1): ?>
+								<tr><td colspan="12" class="font-red text-center">No data to display</td></tr>
+							<?php endif; ?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+
+				<div class="tab-pane" id="commentsadverserecords">
+					<h5 class="font-blue-madison bold">Comments</h5>
+					<div class="table-responsive">
+						<table class="table table-bordered table-striped table-condensed">
+							<thead>
+							<tr>
+								<th style="width: 10%;">Date</th>
+								<th>Remarks</th>
+								<th style="width: 10%;">Action</th>
+							</tr>
+							</thead>
+							<tbody>
+							<?php foreach($specializedtradeComments as $comment): ?>
+								<tr>
+									<td>
+										<?php echo convertDateToClientFormat($comment->Date); ?></td>
+									<td><?php echo e($comment->Remarks); ?></td>
+									<td>
+										<input type="hidden" class="commentid" value="<?php echo $comment->Id; ?>">
+										<input type="hidden" class="specializedtradecommentdate" value="<?php echo convertDateToClientFormat($comment->Date); ?>" />
+										<input type="hidden" class="specializedtradecomment" value="<?php echo $comment->Remarks; ?>" />
+										<?php /*<button type="button" class="btn green-haze btn-sm editspecializedtradecomment">Edit</button>*/ ?>
+										<?php /*<button type="button" class="btn bg-red-sunglo btn-sm deletespecializedtradecomment">Delete</button>*/ ?>
+										
+											<?php if(isset($registrationApproved) && $registrationApproved == 0): ?>)
+												<a href="#" class="editspecializedtradecomment">Edit</a>
+												&nbsp;|&nbsp;
+												<a href="#" class="deletespecializedtradecomment">Delete</a>
+											
+										<?php endif; ?>
+									</td>
+								</tr>
+							<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+
+					<h5 class="font-blue-madison bold">Adverse Records</h5>
+					<div class="table-responsive">
+						<table class="table table-bordered table-striped table-condensed">
+							<thead>
+							<tr>
+								<th style="width: 10%;">Date</th>
+								<th>Remarks</th>
+								<th style="width: 10%;">Action</th>
+							</tr>
+							</thead>
+							<tbody>
+							<?php foreach($specializedtradeAdverseRecords as $adverseRecord): ?>
+								<tr>
+									<td>
+										<?php echo convertDateToClientFormat($adverseRecord->Date); ?></td>
+									<td><?php echo e($adverseRecord->Remarks); ?></td>
+									<td>
+										<input type="hidden" class="adverserecordid" value="<?php echo $adverseRecord->Id; ?>">
+										<input type="hidden" class="specializedtradeadverserecorddate" value="<?php echo convertDateToClientFormat($adverseRecord->Date); ?>" />
+										<input type="hidden" class="specializedtradeadverserecord" value="<?php echo $adverseRecord->Remarks; ?>" />
+										<?php /*<button type="button" class="btn green-haze btn-sm editspecializedtradecomment">Edit</button>*/ ?>
+										<?php /*<button type="button" class="btn bg-red-sunglo btn-sm deletespecializedtradecomment">Delete</button>*/ ?>
+										<?php if(((isset($registrationApproved) && (int)$registrationApproved!=1)) || (isset($isAdmin) && $isAdmin)): ?>
+										<a href="#" class="editspecializedtradeadverserecord">Edit</a>
+										&nbsp;|&nbsp;
+										<a href="#" class="deletespecializedtradeadverserecord">Delete</a>
+										<?php endif; ?>
+									</td>
+								</tr>
+							<?php endforeach; ?>
+							</tbody>
+						</table>
+					</div>
+					<?php if((int)$userSpecializedtrade==0): ?>
+						<?php if(((isset($registrationApproved) && (int)$registrationApproved!=1)) || (isset($isAdmin) && $isAdmin)): ?>
+							<a href="#addcommentadverserecord" data-toggle="modal" class="btn blue-madison">Add Comment/ Adverse Record</a>
+						<?php endif; ?>
+					<?php endif; ?>
+				</div>
+			</div>
+		</div>
+		<?php echo $__env->make('crps.applicationhistory', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+	</div>
+</div>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
